@@ -7,7 +7,7 @@ caliper-php is a php client for [Caliper](http://www.imsglobal.org) that provide
 
 ### Pre-requisites for development:  
 
-* Ensure you have python and pip installed.  
+* Ensure you have python, pip or easy_install) and setuptools installed.  
 
 ### Installing and using the Library:
 
