@@ -1,4 +1,4 @@
-﻿caliper-php
+﻿caliper-python
 ================
 
 caliper-python is a Python client for [Caliper](http://www.imsglobal.org) that provides an implementation of the Caliper Sensor API.
