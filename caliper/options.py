@@ -1,5 +1,5 @@
 
-host = 'http://www.intellifylearning.com'
+host = 'http://www.CALIPER_SENSOR_ENDPOINT.com'
 
 endpoints = {
     'describe': '/v1/describe',
