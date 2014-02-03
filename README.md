@@ -1,7 +1,7 @@
 ﻿caliper-php
 ================
 
-caliper-php is a php client for [Caliper](http://www.imsglobal.org) that provides an implementation of the Caliper Sensor API.
+caliper-python is a Python client for [Caliper](http://www.imsglobal.org) that provides an implementation of the Caliper Sensor API.
 
 ## Documentation
 
@@ -23,6 +23,7 @@ To build the library, clone the repository from github into your desired applica
 Now, you're ready to use the Caliper module as follows:
 
 import caliper
+
 import caliper.utils
 
 ...
