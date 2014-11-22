@@ -40,10 +40,7 @@ import six
 import uuid
 
 from .base import BaseEntity, CaliperSerializable
-
-from .extern import foaf
-from .extern import qti
-from .extern import schemadotorg
+from .extern import foaf, qti, schemadotorg
 
 ### Fundamental entities ###
 ## Base entity class
@@ -65,7 +62,7 @@ class Entity(BaseEntity):
             entity_id = None,
             name = None,
             lastModifiedTime = None,
-            properties = None,
+            properties = {},
             **kwargs):
         BaseEntity.__init__(self, **kwargs)
         self._set_str_prop('@id', entity_id)
@@ -154,9 +151,29 @@ class Organization(Agent):
 
 class CourseSection(Organization):
 
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 courseNumber = None,
+                 label = None,
+                 semester = None,
+                 **kwargs):
         Organization.__init__(self, **kwargs)
         self._set_str_prop('@type', Organization.Types['LIS_COURSE_SECTION'])
+        self._set_str_prop('courseNumber', courseNumber)
+        self._set_str_prop('label', label)
+        self._set_str_prop('semester', semester)
+
+    @property
+    def courseNumber(self):
+        return self._get_prop('courseNumber')
+
+    @property
+    def label(self):
+        return self._get_prop('label')
+
+    @property
+    def semester(self):
+        return self._get_prop('semester')
+
 
 ## Learning Context
 class LearningContext(CaliperSerializable):
@@ -329,7 +346,6 @@ class Frame(DigitalResource):
 
     def __init__(self,
             index = 0,
-            reading = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', DigitalResource.Types['FRAME'])
@@ -481,10 +497,10 @@ class SharedAnnotation(Annotation):
         self._set_str_prop('@type', Annotation.Types['SHARED_ANNOTATION'])
 
         if isinstance(withAgents, collections.MutableSequence):
-            if all( isinstance(item, six_string_types) for item in withAgents):
+            if all( isinstance(item, Agent) for item in withAgents):
                 self._set_list_prop('withAgents', withAgents)
             else:
-                raise TypeError('withAgents must be a list of LIS group or person identifier strings')
+                raise TypeError('withAgents must be a list of objects that implement Agent')
         else:
             self._set_list_prop('withAgents', None)
 

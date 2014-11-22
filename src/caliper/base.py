@@ -43,12 +43,22 @@ import six
 
 
 ### Default configuration values ###
+
 class Options(object):
-    _config = {}
+    _config = {
+        'API_KEY': None,
+        'HOST' : None,
+        'CONNECTION_TIMEOUT': None,
+        'SO_TIMEOUT': None,
+        'CONNECTION_REQUEST_TIMEOUT': None,
+        }
+
+    def __init__(self):
+        pass
 
     @property
     def API_KEY(self):
-        return _config['API_KEY']
+        return self._config['API_KEY']
     @API_KEY.setter
     def API_KEY(self, new_key):
         if isinstance(new_key, six.string_types):
@@ -58,7 +68,7 @@ class Options(object):
         
     @property
     def HOST(self):
-        return _config['HOST']
+        return self._config['HOST']
     @HOST.setter
     def HOST(self,new_host):
         if rfc3987_parse(new_host, rule='URI'):
@@ -66,7 +76,7 @@ class Options(object):
 
     @property
     def CONNECTION_TIMEOUT(self):
-        return _config['CONNECTION_TIMEOUT']
+        return self._config['CONNECTION_TIMEOUT']
     @CONNECTION_TIMEOUT.setter
     def CONNECTION_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
@@ -76,7 +86,7 @@ class Options(object):
 
     @property
     def SO_TIMEOUT(self):
-        return _config['SO_TIMEOUT']
+        return self._config['SO_TIMEOUT']
     @SO_TIMEOUT.setter
     def SO_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
@@ -86,7 +96,7 @@ class Options(object):
 
     @property
     def CONNECTION_REQUEST_TIMEOUT(self):
-        return _config['CONNECTION_REQUEST_TIMEOUT']
+        return self._config['CONNECTION_REQUEST_TIMEOUT']
     @CONNECTION_REQUEST_TIMEOUT.setter
     def CONNECTION_REQUEST_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
@@ -94,17 +104,19 @@ class Options(object):
         else:
             raise ValueError('new timeout value must be at least 1000 milliseconds')
         
-class HttpDefaults(Options):
-
-    def __init__(self):
-        _config = {
-            'API_KEY': 'CaliperKey',
-            'HOST' : 'http://dev-null.com',
-            'CONNECTION_TIMEOUT': 10000,
-            'SO_TIMEOUT': 10000,
-            'CONNECTION_REQUEST_TIMEOUT': 10000,
-        }
-
+class HttpOptions(Options):
+    def __init__(self,
+            api_key='CalperKey',
+            host='http://httpbin.org/post',
+            connection_timeout=10000,
+            so_timeout=10000,
+            connection_request_timeout=10000):
+        Options.__init__(self)
+        self.API_KEY=api_key
+        self.HOST=host
+        self.CONNECTION_TIMEOUT=connection_timeout
+        self.SO_TIMEOUT=so_timeout
+        self.CONNECTION_REQUEST_TIMEOUT=connection_request_timeout
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
@@ -127,16 +139,30 @@ class CaliperSerializable(object):
             self._set_prop(k, bool(v), name)
             
     def _set_int_prop(self,k,v,name=None):
-        self._set_prop(k, int(v) if v else None, name)
+        if v == None:
+            self._set_prop(k,None,name)
+        else:
+            self._set_prop(k, int(v), name)
 
     def _set_list_prop(self,k,v,name=None):
-        self._set_prop(k,v,name)
+        self._set_prop(k,v or [],name)
+
+    def _append_list_prop(self,k,v):
+        if (not k in self._props) or (self._props[k] is None):
+            self._set_list_prop(k,[v])
+        elif isinstance(self._props[k], collections.MutableSequence):
+            self._props[k].append(v)
+        else:
+            raise ValueError('attempt to append to a non-list property')
 
     def _set_obj_prop(self,k,v,name=None):
         self._set_prop(k,v,name)
 
     def _set_str_prop(self,k,v,name=None):
-        self._set_prop(k, str(v) if v else None, name)
+        if v == None:
+            self._set_prop(k,None,name)
+        else:
+            self._set_prop(k, str(v), name)
 
     def _get_prop(self,k):
         try:
@@ -150,10 +176,10 @@ class CaliperSerializable(object):
         except KeyError:
             return k
 
-    def _unpack_list(l):
+    def _unpack_list(self,l):
         r = []
         for item in l:
-            if isinstance(item, collections.MutableSet):
+            if isinstance(item, collections.MutableSequence):
                 r.append(self._unpack_list(item))
             elif isinstance(item, CaliperSerializable):
                 r.append(item.as_dict())
@@ -170,8 +196,8 @@ class CaliperSerializable(object):
             value = None
             
             # handle value based on its type: list, composite, or basic type
-            if isinstance(v, collections.MutableSet):
-                value = self.unpack_list(v)
+            if isinstance(v, collections.MutableSequence):
+                value = self._unpack_list(v)
             elif isinstance(v, CaliperSerializable):
                 value = v.as_dict()
             else:
@@ -253,5 +279,3 @@ class BaseProfile(CaliperSerializable):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
 
-
-    

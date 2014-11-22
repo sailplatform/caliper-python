@@ -35,16 +35,18 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-from .base import HttpDefaults, Options
+import collections
+
+from .base import Options, HttpOptions
 from .entities import Entity
 from .events import Event
 from .request import EventStoreRequestor, HttpRequestor
-from .util.stats import Stats
+from .util.stats import Statistics
 
 class Client(object):
 
     def __init__(self,
-            config_options=HttpDefaults(),
+            config_options = Options(),
             requestor = None,
             stats = None,
             **kwargs):
@@ -61,10 +63,7 @@ class Client(object):
         if stats and not( isinstance(stats, Stats)):
             raise TypeError('stats must implement stats.Stats')
         else:
-            self._stats = stats
-
-        self._stats = stats
-            
+            self._stats = Statistics()
 
     @property
     def config(self):
@@ -81,15 +80,67 @@ class Client(object):
     def apiKey(self, new_key):
         self._config['API_KEY']=new_key
 
+    def _process_results(self,results,update_func):
+        for r in results:
+            if r:
+                self._stats.update_successful(1)
+            else:
+                self._stats.update_failed(1)
+            update_func(1)
+        
     def describe(self, entity=None):
-        if entity and not( isinstance(entity, Entiity)):
-            raise TypeError('entity must implement entities.Entity')
+        self.describe_batch([entity])
+        
+    def describe_batch(self, entity_list=None):
+        if isinstance(entity_list, collections.MutableSequence):
+            if all( isinstance(item, Entity) for item in entity_list):
+                results = self._requestor.send_batch(caliper_object_list=entity_list)
+                self._process_results(results,self.stats.update_describes)
+            else:
+                raise TypeError('entity_list must be a list of entities.Entity')
         else:
-            requestor.send(entity)
+            raise TypeError('entity_list should be a list')
 
     def send(self, event=None):
-        if event and not( isinstance(event, Event)):
-            raise TypeError('event must implement events.Event')
+        self.send_batch([event])
+        
+    def send_batch(self, event_list=None): 
+        if isinstance(event_list, collections.MutableSequence):
+            if all( isinstance(item, Event) for item in event_list):
+                results = self._requestor.send_batch(caliper_object_list=event_list)
+                self._process_results(results,self.stats.update_measures)
+            else:
+                raise TypeError('event_list must be a list of entities.Event')
         else:
-            requestor.send(event)
+            raise TypeError('event_list should be a list')
+       
+                    
+class Sensor(object):
+    def __init__(self,
+                 client=None,
+                 config_options=None,
+                 **kwargs):
+        if client and isinstance(client, Client):
+            self._client = client
+        else:
+            self._client = Client(config_options=config_options)
 
+    def describe(self, entity=None):
+        self._client.describe(entity=entity)
+
+    def describe_batch(self, entity_list=None):
+        self._client.describe_batch(entity_list=entity_list)
+
+    def send(self, event=None):
+        self._client.send(event=event)
+
+    def send_batch(self, event_list=None):
+        self._client.send_batch(event_list=event_list)
+
+    @property
+    def statistics(self):
+        return self._client.stats
+
+    @property
+    def client(self):
+        return self._client

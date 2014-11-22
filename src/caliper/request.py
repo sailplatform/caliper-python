@@ -35,12 +35,13 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
+import collections
 import datetime
+import json
 import requests
 import uuid
 
-from .base import CaliperSerializable, Options, HttpDefaults
-
+from .base import CaliperSerializable, HttpOptions
 
 class EventStoreEnvelope(CaliperSerializable):
     def __init__(self,
@@ -48,6 +49,7 @@ class EventStoreEnvelope(CaliperSerializable):
             content_type=None,
             envelope_id=None,
             time=None):
+        CaliperSerializable.__init__(self)
         self._set_obj_prop('data', content_data)
         self._set_str_prop('id', envelope_id)
         self._set_str_prop('time', time)
@@ -84,21 +86,24 @@ class EventStoreEnvelope(CaliperSerializable):
 
 class EventStoreRequestor(object):
 
-    def send(caliper_object=None):
+    def send(self, caliper_object=None):
         raise NotImplementedError('Instance must implement EventStoreRequester.send()')
 
-    def _generate_payload(caliper_object = None,
+    def send_batch(self, caliper_object_list=None):
+        raise NotImplementedError('Instance must implement EventStoreRequester.send_batch()')
+
+    def _generate_payload(self,
+            caliper_object = None,
             caliper_id = None,
             send_time = None):
         c_id = caliper_id if caliper_id else 'caliper-java_{0}'.format(str(uuid.uuid4()))
         st = send_time if send_time else str(datetime.datetime.now())
 
-        payload = {'data':_get_payload_json(caliper_object, c_id, st)}
-        payload.update({'type':'application/json'})
+        return {'type':'application/json',
+                'data':self._get_payload_json(caliper_object, c_id, st)}
 
-        return payload
-
-    def _get_payload_json(caliper_object = None,
+    def _get_payload_json(self,
+            caliper_object = None,
             caliper_id = None,
             send_time = None):
         envelope = EventStoreEnvelope(
@@ -115,30 +120,30 @@ class HttpRequestor(EventStoreRequestor):
             options = None,
             **kwargs):
         if not options:
-            options = HttpDefaults()
-        elif not( isinstance(options, Options)):
-            raise TypeError('options must implement base.Options')
+            self._options = HttpOptions()
+        elif not( isinstance(options, HttpOptions)):
+            raise TypeError('options must implement base.HttpOptions')
         else:
             self._options = options
 
     def send(self, caliper_object=None):
-        result = False
+        return self.send_batch(caliper_object_list=[caliper_object])[0]
 
-        if caliper_object and not( isinstance(caliper_object, CaliperSerializable)):
-            raise TypeError('caliper_object must implement CaliperSerializable')
-        else:
-            raise ValueError('caliper_object must be provided')
+    def send_batch(self, caliper_object_list=None):
+        results = []
 
-        payload = _generate_payload(caliper_object)
-        r = requests.post(self._options['HOST'],
-            data=json.dumps(payload['data']),
-            headers={'Content-Type':payload['type']})
-        if (r.status_code is requests.codes.ok):
-            result = True
-        else:
-            r.raise_for_status()
+        if isinstance(caliper_object_list, collections.MutableSequence):
+            if all( isinstance(item, CaliperSerializable) for item in caliper_object_list):
+                s = requests.Session()
+                for item in caliper_object_list:
+                    payload = self._generate_payload(caliper_object=item)
+                    r = s.post(self._options.HOST,
+                               data=payload['data'],
+                               headers={'Content-Type':payload['type']} )
+                    if (r.status_code is requests.codes.ok):
+                        results.append(True)
+                    else:
+                        results.append(False)
+                s.close()
 
-        return result
-
-        
-        
+        return results

@@ -42,7 +42,7 @@ from . import entities
 ## Base event class
 class Event(BaseEvent):
 
-    _types = {
+    _contexts = {
         'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/AnnotationEvent',
         'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/AssessmentEvent',
         'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/AssessmentItemEvent',
@@ -51,9 +51,9 @@ class Event(BaseEvent):
         'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/MediaEvent',
         'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/NavigationEvent',
         'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/OutcomeEvent',
-        'VIEWED': 'http://purl.imsglobal.org/ctx/caliper/v1/ViewedEvent',
+        'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/ViewEvent',
         }    
-    _contexts = {
+    _types = {
         'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
         'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',
         'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent',
@@ -62,7 +62,7 @@ class Event(BaseEvent):
         'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
         'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
         'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
-        'VIEWED': 'http://purl.imsglobal.org/caliper/v1/ViewedEvent',
+        'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
         }
 
     def __init__(self,
@@ -71,10 +71,10 @@ class Event(BaseEvent):
             context = None,
             duration = None,
             edApp = None,
-            endedAtTime = None,
+            endedAtTime = 0,
             event_object = None,
             generated = None,
-            lisOrganization = None,
+            group = None,
             startedAtTime = None,
             target = None,
             **kwargs):
@@ -106,19 +106,19 @@ class Event(BaseEvent):
         if generated and (not isinstance(generated, CaliperSerializable)):
             raise TypeError('generated must implement CaliperSerializable')
         else:
-            self._set_obj_prop('generated', event_object)
+            self._set_obj_prop('generated', generated)
 
-        if lisOrganization and (not isinstance(lisOrganization, entities.Organization)):
-            raise TypeError('lisOrganization must implement entities.Organization')
+        if group and (not isinstance(group, entities.Organization)):
+            raise TypeError('group must implement entities.Organization')
         else:
-            self._set_obj_prop('lisOrganization', lisOrganization)
+            self._set_obj_prop('group', group)
 
         self._set_int_prop('startedAtTime', startedAtTime)
             
         if target and (not isinstance(target, CaliperSerializable)):
             raise TypeError('target must implement CaliperSerializable')
         else:
-            self._set_obj_prop('target', event_object)
+            self._set_obj_prop('target', target)
 
 
     @property
@@ -154,8 +154,8 @@ class Event(BaseEvent):
         return self._get_prop('generated')
 
     @property
-    def lisOrganization(self):
-        return self._get_prop('lisOrganization')
+    def group(self):
+        return self._get_prop('group')
 
     @property
     def startedAtTime(self):
@@ -307,7 +307,7 @@ class ViewEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['VIEWED'])
-        self._set_str_prop('@type', Event.Types['VIEWED'])
+        self._set_str_prop('@context', Event.Contexts['VIEW'])
+        self._set_str_prop('@type', Event.Types['VIEW'])
         self._set_str_prop('action', Action.ReadingActions['VIEWED'])
 

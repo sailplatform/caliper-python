@@ -35,6 +35,156 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
+from math import sqrt
 
-class Stats(object):
-    pass
+class Statistic(object):
+    
+    def __init__(self):
+        self._sum = 0.0
+        self._count = 0
+        self._last = 0.0
+
+        ## standard deviation variables based on
+        ## http://www.johndcook.com/standard_deviation.html
+        self._oldM = 0.0
+        self._newM = 0.0
+        self._oldS = 0.0
+        self._newS = 0.0
+
+        self._min = 0.0
+        self._max = 0.0
+
+    def __str__(self):
+        if self._min == 1.0 and self._max == 1.0:
+            return '[Count: {0}]'.format(self._count)
+        else:
+            return '[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]'.format(
+                self._count,
+                self._min,
+                self._max,
+                self.average,
+                self.standard_deviation
+                )
+
+    def clear(self):
+        self._sum = 0.0
+        self._count = 0
+        self._last = 0.0
+        self._oldM = 0.0
+        self._newM = 0.0
+        self._oldS = 0.0
+        self._newS = 0.0
+        self._min = 0.0
+        self._max = 0.0
+
+    def update(self,val):
+        if not self._count:
+            self._count += 1
+            self._min = self._max = self._oldM = self._newM = val
+            self.oldS = 0.0
+        else:
+            self._count += 1
+            self._newM = self._oldM + ((val - self._oldM) / self._count)
+            self._newS = self._oldS + ((val - self._oldM) * (val * self._newM))
+            self._oldM = self._newM
+            self._oldS = self._newS
+
+        self._min = min(val, self._min)
+        self._max = max(val, self._max)
+        self._sum += val
+        self._last = val
+        
+    @property
+    def sum(self):
+        return self._sum
+
+    @property
+    def count(self):
+        return self._count
+
+    @property
+    def average(self):
+        if self._count == 0:
+            return 0.0
+        else:
+            return (self._sum / self._count)
+
+    @property
+    def variance(self):
+        if self._count < 1:
+            return 1.0
+        else:
+            return (self._newS / (self._count - 1))
+
+    @property
+    def standard_deviation(self):
+        return sqrt(self.variance)
+
+    @property
+    def min(self):
+        return self._min
+
+    @property
+    def max(self):
+        return self._max
+
+    @property
+    def last(self):
+        return self._last
+
+
+class Statistics(object):
+    _keys = {
+        'MEASURE' : 'Measure',
+        'DESCRIBE' : 'Describe',
+        'SUCCESSFUL' : 'Successful',
+        'FAILED': 'Failed'
+        }
+
+    def __init__(self):
+        self._map = {}
+        for k in self._keys:
+            self._map.update({self._keys[k]:Statistic()})
+
+    def __str__(self):
+        r_top = '\n-------- Caliper Python Statistics --------\n'
+        r_bod = ''
+        r_bot =   '-------------------------------------------\n'
+        for k in self._keys:
+            r_bod += '{0} : {1}\n'.format(
+                self._keys[k],
+                self._map[self._keys[k]].__str__()
+                )
+        return '{0}{1}{2}'.format(r_top,r_bod,r_bot)
+
+    def clear(self):
+        for k in self._keys:
+            self._map[self._keys[k]].clear()
+
+    @property
+    def describes(self):
+        return self._map[self._keys['DESCRIBE']]
+
+    def update_describes(self,val):
+        self._map[self._keys['DESCRIBE']].update(val)
+
+    @property
+    def measures(self):
+        return self._map[self._keys['MEASURE']]
+
+    def update_measures(self,val):
+        self._map[self._keys['MEASURE']].update(val)
+
+    @property
+    def successful(self):
+        return self._map[self._keys['SUCCESSFUL']]
+
+    def update_successful(self,val):
+        self._map[self._keys['SUCCESSFUL']].update(val)
+            
+    @property
+    def failed(self):
+        return self._map[self._keys['FAILED']]
+
+    def update_failed(self,val):
+        self._map[self._keys['FAILED']].update(val)

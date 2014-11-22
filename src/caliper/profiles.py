@@ -36,6 +36,7 @@
 # email licenses@imsglobal.org
 
 import collections
+import six
 
 from .base import BaseProfile, CaliperSerializable
 from .actions import Action
@@ -50,7 +51,8 @@ class Profile(BaseProfile):
             fromResources = None,
             generateds = None,
             learningContext = None,
-            targets = None):
+            targets = None,
+            **kwargs):
         BaseProfile.__init__(self, **kwargs)
 
         if isinstance(actions, collections.MutableSequence):
@@ -86,7 +88,7 @@ class Profile(BaseProfile):
             self._set_list_prop('targets', None)
 
         if learningContext and (not isinstance(learningContext, LearningContext)):
-            rise TypeError('learningContext must implement entities.LearningContext')
+            raise TypeError('learningContext must implement entities.LearningContext')
         else:
             self._set_obj_prop('learningContext', learningContext)
 
@@ -94,13 +96,31 @@ class Profile(BaseProfile):
     def actions(self):
         return self._get_prop('actions')
 
+    def add_action(self, new_action=None):
+        if not isinstance(new_action, six.string_types):
+            raise TypeError('new action must be an action string')
+        else:
+            self._append_list_prop('actions', new_action)
+
     @property
     def fromResources(self):
         return self._get_prop('fromResources')
 
+    def add_fromResource(self, new_from_resource=None):
+        if not isinstance(new_from_resource, CaliperSerializable):
+            raise TypeError('new from resource must be an object implementing CaliperSerializable')
+        else:
+            self._append_list_prop('fromResources', new_from_resource)
+
     @property
     def generateds(self):
         return self._get_prop('generateds')
+
+    def add_generated(self, new_generated=None):
+        if not isinstance(new_generated, CaliperSerializable):
+            raise TypeError('new generated must be an object implementing CaliperSerializable')
+        else:
+            self._append_list_prop('generated', new_generated)
 
     @property
     def learningContext(self):
@@ -110,6 +130,13 @@ class Profile(BaseProfile):
     def targets(self):
         return self._get_prop('targets')
 
+    def add_target(self, new_target=None):
+        if not isinstance(new_target, CaliperSerializable):
+            raise TypeError('new target must be an object impelementing CaliperSerializable')
+        else:
+            self._append_list_prop('targets', new_target)
+
+            
 ## Derived profiles ##
 
 class AnnotationProfile(Profile):

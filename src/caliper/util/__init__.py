@@ -38,5 +38,3 @@
 """
 Utility modules that may be assistive, but not part of a mainline implementation.
 """
-
-from . import stats

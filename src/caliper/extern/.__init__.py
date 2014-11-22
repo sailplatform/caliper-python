@@ -38,5 +38,3 @@
 """
 References for external entities
 """
-
-from . import foaf, qti, schemadotorg

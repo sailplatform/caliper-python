@@ -40,94 +40,95 @@ from .base import BaseAction
 class Action(BaseAction):
 
     _annotation_actions = {
-        'ATTACHED': 'annotation.attached',
-        'BOOKMARKED': 'annotation.bookmarked',
-        'CLASSIFIED': 'annotation.classified',
-        'COMMENTED': 'annotation.commented',
-        'DESCRIBED': 'annotation.described',
-        'HIGHLIGHTED': 'annotation.highlighted',
-        'IDENTIFIED': 'annotation.identified',
-        'LIKED': 'annotation.liked',
-        'RANKED': 'annotation.ranked',
-        'QUESTIONED': 'annotation.questioned',
-        'RECOMMENDED': 'annotation.recommended',
-        'REPLIED': 'annotation.replied',
-        'SHARED': 'annotation.shared',
-        'SUBSCRIBED': 'annotation.subscribed',
-        'TAGGED': 'annotation.tagged',
+        'ATTACHED': 'attached',
+        'BOOKMARKED': 'bookmarked',
+        'CLASSIFIED': 'classified',
+        'COMMENTED': 'commented',
+        'DESCRIBED': 'described',
+        'HIGHLIGHTED': 'highlighted',
+        'IDENTIFIED': 'identified',
+        'LIKED': 'liked',
+        'LINKED': 'linked',
+        'QUESTIONED': 'questioned',
+        'RANKED': 'ranked',
+        'RECOMMENDED': 'recommended',
+        'REPLIED': 'replied',
+        'SHARED': 'shared',
+        'SUBSCRIBED': 'subscribed',
+        'TAGGED': 'tagged',
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
         
     _assessment_actions = {
-        'STARTED': 'assessment.started',
-        'PAUSED': 'assessment.paused',
-        'RESTARTED': 'assessment.restarted',
-        'SUBMITTED': 'assessment.submitted',
+        'PAUSED': 'paused',
+        'RESTARTED': 'restarted',
+        'STARTED': 'started',
+        'SUBMITTED': 'submitted',
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
 
     _assessment_item_actions = {
-        'STARTED': 'assessment.item.started',
-        'COMPLETED': 'assessment.item.completed',
-        'SKIPPED': 'assessment.item.skipped',
-        'REVIEWED': 'assessment.item.reviewed',
-        'VIEWED': 'assessment.item.viewed',
+        'COMPLETED': 'completed',
+        'SKIPPED': 'skipped',
+        'STARTED': 'started',
+        'REVIEWED': 'reviewed',
+        'VIEWED': 'viewed',
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
 
     _assignable_actions = {
-        'ABANDONED': 'assignable.abandoned',
-        'ACTIVATED': 'assignable.activated',
-        'COMPLETED': 'assignable.completed',
-        'DEACTIVATED': 'assignable.deactivated',
-        'HID': 'assignable.hid',
-        'REVIEWED': 'assignable.reviewed',
-        'SHOWED': 'assignable.showed',
-        'STARTED': 'assignable.started',
-        'SUBMITTED': 'assignable.submitted',
+        'ABANDONED': 'abandoned',
+        'ACTIVATED': 'activated',
+        'COMPLETED': 'completed',
+        'DEACTIVATED': 'deactivated',
+        'HID': 'hid',
+        'REVIEWED': 'reviewed',
+        'SHOWED': 'showed',
+        'STARTED': 'started',
+        'SUBMITTED': 'submitted',
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
 
     _media_actions = {
-        'ENABLEDCLOSECAPTIONING': 'media.accessibility.enabledCloseCaptioning',
-        'DISABLEDCLOSEDCAPTIONING': 'media.accessibility.disabledCloseCaptioning',
+        'DISABLEDCLOSEDCAPTIONING': 'disabled closed captioning',
+        'ENABLEDCLOSECAPTIONING': 'enabled closed captioning',
 
-        'CHANGEDVOLUME': 'media.audio.changedVolume',
-        'MUTED': 'media.audio.muted',
-        'UNMUTED': 'media.audio.unmuted',
+        'CHANGEDVOLUME': 'changed volume',
+        'MUTED': 'muted',
+        'UNMUTED': 'unmuted',
 
-        'CHANGEDSPEED': 'media.playback.changedSpeed',
-        'ENDED': 'media.playback.ended',
-        'JUMPEDTO': 'media.playback.jumpedTo',
-        'FORWARDEDTO': 'media.playback.forwardedTo',
-        'PAUSED': 'media.playback.paused',
-        'RESUMED': 'media.playback.resumed',
-        'REWINDED': 'media.playback.rewindedTo',
-        'STARTED': 'media.playback.started',
+        'CHANGEDSPEED': 'changed speed',
+        'ENDED': 'ended',
+        'FORWARDEDTO': 'forwarded to',
+        'JUMPEDTO': 'jumpted to',
+        'PAUSED': 'paused',
+        'RESUMED': 'resumed',
+        'REWINDED': 'rewinded to',
+        'STARTED': 'started',
 
-        'CHANGEDRESOLUTION': 'media.viewer.changedResolution',
-        'CHANGEDVIEWERSIZE': 'media.viewer.changedViewerSize',
-        'CLOSEDPOPOUT': 'media.viewer.closedPopout',
-        'ENTEREDFULLSCREEN': 'media.viewer.enteredFullScreen',
-        'EXITEDFULLSCREEN': 'media.viewer.exitedFullScreen',
-        'OPENEDPOPOUT': 'media.viewer.openedPopout',
+        'CHANGEDRESOLUTION': 'changed resolution',
+        'CHANGEDVIEWERSIZE': 'changed viewer size',
+        'CLOSEDPOPOUT': 'closed popout',
+        'ENTEREDFULLSCREEN': 'entered full screen',
+        'EXITEDFULLSCREEN': 'exited full screen',
+        'OPENEDPOPOUT': 'opened popout',
 
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
 
     _outcome_actions = {
-        'GRADED': 'outcome.graded',
+        'GRADED': 'graded',
 
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
 
     _reading_actions = {
-        'SEARCHED': 'reading.searched',
-        'VIEWED': 'reading.viewed',
+        'SEARCHED': 'searched',
+        'VIEWED': 'viewed',
 
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to'
         }
