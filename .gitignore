@@ -1,6 +1,4 @@
 *.pyc
-# Ignore Sublime text files
-*.sublime-*
 build
 dist
 *.egg-info*
