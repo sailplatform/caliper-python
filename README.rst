@@ -16,59 +16,76 @@ provides an implementation of the Caliper Sensor API.
 Dependencies
 ============
 To effectively use this `Caliper-python` package, you will need to have Python,
-pip, and setuptools installed.
+pip, and setuptools installed. This package also depends on several third-party
+packages:
+
+* requests
+
+* rfc3987
+
+* six
+
+To work with this package (maintain, use, run tests) you'll need to have these
+third-party packages in your local Python environment.
 
 
 Build and install
 =================
-To build the library and use, follow these steps.
+To build the library and use, follow these steps:
 
-.. highlight:: bash
+#. Still to do -- write new instructions for build and install.
 
-#. Clone the `repository from github
-   <https://github.com/IMSGlobal/caliper-python.git>`_ into your desired
-   application directory::
+.. ..
+   ..
+      Historical instructions from Prashant's original work
 
-     git clone https://github.com/IMSGlobal/caliper-python.git
+      .. highlight:: bash
 
-#. Set the URL for your Sensor endpoint in :file:`caliper/options.py`.
+      #. Clone the `repository from github
+         <https://github.com/IMSGlobal/caliper-python.git>`_ into your desired
+         application directory::
 
-#. To test the project, run :file:`test-caliper.py` in the repository's top
-   directory::
+           git clone https://github.com/IMSGlobal/caliper-python.git
 
-     python test-caliper.py
+      #. Set the URL for your Sensor endpoint in :file:`caliper/options.py`.
 
-#. Build the package, in the repository's top directory::
+      #. To test the project, run :file:`test-caliper.py` in the repository's top
+         directory::
 
-     python setup.py build
+           python test-caliper.py
 
-   If you need to create a distribution of the package, you can use these
-   command lines (from the top directory) to build a binary, or source,
-   distribution::
+      #. Build the package, in the repository's top directory::
 
-     python setup.py sdist
-     python setup.py bdist
+           python setup.py build
 
-#. Install the package into your local python environment::
+         If you need to create a distribution of the package, you can use these
+         command lines (from the top directory) to build a binary, or source,
+         distribution::
 
-     python setup.py install
+           python setup.py sdist
+           python setup.py bdist
+
+      #. Install the package into your local python environment::
+
+           python setup.py install
 
 
-Using the library
-=================
-After installation, you can use the library in your code, like this:
+      Using the library
+      =================
+      After installation, you can use the library in your code, like this:
 
-.. code-block:: python
-                
-   import caliper
-   import caliper.utils
+      .. code-block:: python
 
-   # ... your code here
+         import caliper
+         import caliper.utils
 
-   caliper.init("YOUR_API_KEY", log_level
+         # ... your code here
 
-Happy coding!
+         caliper.init("YOUR_API_KEY", log_level
 
+      Happy coding!
+   ..
+.. ..
 
 Copyright and License
 =====================
