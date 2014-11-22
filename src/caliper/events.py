@@ -175,10 +175,10 @@ class AnnotationEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ANNOTATION'])
         self._set_str_prop('@type', Event.Types['ANNOTATION'])
 
-        if action not in Action.AnnotationActions:
-            raise TypeError('action must be in Action.AnnotationActions')
+        if action not in Action.AnnotationActions.values():
+            raise TypeError('action must be an Action.AnnotationActions value')
         else:
-            self._set_str_prop('action', Action.AnnotationActions[action])
+            self._set_str_prop('action', action)
 
 class AssessmentEvent(Event):
     
@@ -189,10 +189,10 @@ class AssessmentEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT'])
 
-        if action not in Action.AssessmentActions:
-            raise TypeError('action must be in Action.AssessmentActions')
+        if action not in Action.AssessmentActions.values():
+            raise TypeError('action must be an Action.AssessmentActions value')
         else:
-            self._set_str_prop('action', Action.AssessmentActions[action])
+            self._set_str_prop('action', action)
 
 class AssessmentItemEvent(Event):
     
@@ -203,10 +203,10 @@ class AssessmentItemEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT_ITEM'])
 
-        if action not in Action.AssessmentItemActions:
-            raise TypeError('action must be in Actions.AssessmentItemActions')
+        if action not in Action.AssessmentItemActions.values():
+            raise TypeError('action must be an Actions.AssessmentItemActions value')
         else:
-            self._set_str_prop('action', Action.AssessmentItemActions[action])
+            self._set_str_prop('action', action)
 
 class AssignableEvent(Event):
     
@@ -218,10 +218,10 @@ class AssignableEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSIGNABLE'])
         self._set_str_prop('@type', Event.Types['ASSIGNABLE'])
 
-        if action not in Action.AssignableActions:
+        if action not in Action.AssignableActions.values():
             raise TypeError('action must be in Action.AssignableActions')
         else:
-            self._set_str_prop('action', Action.AssignableActions[action])
+            self._set_str_prop('action', action)
 
         if event_object and not( isinstance(event_object, entities.AssignableDigitalResource)):
             raise TypeError('event_object must implement AssignableDigitalResource')
@@ -239,10 +239,10 @@ class MediaEvent(Event):
         self._set_str_prop('@context', Event.Contexts['MEDIA'])
         self._set_str_prop('@type', Event.Types['MEDIA'])
 
-        if action not in Action.MediaActions:
+        if not action in Action.MediaActions.values():
             raise TypeError('action must be in Action.MediaActions')
         else:
-            self._set_str_prop('action', Action.MediaActions[action])
+            self._set_str_prop('action', action)
 
         if event_object and not( isinstance(event_object, entities.MediaObject)):
             raise TypeError('event_object must implement entities.MediaObject')
@@ -288,10 +288,10 @@ class OutcomeEvent(Event):
         self._set_str_prop('@context', Event.Contexts['OUTCOME'])
         self._set_str_prop('@type', Event.Types['OUTCOME'])
                 
-        if action not in Action.OutcomeActions:
-            raise TypeError('action must be in Action.OutcomeActions')
+        if action not in Action.OutcomeActions.values():
+            raise TypeError('action must be an Action.OutcomeActions value')
         else:
-            self._set_str_prop('action', Action.OutcomeActions[action])
+            self._set_str_prop('action', action)
 
         if event_object and not( isinstance(event_object, entities.Attempt)):
             raise TypeError('event_object must implement entities.Attempt')

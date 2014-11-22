@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Caliper-python testing package (testing cases)
+# Caliper-python testing package (testing sensor cases)
 #
 # Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
@@ -66,29 +66,3 @@ class TestEvent(unittest.TestCase):
         count = self.sensor.statistics.measures.count
         self.sensor.statistics.clear()
         self.assertEqual(count, 4)
-
-                     
-
-class TestReadingProfile(unittest.TestCase):
-    def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.reading_profile = util.buildReadingProfile(learning_context=self.learning_context)
-
-    def testViewEvent(self):
-        rp = util.viewReadingTarget(reading_profile=self.reading_profile)
-        view_event = util.buildViewEvent(reading_profile=rp)
-
-        self.assertEqual(view_event.as_json(),
-                         util.getFixtureStr(fixtures.VIEW_EVENT))
-        
-    def testNavigationEvent(self):
-        rp = util.navigateToReadingTarget(reading_profile=self.reading_profile)
-        navigation_event = util.buildNavigationEvent(reading_profile=rp)
-
-        self.assertEqual(navigation_event.as_json(),
-                         util.getFixtureStr(fixtures.NAVIGATION_EVENT))
-
-        
-if __name__ == '__main__':
-    unittest.main()
-

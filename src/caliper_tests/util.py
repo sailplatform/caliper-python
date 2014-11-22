@@ -145,3 +145,42 @@ def buildViewEvent(reading_profile=viewReadingTarget()):
         startedAtTime = _SAT
         )
 
+## Media Profile related funcs
+def buildMediaProfile(learning_context=buildLearningContext()):
+    return caliper.profiles.MediaProfile(
+        learningContext = learning_context,
+        mediaObject = caliper.entities.VideoObject(
+            entity_id = 'https://com.sat/super-media-tool/video/video1',
+            name = 'American Revolution - Key Figures Video',
+            alignedLearningObjective = [caliper.entities.LearningObjective(
+                entity_id = 'http://americanrevolution.com/personalities/learn',
+                )],
+            duration = 1420,
+            lastModifiedTime = _LMT
+            ),
+        mediaLocation = caliper.entities.MediaLocation(
+            entity_id = 'https://com.sat/super-media-tool/video/video1',
+            currentTime = 0
+            )
+        )
+
+def pauseVideo(media_profile=buildMediaProfile()):
+    media_profile.add_action(caliper.actions.Action.MediaActions['PAUSED'])
+    media_profile.add_mediaLocation(
+        new_location = caliper.entities.MediaLocation(
+            entity_id = media_profile.mediaObject.id,
+            currentTime = 710
+            )
+        )
+    return media_profile
+
+def buildMediaEvent(media_profile=pauseVideo()):
+    return caliper.events.MediaEvent(
+        action = media_profile.actions[-1],
+        edApp = media_profile.learningContext.edApp,
+        group = media_profile.learningContext.lisOrganization,
+        actor = media_profile.learningContext.agent,
+        event_object = media_profile.mediaObject,
+        mediaLocation = media_profile.mediaLocations[-1],
+        startedAtTime = _SAT
+        )
