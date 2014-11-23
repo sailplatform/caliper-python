@@ -61,7 +61,11 @@ class Entity(BaseEntity):
     def __init__(self,
             entity_id = None,
             name = None,
+<<<<<<< HEAD
             lastModifiedTime = None,
+=======
+            lastModifiedTime = 0,
+>>>>>>> media-event-unit-test
             properties = {},
             **kwargs):
         BaseEntity.__init__(self, **kwargs)
@@ -735,7 +739,13 @@ class MediaLocation(Entity):
                 self._get_prop('@type'),
                 self._uuid
                 ))
+<<<<<<< HEAD
         self._current_time = currentTime
+=======
+        else:
+            self._set_str_prop('@id', entity_id)
+        self._set_int_prop('currentTime', currentTime)
+>>>>>>> media-event-unit-test
 
     @property
     def currentTime(self):
@@ -753,7 +763,12 @@ class MediaObject(DigitalResource, schemadotorg.MediaObject):
     def __init__(self,
             duration = None,
             **kwargs):
+<<<<<<< HEAD
         DigitalResource._set_str_prop('@type', DigitalResource.Types['MEDIA_OBJECT'])
+=======
+        DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@type', DigitalResource.Types['MEDIA_OBJECT'])
+>>>>>>> media-event-unit-test
         self._set_int_prop('duration', duration) ## Is this the same as an Attempt duration?
 
     @property
@@ -802,7 +817,11 @@ class VideoObject(MediaObject, schemadotorg.VideoObject):
 
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
+<<<<<<< HEAD
         self._set_str_prop('@type', MediaObject.Types['IMAGE_OBJECT'])
+=======
+        self._set_str_prop('@type', MediaObject.Types['VIDEO_OBJECT'])
+>>>>>>> media-event-unit-test
 
 ## Outcome entities
 class Outcome(CaliperSerializable):
