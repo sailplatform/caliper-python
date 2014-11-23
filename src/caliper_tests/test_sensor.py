@@ -66,3 +66,6 @@ class TestEvent(unittest.TestCase):
         count = self.sensor.statistics.measures.count
         self.sensor.statistics.clear()
         self.assertEqual(count, 4)
+
+if __name__ == '__main__':
+    unittest.main()

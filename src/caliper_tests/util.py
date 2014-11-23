@@ -145,8 +145,6 @@ def buildViewEvent(reading_profile=viewReadingTarget()):
         startedAtTime = _SAT
         )
 
-<<<<<<< HEAD
-=======
 ## Media Profile related funcs
 def buildMediaProfile(learning_context=buildLearningContext()):
     return caliper.profiles.MediaProfile(
@@ -186,4 +184,3 @@ def buildMediaEvent(media_profile=pauseVideo()):
         mediaLocation = media_profile.mediaLocations[-1],
         startedAtTime = _SAT
         )
->>>>>>> media-event-unit-test

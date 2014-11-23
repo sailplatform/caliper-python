@@ -40,11 +40,7 @@ import six
 
 from .base import BaseProfile, CaliperSerializable
 from .actions import Action
-<<<<<<< HEAD
-from .entities import LearningContext, DigitalResource
-=======
 from .entities import LearningContext, DigitalResource, MediaLocation, MediaObject
->>>>>>> media-event-unit-test
 
 ## Base profile class
 
@@ -248,15 +244,12 @@ class MediaProfile(Profile):
     @property
     def mediaLocations(self):
         return self._get_prop('mediaLocations')
-<<<<<<< HEAD
-=======
 
     def add_mediaLocation(self, new_location=None):
         if not isinstance(new_location, MediaLocation):
             raise TypeError('new media location must be an object implementing MediaLocation')
         else:
             self._append_list_prop('mediaLocations', new_location)
->>>>>>> media-event-unit-test
         
 class OutcomeProfile(Profile):
 
