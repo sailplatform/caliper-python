@@ -106,7 +106,7 @@ class Options(object):
         
 class HttpOptions(Options):
     def __init__(self,
-            api_key='CalperKey',
+            api_key='CaliperKey',
             host='http://httpbin.org/post',
             connection_timeout=10000,
             so_timeout=10000,
