@@ -73,17 +73,18 @@ class TestMediaProfile(unittest.TestCase):
 class TestReadingProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.buildLearningContext()
-        self.reading_profile = util.buildReadingProfile(learning_context=self.learning_context)
 
     def testViewEvent(self):
-        rp = util.viewReadingTarget(reading_profile=self.reading_profile)
+        rp = util.buildReadingProfile(learning_context=self.learning_context)
+        rp = util.viewReadingTarget(reading_profile=rp)
         view_event = util.buildViewEvent(reading_profile=rp)
 
         self.assertEqual(view_event.as_json(),
                          util.getFixtureStr(fixtures.VIEW_EVENT))
         
     def testNavigationEvent(self):
-        rp = util.navigateToReadingTarget(reading_profile=self.reading_profile)
+        rp = util.buildReadingProfile(learning_context=self.learning_context)
+        rp = util.navigateToReadingTarget(reading_profile=rp)
         navigation_event = util.buildNavigationEvent(reading_profile=rp)
 
         self.assertEqual(navigation_event.as_json(),

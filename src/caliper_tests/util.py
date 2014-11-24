@@ -121,13 +121,18 @@ def buildAssessment():
             ]
         )
 
-def buildAssessmentProfile(learning_context=buildLearningContext(),
-                           assessment=buildAssessment()):
+def buildAssessmentProfile(learning_context=None, assessment=None):
+    if not learning_context:
+        learning_context = buildLearningContext()
+    if not assessment:
+        assessment = buildAssessment()
     return caliper.profiles.AssessmentProfile(
         learningContext = learning_context,
         assessment = assessment)
 
-def startAssessment(assessment_profile=buildAssessmentProfile()):
+def startAssessment(assessment_profile=None):
+    if not assessment_profile:
+        assessment_profile = buildAssessmentProfile()
     assessment_profile.add_action(caliper.actions.Action.AssessmentActions['STARTED'])
     assessment_profile.add_generated(
         new_generated = caliper.entities.Attempt(
@@ -139,7 +144,9 @@ def startAssessment(assessment_profile=buildAssessmentProfile()):
         )
     return assessment_profile
 
-def buildAssessmentEvent(assessment_profile=startAssessment()):
+def buildAssessmentEvent(assessment_profile=None):
+    if not assessment_profile:
+        assessment_profile = startAssessment()
     return caliper.events.AssessmentEvent(
         action = assessment_profile.actions[-1],
         edApp = assessment_profile.learningContext.edApp,
@@ -151,7 +158,9 @@ def buildAssessmentEvent(assessment_profile=startAssessment()):
         )
 
 ## Media Profile related funcs
-def buildMediaProfile(learning_context=buildLearningContext()):
+def buildMediaProfile(learning_context=None):
+    if not learning_context:
+        learning_context=buildLearningContext()
     return caliper.profiles.MediaProfile(
         learningContext = learning_context,
         mediaObject = caliper.entities.VideoObject(
@@ -169,7 +178,9 @@ def buildMediaProfile(learning_context=buildLearningContext()):
             )
         )
 
-def pauseVideo(media_profile=buildMediaProfile()):
+def pauseVideo(media_profile=None):
+    if not media_profile:
+        media_profile = buildMediaProfile()
     media_profile.add_action(caliper.actions.Action.MediaActions['PAUSED'])
     media_profile.add_mediaLocation(
         new_location = caliper.entities.MediaLocation(
@@ -179,7 +190,9 @@ def pauseVideo(media_profile=buildMediaProfile()):
         )
     return media_profile
 
-def buildMediaEvent(media_profile=pauseVideo()):
+def buildMediaEvent(media_profile=None):
+    if not media_profile:
+        media_profile = buildMediaProfile()
     return caliper.events.MediaEvent(
         action = media_profile.actions[-1],
         edApp = media_profile.learningContext.edApp,
@@ -191,7 +204,9 @@ def buildMediaEvent(media_profile=pauseVideo()):
         )
 
 ## Reading Profile related funcs
-def buildReadingProfile(learning_context=buildLearningContext()):
+def buildReadingProfile(learning_context=None):
+    if not learning_context:
+        learning_context = buildLearningContext()
     return caliper.profiles.ReadingProfile(
         learningContext = learning_context,
         reading = caliper.entities.EpubVolume(
@@ -201,7 +216,9 @@ def buildReadingProfile(learning_context=buildLearningContext()):
             ),
         )
 
-def navigateToReadingTarget(reading_profile=buildReadingProfile()):
+def navigateToReadingTarget(reading_profile=None):
+    if not reading_profile:
+        reading_profile = buildReadingProfile()
     reading_profile.add_action(caliper.actions.Action.ReadingActions['NAVIGATED_TO'])
     reading_profile.add_target(
         new_target = caliper.entities.Frame(
@@ -222,7 +239,9 @@ def navigateToReadingTarget(reading_profile=buildReadingProfile()):
         )
     return reading_profile
     
-def viewReadingTarget(reading_profile=buildReadingProfile()):
+def viewReadingTarget(reading_profile=None):
+    if not reading_profile:
+        reading_profile = buildReadingProfile()
     reading_profile.add_action(caliper.actions.Action.ReadingActions['VIEWED'])
     reading_profile.add_target(
         new_target = caliper.entities.Frame(
@@ -235,7 +254,9 @@ def viewReadingTarget(reading_profile=buildReadingProfile()):
         )
     return reading_profile
 
-def buildNavigationEvent(reading_profile=navigateToReadingTarget()):
+def buildNavigationEvent(reading_profile=None):
+    if not reading_profile:
+        reading_profile = buildReadingProfile()
     return caliper.events.NavigationEvent(
         action = reading_profile.actions[-1],
         edApp = reading_profile.learningContext.edApp,
@@ -247,7 +268,9 @@ def buildNavigationEvent(reading_profile=navigateToReadingTarget()):
         startedAtTime = _SAT
         )
     
-def buildViewEvent(reading_profile=viewReadingTarget()):
+def buildViewEvent(reading_profile=None):
+    if not reading_profile:
+        reading_profile = buildReadingProfile()
     return caliper.events.ViewEvent(
         action = reading_profile.actions[-1],
         edApp = reading_profile.learningContext.edApp,
