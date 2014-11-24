@@ -42,6 +42,34 @@ from caliper_tests import fixtures, util
 
 import unittest
 
+class TestAssessmentProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.buildLearningContext()
+        self.assessment = util.buildAssessment()
+        self.assessment_profile = util.buildAssessmentProfile(
+            learning_context = self.learning_context,
+            assessment = self.assessment
+            )
+
+    def testAssessmentEvent(self):
+        ap = util.startAssessment(assessment_profile=self.assessment_profile)
+        assessment_event = util.buildAssessmentEvent(assessment_profile=ap)
+
+        self.assertEqual(assessment_event.as_json(),
+                         util.getFixtureStr(fixtures.ASSESSMENT_EVENT))
+
+class TestMediaProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.buildLearningContext()
+        self.video_media_profile = util.buildMediaProfile(learning_context=self.learning_context)
+
+    def testMediaEvent(self):
+        mp = util.pauseVideo(media_profile=self.video_media_profile)
+        video_media_event = util.buildMediaEvent(media_profile=mp)
+
+        self.assertEqual(video_media_event.as_json(),
+                         util.getFixtureStr(fixtures.MEDIA_EVENT))
+
 class TestReadingProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.buildLearningContext()
@@ -61,18 +89,8 @@ class TestReadingProfile(unittest.TestCase):
         self.assertEqual(navigation_event.as_json(),
                          util.getFixtureStr(fixtures.NAVIGATION_EVENT))
 
-class TestMediaProfile(unittest.TestCase):
-    def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.video_media_profile = util.buildMediaProfile(learning_context=self.learning_context)
 
-    def testMediaEvent(self):
-        mp = util.pauseVideo(media_profile=self.video_media_profile)
-        video_media_event = util.buildMediaEvent(media_profile=mp)
-
-        self.assertEqual(video_media_event.as_json(),
-                         util.getFixtureStr(fixtures.MEDIA_EVENT))
-        
+                
 if __name__ == '__main__':
     unittest.main()
 

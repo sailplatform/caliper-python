@@ -77,6 +77,119 @@ def buildLearningContext():
             )
         )
 
+## Assessment Profile related funcs
+def buildAssessment():
+    return caliper.entities.Assessment(
+        entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+        name = 'American Revolution - Key Figures Assessment',
+        partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101',
+        dateCreated = _LMT,
+        datePublished = _LMT,
+        dateToActivate = _LMT,
+        dateToShow = _LMT,
+        dateToStartOn = _LMT,
+        dateToSubmit = _LMT,
+        maxAttempts = 2,
+        maxSubmits = 2,
+        maxScore = 3,
+        lastModifiedTime = _LMT,
+        assessmentItems = [
+            caliper.entities.AssessmentItem(
+                entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item1',
+                name = 'Assessment Item 1',
+                partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+                maxAttempts = 2,
+                maxSubmits = 2,
+                maxScore = 1
+                ),
+            caliper.entities.AssessmentItem(
+                entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item2',
+                name = 'Assessment Item 2',
+                partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+                maxAttempts = 2,
+                maxSubmits = 2,
+                maxScore = 1
+                ),
+            caliper.entities.AssessmentItem(
+                entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item3',
+                name = 'Assessment Item 3',
+                partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+                maxAttempts = 2,
+                maxSubmits = 2,
+                maxScore = 1
+                )
+            ]
+        )
+
+def buildAssessmentProfile(learning_context=buildLearningContext(),
+                           assessment=buildAssessment()):
+    return caliper.profiles.AssessmentProfile(
+        learningContext = learning_context,
+        assessment = assessment)
+
+def startAssessment(assessment_profile=buildAssessmentProfile()):
+    assessment_profile.add_action(caliper.actions.Action.AssessmentActions['STARTED'])
+    assessment_profile.add_generated(
+        new_generated = caliper.entities.Attempt(
+            entity_id = assessment_profile.assessment.id + '/attempt1',
+            assignable = assessment_profile.assessment,
+            actor = assessment_profile.learningContext.agent,
+            count = 1
+            )
+        )
+    return assessment_profile
+
+def buildAssessmentEvent(assessment_profile=startAssessment()):
+    return caliper.events.AssessmentEvent(
+        action = assessment_profile.actions[-1],
+        edApp = assessment_profile.learningContext.edApp,
+        group = assessment_profile.learningContext.lisOrganization,
+        actor = assessment_profile.learningContext.agent,
+        event_object = assessment_profile.assessment,
+        generated = assessment_profile.generateds[-1],
+        startedAtTime = _SAT
+        )
+
+## Media Profile related funcs
+def buildMediaProfile(learning_context=buildLearningContext()):
+    return caliper.profiles.MediaProfile(
+        learningContext = learning_context,
+        mediaObject = caliper.entities.VideoObject(
+            entity_id = 'https://com.sat/super-media-tool/video/video1',
+            name = 'American Revolution - Key Figures Video',
+            alignedLearningObjective = [caliper.entities.LearningObjective(
+                entity_id = 'http://americanrevolution.com/personalities/learn',
+                )],
+            duration = 1420,
+            lastModifiedTime = _LMT
+            ),
+        mediaLocation = caliper.entities.MediaLocation(
+            entity_id = 'https://com.sat/super-media-tool/video/video1',
+            currentTime = 0
+            )
+        )
+
+def pauseVideo(media_profile=buildMediaProfile()):
+    media_profile.add_action(caliper.actions.Action.MediaActions['PAUSED'])
+    media_profile.add_mediaLocation(
+        new_location = caliper.entities.MediaLocation(
+            entity_id = media_profile.mediaObject.id,
+            currentTime = 710
+            )
+        )
+    return media_profile
+
+def buildMediaEvent(media_profile=pauseVideo()):
+    return caliper.events.MediaEvent(
+        action = media_profile.actions[-1],
+        edApp = media_profile.learningContext.edApp,
+        group = media_profile.learningContext.lisOrganization,
+        actor = media_profile.learningContext.agent,
+        event_object = media_profile.mediaObject,
+        mediaLocation = media_profile.mediaLocations[-1],
+        startedAtTime = _SAT
+        )
+
 ## Reading Profile related funcs
 def buildReadingProfile(learning_context=buildLearningContext()):
     return caliper.profiles.ReadingProfile(
@@ -145,42 +258,3 @@ def buildViewEvent(reading_profile=viewReadingTarget()):
         startedAtTime = _SAT
         )
 
-## Media Profile related funcs
-def buildMediaProfile(learning_context=buildLearningContext()):
-    return caliper.profiles.MediaProfile(
-        learningContext = learning_context,
-        mediaObject = caliper.entities.VideoObject(
-            entity_id = 'https://com.sat/super-media-tool/video/video1',
-            name = 'American Revolution - Key Figures Video',
-            alignedLearningObjective = [caliper.entities.LearningObjective(
-                entity_id = 'http://americanrevolution.com/personalities/learn',
-                )],
-            duration = 1420,
-            lastModifiedTime = _LMT
-            ),
-        mediaLocation = caliper.entities.MediaLocation(
-            entity_id = 'https://com.sat/super-media-tool/video/video1',
-            currentTime = 0
-            )
-        )
-
-def pauseVideo(media_profile=buildMediaProfile()):
-    media_profile.add_action(caliper.actions.Action.MediaActions['PAUSED'])
-    media_profile.add_mediaLocation(
-        new_location = caliper.entities.MediaLocation(
-            entity_id = media_profile.mediaObject.id,
-            currentTime = 710
-            )
-        )
-    return media_profile
-
-def buildMediaEvent(media_profile=pauseVideo()):
-    return caliper.events.MediaEvent(
-        action = media_profile.actions[-1],
-        edApp = media_profile.learningContext.edApp,
-        group = media_profile.learningContext.lisOrganization,
-        actor = media_profile.learningContext.agent,
-        event_object = media_profile.mediaObject,
-        mediaLocation = media_profile.mediaLocations[-1],
-        startedAtTime = _SAT
-        )
