@@ -40,7 +40,7 @@ import six
 
 from .base import BaseProfile, CaliperSerializable
 from .actions import Action
-from .entities import LearningContext, DigitalResource, MediaLocation, MediaObject
+from .entities import Assessment, DigitalResource, LearningContext, MediaLocation, MediaObject
 
 ## Base profile class
 
@@ -120,7 +120,7 @@ class Profile(BaseProfile):
         if not isinstance(new_generated, CaliperSerializable):
             raise TypeError('new generated must be an object implementing CaliperSerializable')
         else:
-            self._append_list_prop('generated', new_generated)
+            self._append_list_prop('generateds', new_generated)
 
     @property
     def learningContext(self):

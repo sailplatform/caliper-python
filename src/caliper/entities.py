@@ -36,6 +36,7 @@
 # email licenses@imsglobal.org
 
 import collections
+from rfc3987 import parse as rfc3987_parse
 import six
 import uuid
 
@@ -268,11 +269,16 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
         else:
             self._set_list_prop('objectType', None)
 
-        if partOf and (not isinstance(partOf, CaliperSerializable)):
-            raise TypeError('partOf must implement CaliperSerializable')
+        if partOf:
+            if (isinstance(partOf, six.string_types)) and (rfc3987_parse(partOf, rule='URI')):
+                self._set_str_prop('partOf', partOf)
+            elif isinstance(partOf, CaliperSerializable):
+                self._set_obj_prop('partOf', partOf)
+            else:
+                raise TypeError('partOf must implement CaliperSerializable or be an URL for a caliper entity')
         else:
             self._set_obj_prop('partOf', partOf)
-
+            
     @property
     def alignedLearningObjective(self):
         return self._get_prop('alignedLearningObjective')
@@ -605,8 +611,8 @@ class Attempt(Entity):
             actor = None,
             count = None,
             duration = None,
-            endedAtTime = None,
-            startedAtTime = None,
+            endedAtTime = 0,
+            startedAtTime = 0,
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['ATTEMPT'])
@@ -617,7 +623,7 @@ class Attempt(Entity):
         else:
             self._assignable = None
 
-        if agent and (not isinstance(agent, Agent)):
+        if actor and (not isinstance(actor, Agent)):
             raise TypeError('agent must implement Agent')
         else:
             self._actor = None
@@ -665,12 +671,12 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         }
 
     def __init__(self,
-            dateCreated = None,
-            datePublished = None,
-            dateToActivate = None,
-            dateToShow = None,
-            dateToStartOn = None,
-            dateToSubmit = None,
+            dateCreated = 0,
+            datePublished = 0,
+            dateToActivate = 0,
+            dateToShow = 0,
+            dateToStartOn = 0,
+            dateToSubmit = 0,
             maxAttempts = None,
             maxSubmits = None,
             maxScore = None,
