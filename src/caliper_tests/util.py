@@ -38,7 +38,6 @@
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 import caliper, caliper_tests
-
 import json
 
 
@@ -78,6 +77,16 @@ def buildLearningContext():
         )
 
 ## Assessment Profile related funcs
+def buildAssessmentItem():
+    return caliper.entities.AssessmentItem(
+        entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item1',
+        name = 'Assessment Item 1',
+        partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+        maxAttempts = 2,
+        maxSubmits = 2,
+        maxScore = 1
+        )
+
 def buildAssessment():
     return caliper.entities.Assessment(
         entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
@@ -133,7 +142,7 @@ def buildAssessmentProfile(learning_context=None, assessment=None):
 def startAssessment(assessment_profile=None):
     if not assessment_profile:
         assessment_profile = buildAssessmentProfile()
-    assessment_profile.add_action(caliper.actions.Action.AssessmentActions['STARTED'])
+    assessment_profile.add_action(new_action=caliper.actions.Action.AssessmentItemActions['STARTED'])
     assessment_profile.add_generated(
         new_generated = caliper.entities.Attempt(
             entity_id = assessment_profile.assessment.id + '/attempt1',
@@ -144,9 +153,20 @@ def startAssessment(assessment_profile=None):
         )
     return assessment_profile
 
+def startAssessmentItem(assessment_profile=None,
+                        assessment_item=None):
+    if not assessment_profile:
+        assessment_profile = buildAssessmentProfile()
+    if not assessment_item:
+        assessment_item = buildAssessmentItem()
+    assessment_profile.add_action(new_action=caliper.actions.Action.AssessmentItemActions['STARTED'])
+    assessment_profile.add_item_attempted(new_attempt=assessment_item)
+    return assessment_item
+
 def buildAssessmentEvent(assessment_profile=None):
     if not assessment_profile:
-        assessment_profile = startAssessment()
+        assessment_profile = buildAssessmentProfile()
+        assessment_profile = startAssessment(assessment_profile=assessment_profile)
     return caliper.events.AssessmentEvent(
         action = assessment_profile.actions[-1],
         edApp = assessment_profile.learningContext.edApp,
@@ -156,6 +176,23 @@ def buildAssessmentEvent(assessment_profile=None):
         generated = assessment_profile.generateds[-1],
         startedAtTime = _SAT
         )
+
+def buildAssessmentItemEvent(assessment_profile=None,
+                             assessment_item=None):
+    if not assessment_profile:
+        assessment_profile = buildAssessmentProfile()
+    if not assessment_item:
+        assessment_item = buildAssessmentItem()
+        assessment_item = startAssessmentItem(assessment_profile=assessment_profile,
+                                              assessment_item=assessment_item)
+    return caliper.events.AssessmentItemEvent(
+        action = assessment_profile.actions[-1],
+        edApp = assessment_profile.learningContext.edApp,
+        group = assessment_profile.learningContext.lisOrganization,
+        actor = assessment_profile.learningContext.agent,
+        event_object = assessment_item,
+        startedAtTime = _SAT
+    )
 
 ## Media Profile related funcs
 def buildMediaProfile(learning_context=None):
@@ -181,7 +218,7 @@ def buildMediaProfile(learning_context=None):
 def pauseVideo(media_profile=None):
     if not media_profile:
         media_profile = buildMediaProfile()
-    media_profile.add_action(caliper.actions.Action.MediaActions['PAUSED'])
+    media_profile.add_action(new_action=caliper.actions.Action.MediaActions['PAUSED'])
     media_profile.add_mediaLocation(
         new_location = caliper.entities.MediaLocation(
             entity_id = media_profile.mediaObject.id,
@@ -219,7 +256,7 @@ def buildReadingProfile(learning_context=None):
 def navigateToReadingTarget(reading_profile=None):
     if not reading_profile:
         reading_profile = buildReadingProfile()
-    reading_profile.add_action(caliper.actions.Action.ReadingActions['NAVIGATED_TO'])
+    reading_profile.add_action(new_action=caliper.actions.Action.ReadingActions['NAVIGATED_TO'])
     reading_profile.add_target(
         new_target = caliper.entities.Frame(
             entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)',
@@ -242,7 +279,7 @@ def navigateToReadingTarget(reading_profile=None):
 def viewReadingTarget(reading_profile=None):
     if not reading_profile:
         reading_profile = buildReadingProfile()
-    reading_profile.add_action(caliper.actions.Action.ReadingActions['VIEWED'])
+    reading_profile.add_action(new_action=caliper.actions.Action.ReadingActions['VIEWED'])
     reading_profile.add_target(
         new_target = caliper.entities.Frame(
             entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)',
