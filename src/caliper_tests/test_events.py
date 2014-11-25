@@ -51,6 +51,17 @@ class TestAssessmentProfile(unittest.TestCase):
             assessment = self.assessment
             )
 
+    def testAssessmentItemEvent(self):
+        ai = util.startAssessmentItem(
+            assessment_profile=self.assessment_profile,
+            assessment_item=self.assessment_profile.assessment.assessmentItems[0])
+        assessment_item_event = util.buildAssessmentItemEvent(
+            assessment_profile = self.assessment_profile,
+            assessment_item = ai)
+
+        self.assertEqual(assessment_item_event.as_json(),
+                         util.getFixtureStr(fixtures.ASSESSMENT_ITEM_EVENT))
+
     def testAssessmentEvent(self):
         ap = util.startAssessment(assessment_profile=self.assessment_profile)
         assessment_event = util.buildAssessmentEvent(assessment_profile=ap)

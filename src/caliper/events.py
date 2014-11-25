@@ -175,7 +175,7 @@ class AnnotationEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ANNOTATION'])
         self._set_str_prop('@type', Event.Types['ANNOTATION'])
 
-        if action not in Action.AnnotationActions.values():
+        if action and (action not in Action.AnnotationActions.values()):
             raise TypeError('action must be an Action.AnnotationActions value')
         else:
             self._set_str_prop('action', action)
@@ -189,7 +189,7 @@ class AssessmentEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT'])
 
-        if action not in Action.AssessmentActions.values():
+        if action and (action not in Action.AssessmentActions.values()):
             raise TypeError('action must be an Action.AssessmentActions value')
         else:
             self._set_str_prop('action', action)
@@ -203,7 +203,7 @@ class AssessmentItemEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT_ITEM'])
 
-        if action not in Action.AssessmentItemActions.values():
+        if action and (action not in Action.AssessmentItemActions.values()):
             raise TypeError('action must be an Actions.AssessmentItemActions value')
         else:
             self._set_str_prop('action', action)
@@ -218,7 +218,7 @@ class AssignableEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSIGNABLE'])
         self._set_str_prop('@type', Event.Types['ASSIGNABLE'])
 
-        if action not in Action.AssignableActions.values():
+        if action and (action not in Action.AssignableActions.values()):
             raise TypeError('action must be in Action.AssignableActions')
         else:
             self._set_str_prop('action', action)
@@ -239,7 +239,7 @@ class MediaEvent(Event):
         self._set_str_prop('@context', Event.Contexts['MEDIA'])
         self._set_str_prop('@type', Event.Types['MEDIA'])
 
-        if not action in Action.MediaActions.values():
+        if action and (action not in Action.MediaActions.values()):
             raise TypeError('action must be in Action.MediaActions')
         else:
             self._set_str_prop('action', action)
@@ -288,7 +288,7 @@ class OutcomeEvent(Event):
         self._set_str_prop('@context', Event.Contexts['OUTCOME'])
         self._set_str_prop('@type', Event.Types['OUTCOME'])
                 
-        if action not in Action.OutcomeActions.values():
+        if action and (action not in Action.OutcomeActions.values()):
             raise TypeError('action must be an Action.OutcomeActions value')
         else:
             self._set_str_prop('action', action)
