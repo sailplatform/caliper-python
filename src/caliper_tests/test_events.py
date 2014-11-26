@@ -46,28 +46,51 @@ class TestAssessmentProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.buildLearningContext()
         self.assessment = util.buildAssessment()
-        self.assessment_profile = util.buildAssessmentProfile(
+
+    def testAssessmentItemEvent(self):
+        ap = util.buildAssessmentProfile(
             learning_context = self.learning_context,
             assessment = self.assessment
             )
-
-    def testAssessmentItemEvent(self):
         ai = util.startAssessmentItem(
-            assessment_profile=self.assessment_profile,
-            assessment_item=self.assessment_profile.assessment.assessmentItems[0])
+            assessment_profile=ap,
+            assessment_item=ap.assessment.assessmentItems[0])
         assessment_item_event = util.buildAssessmentItemEvent(
-            assessment_profile = self.assessment_profile,
+            assessment_profile = ap,
             assessment_item = ai)
 
         self.assertEqual(assessment_item_event.as_json(),
                          util.getFixtureStr(fixtures.ASSESSMENT_ITEM_EVENT))
 
     def testAssessmentEvent(self):
-        ap = util.startAssessment(assessment_profile=self.assessment_profile)
+        ap = util.buildAssessmentProfile(
+            learning_context = self.learning_context,
+            assessment = self.assessment
+            )
+        ap = util.startAssessment(assessment_profile=ap)
         assessment_event = util.buildAssessmentEvent(assessment_profile=ap)
 
         self.assertEqual(assessment_event.as_json(),
                          util.getFixtureStr(fixtures.ASSESSMENT_EVENT))
+
+class TestOutcomeProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.buildLearningContext()
+        self.assessment = util.buildAssessment()
+
+    def testAssessmentOutcomeEvent(self):
+        ap = util.buildAssessmentProfile(
+            learning_context = self.learning_context,
+            assessment = self.assessment
+            )
+        ap = util.startAssessment(assessment_profile=ap)
+        res = util.buildAssessmentResult(assessment_profile=ap)
+        op = util.buildAssessmentOutcomeProfile(assessment_profile=ap,
+                                                result=res)
+        assessment_outcome_event = util.buildAssessmentOutcomeEvent(outcome_profile=op)
+
+        self.assertEqual(assessment_outcome_event.as_json(),
+                         util.getFixtureStr(fixtures.ASSESSMENT_OUTCOME_EVENT))
 
 class TestMediaProfile(unittest.TestCase):
     def setUp(self):
