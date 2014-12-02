@@ -40,7 +40,9 @@ import six
 
 from .base import BaseProfile, CaliperSerializable
 from .actions import Action
-from .entities import Assessment, AssessmentItem, DigitalResource, LearningContext, MediaLocation, MediaObject
+from .entities import (Assessment, AssessmentItem, AssignableDigitalResource,
+                       DigitalResource, LearningContext, MediaLocation,
+                       MediaObject, Outcome, )
 
 ## Base profile class
 

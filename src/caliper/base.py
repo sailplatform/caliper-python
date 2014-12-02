@@ -130,7 +130,10 @@ class CaliperSerializable(object):
             self._prop_name_map.update({k:name})
 
     def _set_float_prop(self,k,v,name=None):
-        self._set_prop(k, float(v) if v else None, name)
+        if v == None:
+            self._set_prop(k,None,name)
+        else:
+            self._set_prop(k, float(v), name)
 
     def _set_bool_prop(self,k,v,name=None):
         if v == None:
