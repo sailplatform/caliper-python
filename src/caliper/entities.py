@@ -824,7 +824,7 @@ class Outcome(CaliperSerializable):
         if attempt and (not isinstance(attempt, Attempt)):
             raise TypeError('attempt must implement Attempt')
         else:
-            self._set_obj_prop('attmept', attempt)
+            self._set_obj_prop('attempt', attempt)
 
         if result and (not isinstance(result, Result)):
             raise TypeError('result must implement Result')
@@ -839,7 +839,7 @@ class Outcome(CaliperSerializable):
         if new_attempt and (not isinstance(new_attempt, Attempt)):
             raise TypeError('new_attempt must implement Attempt')
         else:
-            self._set_obj_prop('attmept', new_attempt)
+            self._set_obj_prop('attempt', new_attempt)
         
     @property
     def result(self):
@@ -856,13 +856,13 @@ class Result(Entity):
 
     def __init__(self,
             comment = None,
-            curvedTotalScore = None,
-            curveFactor = None,
-            extraCreditScore = None,
-            normalScore = None,
-            penaltyScore = None,
+            curvedTotalScore = 0.0,
+            curveFactor = 0.0,
+            extraCreditScore = 0.0,
+            normalScore = 0.0,
+            penaltyScore = 0.0,
             scoredBy = None,
-            totalScore = None,
+            totalScore = 0.0,
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['RESULT'])
