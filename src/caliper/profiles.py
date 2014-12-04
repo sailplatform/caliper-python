@@ -41,7 +41,7 @@ import six
 from .base import BaseProfile, CaliperSerializable
 from .actions import Action
 from .entities import (Assessment, AssessmentItem, AssignableDigitalResource,
-                       DigitalResource, LearningContext, MediaLocation,
+                       Attempt, DigitalResource, LearningContext, MediaLocation,
                        MediaObject, Outcome, )
 
 ## Base profile class
@@ -223,6 +223,12 @@ class AssignableProfile(Profile):
     @property
     def attempts(self):
         return self._get_prop('attempts')
+
+    def add_attempt(self, new_attempt=None):
+        if not isinstance(new_attempt, Attempt):
+            raise TypeError('new attmept must be an object implementing Attempt')
+        else:
+            self._append_list_prop('attempts', new_attempt)
         
 class MediaProfile(Profile):
 

@@ -211,6 +211,8 @@ def buildAssessmentResult(assessment_profile=None):
         comment = 'Well done.'
         )
 
+
+## Outcome Profile related funcs
 def buildAssessmentOutcomeProfile(assessment_profile=None,
                                   result=None):
     if not assessment_profile:
@@ -242,9 +244,47 @@ def buildAssessmentOutcomeEvent(outcome_profile=None):
         generated = outcome.result,
         startedAtTime = _SAT
         )
-    
-        
 
+## Assignable Profile related funcs
+def buildAssignableProfile(learning_context=None,
+                           assessment = None):
+    if not learning_context:
+        learning_context = buildLearningContext()
+    if not assessment:
+        assessment = buildAssessment()
+    return caliper.profiles.AssignableProfile(
+        learningContext = learning_context,
+        assignable = assessment,
+        )
+
+def startAssignableAssessment(assignable_profile=None):
+    if not assignable_profile:
+        assignable_profile = buildAssignableProfile()
+    assignable_profile.add_action(new_action=caliper.actions.Action.AssignableActions['STARTED'])
+    assignable_profile.add_attempt(
+        new_attempt = caliper.entities.Attempt(
+            entity_id = assignable_profile.assignable.id+'/attempt1',
+            assignable = assignable_profile.assignable,
+            actor = assignable_profile.learningContext.agent,
+            count = 1
+            )
+        )
+    return assignable_profile
+
+def buildAssignableEvent(assignable_profile=None):
+    if not assignable_profile:
+        assignable_profile = buildAssignableProfile()
+    return caliper.events.AssignableEvent(
+        action = assignable_profile.actions[-1],
+        edApp = assignable_profile.learningContext.edApp,
+        group = assignable_profile.learningContext.lisOrganization,
+        actor = assignable_profile.learningContext.agent,
+        event_object = assignable_profile.assignable,
+        generated = assignable_profile.attempts[-1],
+        startedAtTime = _SAT
+        )
+
+    
 ## Media Profile related funcs
 def buildMediaProfile(learning_context=None):
     if not learning_context:
