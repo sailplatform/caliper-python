@@ -42,6 +42,22 @@ from caliper_tests import fixtures, util
 
 import unittest
 
+class TestAssignableProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.buildLearningContext()
+        self.assessment = util.buildAssessment()
+
+    def testAssignableEvent(self):
+        ap = util.buildAssignableProfile(
+            learning_context = self.learning_context,
+            assessment = self.assessment
+            )
+        ap = util.startAssignableAssessment(assignable_profile=ap)
+        assignable_event = util.buildAssignableEvent(assignable_profile=ap)
+
+        self.assertEqual(assignable_event.as_json(),
+                         util.getFixtureStr(fixtures.ASSIGNABLE_EVENT))
+
 class TestAssessmentProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.buildLearningContext()
