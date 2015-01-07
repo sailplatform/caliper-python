@@ -68,7 +68,6 @@ class Event(BaseEvent):
     def __init__(self,
             action = None,
             actor = None,
-            context = None,
             duration = None,
             edApp = None,
             endedAtTime = 0,
@@ -103,20 +102,20 @@ class Event(BaseEvent):
         else:
             self._set_obj_prop('object', event_object)
 
-        if generated and (not isinstance(generated, CaliperSerializable)):
-            raise TypeError('generated must implement CaliperSerializable')
+        if generated and (not isinstance(generated, entities.Generatable)):
+            raise TypeError('generated must implement entities.Generatable')
         else:
             self._set_obj_prop('generated', generated)
 
-        if group and (not isinstance(group, entities.Organization)):
-            raise TypeError('group must implement entities.Organization')
+        if lisOrganzation and (not isinstance(lisOrganization, entities.Organization)):
+            raise TypeError('lisOrganization must implement entities.Organization')
         else:
-            self._set_obj_prop('group', group)
+            self._set_obj_prop('group', lisOrganization)
 
         self._set_int_prop('startedAtTime', startedAtTime)
             
-        if target and (not isinstance(target, CaliperSerializable)):
-            raise TypeError('target must implement CaliperSerializable')
+        if target and (not isinstance(target, entities.Targetable)):
+            raise TypeError('target must implement entities.Targetable')
         else:
             self._set_obj_prop('target', target)
 
@@ -154,22 +153,28 @@ class Event(BaseEvent):
         return self._get_prop('generated')
 
     @property
-    def group(self):
+    def lisOrganization(self):
         return self._get_prop('group')
-
-    @property
-    def startedAtTime(self):
-        return self._get_prop('startedAtTime')
     
     @property
     def object(self):
         return self._get_prop('object')
+
+    @property
+    def startedAtTime(self):
+        return self._get_prop('startedAtTime')
+
+    @property
+    def target(self):
+        return self._get_prop('target')
+
 
 ## Derived Events
 class AnnotationEvent(Event):
 
     def __init__(self,
             action = None,
+            event_object = None,
             **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['ANNOTATION'])
@@ -180,10 +185,18 @@ class AnnotationEvent(Event):
         else:
             self._set_str_prop('action', action)
 
+        if event_object and (not isinstance(event_object, entities.Annotation)):
+            raise TypeError('event_object must implement entities.Annotation')
+        else:
+            self._set_obj_prop('object', event_object)
+
+
 class AssessmentEvent(Event):
     
     def __init__(self,
             action = None,
+            event_object = None,
+            generated = None,
             **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT'])
@@ -194,10 +207,22 @@ class AssessmentEvent(Event):
         else:
             self._set_str_prop('action', action)
 
+        if event_object and (not isinstance(event_object, entities.Assessment)):
+            raise TypeError('event_object must implement entities.Assessment')
+        else:
+            self._set_obj_prop('object', event_object)
+
+        if generated and (not isinstnace(generated, entities.Attempt)):
+            raise TypeError('generated must implement entities.Attempt')
+        else:
+            self._set_obj_prop('generated', generated)
+
+
 class AssessmentItemEvent(Event):
     
     def __init__(self,
             action = None,
+            event_object = None,
             **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
@@ -208,11 +233,18 @@ class AssessmentItemEvent(Event):
         else:
             self._set_str_prop('action', action)
 
+        if event_object and (not isinstance(event_object, entities.AssessmentItem)):
+            raise TypeError('event_object must implement entities.AssessmentItem')
+        else:
+            self._set_obj_prop('object', event_object)
+
+
 class AssignableEvent(Event):
     
     def __init__(self,
             action = None,
             event_object = None,
+            generated = None,
             **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['ASSIGNABLE'])
@@ -228,12 +260,18 @@ class AssignableEvent(Event):
         else:
             self._set_obj_prop('object', event_object)
 
+        if generated and (not isinstnace(generated, entities.Attempt)):
+            raise TypeError('generated must implement entities.Attempt')
+        else:
+            self._set_obj_prop('generated', generated)
+
+
 class MediaEvent(Event):
 
     def __init__(self,
             action = None,
             event_object = None,
-            mediaLocation = None,
+            target = None,
             **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['MEDIA'])
@@ -249,14 +287,11 @@ class MediaEvent(Event):
         else:
             self._set_obj_prop('object', event_object)
 
-        if mediaLocation and not( isinstance(mediaLocation, entities.MediaLocation)):
-            raise TypeError('mediaLocation must implement entities.MediaLocation')
+        if target and not( isinstance(target, entities.MediaLocation)):
+            raise TypeError('target must implement entities.MediaLocation')
         else:
-            self._set_obj_prop('mediaLocation', mediaLocation)
+            self._set_obj_prop('target', target)
 
-    @property
-    def mediaLocation(self):
-        return self._get_prop('mediaLocation')
 
 class NavigationEvent(Event):
 
@@ -277,10 +312,10 @@ class NavigationEvent(Event):
     def navigatedFrom(self):
         return self._get_prop('navigatedFrom')
 
+
 class OutcomeEvent(Event):
 
     def __init__(self,
-                 action = None,
                  event_object = None,
                  generated = None,
                  **kwargs):
@@ -288,11 +323,6 @@ class OutcomeEvent(Event):
         self._set_str_prop('@context', Event.Contexts['OUTCOME'])
         self._set_str_prop('@type', Event.Types['OUTCOME'])
                 
-        if action and (action not in Action.OutcomeActions.values()):
-            raise TypeError('action must be an Action.OutcomeActions value')
-        else:
-            self._set_str_prop('action', action)
-
         if event_object and not( isinstance(event_object, entities.Attempt)):
             raise TypeError('event_object must implement entities.Attempt')
         else:
@@ -303,11 +333,26 @@ class OutcomeEvent(Event):
         else:
             self._set_obj_prop('generated', generated)
 
+
 class ViewEvent(Event):
 
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 event_object = None,
+                 target = None,
+                 **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['VIEW'])
         self._set_str_prop('@type', Event.Types['VIEW'])
         self._set_str_prop('action', Action.ReadingActions['VIEWED'])
 
+        if event_object and not( isinstance(event_object, entities.DigitalResource)):
+            raise TypeError('event_object must implement DigitalResource')
+        else:
+            self._set_obj_prop('object', event_object)
+
+        if target and not( isinstance(target, entities.Frame)):
+            raise TypeError('target must implement entities.Frame')
+        else:
+            self._set_obj_prop('target', target)
+
+        
