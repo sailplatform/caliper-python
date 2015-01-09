@@ -56,7 +56,7 @@ __copyright__ = 'Copyright 2014 IMS Global Learning Consortium, Inc.'
 # import base, actions, entities, events, profiles, request, sensor
 # import extern, util
 
-from . import base, actions, entities, events, profiles, request, sensor
+from . import base, entities, events, profiles, request, sensor
 from .sensor import Sensor as Sensor
 from .util import stats
 

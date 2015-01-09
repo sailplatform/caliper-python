@@ -132,10 +132,10 @@ class Assignable(CaliperSerializable):
     def maxSubmits(self):
         return self._get_prop('maxSubmits')
 
-class Generatable(object):
+class Generatable(CaliperSerializable):
     pass
 
-class Targetable(object):
+class Targetable(CaliperSerializable):
     pass
 
     
@@ -674,7 +674,7 @@ class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
 
 ## Media entities
-class MediaLocation(DigitalResource):
+class MediaLocation(DigitalResource, Targetable):
 
     def __init__(self,
             currentTime = None,

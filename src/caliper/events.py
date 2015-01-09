@@ -36,8 +36,7 @@
 # email licenses@imsglobal.org
 
 from .base import BaseEvent, CaliperSerializable
-from .actions import Action
-from . import entities
+from . import entities, profiles
 
 ## Base event class
 class Event(BaseEvent):
@@ -81,7 +80,10 @@ class Event(BaseEvent):
         self._set_str_prop('@context', Event.Contexts['EVENT'])
         self._set_str_prop('@type', Event.Types['EVENT'])
 
-        self._set_str_prop('action', action)
+        if action and (action not in profiles.Profile.Actions.values()):
+            raise ValueError('action must be in the list of base Profile actions')
+        else:
+            self._set_str_prop('action', action)
 
         if actor and (not isinstance(actor, entities.Agent)):
             raise TypeError('actor must implement entities.Agent')
@@ -180,8 +182,8 @@ class AnnotationEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ANNOTATION'])
         self._set_str_prop('@type', Event.Types['ANNOTATION'])
 
-        if action and (action not in Action.AnnotationActions.values()):
-            raise TypeError('action must be an Action.AnnotationActions value')
+        if action and (action not in profiles.AnnotationProfile.Actions.values()):
+            raise ValueError('action must be in the list of AnnotationProfile actions')
         else:
             self._set_str_prop('action', action)
 
@@ -202,8 +204,8 @@ class AssessmentEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT'])
 
-        if action and (action not in Action.AssessmentActions.values()):
-            raise TypeError('action must be an Action.AssessmentActions value')
+        if action and (action not in profiles.AssessmentProfile.Actions.values()):
+            raise ValueError('action must be in the list of AssessmentProfile actions')
         else:
             self._set_str_prop('action', action)
 
@@ -228,8 +230,8 @@ class AssessmentItemEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT_ITEM'])
 
-        if action and (action not in Action.AssessmentItemActions.values()):
-            raise TypeError('action must be an Actions.AssessmentItemActions value')
+        if action and (action not in profiles.AssessmentItemProfile.Actions.values()):
+            raise ValueError('action must be in the list of AssessmentItemProfile actions')
         else:
             self._set_str_prop('action', action)
 
@@ -250,8 +252,8 @@ class AssignableEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSIGNABLE'])
         self._set_str_prop('@type', Event.Types['ASSIGNABLE'])
 
-        if action and (action not in Action.AssignableActions.values()):
-            raise TypeError('action must be in Action.AssignableActions')
+        if action and (action not in profiles.AssignableProfile.Actions.values()):
+            raise TypeError('action must be in the list of AssignableProfile actions')
         else:
             self._set_str_prop('action', action)
 
@@ -277,8 +279,8 @@ class MediaEvent(Event):
         self._set_str_prop('@context', Event.Contexts['MEDIA'])
         self._set_str_prop('@type', Event.Types['MEDIA'])
 
-        if action and (action not in Action.MediaActions.values()):
-            raise TypeError('action must be in Action.MediaActions')
+        if action and (action not in profiles.MediaProfile.Actions.values()):
+            raise TypeError('action must be in the list of MediaProfile actions')
         else:
             self._set_str_prop('action', action)
 
@@ -296,12 +298,12 @@ class MediaEvent(Event):
 class NavigationEvent(Event):
 
     def __init__(self,
-            navigatedFrom = None,
-            **kwargs):
+                 navigatedFrom = None,
+                 **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['NAVIGATION'])
         self._set_str_prop('@type', Event.Types['NAVIGATION'])
-        self._set_str_prop('action', Action.ReadingActions['NAVIGATED_TO'])
+        self._set_str_prop('action', profiles.Profile.Actions['NAVIGATED_TO'])
 
         if navigatedFrom and not( isinstance(navigatedFrom, entities.DigitalResource)):
             raise TypeError('navigatedFrom must implement entities.DigitalResource')
@@ -316,12 +318,18 @@ class NavigationEvent(Event):
 class OutcomeEvent(Event):
 
     def __init__(self,
+                 action = None,
                  event_object = None,
                  generated = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['OUTCOME'])
         self._set_str_prop('@type', Event.Types['OUTCOME'])
+
+        if action and (action not in profiles.OutcomeProfile.Actions.values()):
+            raise TypeError('action must be in the list of OutcomeProfile actions')
+        else:
+            self._set_str_prop('action', action)
                 
         if event_object and not( isinstance(event_object, entities.Attempt)):
             raise TypeError('event_object must implement entities.Attempt')
@@ -337,13 +345,18 @@ class OutcomeEvent(Event):
 class ViewEvent(Event):
 
     def __init__(self,
+                 action = None,
                  event_object = None,
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['VIEW'])
         self._set_str_prop('@type', Event.Types['VIEW'])
-        self._set_str_prop('action', Action.ReadingActions['VIEWED'])
+
+        if action and (action not in profiles.ReadingProfile.Actions.values()):
+            raise TypeError('action must be in the list of ReadingProfile actions')
+        else:
+            self._set_str_prop('action', action)
 
         if event_object and not( isinstance(event_object, entities.DigitalResource)):
             raise TypeError('event_object must implement DigitalResource')

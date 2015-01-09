@@ -212,45 +212,11 @@ class CaliperSerializable(object):
     def as_json(self):
         return json.dumps(self.as_dict(),sort_keys=True)
 
-### Actions ###
-class MetaAction(type):
-    @property
-    def AnnotationActions(self):
-        return self._annotation_actions
-
-    @property
-    def AssessmentActions(self):
-        return self._assessment_actions
-
-    @property
-    def AssessmentItemActions(self):
-        return self._assessment_item_actions
-
-    @property
-    def AssignableActions(self):
-        return self._assignable_actions
-
-    @property
-    def MediaActions(self):
-        return self._media_actions
-
-    @property
-    def OutcomeActions(self):
-        return self._outcome_actions
-
-    @property
-    def ReadingActions(self):
-        return self._reading_actions
-
-@six.add_metaclass(MetaAction)
-class BaseAction(object):
-    pass
-
 ### Entities ###
 class MetaEntity(type):
     @property
-    def Types(self):
-        return self._types
+    def Types(cls):
+        return cls._types
 
 @six.add_metaclass(MetaEntity)
 class BaseEntity(CaliperSerializable):
@@ -261,8 +227,8 @@ class BaseEntity(CaliperSerializable):
 ### Events ###
 class MetaEvent(type):
     @property
-    def Types(self):
-        return self._types
+    def Types(cls):
+        return cls._types
 
     @property
     def Contexts(cls):
@@ -275,7 +241,9 @@ class BaseEvent(CaliperSerializable):
 
 ### Profiles ###
 class MetaProfile(type):
-    pass
+    @property
+    def Actions(cls):
+        return cls._actions
 
 @six.add_metaclass(MetaProfile)
 class BaseProfile(CaliperSerializable):
