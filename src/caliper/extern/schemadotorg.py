@@ -51,5 +51,11 @@ class AudioObject(MediaObject):
 class ImageObject(MediaObject):
     pass
 
+class SoftwareApplication(CreativeWork):
+    pass
+
 class VideoObject(MediaObject):
+    pass
+
+class WebPage(CreativeWork):
     pass

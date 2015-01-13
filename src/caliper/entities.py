@@ -48,15 +48,19 @@ from .extern import foaf, qti, schemadotorg
 class Entity(BaseEntity):
 
     _types = {
-        'ACTIVITY_CONTEXT': 'http://purl.imsglobal.org/caliper/v1/ActivityContext',
         'AGENT': 'http://purl.imsglobal.org/caliper/v1/Agent',
         'ATTEMPT': 'http://purl.imsglobal.org/caliper/v1/Attempt',
         'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/DigitalResource',
         'ENTITY': 'http://purl.imsglobal.org/caliper/v1/Entity',
+        'GENERATED': 'http://purl.imsglobal.org/caliper/v1/Generated',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
-        'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
+        'LIS_PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
+        'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
+        # 'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
         'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
-        'VIEW': 'http://purl.imsglobal.org/caliper/v1/View',
+        'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
+        'TARGET': 'http://purl.imsglobal.org/caliper/v1/Target',
+        'VIEW': 'http://purl.imsglobal.org/caliper/v1/View', # not sure we need this any more?
         }
 
     def __init__(self,
@@ -70,11 +74,6 @@ class Entity(BaseEntity):
         self._set_str_prop('@type', Entity.Types['ENTITY'])
         self._set_int_prop('lastModifiedTime', lastModifiedTime)
         self._set_str_prop('name', name)
-
-        if properties and (not isinstance(properties, collections.MutableMapping)):
-            raise TypeError('properties must be a dictionary or mapping of key-value pairs')
-        else:
-            self._set_obj_prop('properties', properties)
 
     @property
     def id(self):
@@ -92,45 +91,64 @@ class Entity(BaseEntity):
     def name(self):
         return self._get_prop('name')
 
+## Behavioural interfaces for entities ##
+class Assignable(CaliperSerializable):
+
     @property
-    def properties(self):
-        return self._get_obj_prop('properties')
+    def dateCreated(self):
+        return self._get_prop('dateCreated')
 
+    @property
+    def datePublished(self):
+        return self._get_prop('datePublished')
 
+    @property
+    def dateToActivate(self):
+        return self._get_prop('dateToActivate')
+
+    @property
+    def dateToShow(self):
+        return self._get_prop('dateToShow')
+
+    @property
+    def dateToStartOn(self):
+        return self._get_prop('dateToStartOn')
+
+    @property
+    def dateToSubmit(self):
+        return self._get_prop('dateToSubmit')
+
+    @property
+    def maxAttempts(self):
+        return self._get_prop('maxAttempts')
+
+    @property
+    def maxSubmits(self):
+        return self._get_prop('maxSubmits')
+
+class Generatable(CaliperSerializable):
+    pass
+
+class Targetable(CaliperSerializable):
+    pass
+
+    
 ### Derived entities ###
 
-## Activity context entities
-class ActivityContext(Entity):
-
-    def __init__(self, **kwargs):
-        Entity.__init__(self, **kwargs)
-        self._set_str_prop('@type', Entity.Types['ACTIVITY_CONTEXT'])
-
 ## Agent entities
-class Agent(Entity, foaf.Agent):
-    _types = {
-        'LIS_PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
-        'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
-        'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
-        }
+class SoftwareApplication(Entity, foaf.Agent, schemadotorg.SoftwareApplication):
 
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_str_prop('@type', Entity.Types['AGENT'])
+        self._set_str_prop('@type', Entity.Types['SOFTWARE_APPLICATION'])
 
-class SoftwareApplication(Agent):
-
-    def __init__(self, **kwargs):
-        Agent.__init__(self, **kwargs)
-        self._set_str_prop('@type', Agent.Types['SOFTWARE_APPLICATION'])
-
-class Person(Agent):
+class Person(Entity, foaf.Agent):
 
     def __init__(self, **kwargs):
-        Agent.__init__(self, **kwargs)
-        self._set_str_prop('@type', Agent.Types['LIS_PERSON'])
+        Entity.__init__(self, **kwargs)
+        self._set_str_prop('@type', Entity.Types['LIS_PERSON'])
 
-class Organization(Agent):
+class Organization(Entity, foaf.Agent):
     _types = {
         'LIS_COURSE_SECTION': 'http://purl.imsglobal.org/caliper/v1/lis/CourseSection',
         }
@@ -138,8 +156,8 @@ class Organization(Agent):
     def __init__(self,
             parentOrg=None,
             **kwargs):
-        Agent.__init__(self, **kwargs)
-        self._set_str_prop('@type', Agent.Types['LIS_ORGANIZATION'])
+        Entity.__init__(self, **kwargs)
+        self._set_str_prop('@type', Entity.Types['LIS_ORGANIZATION'])
 
         if parentOrg and (not isinstance(parentOrg, Organization)):
             raise TypeError('parentOrg must implement Organization')
@@ -185,8 +203,8 @@ class LearningContext(CaliperSerializable):
 
         CaliperSerializable.__init__(self)
 
-        if agent and (not isinstance(agent, Agent)):
-            raise TypeError('agent must implement Agent')
+        if agent and (not isinstance(agent, foaf.Agent)):
+            raise TypeError('agent must implement foaf.Agent')
         else:
             self._set_obj_prop('agent', agent)
 
@@ -231,6 +249,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
         'EPUB_SUB_CHAPTER': 'http://www.idpf.org/epub/vocab/structure/#subchapter',
         'EPUB_VOLUME': 'http://www.idpf.org/epub/vocab/structure/#volume',
         'FRAME': 'http://purl.imsglobal.org/caliper/v1/Frame',
+        'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
         'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
         'READING': 'http://www.idpf.org/epub/vocab/structure',
         'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage',
@@ -295,60 +314,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
     def partOf(self):
         return self._get_prop('partOf')
 
-class View(Entity):
-
-    def __init__(self,
-            actor = None,
-            duration = None,
-            endedAtTime = 0,
-            frame = None,
-            startedAtTime = 0,
-            **kwargs):
-        Entity.__init__(self,**kwargs)
-        self._set_str_prop('@type', Entity.Types['VIEW'])
-
-        if actor and (not isinstance(actor, Agent)):
-            raise TypeError('actor must implement Agent')
-        else:
-            self._set_obj_prop('actor', actor)
-
-        self._set_str_prop('duration', duration)
-        self._set_int_prop('endedAtTime', endedAtTime)
-
-        if frame and (not isinstance(frame, Frame)):
-            raise TypeError('frame must implement Frame')
-        else:
-            self._set_obj_prop('frame', frame)
-
-        self._set_int_prop('startedAtTime', startedAtTime)
-
-    @property
-    def actor(self):
-        return self._get_prop('actor')
-
-    @property
-    def duration(self):
-        return self._get_prop('duration')
-    @duration.setter
-    def duration(self, new_duration):
-        self._set_str_prop('duration', new_duration)
-
-    @property
-    def endedAtTime(self):
-        return self._get_prop('endedAtTime')
-    @endedAtTime.setter
-    def endedAtTime(self, new_endedAtTime):
-        self._set_int_prop('endedAtTime', new_endedAtTime)
-
-    @property
-    def frame(self):
-        return self._get_prop('frame')
-
-    @property
-    def startedAtTime(self):
-        return self._get_prop('startedAtTime')
-        
-class Frame(DigitalResource):
+class Frame(DigitalResource, Targetable):
 
     def __init__(self,
             index = 0,
@@ -361,8 +327,7 @@ class Frame(DigitalResource):
     def index(self):
         return self._get_prop('index')
     
-
-class MediaObject(DigitalResource):
+class MediaObject(DigitalResource, schemadotorg.MediaObject):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
@@ -399,7 +364,7 @@ class Reading(DigitalResource):
     def version(self):
         return self._get_prop('version')
                      
-class WebPage(DigitalResource):
+class WebPage(DigitalResource, schemadotorg.WebPage):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
@@ -503,10 +468,10 @@ class SharedAnnotation(Annotation):
         self._set_str_prop('@type', Annotation.Types['SHARED_ANNOTATION'])
 
         if isinstance(withAgents, collections.MutableSequence):
-            if all( isinstance(item, Agent) for item in withAgents):
+            if all( isinstance(item, foaf.Agent) for item in withAgents):
                 self._set_list_prop('withAgents', withAgents)
             else:
-                raise TypeError('withAgents must be a list of objects that implement Agent')
+                raise TypeError('withAgents must be a list of objects that implement foaf.Agent')
         else:
             self._set_list_prop('withAgents', None)
 
@@ -555,41 +520,8 @@ class TextPositionSelector(CaliperSerializable):
         self._set_str_prop('start', new_start)
 
 ## Assignable entities
-class Assignable(CaliperSerializable):
-
-    @property
-    def dateCreated(self):
-        return self._get_prop('dateCreated')
-
-    @property
-    def datePublished(self):
-        return self._get_prop('datePublished')
-
-    @property
-    def dateToActivate(self):
-        return self._get_prop('dateToActivate')
-
-    @property
-    def dateToShow(self):
-        return self._get_prop('dateToShow')
-
-    @property
-    def dateToStartOn(self):
-        return self._get_prop('dateToStartOn')
-
-    @property
-    def dateToSubmit(self):
-        return self._get_prop('dateToSubmit')
-
-    @property
-    def maxAttempts(self):
-        return self._get_prop('maxAttempts')
-
-    @property
-    def maxSubmits(self):
-        return self._get_prop('maxSubmits')
                  
-class Attempt(Entity):
+class Attempt(Entity, Generatable):
 
     '''
     Keyword arguments:
@@ -623,8 +555,8 @@ class Attempt(Entity):
         else:
             self._assignable = None
 
-        if actor and (not isinstance(actor, Agent)):
-            raise TypeError('agent must implement Agent')
+        if actor and (not isinstance(actor, foaf.Agent)):
+            raise TypeError('agent must implement foaf.Agent')
         else:
             self._actor = None
 
@@ -725,14 +657,14 @@ class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
 
 ## Media entities
-class MediaLocation(Entity):
+class MediaLocation(DigitalResource, Targetable):
 
     def __init__(self,
             currentTime = None,
             entity_id = None,
             **kwargs):
-        Entity.__init__(self, **kwargs)
-        self._set_str_prop('@type', Entity.Types['MEDIA_LOCATION'])
+        DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@type', DigitalResource.Types['MEDIA_LOCATION'])
         ## Is it sufficient just to generate a random UUID here? Or does there
         ## need to be some specific value (as there seems to be in the Java client)??
         self._uuid = uuid.uuid4()
@@ -814,45 +746,7 @@ class VideoObject(MediaObject, schemadotorg.VideoObject):
         self._set_str_prop('@type', MediaObject.Types['VIDEO_OBJECT'])
 
 ## Outcome entities
-class Outcome(CaliperSerializable):
-
-    def __init__(self,
-            attempt = None,
-            result = None):
-        CaliperSerializable.__init__(self)
-
-        if attempt and (not isinstance(attempt, Attempt)):
-            raise TypeError('attempt must implement Attempt')
-        else:
-            self._set_obj_prop('attempt', attempt)
-
-        if result and (not isinstance(result, Result)):
-            raise TypeError('result must implement Result')
-        else:
-            self._set_obj_prop('result', result)
-
-    @property
-    def attempt(self):
-        return self._get_prop('attempt')
-    @attempt.setter
-    def attempt(self, new_attempt):
-        if new_attempt and (not isinstance(new_attempt, Attempt)):
-            raise TypeError('new_attempt must implement Attempt')
-        else:
-            self._set_obj_prop('attempt', new_attempt)
-        
-    @property
-    def result(self):
-        return self._get_prop('result')
-    @result.setter
-    def result(self, new_result):
-        if new_result and (not isinstance(new_result, Result)):
-            raise TypeError('new_result must implement Result')
-        else:
-            self._set_obj_prop('result', new_result)
-
-
-class Result(Entity):
+class Result(Entity, Generatable):
 
     def __init__(self,
             comment = None,
@@ -874,8 +768,8 @@ class Result(Entity):
         self._set_float_prop('normalScore', normalScore)
         self._set_float_prop('penaltyScore', penaltyScore)
 
-        if scoredBy and (not isinstance(scoredBy, Agent)):
-            raise TypeError('scoredBy must implement Agent')
+        if scoredBy and (not isinstance(scoredBy, foaf.Agent)):
+            raise TypeError('scoredBy must implement foaf.Agent')
         else:
             self._set_obj_prop('scoredBy', scoredBy)
         

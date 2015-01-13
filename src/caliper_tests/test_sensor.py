@@ -44,28 +44,44 @@ import unittest
 
 class TestEvent(unittest.TestCase):
     def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.reading_profile = util.buildReadingProfile(learning_context=self.learning_context)
-        self.sensor = caliper.build_sensor_from_config(config_options=util.getTestingOptions())
+        self.sensor = caliper.build_sensor_from_config(
+            config_options = util.get_testing_options())
+        self.learning_context = util.build_readium_learning_context()
+        self.epub = util.build_epub_vol43()
+        self.from_resource = util.build_AmRev101_landing_page()
+        self.target = util.build_epub_subchap431()
 
     def testEvent(self):
-        rp = util.navigateToReadingTarget(reading_profile=self.reading_profile)
-
-        for i in range(4):
-            self.sensor.send(util.buildNavigationEvent(rp))
-
-        count = self.sensor.statistics.measures.count
+        iterations = 4
+        for i in range(iterations):
+            self.sensor.send(
+                util.build_epub_navigation_event(
+                    learning_context = self.learning_context,
+                    event_object = self.epub,
+                    action = caliper.profiles.ReadingProfile.Actions['NAVIGATED_TO'],
+                    from_resource = self.from_resource,
+                    target = self.target
+                    )
+                )
+        counted = self.sensor.statistics.measures.count
         self.sensor.statistics.clear()
-        self.assertEqual(count, 4)
+        self.assertEqual(counted, iterations)
 
     def testEventBatch(self):
-        rp = util.navigateToReadingTarget(reading_profile=self.reading_profile)
-
-        batch = [util.buildNavigationEvent(rp) for x in range(4)]
+        iterations = 4
+        batch = [
+            util.build_epub_navigation_event(
+                learning_context = self.learning_context,
+                event_object = self.epub,
+                action = caliper.profiles.ReadingProfile.Actions['NAVIGATED_TO'],
+                from_resource = self.from_resource,
+                target = self.target
+                )
+            for x in range(iterations)]
         self.sensor.send_batch(batch)
         count = self.sensor.statistics.measures.count
         self.sensor.statistics.clear()
-        self.assertEqual(count, 4)
+        self.assertEqual(count, iterations)
 
 if __name__ == '__main__':
     unittest.main()
