@@ -42,116 +42,118 @@ from .base import BaseProfile, CaliperSerializable
 from .entities import Assignable, Generatable, Targetable
 from .entities import (Assessment, AssessmentItem, AssignableDigitalResource,
                        Attempt, DigitalResource, LearningContext, MediaLocation,
-                       MediaObject, Outcome, )
+                       MediaObject, )
 
 ## Base profile class
 
 class Profile(BaseProfile):
     _actions = {
-        'DOWNLOADED': 'item.downloaded',
-        'UPLOADED': 'item.uploaded',
+        'DOWNLOADED': 'downloaded', # item.downloaded
+        'UPLOADED': 'uploaded', # item.uploaded
         
-        'LOGGED_IN': 'session.loggedIn',
-        'LOGGED_OUT': 'session.loggedOut',
+        'LOGGED_IN': 'logged in', # session.loggedIn
+        'LOGGED_OUT': 'logged out', # session.loggedOut
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
 
 ## Derived profiles ##
 
 class AnnotationProfile(Profile):
     _actions = {
-        'ATTACHED': 'annotation.attached',
-        'BOOKMARKED': 'annotation.bookmarked',
-        'CLASSIFIED': 'annotation.classified',
-        'COMMENTED': 'annotation.commented',
-        'DESCRIBED': 'annotation.described',
-        'HIGHLIGHTED': 'annotation.highlighted',
-        'IDENTIFIED': 'annotation.identified',
-        'LIKED': 'annotation.liked',
-        'LINKED': 'annotation.linked',
-        'QUESTIONED': 'annotation.questioned',
-        'RANKED': 'annotation.ranked',
-        'RECOMMENDED': 'annotation.recommended',
-        'REPLIED': 'annotation.replied',
-        'SHARED': 'annotation.shared',
-        'SUBSCRIBED': 'annotation.subscribed',
-        'TAGGED': 'annotation.tagged',
+        'ATTACHED': 'attached', # annotation.attached
+        'BOOKMARKED': 'bookmarked', # annotation.bookmarked
+        'CLASSIFIED': 'classified', # annotation.classified
+        'COMMENTED': 'commented', # annotation.commented
+        'DESCRIBED': 'described', # annotation.described
+        'HIGHLIGHTED': 'highlighted', # annotation.highlighted
+        'IDENTIFIED': 'identified', # annotation.identified
+        'LIKED': 'liked', # annotation.liked
+        'LINKED': 'linked', # annotation.linked
+        'QUESTIONED': 'questioned', # annotation.questioned
+        'RANKED': 'ranked', # annotation.ranked
+        'RECOMMENDED': 'recommended', # annotation.recommended
+        'REPLIED': 'replied', # annotation.replied
+        'SHARED': 'shared', # annotation.shared
+        'SUBSCRIBED': 'subscribed', # annotation.subscribed
+        'TAGGED': 'tagged', # annotation.tagged
         }
         
 class AssessmentProfile(Profile):
     _actions = {
-        'PAUSED': 'assessment.paused',
-        'RESTARTED': 'assessment.restarted',
-        'STARTED': 'assessment.started',
-        'SUBMITTED': 'assessment.submitted',
+        'PAUSED': 'paused', # assessment.paused
+        'RESTARTED': 'restarted', # assessment.restarted
+        'STARTED': 'started', # assessment.started
+        'SUBMITTED': 'submitted', # assessment.submitted
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
 
 class AssessmentItemProfile(Profile):
     _actions = {
-        'COMPLETED': 'assessment.item.completed',
-        'SKIPPED': 'assessment.item.skipped',
-        'STARTED': 'assessment.item.started',
-        'REVIEWED': 'assessment.item.reviewed',
-        'VIEWED': 'assessment.item.viewed',
+        'COMPLETED': 'completed', # assessment.item.completed
+        'SKIPPED': 'skipped', # assessment.item.skipped
+        'STARTED': 'started', # assessment.item.started
+        'REVIEWED': 'reviewed', # assessment.item.reviewed
+        'VIEWED': 'viewed', # assessment.item.viewed
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
 
 class AssignableProfile(Profile):
     _actions = {
-        'ABANDONED': 'assignable.abandoned',
-        'ACTIVATED': 'assignable.activated',
-        'COMPLETED': 'assignable.completed',
-        'DEACTIVATED': 'assignable.deactivated',
-        'HID': 'assignable.hid',
-        'REVIEWED': 'assignable.reviewed',
-        'SHOWED': 'assignable.showed',
-        'STARTED': 'assignable.started',
-        'SUBMITTED': 'assignable.submitted',
+        'ABANDONED': 'abandoned', # assignable.abandoned
+        'ACTIVATED': 'activated', # assignable.activated
+        'COMPLETED': 'completed', # assignable.completed
+        'DEACTIVATED': 'deactivated', # assignable.deactivated
+        'HID': 'hid', # assignable.hid
+        'REVIEWED': 'reviewed', # assignable.reviewed
+        'SHOWED': 'showed', # assignable.showed
+        'STARTED': 'started', # assignable.started
+        'SUBMITTED': 'submitted', # assignable.submitted
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
 
 class MediaProfile(Profile):
     _actions = {
-        'DISABLEDCLOSEDCAPTIONING': 'media.accessibility.disabledClosedCaptioning',
-        'ENABLEDCLOSECAPTIONING': 'media.accessibility.enabledClosedCaptioning',
+        'DISABLEDCLOSEDCAPTIONING': 'disabled closed captioning', # media.accessibility.disabledClosedCaptioning
+        'ENABLEDCLOSECAPTIONING': 'enabled closed captioning', # media.accessibility.enabledClosedCaptioning
 
-        'CHANGEDVOLUME': 'media.audio.changedVolume',
-        'MUTED': 'media.audio.muted',
-        'UNMUTED': 'media.audio.unmuted',
+        'CHANGEDVOLUME': 'changed volume', # media.audio.changedVolume
+        'MUTED': 'muted', # media.audio.muted
+        'UNMUTED': 'unmuted', # media.audio.unmuted
 
-        'CHANGEDSPEED': 'media.playback.changedSpeed',
-        'ENDED': 'media.playback.ended',
-        'FORWARDEDTO': 'media.playback.forwardedTo',
-        'JUMPEDTO': 'media.playback.jumpedTo',
-        'PAUSED': 'media.playback.paused',
-        'RESUMED': 'media.playback.resumed',
-        'REWINDED': 'media.playback.rewindedTo',
-        'STARTED': 'media.playback.started',
+        'CHANGEDSPEED': 'changed speed', # media.playback.changedSpeed
+        'ENDED': 'ended', # media.playback.ended
+        'FORWARDEDTO': 'forwarded to', # media.playback.forwardedTo
+        'JUMPEDTO': 'jumped to', # media.playback.jumpedTo
+        'PAUSED': 'paused', # media.playback.paused
+        'RESUMED': 'resumed', # media.playback.resumed
+        'REWINDED': 'rewinded to', # media.playback.rewindedTo
+        'STARTED': 'started', # media.playback.started
 
-        'CHANGEDRESOLUTION': 'media.viewer.changedResolution',
-        'CHANGEDVIEWERSIZE': 'media.viewer.changedViewerSize',
-        'CLOSEDPOPOUT': 'media.viewer.closedPopout',
-        'ENTEREDFULLSCREEN': 'media.viewer.enteredFullScreen',
-        'EXITEDFULLSCREEN': 'media.viewer.exitedFullScreen',
-        'OPENEDPOPOUT': 'media.viewer.openedPopout',
+        'CHANGEDRESOLUTION': 'changed resolution', # media.viewer.changedResolution
+        'CHANGEDSIZE': 'changed viewer size', # media.viewer.changedSize
+        'CLOSEDPOPOUT': 'closed popout', # media.viewer.closedPopout
+        'ENTEREDFULLSCREEN': 'entered full screen', # media.viewer.enteredFullScreen
+        'EXITEDFULLSCREEN': 'exited full screen', # media.viewer.exitedFullScreen
+        'OPENEDPOPOUT': 'opened popout', # media.viewer.openedPopout
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
         
 class OutcomeProfile(Profile):
     _actions = {
-        'GRADED': 'outcome.graded',
+        'GRADED': 'graded', # outcome.graded
         
-        'NAVIGATED_TO': 'navigation.navigatedTo'
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
 
 class ReadingProfile(Profile):
     _actions = {
-        'SEARCHED': 'reading.searched',
-        'VIEWED': 'reading.viewed',
+        'SEARCHED': 'searched', # reading.searched
+        'VIEWED': 'viewed', # reading.viewed
+
+        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }

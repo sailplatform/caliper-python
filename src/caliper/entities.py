@@ -54,8 +54,11 @@ class Entity(BaseEntity):
         'ENTITY': 'http://purl.imsglobal.org/caliper/v1/Entity',
         'GENERATED': 'http://purl.imsglobal.org/caliper/v1/Generated',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
+        'LIS_PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
+        'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
         # 'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
         'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
+        'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
         'TARGET': 'http://purl.imsglobal.org/caliper/v1/Target',
         'VIEW': 'http://purl.imsglobal.org/caliper/v1/View', # not sure we need this any more?
         }
@@ -72,11 +75,6 @@ class Entity(BaseEntity):
         self._set_int_prop('lastModifiedTime', lastModifiedTime)
         self._set_str_prop('name', name)
 
-        if properties and (not isinstance(properties, collections.MutableMapping)):
-            raise TypeError('properties must be a dictionary or mapping of key-value pairs')
-        else:
-            self._set_obj_prop('properties', properties)
-
     @property
     def id(self):
         return self._get_prop('@id')
@@ -92,10 +90,6 @@ class Entity(BaseEntity):
     @property
     def name(self):
         return self._get_prop('name')
-
-    @property
-    def properties(self):
-        return self._get_obj_prop('properties')
 
 ## Behavioural interfaces for entities ##
 class Assignable(CaliperSerializable):
@@ -142,30 +136,19 @@ class Targetable(CaliperSerializable):
 ### Derived entities ###
 
 ## Agent entities
-class Agent(Entity, foaf.Agent):
-    _types = {
-        'LIS_PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
-        'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
-        'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
-        }
+class SoftwareApplication(Entity, foaf.Agent, schemadotorg.SoftwareApplication):
 
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_str_prop('@type', Entity.Types['AGENT'])
+        self._set_str_prop('@type', Entity.Types['SOFTWARE_APPLICATION'])
 
-class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
-
-    def __init__(self, **kwargs):
-        Agent.__init__(self, **kwargs)
-        self._set_str_prop('@type', Agent.Types['SOFTWARE_APPLICATION'])
-
-class Person(Agent):
+class Person(Entity, foaf.Agent):
 
     def __init__(self, **kwargs):
-        Agent.__init__(self, **kwargs)
-        self._set_str_prop('@type', Agent.Types['LIS_PERSON'])
+        Entity.__init__(self, **kwargs)
+        self._set_str_prop('@type', Entity.Types['LIS_PERSON'])
 
-class Organization(Agent):
+class Organization(Entity, foaf.Agent):
     _types = {
         'LIS_COURSE_SECTION': 'http://purl.imsglobal.org/caliper/v1/lis/CourseSection',
         }
@@ -173,8 +156,8 @@ class Organization(Agent):
     def __init__(self,
             parentOrg=None,
             **kwargs):
-        Agent.__init__(self, **kwargs)
-        self._set_str_prop('@type', Agent.Types['LIS_ORGANIZATION'])
+        Entity.__init__(self, **kwargs)
+        self._set_str_prop('@type', Entity.Types['LIS_ORGANIZATION'])
 
         if parentOrg and (not isinstance(parentOrg, Organization)):
             raise TypeError('parentOrg must implement Organization')
@@ -220,8 +203,8 @@ class LearningContext(CaliperSerializable):
 
         CaliperSerializable.__init__(self)
 
-        if agent and (not isinstance(agent, Agent)):
-            raise TypeError('agent must implement Agent')
+        if agent and (not isinstance(agent, foaf.Agent)):
+            raise TypeError('agent must implement foaf.Agent')
         else:
             self._set_obj_prop('agent', agent)
 
@@ -485,10 +468,10 @@ class SharedAnnotation(Annotation):
         self._set_str_prop('@type', Annotation.Types['SHARED_ANNOTATION'])
 
         if isinstance(withAgents, collections.MutableSequence):
-            if all( isinstance(item, Agent) for item in withAgents):
+            if all( isinstance(item, foaf.Agent) for item in withAgents):
                 self._set_list_prop('withAgents', withAgents)
             else:
-                raise TypeError('withAgents must be a list of objects that implement Agent')
+                raise TypeError('withAgents must be a list of objects that implement foaf.Agent')
         else:
             self._set_list_prop('withAgents', None)
 
@@ -572,8 +555,8 @@ class Attempt(Entity, Generatable):
         else:
             self._assignable = None
 
-        if actor and (not isinstance(actor, Agent)):
-            raise TypeError('agent must implement Agent')
+        if actor and (not isinstance(actor, foaf.Agent)):
+            raise TypeError('agent must implement foaf.Agent')
         else:
             self._actor = None
 
@@ -785,8 +768,8 @@ class Result(Entity, Generatable):
         self._set_float_prop('normalScore', normalScore)
         self._set_float_prop('penaltyScore', penaltyScore)
 
-        if scoredBy and (not isinstance(scoredBy, Agent)):
-            raise TypeError('scoredBy must implement Agent')
+        if scoredBy and (not isinstance(scoredBy, foaf.Agent)):
+            raise TypeError('scoredBy must implement foaf.Agent')
         else:
             self._set_obj_prop('scoredBy', scoredBy)
         

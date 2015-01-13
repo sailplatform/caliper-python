@@ -36,55 +36,6 @@
 # email licenses@imsglobal.org
 
 
-
-EVENT = '''{
-    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/NavigationEvent",
-    "@type": "http://purl.imsglobal.org/caliper/v1/NavigationEvent",
-    "actor": {
-        "@id": "uri:/someEdu/user/42",
-        "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
-        "name": null,
-        "lastModifiedTime": 0,
-        "properties": {}
-    },
-    "action": "navigated to",
-    "object": {
-        "@id": "uri:/someEdu/reading/42",
-        "@type": "http://purl.imsglobal.org/caliper/v1/ActivityContext",
-        "name": null,
-        "lastModifiedTime": 0,
-        "properties": {}
-    },
-    "target": {
-        "@id": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3)",
-        "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
-        "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
-        "objectType": [],
-        "properties": {},
-        "alignedLearningObjective": [],
-        "keyword": [],
-        "partOf": null,
-        "lastModifiedTime": 1402965614516
-    },
-    "generated": null,
-    "startedAtTime": 1402965614516,
-    "endedAtTime": 0,
-    "duration": null,
-    "edApp": null,
-    "group": null,
-    "navigatedFrom": {
-        "@id": "AmRev-101-landingPage",
-        "@type": "http://purl.imsglobal.org/caliper/v1/WebPage",
-        "name": "American Revolution 101 Landing Page",
-        "objectType": [],
-        "properties": {},
-        "alignedLearningObjective": [],
-        "keyword": [],
-        "partOf": null,
-        "lastModifiedTime": 0
-    }
-}'''
-
 ASSESSMENT_EVENT='''{
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/AssessmentEvent",
     "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentEvent",
@@ -92,7 +43,6 @@ ASSESSMENT_EVENT='''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "started",
@@ -101,7 +51,6 @@ ASSESSMENT_EVENT='''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Assessment",
         "name": "American Revolution - Key Figures Assessment",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101",
@@ -120,7 +69,6 @@ ASSESSMENT_EVENT='''{
                 "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
                 "name": "Assessment Item 1",
                 "objectType": [],
-                "properties": {},
                 "alignedLearningObjective": [],
                 "keyword": [],
                 "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -138,7 +86,6 @@ ASSESSMENT_EVENT='''{
                 "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
                 "name": "Assessment Item 2",
                 "objectType": [],
-                "properties": {},
                 "alignedLearningObjective": [],
                 "keyword": [],
                 "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -156,7 +103,6 @@ ASSESSMENT_EVENT='''{
                 "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
                 "name": "Assessment Item 3",
                 "objectType": [],
-                "properties": {},
                 "alignedLearningObjective": [],
                 "keyword": [],
                 "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -176,7 +122,6 @@ ASSESSMENT_EVENT='''{
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/attempt1",
         "@type": "http://purl.imsglobal.org/caliper/v1/Attempt",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 0,
         "count": 1,
         "startedAtTime": 0,
@@ -187,10 +132,9 @@ ASSESSMENT_EVENT='''{
     "endedAtTime": 0,
     "duration": null,
     "edApp": {
-        "@id": "https://github.com/readium/readium-js-viewer",
+        "@id": "https://com.sat/super-assessment-tool",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-        "name": "Readium",
-        "properties": {},
+        "name": "Super Assessment Tool",
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -201,7 +145,6 @@ ASSESSMENT_EVENT='''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -213,7 +156,6 @@ ASSESSMENT_ITEM_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "started",
@@ -222,7 +164,6 @@ ASSESSMENT_ITEM_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
         "name": "Assessment Item 1",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -242,10 +183,9 @@ ASSESSMENT_ITEM_EVENT = '''{
     "endedAtTime": 0,
     "duration": null,
     "edApp": {
-        "@id": "https://github.com/readium/readium-js-viewer",
+        "@id": "https://com.sat/super-assessment-tool",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-        "name": "Readium",
-        "properties": {},
+        "name": "Super Assessment Tool",
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -256,7 +196,6 @@ ASSESSMENT_ITEM_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -268,7 +207,6 @@ ASSESSMENT_OUTCOME_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "graded",
@@ -276,7 +214,6 @@ ASSESSMENT_OUTCOME_EVENT = '''{
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/attempt1",
         "@type": "http://purl.imsglobal.org/caliper/v1/Attempt",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 0,
         "count": 1,
         "startedAtTime": 0,
@@ -288,7 +225,6 @@ ASSESSMENT_OUTCOME_EVENT = '''{
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/attempt1/result",
         "@type": "http://purl.imsglobal.org/caliper/v1/Result",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516,
         "normalScore": 3.0,
         "penaltyScore": 0.0,
@@ -303,10 +239,9 @@ ASSESSMENT_OUTCOME_EVENT = '''{
     "endedAtTime": 0,
     "duration": null,
     "edApp": {
-        "@id": "https://github.com/readium/readium-js-viewer",
+        "@id": "https://com.sat/super-assessment-tool",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-        "name": "Readium",
-        "properties": {},
+        "name": "Super Assessment Tool",
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -317,7 +252,6 @@ ASSESSMENT_OUTCOME_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -329,16 +263,14 @@ ASSIGNABLE_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
-    "action": "started",
+    "action": "activated",
     "object": {
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
         "@type": "http://purl.imsglobal.org/caliper/v1/Assessment",
         "name": "American Revolution - Key Figures Assessment",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101",
@@ -357,7 +289,6 @@ ASSIGNABLE_EVENT = '''{
             "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
             "name": "Assessment Item 1",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -375,7 +306,6 @@ ASSIGNABLE_EVENT = '''{
             "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
             "name": "Assessment Item 2",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -393,7 +323,6 @@ ASSIGNABLE_EVENT = '''{
             "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
             "name": "Assessment Item 3",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
@@ -413,7 +342,6 @@ ASSIGNABLE_EVENT = '''{
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/attempt1",
         "@type": "http://purl.imsglobal.org/caliper/v1/Attempt",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 0,
         "count": 1,
         "startedAtTime": 0,
@@ -424,10 +352,9 @@ ASSIGNABLE_EVENT = '''{
     "endedAtTime": 0,
     "duration": null,
     "edApp": {
-        "@id": "https://github.com/readium/readium-js-viewer",
+        "@id": "https://com.sat/super-assessment-tool",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-        "name": "Readium",
-        "properties": {},
+        "name": "Super Assessment Tool",
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -438,7 +365,6 @@ ASSIGNABLE_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -450,7 +376,6 @@ BOOKMARK_ANNOTATION_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "bookmarked",
@@ -458,7 +383,6 @@ BOOKMARK_ANNOTATION_EVENT = '''{
         "@id": "https://someEduApp.edu/bookmarks/00001",
         "@type": "http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516,
         "bookmarkNotes": "The Intolerable Acts (1774)--bad idea Lord North"
     },
@@ -467,7 +391,6 @@ BOOKMARK_ANNOTATION_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: Lord North",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -475,7 +398,6 @@ BOOKMARK_ANNOTATION_EVENT = '''{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -492,7 +414,6 @@ BOOKMARK_ANNOTATION_EVENT = '''{
         "@id": "https://github.com/readium/readium-js-viewer",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -503,7 +424,6 @@ BOOKMARK_ANNOTATION_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -515,7 +435,6 @@ HIGHLIGHT_ANNOTATION_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "highlighted",
@@ -523,7 +442,6 @@ HIGHLIGHT_ANNOTATION_EVENT = '''{
         "@id": "https://someEduApp.edu/highlights/12345",
         "@type": "http://purl.imsglobal.org/caliper/v1/HighlightAnnotation",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516,
         "selection": {
             "start": "455",
@@ -536,7 +454,6 @@ HIGHLIGHT_ANNOTATION_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: George Washington",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -544,7 +461,6 @@ HIGHLIGHT_ANNOTATION_EVENT = '''{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -561,7 +477,6 @@ HIGHLIGHT_ANNOTATION_EVENT = '''{
         "@id": "https://github.com/readium/readium-js-viewer",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -572,7 +487,6 @@ HIGHLIGHT_ANNOTATION_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -584,7 +498,6 @@ MEDIA_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "paused",
@@ -593,12 +506,10 @@ MEDIA_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/VideoObject",
         "name": "American Revolution - Key Figures Video",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [{
             "@id": "http://americanrevolution.com/personalities/learn",
             "@type": "http://purl.imsglobal.org/caliper/v1/LearningObjective",
             "name": null,
-            "properties": {},
             "lastModifiedTime": 0
         }],
         "keyword": [],
@@ -606,24 +517,25 @@ MEDIA_EVENT = '''{
         "lastModifiedTime": 1402965614516,
         "duration": 1420
     },
-    "mediaLocation": {
+    "target": {
         "@id": "https://com.sat/super-media-tool/video/video1",
         "@type": "http://purl.imsglobal.org/caliper/v1/MediaLocation",
         "name": null,
-        "properties": {},
+        "objectType": [],
+        "alignedLearningObjective": [],
+        "keyword": [],
+        "partOf": null,
         "lastModifiedTime": 0,
         "currentTime": 710
     },
-    "target": null,
     "generated": null,
     "startedAtTime": 1402965614516,
     "endedAtTime": 0,
     "duration": null,
     "edApp": {
-        "@id": "https://github.com/readium/readium-js-viewer",
+        "@id": "https://com.sat/super-media-tool",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-        "name": "Readium",
-        "properties": {},
+        "name": "Super Media Tool",
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -634,7 +546,6 @@ MEDIA_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -646,7 +557,6 @@ NAVIGATION_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "navigated to",
@@ -655,7 +565,6 @@ NAVIGATION_EVENT = '''{
         "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
         "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": null,
@@ -666,7 +575,6 @@ NAVIGATION_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: George Washington",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -674,7 +582,6 @@ NAVIGATION_EVENT = '''{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -691,7 +598,6 @@ NAVIGATION_EVENT = '''{
         "@id": "https://github.com/readium/readium-js-viewer",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -702,7 +608,6 @@ NAVIGATION_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "navigatedFrom": {
@@ -710,7 +615,6 @@ NAVIGATION_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/WebPage",
         "name": "American Revolution 101 Landing Page",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -721,7 +625,6 @@ NAVIGATION_EVENT = '''{
             "label": "Am Rev 101",
             "name": "American Revolution 101",
             "parentOrg": null,
-            "properties": {},
             "lastModifiedTime": 1402965614516
         },
         "lastModifiedTime": 1402965614516
@@ -735,7 +638,6 @@ SHARED_ANNOTATION_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "shared",
@@ -743,18 +645,15 @@ SHARED_ANNOTATION_EVENT = '''{
         "@id": "https://someEduApp.edu/shared/9999",
         "@type": "http://purl.imsglobal.org/caliper/v1/SharedAnnotation",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516,
         "withAgents": [
             {"@id": "https://some-university.edu/students/657585",
             "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
             "name": null,
-            "properties": {},
             "lastModifiedTime": 1402965614516},
             {"@id": "https://some-university.edu/students/667788",
             "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
             "name": null,
-            "properties": {},
             "lastModifiedTime": 1402965614516}]
     },
     "target": {
@@ -762,7 +661,6 @@ SHARED_ANNOTATION_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: John Adams",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -770,7 +668,6 @@ SHARED_ANNOTATION_EVENT = '''{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -787,7 +684,6 @@ SHARED_ANNOTATION_EVENT = '''{
         "@id": "https://github.com/readium/readium-js-viewer",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -798,7 +694,6 @@ SHARED_ANNOTATION_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -810,15 +705,13 @@ TAG_ANNOTATION_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
-    "action": "shared",
+    "action": "tagged",
     "object": {
         "@id": "https://someEduApp.edu/tags/7654",
         "@type": "http://purl.imsglobal.org/caliper/v1/TagAnnotation",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516,
         "tags": ["to-read", "1765", "shared-with-project-team"]
     },
@@ -827,7 +720,6 @@ TAG_ANNOTATION_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "The Stamp Act Crisis",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -835,7 +727,6 @@ TAG_ANNOTATION_EVENT = '''{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -852,7 +743,6 @@ TAG_ANNOTATION_EVENT = '''{
         "@id": "https://github.com/readium/readium-js-viewer",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -863,7 +753,6 @@ TAG_ANNOTATION_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -875,7 +764,6 @@ VIEW_EVENT = '''{
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "action": "viewed",
@@ -884,7 +772,6 @@ VIEW_EVENT = '''{
         "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
         "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": null,
@@ -895,7 +782,6 @@ VIEW_EVENT = '''{
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: George Washington",
         "objectType": [],
-        "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
         "partOf": {
@@ -903,7 +789,6 @@ VIEW_EVENT = '''{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -920,7 +805,6 @@ VIEW_EVENT = '''{
         "@id": "https://github.com/readium/readium-js-viewer",
         "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "properties": {},
         "lastModifiedTime": 1402965614516
     },
     "group": {
@@ -931,7 +815,6 @@ VIEW_EVENT = '''{
         "label": "Am Rev 101",
         "name": "American Revolution 101",
         "parentOrg": null,
-        "properties": {},
         "lastModifiedTime": 1402965614516
     }
 }'''
@@ -947,7 +830,6 @@ EVENT_STORE_PAYLOAD = '''[{
             "@id": "https://some-university.edu/user/554433",
             "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
             "name": null,
-            "properties": {},
             "lastModifiedTime": 1402965614516
         },
         "action": "navigated to",
@@ -956,7 +838,6 @@ EVENT_STORE_PAYLOAD = '''[{
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": null,
@@ -967,7 +848,6 @@ EVENT_STORE_PAYLOAD = '''[{
             "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
             "name": "Key Figures: George Washington",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": {
@@ -975,7 +855,6 @@ EVENT_STORE_PAYLOAD = '''[{
                 "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
                 "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
                 "objectType": [],
-                "properties": {},
                 "alignedLearningObjective": [],
                 "keyword": [],
                 "partOf": null,
@@ -992,7 +871,6 @@ EVENT_STORE_PAYLOAD = '''[{
             "@id": "https://github.com/readium/readium-js-viewer",
             "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
             "name": "Readium",
-            "properties": {},
             "lastModifiedTime": 1402965614516
         },
         "group": {
@@ -1003,7 +881,6 @@ EVENT_STORE_PAYLOAD = '''[{
             "label": "Am Rev 101",
             "name": "American Revolution 101",
             "parentOrg": null,
-            "properties": {},
             "lastModifiedTime": 1402965614516
         },
         "navigatedFrom": {
@@ -1011,7 +888,6 @@ EVENT_STORE_PAYLOAD = '''[{
             "@type": "http://purl.imsglobal.org/caliper/v1/WebPage",
             "name": "American Revolution 101 Landing Page",
             "objectType": [],
-            "properties": {},
             "alignedLearningObjective": [],
             "keyword": [],
             "partOf": {
@@ -1022,10 +898,10 @@ EVENT_STORE_PAYLOAD = '''[{
                 "label": "Am Rev 101",
                 "name": "American Revolution 101",
                 "parentOrg": null,
-                "properties": {},
                 "lastModifiedTime": 1402965614516
             },
             "lastModifiedTime": 1402965614516
         }
     }
 }]'''
+

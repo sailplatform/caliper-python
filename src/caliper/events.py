@@ -37,6 +37,7 @@
 
 from .base import BaseEvent, CaliperSerializable
 from . import entities, profiles
+from .extern import foaf
 
 ## Base event class
 class Event(BaseEvent):
@@ -72,7 +73,7 @@ class Event(BaseEvent):
             endedAtTime = 0,
             event_object = None,
             generated = None,
-            group = None,
+            lisOrganization = None,
             startedAtTime = None,
             target = None,
             **kwargs):
@@ -85,8 +86,8 @@ class Event(BaseEvent):
         else:
             self._set_str_prop('action', action)
 
-        if actor and (not isinstance(actor, entities.Agent)):
-            raise TypeError('actor must implement entities.Agent')
+        if actor and (not isinstance(actor, foaf.Agent)):
+            raise TypeError('actor must implement foaf.Agent')
         else:
             self._set_obj_prop('actor', actor)
 
@@ -109,7 +110,7 @@ class Event(BaseEvent):
         else:
             self._set_obj_prop('generated', generated)
 
-        if lisOrganzation and (not isinstance(lisOrganization, entities.Organization)):
+        if lisOrganization and (not isinstance(lisOrganization, entities.Organization)):
             raise TypeError('lisOrganization must implement entities.Organization')
         else:
             self._set_obj_prop('group', lisOrganization)

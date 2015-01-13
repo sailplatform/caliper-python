@@ -42,104 +42,22 @@ from caliper_tests import fixtures, util
 
 import unittest
 
-class TestAssignableProfile(unittest.TestCase):
+class ReadingProfile(unittest.TestCase):
     def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.assessment = util.buildAssessment()
+        self.learning_context = util.build_readium_learning_context()
+        self.epub = util.build_epub_vol43()
+        self.target = util.build_epub_subchap431()
 
-    def testAssignableEvent(self):
-        ap = util.buildAssignableProfile(
+    def testViewedEvent(self):
+        viewed_event = util.build_epub_view_event(
             learning_context = self.learning_context,
-            assessment = self.assessment
+            event_object = self.epub,
+            action = caliper.profiles.ReadingProfile.Actions['VIEWED'],
+            target = self.target
             )
-        ap = util.startAssignableAssessment(assignable_profile=ap)
-        assignable_event = util.buildAssignableEvent(assignable_profile=ap)
 
-        self.assertEqual(assignable_event.as_json(),
-                         util.getFixtureStr(fixtures.ASSIGNABLE_EVENT))
-
-class TestAssessmentProfile(unittest.TestCase):
-    def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.assessment = util.buildAssessment()
-
-    def testAssessmentItemEvent(self):
-        ap = util.buildAssessmentProfile(
-            learning_context = self.learning_context,
-            assessment = self.assessment
-            )
-        ai = util.startAssessmentItem(
-            assessment_profile=ap,
-            assessment_item=ap.assessment.assessmentItems[0])
-        assessment_item_event = util.buildAssessmentItemEvent(
-            assessment_profile = ap,
-            assessment_item = ai)
-
-        self.assertEqual(assessment_item_event.as_json(),
-                         util.getFixtureStr(fixtures.ASSESSMENT_ITEM_EVENT))
-
-    def testAssessmentEvent(self):
-        ap = util.buildAssessmentProfile(
-            learning_context = self.learning_context,
-            assessment = self.assessment
-            )
-        ap = util.startAssessment(assessment_profile=ap)
-        assessment_event = util.buildAssessmentEvent(assessment_profile=ap)
-
-        self.assertEqual(assessment_event.as_json(),
-                         util.getFixtureStr(fixtures.ASSESSMENT_EVENT))
-
-class TestOutcomeProfile(unittest.TestCase):
-    def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.assessment = util.buildAssessment()
-
-    def testAssessmentOutcomeEvent(self):
-        ap = util.buildAssessmentProfile(
-            learning_context = self.learning_context,
-            assessment = self.assessment
-            )
-        ap = util.startAssessment(assessment_profile=ap)
-        res = util.buildAssessmentResult(assessment_profile=ap)
-        op = util.buildAssessmentOutcomeProfile(assessment_profile=ap,
-                                                result=res)
-        assessment_outcome_event = util.buildAssessmentOutcomeEvent(outcome_profile=op)
-
-        self.assertEqual(assessment_outcome_event.as_json(),
-                         util.getFixtureStr(fixtures.ASSESSMENT_OUTCOME_EVENT))
-
-class TestMediaProfile(unittest.TestCase):
-    def setUp(self):
-        self.learning_context = util.buildLearningContext()
-        self.video_media_profile = util.buildMediaProfile(learning_context=self.learning_context)
-
-    def testMediaEvent(self):
-        mp = util.pauseVideo(media_profile=self.video_media_profile)
-        video_media_event = util.buildMediaEvent(media_profile=mp)
-
-        self.assertEqual(video_media_event.as_json(),
-                         util.getFixtureStr(fixtures.MEDIA_EVENT))
-
-class TestReadingProfile(unittest.TestCase):
-    def setUp(self):
-        self.learning_context = util.buildLearningContext()
-
-    def testViewEvent(self):
-        rp = util.buildReadingProfile(learning_context=self.learning_context)
-        rp = util.viewReadingTarget(reading_profile=rp)
-        view_event = util.buildViewEvent(reading_profile=rp)
-
-        self.assertEqual(view_event.as_json(),
-                         util.getFixtureStr(fixtures.VIEW_EVENT))
-        
-    def testNavigationEvent(self):
-        rp = util.buildReadingProfile(learning_context=self.learning_context)
-        rp = util.navigateToReadingTarget(reading_profile=rp)
-        navigation_event = util.buildNavigationEvent(reading_profile=rp)
-
-        self.assertEqual(navigation_event.as_json(),
-                         util.getFixtureStr(fixtures.NAVIGATION_EVENT))
-
+        self.assertEqual(viewed_event.as_json(),
+                         util.get_fixture_str(fixtures.VIEW_EVENT))
 
                 
 if __name__ == '__main__':
