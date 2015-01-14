@@ -53,6 +53,8 @@ def get_testing_options():
 def get_fixture_str(fixture=None):
     return json.dumps(json.loads(fixture), sort_keys=True)
 
+
+### Shared entity resources ###
 ## build a test learning context
 def build_student_554433():
     return caliper.entities.Person(
@@ -93,8 +95,124 @@ def build_assessment_tool_learning_context():
         lisOrganization = build_AmRev101_course_section()
         )
 
-### Assessment Profile ###
+## build a test EPUB volume
+def build_epub_vol43():
+    return caliper.entities.EpubVolume(
+        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3)',
+        name = 'The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)',
+        lastModifiedTime = _LMT
+        )
 
+def build_epub_subchap431():
+    return caliper.entities.EpubSubChapter(
+        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)',
+        name = 'Key Figures: George Washington',
+        partOf = build_epub_vol43(),
+        lastModifiedTime = _LMT
+        )
+
+def build_epub_subchap432():
+    return caliper.entities.EpubSubChapter(
+        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/2)',
+        name = 'Key Figures: Lord North',
+        partOf = build_epub_vol43(),
+        lastModifiedTime = _LMT
+        )
+
+def build_epub_subchap433():
+    return caliper.entities.EpubSubChapter(
+        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/3)',
+        name = 'Key Figures: John Adams',
+        partOf = build_epub_vol43(),
+        lastModifiedTime = _LMT
+        )
+
+def build_epub_subchap434():
+    return caliper.entities.EpubSubChapter(
+        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/4)',
+        name = 'The Stamp Act Crisis',
+        partOf = build_epub_vol43(),
+        lastModifiedTime = _LMT
+        )
+
+
+## build a course landing page
+def build_AmRev101_landing_page():
+    return caliper.entities.WebPage(
+        entity_id = 'AmRev-1010-landingPage',
+        name = 'American Revolution 101 Landing Page',
+        partOf = build_epub_vol43(),
+        lastModifiedTime = _LMT
+        )
+
+
+### Annotation Profile ###
+## build test annotations
+def build_bookmark_annotation(target = None):
+    return caliper.entities.BookmarkAnnotation(
+        entity_id = 'https://someEduApp.edu/bookmarks/00001',
+        bookmarkNotes = 'The Intolerable Acts (1774)--bad idea Lord North',
+        lastModifiedTime = _LMT,
+        target = target
+        )
+
+def build_highlight_annotation(target = None):
+    selection = caliper.entities.TextPositionSelector(start='455', end='489')
+    return caliper.entities.HighlightAnnotation(
+        entity_id = 'https://someEduApp.edu/highlights/12345',
+        selection = selection,
+        selectionText = 'Life, Liberty and the pursuit of Happiness',
+        target = target,
+        lastModifiedTime = _LMT
+        )
+
+def build_shared_annotation(target = None):
+    return caliper.entities.SharedAnnotation(
+        entity_id = 'https://someEduApp.edu/shared/9999',
+        withAgents = [
+            caliper.entities.Person(
+                entity_id = 'https://some-university.edu/students/657585',
+                lastModifiedTime = _LMT
+                ),
+            caliper.entities.Person(
+                entity_id = 'https://some-university.edu/students/667788',
+                lastModifiedTime = _LMT
+                )
+            ],
+        lastModifiedTime = _LMT
+        )
+
+def build_tag_annotation(target = None):
+    return caliper.entities.TagAnnotation(
+        entity_id = 'https://someEduApp.edu/tags/7654',
+        tags = ['to-read', '1765', 'shared-with-project-team'],
+        target = target,
+        lastModifiedTime = _LMT
+        )
+
+## build general annotation event
+def build_annotation_event(learning_context = None,
+                           annotation = None,
+                           index = None,
+                           target = None,
+                           action = None):
+    return caliper.events.AnnotationEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = annotation,
+        target = caliper.entities.Frame(
+            entity_id = target.id,
+            name = target.name,
+            partOf = target.partOf,
+            lastModifiedTime = _LMT,
+            index = index
+            ),
+        startedAtTime = _SAT
+        )
+
+### Assessment Profile ###
 ## build a test assessment
 def build_assessment_items():
     _id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item'
@@ -196,32 +314,6 @@ def build_assessment_outcome_event(learning_context = None,
         )
 
 ### Reading Profile ###
-
-## build a test epub volume
-def build_epub_vol43():
-    return caliper.entities.EpubVolume(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3)',
-        name = 'The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)',
-        lastModifiedTime = _LMT
-        )
-
-def build_epub_subchap431():
-    return caliper.entities.EpubSubChapter(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)',
-        name = 'Key Figures: George Washington',
-        partOf = build_epub_vol43(),
-        lastModifiedTime = _LMT
-        )
-
-## related resources
-def build_AmRev101_landing_page():
-    return caliper.entities.WebPage(
-        entity_id = 'AmRev-1010-landingPage',
-        name = 'American Revolution 101 Landing Page',
-        partOf = build_epub_vol43(),
-        lastModifiedTime = _LMT
-        )
-
 ## View event
 def build_epub_view_event(learning_context = None,
                           event_object = None,
