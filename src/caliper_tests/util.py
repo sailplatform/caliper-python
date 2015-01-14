@@ -128,9 +128,9 @@ def build_assessment():
         )
     pass
 
-## build a test attempt
+## build a test assessment attempt
 def build_assessment_attempt(learning_context=None,
-                             assessment=None,):
+                             assessment=None):
     return caliper.entities.Attempt(
         entity_id = '{0}/{1}'.format(assessment.id,'attempt1'),
         assignable = assessment,
@@ -139,11 +139,26 @@ def build_assessment_attempt(learning_context=None,
         )
     pass
 
+## build a test assessment result
+def build_assessment_result(attempt=None):
+    return caliper.entities.Result(
+        entity_id = '{0}/{1}'.format(attempt.id, 'result'),
+        comment = 'Well done.',
+        curvedTotalScore = 3.0,
+        curveFactor = 0.0,
+        extraCreditScore = 0.0,
+        normalScore = 3.0,
+        penaltyScore = 0.0,
+        # scoredBy = someAgent, ## TODO -- add some agent
+        totalScore = 3.0,
+        lastModifiedTime = _LMT
+        )
+
 ## Asessement event
 def build_assessment_event(learning_context = None,
                            assessment = None,
-                           action = None,
-                           attempt = None,):
+                           attempt = None,
+                           action = None):
     return caliper.events.AssessmentEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
@@ -156,13 +171,27 @@ def build_assessment_event(learning_context = None,
 
 def build_assessment_item_event(learning_context = None,
                                 assessment_item = None,
-                                action = None,):
+                                action = None):
     return caliper.events.AssessmentItemEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
         actor = learning_context.agent,
         action = action,
         event_object = assessment_item,
+        startedAtTime = _SAT
+        )
+
+def build_assessment_outcome_event(learning_context = None,
+                                   attempt = None,
+                                   result = None,
+                                   action = None):
+    return caliper.events.OutcomeEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = attempt,
+        generated = result,
         startedAtTime = _SAT
         )
 
@@ -196,8 +225,8 @@ def build_AmRev101_landing_page():
 ## View event
 def build_epub_view_event(learning_context = None,
                           event_object = None,
-                          action = None,
-                          target = None):
+                          target = None,
+                          action = None):
     return caliper.events.ViewEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
@@ -217,9 +246,9 @@ def build_epub_view_event(learning_context = None,
 ## Navigation event
 def build_epub_navigation_event(learning_context = None,
                                 event_object = None,
-                                action = None,
                                 from_resource = None,
-                                target = None):
+                                target = None,
+                                action = None):
     return caliper.events.NavigationEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
