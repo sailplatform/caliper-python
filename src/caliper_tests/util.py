@@ -143,8 +143,7 @@ def build_assessment_attempt(learning_context=None,
 def build_assessment_event(learning_context = None,
                            assessment = None,
                            action = None,
-                           attempt = None,
-        ):
+                           attempt = None,):
     return caliper.events.AssessmentEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
@@ -152,6 +151,18 @@ def build_assessment_event(learning_context = None,
         action = action,
         event_object = assessment,
         generated = attempt,
+        startedAtTime = _SAT
+        )
+
+def build_assessment_item_event(learning_context = None,
+                                assessment_item = None,
+                                action = None,):
+    return caliper.events.AssessmentItemEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = assessment_item,
         startedAtTime = _SAT
         )
 
