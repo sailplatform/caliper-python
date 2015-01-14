@@ -42,6 +42,23 @@ from caliper_tests import fixtures, util
 
 import unittest
 
+class AssessmentProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.build_assessment_tool_learning_context()
+        self.assessment = util.build_assessment()
+
+    def testAssessmentEvent(self):
+        assessment_event = util.build_assessment_event(
+            learning_context = self.learning_context,
+            assessment = self.assessment,
+            action = caliper.profiles.AssessmentProfile.Actions['STARTED'],
+            attempt = util.build_assessment_attempt(learning_context=self.learning_context,
+                                                    assessment=self.assessment)
+            )
+
+        self.assertEqual(assessment_event.as_json(),
+                         util.get_fixture_str(fixtures.ASSESSMENT_EVENT))
+
 class ReadingProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_readium_learning_context()
