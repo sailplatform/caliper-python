@@ -137,7 +137,22 @@ class AssessmentProfile(unittest.TestCase):
 
         self.assertEqual(assessment_outcome_event.as_json(),
                          util.get_fixture_str(fixtures.ASSESSMENT_OUTCOME_EVENT))
-                
+
+class AssignableProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.build_assessment_tool_learning_context()
+        self.assessment = util.build_assessment()
+
+    def testAssignableEvent(self):
+        assignable_event = util.build_assessment_assignable_event(
+            learning_context = self.learning_context,
+            assessment = self.assessment,
+            action = caliper.profiles.AssignableProfile.Actions['ACTIVATED']
+            )
+
+        self.assertEqual(assignable_event.as_json(),
+                         util.get_fixture_str(fixtures.ASSIGNABLE_EVENT))
+        
 class ReadingProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_readium_learning_context()
