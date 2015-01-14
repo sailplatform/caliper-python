@@ -47,14 +47,17 @@ class AssessmentProfile(unittest.TestCase):
         self.learning_context = util.build_assessment_tool_learning_context()
         self.assessment = util.build_assessment()
         self.assessment_item = self.assessment.assessmentItems[0]
+        self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
+                                                     assessment=self.assessment)
+        self.result = util.build_assessment_result(attempt=self.attempt)
 
+        
     def testAssessmentEvent(self):
         assessment_event = util.build_assessment_event(
             learning_context = self.learning_context,
             assessment = self.assessment,
-            action = caliper.profiles.AssessmentProfile.Actions['STARTED'],
-            attempt = util.build_assessment_attempt(learning_context=self.learning_context,
-                                                    assessment=self.assessment)
+            attempt = self.attempt,
+            action = caliper.profiles.AssessmentProfile.Actions['STARTED']
             )
 
         self.assertEqual(assessment_event.as_json(),
@@ -69,7 +72,18 @@ class AssessmentProfile(unittest.TestCase):
 
         self.assertEqual(assessment_item_event.as_json(),
                          util.get_fixture_str(fixtures.ASSESSMENT_ITEM_EVENT))
-        
+
+    def testAssessmentOutcomeEvent(self):
+        assessment_outcome_event = util.build_assessment_outcome_event(
+            learning_context = self.learning_context,
+            attempt = self.attempt,
+            result = self.result,
+            action = caliper.profiles.OutcomeProfile.Actions['GRADED']
+            )
+
+        self.assertEqual(assessment_outcome_event.as_json(),
+                         util.get_fixture_str(fixtures.ASSESSMENT_OUTCOME_EVENT))
+                
 class ReadingProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_readium_learning_context()
