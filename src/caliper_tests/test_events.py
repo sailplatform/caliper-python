@@ -46,6 +46,7 @@ class AssessmentProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_assessment_tool_learning_context()
         self.assessment = util.build_assessment()
+        self.assessment_item = self.assessment.assessmentItems[0]
 
     def testAssessmentEvent(self):
         assessment_event = util.build_assessment_event(
@@ -59,6 +60,16 @@ class AssessmentProfile(unittest.TestCase):
         self.assertEqual(assessment_event.as_json(),
                          util.get_fixture_str(fixtures.ASSESSMENT_EVENT))
 
+    def testAssessmentItemEvent(self):
+        assessment_item_event = util.build_assessment_item_event(
+            learning_context = self.learning_context,
+            assessment_item = self.assessment_item,
+            action = caliper.profiles.AssessmentItemProfile.Actions['STARTED']
+            )
+
+        self.assertEqual(assessment_item_event.as_json(),
+                         util.get_fixture_str(fixtures.ASSESSMENT_ITEM_EVENT))
+        
 class ReadingProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_readium_learning_context()
