@@ -442,12 +442,12 @@ class HighlightAnnotation(Annotation):
             selectionText = None,
             **kwargs):
         Annotation.__init__(self, **kwargs)
-        self._set_str_prop('@type', Annotation.Types['BOOKMARK_ANNOTATION'])
+        self._set_str_prop('@type', Annotation.Types['HIGHLIGHT_ANNOTATION'])
 
         if selection and (not isinstance(selection, TextPositionSelector)):
             raise TypeError ('selection must implement TextPositionSelector')
         else:
-            self._set_obj_prop('selection', TextPositionSelector)
+            self._set_obj_prop('selection', selection)
         
         self._set_str_prop('selectionText', selectionText)
                  

@@ -42,6 +42,60 @@ from caliper_tests import fixtures, util
 
 import unittest
 
+class AnnotationProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.build_readium_learning_context()
+
+    def testBookmarkAnnotationEvent(self):
+        target = util.build_epub_subchap432()
+        annotation_event = util.build_annotation_event(
+            learning_context = self.learning_context,
+            annotation = util.build_bookmark_annotation(target=target),
+            index = 2,
+            target = target,
+            action = caliper.profiles.AnnotationProfile.Actions['BOOKMARKED']
+            )
+
+        self.assertEqual(annotation_event.as_json(),
+                         util.get_fixture_str(fixtures.BOOKMARK_ANNOTATION_EVENT))
+
+    def testHighlightAnnotationEvent(self):
+        target = util.build_epub_subchap431()
+        annotation_event = util.build_annotation_event(
+            learning_context = self.learning_context,
+            annotation = util.build_highlight_annotation(target=target),
+            target = target,
+            index = 1,
+            action = caliper.profiles.AnnotationProfile.Actions['HIGHLIGHTED']
+            )
+        self.assertEqual(annotation_event.as_json(),
+                         util.get_fixture_str(fixtures.HIGHLIGHT_ANNOTATION_EVENT))
+
+    def testSharedAnnotationEvent(self):
+        target = util.build_epub_subchap433()
+        annotation_event = util.build_annotation_event(
+            learning_context = self.learning_context,
+            annotation = util.build_shared_annotation(target=target),
+            target = target,
+            index = 3,
+            action = caliper.profiles.AnnotationProfile.Actions['SHARED']
+            )
+        self.assertEqual(annotation_event.as_json(),
+                         util.get_fixture_str(fixtures.SHARED_ANNOTATION_EVENT))
+
+    def testTagAnnotationEvent(self):
+        target = util.build_epub_subchap434()
+        annotation_event = util.build_annotation_event(
+            learning_context = self.learning_context,
+            annotation = util.build_tag_annotation(target=target),
+            target = target,
+            index = 4,
+            action = caliper.profiles.AnnotationProfile.Actions['TAGGED']
+            )
+        self.assertEqual(annotation_event.as_json(),
+                         util.get_fixture_str(fixtures.TAG_ANNOTATION_EVENT))
+        
+
 class AssessmentProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_assessment_tool_learning_context()
