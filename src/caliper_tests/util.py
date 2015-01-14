@@ -82,6 +82,78 @@ def build_readium_learning_context():
         lisOrganization = build_AmRev101_course_section()
         )
 
+def build_assessment_tool_learning_context():
+    return caliper.entities.LearningContext(
+        agent = build_student_554433(),
+        edApp = caliper.entities.SoftwareApplication(
+            entity_id = 'https://com.sat/super-assessment-tool',
+            name = 'Super Assessment Tool',
+            lastModifiedTime = _LMT
+            ),
+        lisOrganization = build_AmRev101_course_section()
+        )
+
+### Assessment Profile ###
+
+## build a test assessment
+def build_assessment_items():
+    _id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item'
+    _name = 'Assessment Item'
+    return [caliper.entities.AssessmentItem(
+               entity_id = '{0}{1}'.format(_id,particle),
+               name = '{0} {1}'.format(_name,particle),
+               partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+               maxAttempts = 2,
+               maxSubmits = 2,
+               maxScore = 1)
+            for particle in ['1','2','3']
+        ]
+
+def build_assessment():
+    return caliper.entities.Assessment(
+        entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+        name = 'American Revolution - Key Figures Assessment',
+        partOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101',
+        dateCreated = _LMT,
+        datePublished = _LMT,
+        dateToActivate = _LMT,
+        dateToShow = _LMT,
+        dateToStartOn = _LMT,
+        dateToSubmit = _LMT,
+        maxAttempts = 2,
+        maxSubmits = 2,
+        maxScore = 3, # WARN original value is 5.0d, says Java impl
+        assessmentItems = build_assessment_items(),
+        lastModifiedTime = _LMT
+        )
+    pass
+
+## build a test attempt
+def build_assessment_attempt(learning_context=None,
+                             assessment=None,):
+    return caliper.entities.Attempt(
+        entity_id = '{0}/{1}'.format(assessment.id,'attempt1'),
+        assignable = assessment,
+        actor = learning_context.agent,
+        count = 1
+        )
+    pass
+
+## Asessement event
+def build_assessment_event(learning_context = None,
+                           assessment = None,
+                           action = None,
+                           attempt = None,
+        ):
+    return caliper.events.AssessmentEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = assessment,
+        generated = attempt,
+        startedAtTime = _SAT
+        )
 
 ### Reading Profile ###
 

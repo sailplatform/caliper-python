@@ -215,7 +215,7 @@ class AssessmentEvent(Event):
         else:
             self._set_obj_prop('object', event_object)
 
-        if generated and (not isinstnace(generated, entities.Attempt)):
+        if generated and (not isinstance(generated, entities.Attempt)):
             raise TypeError('generated must implement entities.Attempt')
         else:
             self._set_obj_prop('generated', generated)
