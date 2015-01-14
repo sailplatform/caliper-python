@@ -73,23 +73,23 @@ def build_AmRev101_course_section():
         lastModifiedTime = _LMT
         )
 
-def build_readium_learning_context():
-    return caliper.entities.LearningContext(
-        agent = build_student_554433(),
-        edApp = caliper.entities.SoftwareApplication(
-            entity_id = 'https://github.com/readium/readium-js-viewer',
-            name = 'Readium',
-            lastModifiedTime = _LMT
-            ),
-        lisOrganization = build_AmRev101_course_section()
-        )
-
 def build_assessment_tool_learning_context():
     return caliper.entities.LearningContext(
         agent = build_student_554433(),
         edApp = caliper.entities.SoftwareApplication(
             entity_id = 'https://com.sat/super-assessment-tool',
             name = 'Super Assessment Tool',
+            lastModifiedTime = _LMT
+            ),
+        lisOrganization = build_AmRev101_course_section()
+        )
+
+def build_readium_learning_context():
+    return caliper.entities.LearningContext(
+        agent = build_student_554433(),
+        edApp = caliper.entities.SoftwareApplication(
+            entity_id = 'https://github.com/readium/readium-js-viewer',
+            name = 'Readium',
             lastModifiedTime = _LMT
             ),
         lisOrganization = build_AmRev101_course_section()
@@ -209,6 +209,25 @@ def build_annotation_event(learning_context = None,
             lastModifiedTime = _LMT,
             index = index
             ),
+        startedAtTime = _SAT
+        )
+
+### Assignable Profile ###
+## build assignable event
+def build_assessment_assignable_event(learning_context = None,
+                                      assessment = None,
+                                      action = None):
+    return caliper.events.AssignableEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = assessment,
+        generated = caliper.entities.Attempt(
+            entity_id = '{0}/{1}'.format(assessment.id, 'attempt1'),
+            assignable = assessment,
+            actor = learning_context.agent,
+            count = 1),
         startedAtTime = _SAT
         )
 
