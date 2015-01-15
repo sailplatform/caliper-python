@@ -84,6 +84,17 @@ def build_assessment_tool_learning_context():
         lisOrganization = build_AmRev101_course_section()
         )
 
+def build_video_media_tool_learning_context():
+    return caliper.entities.LearningContext(
+        agent = build_student_554433(),
+        edApp = caliper.entities.SoftwareApplication(
+            entity_id = 'https://com.sat/super-media-tool',
+            name = 'Super Media Tool',
+            lastModifiedTime = _LMT
+            ),
+        lisOrganization = build_AmRev101_course_section()
+        )
+
 def build_readium_learning_context():
     return caliper.entities.LearningContext(
         agent = build_student_554433(),
@@ -231,7 +242,7 @@ def build_assessment_assignable_event(learning_context = None,
         startedAtTime = _SAT
         )
 
-### Assessment Profile ###
+### Assessment Profile and Outcome Profile ###
 ## build a test assessment
 def build_assessment_items():
     _id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item'
@@ -332,7 +343,42 @@ def build_assessment_outcome_event(learning_context = None,
         startedAtTime = _SAT
         )
 
+
+### Media Profile ###
+## Media event
+def build_video_media_event(learning_context = None,
+                            event_object = None,
+                            location = None,
+                            action = None):
+    return caliper.events.MediaEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = event_object,
+        target = location,
+        startedAtTime = _SAT
+        )
+
 ### Reading Profile ###
+## build a test video and location
+def build_video_with_learning_objective():
+    return caliper.entities.VideoObject(
+        entity_id = 'https://com.sat/super-media-tool/video/video1',
+        name = 'American Revolution - Key Figures Video',
+        alignedLearningObjective = [caliper.entities.LearningObjective(
+            entity_id = 'http://americanrevolution.com/personalities/learn'
+            )],
+        duration = 1420,
+        lastModifiedTime = _LMT
+        )
+
+def build_video_media_location():
+    return caliper.entities.MediaLocation(
+        entity_id = build_video_with_learning_objective().id,
+        currentTime = 710
+        )
+
 ## View event
 def build_epub_view_event(learning_context = None,
                           event_object = None,

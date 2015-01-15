@@ -103,8 +103,6 @@ class AssessmentProfile(unittest.TestCase):
         self.assessment_item = self.assessment.assessmentItems[0]
         self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
                                                      assessment=self.assessment)
-        self.result = util.build_assessment_result(attempt=self.attempt)
-
         
     def testAssessmentEvent(self):
         assessment_event = util.build_assessment_event(
@@ -127,16 +125,6 @@ class AssessmentProfile(unittest.TestCase):
         self.assertEqual(assessment_item_event.as_json(),
                          util.get_fixture_str(fixtures.ASSESSMENT_ITEM_EVENT))
 
-    def testAssessmentOutcomeEvent(self):
-        assessment_outcome_event = util.build_assessment_outcome_event(
-            learning_context = self.learning_context,
-            attempt = self.attempt,
-            result = self.result,
-            action = caliper.profiles.OutcomeProfile.Actions['GRADED']
-            )
-
-        self.assertEqual(assessment_outcome_event.as_json(),
-                         util.get_fixture_str(fixtures.ASSESSMENT_OUTCOME_EVENT))
 
 class AssignableProfile(unittest.TestCase):
     def setUp(self):
@@ -152,6 +140,43 @@ class AssignableProfile(unittest.TestCase):
 
         self.assertEqual(assignable_event.as_json(),
                          util.get_fixture_str(fixtures.ASSIGNABLE_EVENT))
+
+class MediaProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.build_video_media_tool_learning_context()
+        self.video = util.build_video_with_learning_objective()
+        self.location = util.build_video_media_location()
+
+    def testVideoMediaEvent(self):
+        video_media_event = util.build_video_media_event(
+            learning_context = self.learning_context,
+            event_object = self.video,
+            location = self.location,
+            action = caliper.profiles.MediaProfile.Actions['PAUSED']
+            )
+
+        self.assertEqual(video_media_event.as_json(),
+                         util.get_fixture_str(fixtures.MEDIA_EVENT))
+
+class OutcomeProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.build_assessment_tool_learning_context()
+        self.assessment = util.build_assessment()
+        self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
+                                                     assessment=self.assessment)
+        self.result = util.build_assessment_result(attempt=self.attempt)
+
+    def testAssessmentOutcomeEvent(self):
+        assessment_outcome_event = util.build_assessment_outcome_event(
+            learning_context = self.learning_context,
+            attempt = self.attempt,
+            result = self.result,
+            action = caliper.profiles.OutcomeProfile.Actions['GRADED']
+            )
+
+        self.assertEqual(assessment_outcome_event.as_json(),
+                         util.get_fixture_str(fixtures.ASSESSMENT_OUTCOME_EVENT))
+        
         
 class ReadingProfile(unittest.TestCase):
     def setUp(self):

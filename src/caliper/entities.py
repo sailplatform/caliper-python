@@ -264,10 +264,12 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['DIGITAL_RESOURCE'])
         
-        if isinstance(alignedLearningObjective, collections.MutableSequence):
+        if alignedLearningObjective and isinstance(alignedLearningObjective, collections.MutableSequence):
             if all( isinstance(item, LearningObjective) for item in alignedLearningObjective ):
                 self._set_list_prop('alignedLearningObjective', alignedLearningObjective)
             else:
+                raise TypeError('alignedLearningObjective must be a list of LearningObjectives')                
+        elif alignedLearningObjective:
                 raise TypeError('alignedLearningObjective must be a list of LearningObjectives')
         else:
             self._set_list_prop('alignedLearningObjective', None)
