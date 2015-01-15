@@ -184,12 +184,24 @@ class ReadingProfile(unittest.TestCase):
         self.epub = util.build_epub_vol43()
         self.target = util.build_epub_subchap431()
 
+    def testNavigationEvent(self):
+        navigation_event = util.build_epub_navigation_event(
+            learning_context = self.learning_context,
+            event_object = self.epub,
+            from_resource = util.build_AmRev101_landing_page(),
+            target = self.target,
+            action = caliper.profiles.ReadingProfile.Actions['NAVIGATED_TO']
+            )
+
+        self.assertEqual(navigation_event.as_json(),
+                         util.get_fixture_str(fixtures.NAVIGATION_EVENT))
+        
     def testViewedEvent(self):
         viewed_event = util.build_epub_view_event(
             learning_context = self.learning_context,
             event_object = self.epub,
-            action = caliper.profiles.ReadingProfile.Actions['VIEWED'],
-            target = self.target
+            target = self.target,
+            action = caliper.profiles.ReadingProfile.Actions['VIEWED']
             )
 
         self.assertEqual(viewed_event.as_json(),

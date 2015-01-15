@@ -150,9 +150,9 @@ def build_epub_subchap434():
 ## build a course landing page
 def build_AmRev101_landing_page():
     return caliper.entities.WebPage(
-        entity_id = 'AmRev-1010-landingPage',
+        entity_id = 'AmRev-101-landingPage',
         name = 'American Revolution 101 Landing Page',
-        partOf = build_epub_vol43(),
+        partOf = build_AmRev101_course_section(),
         lastModifiedTime = _LMT
         )
 
