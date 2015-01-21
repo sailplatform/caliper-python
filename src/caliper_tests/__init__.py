@@ -35,5 +35,4 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-from . import fixtures
 from . import util

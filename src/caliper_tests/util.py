@@ -44,15 +44,27 @@ import json
 _LMT = 1402965614516
 _SAT = 1402965614516
 
+### NOTE
+###
+### FIXTURE_DIR assumes that the caliper fixtures repo contents are symlinked
+### into the caliper_tests module's directory in a 'fixtures' subdirectory so
+### that the tests can find all the json fixture files in that sub-directory
+###
+_FIXTURE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures' + os.path.sep
+
 ## general state and utility functions used by many tests
 def get_testing_options():
     return caliper.base.HttpOptions(
         host='http://httpbin.org/post',
         api_key='6xp7jKrOSOWOgy3acxHFWA')
 
-def get_fixture_str(fixture=None):
-    return json.dumps(json.loads(fixture), sort_keys=True)
-
+def get_fixture(fixture_name):
+    loc = _FIXTURE_DIR+fixture_name+'.json'
+    r = ''
+    if os.path.exists(loc):
+        with open(loc,'r') as f:
+            r = f.read().replace('\n','')
+    return json.dumps(json.loads(r), sort_keys=True)
 
 ### Shared entity resources ###
 ## build a test learning context
