@@ -38,7 +38,7 @@
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 import caliper, caliper_tests
-from caliper_tests import fixtures, util
+from caliper_tests import util
 
 import unittest
 
@@ -57,7 +57,7 @@ class AnnotationProfile(unittest.TestCase):
             )
 
         self.assertEqual(annotation_event.as_json(),
-                         util.get_fixture_str(fixtures.BOOKMARK_ANNOTATION_EVENT))
+                         util.get_fixture('caliperBookmarkAnnotationEvent'))
 
     def testHighlightAnnotationEvent(self):
         target = util.build_epub_subchap431()
@@ -69,7 +69,7 @@ class AnnotationProfile(unittest.TestCase):
             action = caliper.profiles.AnnotationProfile.Actions['HIGHLIGHTED']
             )
         self.assertEqual(annotation_event.as_json(),
-                         util.get_fixture_str(fixtures.HIGHLIGHT_ANNOTATION_EVENT))
+                         util.get_fixture('caliperHighlightAnnotationEvent'))
 
     def testSharedAnnotationEvent(self):
         target = util.build_epub_subchap433()
@@ -81,7 +81,7 @@ class AnnotationProfile(unittest.TestCase):
             action = caliper.profiles.AnnotationProfile.Actions['SHARED']
             )
         self.assertEqual(annotation_event.as_json(),
-                         util.get_fixture_str(fixtures.SHARED_ANNOTATION_EVENT))
+                         util.get_fixture('caliperSharedAnnotationEvent'))
 
     def testTagAnnotationEvent(self):
         target = util.build_epub_subchap434()
@@ -93,7 +93,7 @@ class AnnotationProfile(unittest.TestCase):
             action = caliper.profiles.AnnotationProfile.Actions['TAGGED']
             )
         self.assertEqual(annotation_event.as_json(),
-                         util.get_fixture_str(fixtures.TAG_ANNOTATION_EVENT))
+                         util.get_fixture('caliperTagAnnotationEvent'))
         
 
 class AssessmentProfile(unittest.TestCase):
@@ -113,7 +113,7 @@ class AssessmentProfile(unittest.TestCase):
             )
 
         self.assertEqual(assessment_event.as_json(),
-                         util.get_fixture_str(fixtures.ASSESSMENT_EVENT))
+                         util.get_fixture('caliperAssessmentEvent'))
 
     def testAssessmentItemEvent(self):
         assessment_item_event = util.build_assessment_item_event(
@@ -123,7 +123,7 @@ class AssessmentProfile(unittest.TestCase):
             )
 
         self.assertEqual(assessment_item_event.as_json(),
-                         util.get_fixture_str(fixtures.ASSESSMENT_ITEM_EVENT))
+                         util.get_fixture('caliperAssessmentItemEvent'))
 
 
 class AssignableProfile(unittest.TestCase):
@@ -139,7 +139,7 @@ class AssignableProfile(unittest.TestCase):
             )
 
         self.assertEqual(assignable_event.as_json(),
-                         util.get_fixture_str(fixtures.ASSIGNABLE_EVENT))
+                         util.get_fixture('caliperAssignableEvent'))
 
 class MediaProfile(unittest.TestCase):
     def setUp(self):
@@ -156,7 +156,7 @@ class MediaProfile(unittest.TestCase):
             )
 
         self.assertEqual(video_media_event.as_json(),
-                         util.get_fixture_str(fixtures.MEDIA_EVENT))
+                         util.get_fixture('caliperMediaEvent'))
 
 class OutcomeProfile(unittest.TestCase):
     def setUp(self):
@@ -175,7 +175,7 @@ class OutcomeProfile(unittest.TestCase):
             )
 
         self.assertEqual(assessment_outcome_event.as_json(),
-                         util.get_fixture_str(fixtures.ASSESSMENT_OUTCOME_EVENT))
+                         util.get_fixture('caliperAssessmentOutcomeEvent'))
         
         
 class ReadingProfile(unittest.TestCase):
@@ -194,7 +194,7 @@ class ReadingProfile(unittest.TestCase):
             )
 
         self.assertEqual(navigation_event.as_json(),
-                         util.get_fixture_str(fixtures.NAVIGATION_EVENT))
+                         util.get_fixture('caliperNavigationEvent'))
         
     def testViewedEvent(self):
         viewed_event = util.build_epub_view_event(
@@ -205,7 +205,7 @@ class ReadingProfile(unittest.TestCase):
             )
 
         self.assertEqual(viewed_event.as_json(),
-                         util.get_fixture_str(fixtures.VIEW_EVENT))
+                         util.get_fixture('caliperViewEvent'))
 
                 
 if __name__ == '__main__':

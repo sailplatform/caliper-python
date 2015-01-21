@@ -38,7 +38,7 @@
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 import caliper, caliper_tests
-from caliper_tests import fixtures, util
+from caliper_tests import util
 
 import unittest
 
