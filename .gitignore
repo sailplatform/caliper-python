@@ -2,5 +2,5 @@
 build
 dist
 *.egg-info*
-# remove when common repo is up-to-date and jenkins fixed to grab fixtures from elsewhere
-# src/caliper_tests/fixtures
+# fixtures linked in from the caliper-common-fixtures repo should go here
+src/caliper_tests/fixtures
