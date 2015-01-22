@@ -434,3 +434,35 @@ def build_epub_navigation_event(learning_context = None,
         navigatedFrom = from_resource,
         startedAtTime = _SAT
         )
+
+### Session profile
+
+def build_readium_session():
+    return caliper.entities.Session(
+        entity_id = 'https://github.com/readium/session-123456789',
+        name = 'session-123456789',
+        lastModifiedTime = _LMT,
+        startedAtTime = _SAT,
+        )
+
+## Session event
+def build_session_event(learning_context = None,
+                        event_object = None,
+                        target = None,
+                        action = None):
+    return caliper.events.SessionEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = event_object,
+        generated = build_readium_session(),
+        target = caliper.entities.Frame(
+            entity_id = target.id,
+            name = target.name,
+            partOf = target.partOf,
+            lastModifiedTime = _LMT,
+            index = 1
+            ),
+        startedAtTime = _SAT
+        )
