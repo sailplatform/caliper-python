@@ -51,6 +51,7 @@ class Event(BaseEvent):
         'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/MediaEvent',
         'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/NavigationEvent',
         'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/OutcomeEvent',
+        'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/SessionEvent',
         'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/ViewEvent',
         }    
     _types = {
@@ -62,6 +63,7 @@ class Event(BaseEvent):
         'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
         'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
         'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
+        'SESSION': 'http://purl.imsglobal.org/caliper/v1/SessionEvent',
         'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
         }
 
@@ -74,7 +76,7 @@ class Event(BaseEvent):
             event_object = None,
             generated = None,
             lisOrganization = None,
-            startedAtTime = None,
+            startedAtTime = 0,
             target = None,
             **kwargs):
         BaseEvent.__init__(self, **kwargs)
@@ -342,6 +344,26 @@ class OutcomeEvent(Event):
         else:
             self._set_obj_prop('generated', generated)
 
+class SessionEvent(Event):
+
+    def __init__(self,
+                 action = None,
+                 generated = None,
+                 **kwargs):
+        Event.__init__(self, **kwargs)
+        self._set_str_prop('@context', Event.Contexts['SESSION'])
+        self._set_str_prop('@type', Event.Types['SESSION'])
+
+        if action and (action not in profiles.SessionProfile.Actions.values()):
+            raise TypeError('action must be in the list of SessionProfile actions')
+        else:
+            self._set_str_prop('action', action)
+
+        if generated and not( isinstance(generated, entities.Generatable)):
+            raise TypeError('generated must implement entities.Generatable')
+        else:
+            self._set_obj_prop('generated', generated)
+            
 
 class ViewEvent(Event):
 

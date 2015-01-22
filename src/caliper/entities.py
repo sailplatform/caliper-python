@@ -58,6 +58,7 @@ class Entity(BaseEntity):
         'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
         # 'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
         'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
+        'SESSION': 'http://purl.imsglobal.org/caliper/v1/Session',
         'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
         'TARGET': 'http://purl.imsglobal.org/caliper/v1/Target',
         'VIEW': 'http://purl.imsglobal.org/caliper/v1/View', # not sure we need this any more?
@@ -806,3 +807,46 @@ class Result(Entity, Generatable):
         return self._get_prop('scoredBy')
 
 
+## Session entities
+class Session(Entity, Generatable):
+
+    def __init__(self,
+                 actor = None,
+                 duration = None,
+                 endedAtTime = 0,
+                 startedAtTime = 0,
+                 **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_str_prop('@type', Entity.Types['SESSION'])
+        
+        if actor and (not isinstance(actor, foaf.Agent)):
+            raise TypeError('agent must implement foaf.Agent')
+        else:
+            self._actor = None
+
+        self._set_int_prop('actor', actor)
+        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_int_prop('endedAtTime', endedAtTime)
+        self._set_int_prop('startedAtTime', startedAtTime)
+
+    @property
+    def actor(self):
+        return self._actor
+
+    @property
+    def duration(self):
+        return self._get_prop('duration')
+    @duration.setter
+    def duration(self, new_duration):
+        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+
+    @property
+    def endedAtTime(self):
+        return self._get_prop('endedAtTime')
+    @endedAtTime.setter
+    def endedAtTime(self,new_time):
+        self._set_int_prop('endedAtTime', new_time)
+
+    @property
+    def startedAtTime(self):
+        return self._get_prop('startedAtTime')

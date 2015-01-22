@@ -207,6 +207,24 @@ class ReadingProfile(unittest.TestCase):
         self.assertEqual(viewed_event.as_json(),
                          util.get_fixture('caliperViewEvent'))
 
+
+class SessionProfile(unittest.TestCase):
+    def setUp(self):
+        self.learning_context = util.build_readium_learning_context()
+        self.epub = util.build_epub_vol43()
+        self.session = util.build_readium_session()
+        self.target = util.build_epub_subchap431()
+
+    def testSessionEvent(self):
+        session_event = util.build_session_event(
+            learning_context = self.learning_context,
+            event_object = self.learning_context.edApp,
+            target = self.target,
+            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
+            )
+
+        self.assertEqual(session_event.as_json(),
+                         util.get_fixture('caliperSessionEvent'))
                 
 if __name__ == '__main__':
     unittest.main()
