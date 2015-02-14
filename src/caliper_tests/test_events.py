@@ -219,6 +219,7 @@ class SessionProfile(unittest.TestCase):
     def testSessionLoginEvent(self):
         session_event = util.build_session_event(
             learning_context = self.learning_context,
+            actor = self.learning_context.agent,
             event_object = self.learning_context.edApp,
             session = self.session,
             target = util.build_epub_subchap431(),
@@ -231,6 +232,7 @@ class SessionProfile(unittest.TestCase):
     def testSessionLogoutEvent(self):
         session_event = util.build_session_event(
             learning_context = self.learning_context,
+            actor = self.learning_context.agent,
             event_object = self.learning_context.edApp,
             target = self.session,
             action = caliper.profiles.SessionProfile.Actions['LOGGEDOUT']            
@@ -238,6 +240,19 @@ class SessionProfile(unittest.TestCase):
 
         self.assertEqual(session_event.as_json(),
                          util.get_fixture('caliperSessionLogoutEvent'))
+
+    def testSessionTimeoutEvent(self):
+        session_event = util.build_session_event(
+            learning_context = self.learning_context,
+            actor = self.learning_context.edApp,
+            event_object = self.learning_context.edApp,
+            target = self.session,
+            action = caliper.profiles.SessionProfile.Actions['TIMEDOUT']            
+            )
+
+        self.assertEqual(session_event.as_json(),
+                         util.get_fixture('caliperSessionTimeoutEvent'))
+
         
 if __name__ == '__main__':
     unittest.main()

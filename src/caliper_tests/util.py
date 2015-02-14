@@ -486,6 +486,7 @@ def build_readium_session(learning_context=None):
 
 ## Session event
 def build_session_event(learning_context = None,
+                        actor = None,
                         event_object = None,
                         session = None,
                         target = None,
@@ -505,7 +506,7 @@ def build_session_event(learning_context = None,
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
-        actor = learning_context.agent,
+        actor = actor,
         action = action,
         event_object = event_object,
         generated = session,
