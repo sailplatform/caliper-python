@@ -5,45 +5,62 @@
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "lastModifiedTime": 1402965614516
+        "description": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z"
     },
     "action": "paused",
     "object": {
         "@id": "https://com.sat/super-media-tool/video/video1",
         "@type": "http://purl.imsglobal.org/caliper/v1/VideoObject",
         "name": "American Revolution - Key Figures Video",
+        "description": null,
         "objectType": [],
         "alignedLearningObjective": [{
             "@id": "http://americanrevolution.com/personalities/learn",
             "@type": "http://purl.imsglobal.org/caliper/v1/LearningObjective",
             "name": null,
-            "lastModifiedTime": 0
+            "description": null,
+            "properties": {},
+            "dateCreated": "2015-01-01T06:00:00.000Z",
+            "dateModified": null
         }],
-        "keyword": [],
-        "partOf": null,
-        "lastModifiedTime": 1402965614516,
+        "keywords": [],
+        "isPartOf": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z",
+        "datePublished": null,
         "duration": 1420
     },
     "target": {
         "@id": "https://com.sat/super-media-tool/video/video1",
         "@type": "http://purl.imsglobal.org/caliper/v1/MediaLocation",
         "name": null,
+        "description": null,
         "objectType": [],
         "alignedLearningObjective": [],
-        "keyword": [],
-        "partOf": null,
-        "lastModifiedTime": 0,
+        "keywords": [],
+        "isPartOf": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": null,
+        "datePublished": null,
         "currentTime": 710
     },
     "generated": null,
-    "startedAtTime": 1402965614516,
-    "endedAtTime": 0,
+    "startedAtTime": "2015-02-15T10:15:00.000Z",
+    "endedAtTime": null,
     "duration": null,
     "edApp": {
         "@id": "https://com.sat/super-media-tool",
-        "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
+        "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Super Media Tool",
-        "lastModifiedTime": 1402965614516
+        "description": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z"
     },
     "group": {
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101",
@@ -52,7 +69,10 @@
         "courseNumber": "AmRev-101",
         "label": "Am Rev 101",
         "name": "American Revolution 101",
+        "description": null,
         "parentOrg": null,
-        "lastModifiedTime": 1402965614516
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z"
     }
 }

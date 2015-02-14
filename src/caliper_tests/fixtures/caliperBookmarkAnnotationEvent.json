@@ -5,45 +5,62 @@
         "@id": "https://some-university.edu/user/554433",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
-        "lastModifiedTime": 1402965614516
+        "description": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z"
     },
     "action": "bookmarked",
     "object": {
         "@id": "https://someEduApp.edu/bookmarks/00001",
         "@type": "http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation",
         "name": null,
-        "lastModifiedTime": 1402965614516,
+        "description": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z",
         "bookmarkNotes": "The Intolerable Acts (1774)--bad idea Lord North"
     },
     "target": {
         "@id": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/2)",
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: Lord North",
+        "description": null,
         "objectType": [],
         "alignedLearningObjective": [],
-        "keyword": [],
-        "partOf": {
+        "keywords": [],
+        "isPartOf": {
             "@id": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3)",
             "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
             "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
+            "description": null,
             "objectType": [],
             "alignedLearningObjective": [],
-            "keyword": [],
-            "partOf": null,
-            "lastModifiedTime": 1402965614516
+            "keywords": [],
+            "isPartOf": null,
+            "properties": {},
+            "dateCreated": "2015-01-01T06:00:00.000Z",
+            "dateModified": "2015-02-02T11:30:00.000Z",
+            "datePublished": null
         },
-        "lastModifiedTime": 1402965614516,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z",
+        "datePublished": null,
         "index": 2
     },
     "generated": null,
-    "startedAtTime": 1402965614516,
-    "endedAtTime": 0,
+    "startedAtTime": "2015-02-15T10:15:00.000Z",
+    "endedAtTime": null,
     "duration": null,
     "edApp": {
         "@id": "https://github.com/readium/readium-js-viewer",
-        "@type":"http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
+        "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
-        "lastModifiedTime": 1402965614516
+        "description": null,
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z"
     },
     "group": {
         "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101",
@@ -52,7 +69,10 @@
         "courseNumber": "AmRev-101",
         "label": "Am Rev 101",
         "name": "American Revolution 101",
+        "description": null,
         "parentOrg": null,
-        "lastModifiedTime": 1402965614516
+        "properties": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z"
     }
 }

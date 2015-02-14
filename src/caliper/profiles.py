@@ -160,7 +160,7 @@ class ReadingProfile(Profile):
 
 class SessionProfile(Profile):
     _actions = {
-        'LOGGED_IN': 'logged in', # session.loggedIn
-        'LOGGED_OUT': 'logged out', # session.loggedOut
-        'TIMED_OUT': 'timed out', # session.timedOut
+        'LOGGEDIN': 'logged in', # session.loggedIn
+        'LOGGEDOUT': 'logged out', # session.loggedOut
+        'TIMEDOUT': 'timed out', # session.timedOut
         }

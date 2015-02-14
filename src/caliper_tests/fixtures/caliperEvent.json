@@ -24,7 +24,7 @@
         "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
-        "partOf": null,
+        "isPartOf": null,
         "lastModifiedTime": 1402965614516
     },
     "generated": null,
@@ -41,7 +41,7 @@
         "properties": {},
         "alignedLearningObjective": [],
         "keyword": [],
-        "partOf": null,
+        "isPartOf": null,
         "lastModifiedTime": 0
     }
 }

@@ -51,6 +51,7 @@ class Event(BaseEvent):
         'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/MediaEvent',
         'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/NavigationEvent',
         'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/OutcomeEvent',
+        'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/ReadingEvent',
         'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/SessionEvent',
         'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/ViewEvent',
         }    
@@ -63,6 +64,7 @@ class Event(BaseEvent):
         'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
         'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
         'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
+        'READING': 'http://purl.imsglobal.org/caliper/v1/ReadingEvent',
         'SESSION': 'http://purl.imsglobal.org/caliper/v1/SessionEvent',
         'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
         }
@@ -72,11 +74,11 @@ class Event(BaseEvent):
             actor = None,
             duration = None,
             edApp = None,
-            endedAtTime = 0,
+            endedAtTime = None,
             event_object = None,
             generated = None,
             lisOrganization = None,
-            startedAtTime = 0,
+            startedAtTime = None,
             target = None,
             **kwargs):
         BaseEvent.__init__(self, **kwargs)
@@ -100,7 +102,7 @@ class Event(BaseEvent):
         else:
             self._set_obj_prop('edApp', edApp)
 
-        self._set_int_prop('endedAtTime', endedAtTime)
+        self._set_str_prop('endedAtTime', endedAtTime)
 
         if event_object and (not isinstance(event_object, CaliperSerializable)):
             raise TypeError('event_object must implement CaliperSerializable')
@@ -117,7 +119,7 @@ class Event(BaseEvent):
         else:
             self._set_obj_prop('group', lisOrganization)
 
-        self._set_int_prop('startedAtTime', startedAtTime)
+        self._set_str_prop('startedAtTime', startedAtTime)
             
         if target and (not isinstance(target, entities.Targetable)):
             raise TypeError('target must implement entities.Targetable')
@@ -344,6 +346,34 @@ class OutcomeEvent(Event):
         else:
             self._set_obj_prop('generated', generated)
 
+
+class ReadingEvent(Event):
+
+    def __init__(self,
+                 action = None,
+                 event_object = None,
+                 target = None,
+                 **kwargs):
+        Event.__init__(self, **kwargs)
+        self._set_str_prop('@context', Event.Contexts['READING'])
+        self._set_str_prop('@type', Event.Types['READING'])
+
+        if action and (action not in profiles.ReadingProfile.Actions.values()):
+            raise TypeError('action must be in the list of ReadingProfile actions')
+        else:
+            self._set_str_prop('action', action)
+
+        if event_object and not( isinstance(event_object, entities.DigitalResource)):
+            raise TypeError('event_object must implement DigitalResource')
+        else:
+            self._set_obj_prop('object', event_object)
+
+        if target and not( isinstance(target, entities.Frame)):
+            raise TypeError('target must implement entities.Frame')
+        else:
+            self._set_obj_prop('target', target)
+
+
 class SessionEvent(Event):
 
     def __init__(self,
@@ -364,31 +394,5 @@ class SessionEvent(Event):
         else:
             self._set_obj_prop('generated', generated)
             
-
-class ViewEvent(Event):
-
-    def __init__(self,
-                 action = None,
-                 event_object = None,
-                 target = None,
-                 **kwargs):
-        Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['VIEW'])
-        self._set_str_prop('@type', Event.Types['VIEW'])
-
-        if action and (action not in profiles.ReadingProfile.Actions.values()):
-            raise TypeError('action must be in the list of ReadingProfile actions')
-        else:
-            self._set_str_prop('action', action)
-
-        if event_object and not( isinstance(event_object, entities.DigitalResource)):
-            raise TypeError('event_object must implement DigitalResource')
-        else:
-            self._set_obj_prop('object', event_object)
-
-        if target and not( isinstance(target, entities.Frame)):
-            raise TypeError('target must implement entities.Frame')
-        else:
-            self._set_obj_prop('target', target)
 
         
