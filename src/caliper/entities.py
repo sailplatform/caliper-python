@@ -45,7 +45,7 @@ from .extern import foaf, qti, schemadotorg
 
 ### Fundamental entities ###
 ## Base entity class
-class Entity(BaseEntity):
+class Entity(BaseEntity, schemadotorg.Thing):
 
     _types = {
         'AGENT': 'http://purl.imsglobal.org/caliper/v1/Agent',
@@ -419,7 +419,7 @@ class EpubVolume(DigitalResource):
 
 
 ## Annotation entities
-class Annotation(Entity, schemadotorg.Thing):
+class Annotation(Entity):
     _types = {
         'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/Annotation',
         'BOOKMARK_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation',
