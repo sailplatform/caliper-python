@@ -164,7 +164,8 @@ class OutcomeProfile(unittest.TestCase):
         self.assessment = util.build_assessment()
         self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
                                                      assessment=self.assessment)
-        self.result = util.build_assessment_result(attempt=self.attempt)
+        self.result = util.build_assessment_result(learning_context=self.learning_context,
+                                                   attempt=self.attempt)
 
     def testAssessmentOutcomeEvent(self):
         assessment_outcome_event = util.build_assessment_outcome_event(
@@ -196,15 +197,15 @@ class ReadingProfile(unittest.TestCase):
         self.assertEqual(navigation_event.as_json(),
                          util.get_fixture('caliperNavigationEvent'))
         
-    def testViewedEvent(self):
-        viewed_event = util.build_epub_view_event(
+    def testReadingEvent(self):
+        reading_event = util.build_epub_reading_event(
             learning_context = self.learning_context,
             event_object = self.epub,
             target = self.target,
             action = caliper.profiles.ReadingProfile.Actions['VIEWED']
             )
 
-        self.assertEqual(viewed_event.as_json(),
+        self.assertEqual(reading_event.as_json(),
                          util.get_fixture('caliperViewEvent'))
 
 
@@ -212,20 +213,32 @@ class SessionProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_readium_learning_context()
         self.epub = util.build_epub_vol43()
-        self.session = util.build_readium_session()
-        self.target = util.build_epub_subchap431()
+        self.session = util.build_readium_session(learning_context=self.learning_context)
 
-    def testSessionEvent(self):
+
+    def testSessionLoginEvent(self):
         session_event = util.build_session_event(
             learning_context = self.learning_context,
             event_object = self.learning_context.edApp,
-            target = self.target,
-            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
+            session = self.session,
+            target = util.build_epub_subchap431(),
+            action = caliper.profiles.SessionProfile.Actions['LOGGEDIN']
             )
 
         self.assertEqual(session_event.as_json(),
-                         util.get_fixture('caliperSessionEvent'))
-                
+                         util.get_fixture('caliperSessionLoginEvent'))
+
+    def testSessionLogoutEvent(self):
+        session_event = util.build_session_event(
+            learning_context = self.learning_context,
+            event_object = self.learning_context.edApp,
+            target = self.session,
+            action = caliper.profiles.SessionProfile.Actions['LOGGEDOUT']            
+            )
+
+        self.assertEqual(session_event.as_json(),
+                         util.get_fixture('caliperSessionLogoutEvent'))
+        
 if __name__ == '__main__':
     unittest.main()
 

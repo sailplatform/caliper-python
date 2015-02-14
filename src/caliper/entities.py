@@ -61,20 +61,25 @@ class Entity(BaseEntity):
         'SESSION': 'http://purl.imsglobal.org/caliper/v1/Session',
         'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
         'TARGET': 'http://purl.imsglobal.org/caliper/v1/Target',
-        'VIEW': 'http://purl.imsglobal.org/caliper/v1/View', # not sure we need this any more?
+        'VIEW': 'http://purl.imsglobal.org/caliper/v1/View',
         }
 
     def __init__(self,
             entity_id = None,
+            dateCreated = None,
+            dateModified = None,
+            description = None,
             name = None,
-            lastModifiedTime = 0,
             properties = {},
             **kwargs):
         BaseEntity.__init__(self, **kwargs)
         self._set_str_prop('@id', entity_id)
         self._set_str_prop('@type', Entity.Types['ENTITY'])
-        self._set_int_prop('lastModifiedTime', lastModifiedTime)
+        self._set_str_prop('dateCreated', dateCreated)
+        self._set_str_prop('dateModified', dateModified)
+        self._set_str_prop('description', description)
         self._set_str_prop('name', name)
+        self._set_obj_prop('properties', properties)
 
     @property
     def id(self):
@@ -85,19 +90,27 @@ class Entity(BaseEntity):
         return self._get_prop('@type')
 
     @property
-    def lastModifiedTime(self):
-        return self._get_prop('lastModifiedTime')
+    def dateCreated(self):
+        return self._get_prop('dateCreated')
+
+    @property
+    def dateModified(self):
+        return self._get_prop('dateModified')
+
+    @property
+    def description(self):
+        return self._get_prop('description')
 
     @property
     def name(self):
         return self._get_prop('name')
 
+    @property
+    def properties(self):
+        return self._get_prop('properties')
+
 ## Behavioural interfaces for entities ##
 class Assignable(CaliperSerializable):
-
-    @property
-    def dateCreated(self):
-        return self._get_prop('dateCreated')
 
     @property
     def datePublished(self):
@@ -241,7 +254,7 @@ class LearningObjective(Entity):
 
     
 ## Creative works
-class DigitalResource(Entity, schemadotorg.CreativeWork):
+class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
 
     _types = {
         'ASSIGNABLE_DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/AssignableDigitalResource',
@@ -258,9 +271,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
         
     def __init__(self,
             alignedLearningObjective = None,
-            keyword = None,
+            datePublished = None,
+            keywords = None,
             objectType = None,
-            partOf = None,
+            isPartOf = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['DIGITAL_RESOURCE'])
@@ -275,13 +289,15 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
         else:
             self._set_list_prop('alignedLearningObjective', None)
 
-        if isinstance(keyword, collections.MutableSequence):
-            if all( isinstance(item, six.string_types) for item in keyword):
-                self._set_list_prop('keyword', keyword)
+        self._set_str_prop('datePublished', datePublished)
+
+        if isinstance(keywords, collections.MutableSequence):
+            if all( isinstance(item, six.string_types) for item in keywords):
+                self._set_list_prop('keywords', keywords)
             else:
-                raise TypeError('keyword must be a list of keyword strings')
+                raise TypeError('keywords must be a list of keyword strings')
         else:
-            self._set_list_prop('keyword', None)
+            self._set_list_prop('keywords', None)
 
         if isinstance(objectType, collections.MutableSequence):
             if all( isinstance(item, six.string_types) for item in objectType ):
@@ -291,19 +307,23 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
         else:
             self._set_list_prop('objectType', None)
 
-        if partOf:
-            if (isinstance(partOf, six.string_types)) and (rfc3987_parse(partOf, rule='URI')):
-                self._set_str_prop('partOf', partOf)
-            elif isinstance(partOf, CaliperSerializable):
-                self._set_obj_prop('partOf', partOf)
+        if isPartOf:
+            if (isinstance(isPartOf, six.string_types)) and (rfc3987_parse(isPartOf, rule='URI')):
+                self._set_str_prop('isPartOf', isPartOf)
+            elif isinstance(isPartOf, CaliperSerializable):
+                self._set_obj_prop('isPartOf', isPartOf)
             else:
-                raise TypeError('partOf must implement CaliperSerializable or be an URL for a caliper entity')
+                raise TypeError('isPartOf must implement CaliperSerializable or be an URL for a caliper entity')
         else:
-            self._set_obj_prop('partOf', partOf)
+            self._set_obj_prop('isPartOf', isPartOf)
             
     @property
     def alignedLearningObjective(self):
         return self._get_prop('alignedLearningObjective')
+
+    @property
+    def datePublished(self):
+        return self._get_prop('datePublished')
 
     @property
     def keyword(self):
@@ -311,11 +331,11 @@ class DigitalResource(Entity, schemadotorg.CreativeWork):
 
     @property
     def objectType(self):
-        return self._get_prop('objecType')
+        return self._get_prop('objectType')
 
     @property
-    def partOf(self):
-        return self._get_prop('partOf')
+    def isPartOf(self):
+        return self._get_prop('isPartOf')
 
 class Frame(DigitalResource, Targetable):
 
@@ -542,39 +562,30 @@ class Attempt(Entity, Generatable):
                 positive).
     '''
     def __init__(self,
-            assignable = None,
-            actor = None,
+            assignable_id = None,
+            actor_id = None,
             count = None,
             duration = None,
-            endedAtTime = 0,
-            startedAtTime = 0,
+            endedAtTime =None,
+            startedAtTime = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['ATTEMPT'])
-        self._assignable = self._actor = None
 
-        if assignable and (not isinstance(assignable, Assignable)):
-            raise TypeError('assignable must implement Assignable')
-        else:
-            self._assignable = None
-
-        if actor and (not isinstance(actor, foaf.Agent)):
-            raise TypeError('agent must implement foaf.Agent')
-        else:
-            self._actor = None
-
+        self._set_str_prop('actor', actor_id)
+        self._set_str_prop('assignable', assignable_id)
         self._set_int_prop('count', count)
         self._set_str_prop('duration', duration) ## should we armour this with a regex?
-        self._set_int_prop('endedAtTime', endedAtTime)
-        self._set_int_prop('startedAtTime', startedAtTime)
+        self._set_str_prop('endedAtTime', endedAtTime)
+        self._set_str_prop('startedAtTime', startedAtTime)
             
     @property
     def assignable(self):
-        return self._assignable
+        return self._get_prop('assignable')
 
     @property
     def actor(self):
-        return self._actor
+        return self._get_prop('actor')
 
     @property
     def count(self):
@@ -592,7 +603,7 @@ class Attempt(Entity, Generatable):
         return self._get_prop('endedAtTime')
     @endedAtTime.setter
     def endedAtTime(self,new_time):
-        self._set_int_prop('endedAtTime', new_time)
+        self._set_str_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):
@@ -606,12 +617,10 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         }
 
     def __init__(self,
-            dateCreated = 0,
-            datePublished = 0,
-            dateToActivate = 0,
-            dateToShow = 0,
-            dateToStartOn = 0,
-            dateToSubmit = 0,
+            dateToActivate = None,
+            dateToShow = None,
+            dateToStartOn = None,
+            dateToSubmit = None,
             maxAttempts = None,
             maxSubmits = None,
             maxScore = None,
@@ -619,12 +628,10 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', DigitalResource.Types['ASSIGNABLE_DIGITAL_RESOURCE'])
 
-        self._set_int_prop('dateCreated', dateCreated)
-        self._set_int_prop('datePublished', datePublished)
-        self._set_int_prop('dateToActivate', dateToActivate)
-        self._set_int_prop('dateToShow', dateToShow)
-        self._set_int_prop('dateToStartOn', dateToStartOn)
-        self._set_int_prop('dateToSubmit', dateToSubmit)
+        self._set_str_prop('dateToActivate', dateToActivate)
+        self._set_str_prop('dateToShow', dateToShow)
+        self._set_str_prop('dateToStartOn', dateToStartOn)
+        self._set_str_prop('dateToSubmit', dateToSubmit)
         self._set_int_prop('maxAttempts', maxAttempts)
         self._set_int_prop('maxSubmits', maxSubmits)
         self._set_float_prop('maxScore', maxScore)
@@ -752,6 +759,8 @@ class VideoObject(MediaObject, schemadotorg.VideoObject):
 class Result(Entity, Generatable):
 
     def __init__(self,
+            actor_id = None,
+            assignable_id = None,
             comment = None,
             curvedTotalScore = 0.0,
             curveFactor = 0.0,
@@ -764,6 +773,8 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['RESULT'])
 
+        self._set_str_prop('actor', actor_id)
+        self._set_str_prop('assignable', assignable_id)
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
@@ -777,6 +788,14 @@ class Result(Entity, Generatable):
             self._set_obj_prop('scoredBy', scoredBy)
         
         self._set_float_prop('totalScore', totalScore)
+
+    @property
+    def actor(self):
+        return self._get_prop('actor')
+
+    @property
+    def assignable(self):
+        return self._get_prop('assignable')
 
     @property
     def comment(self):
@@ -808,13 +827,13 @@ class Result(Entity, Generatable):
 
 
 ## Session entities
-class Session(Entity, Generatable):
+class Session(Entity, Generatable, Targetable):
 
     def __init__(self,
                  actor = None,
                  duration = None,
-                 endedAtTime = 0,
-                 startedAtTime = 0,
+                 endedAtTime = None,
+                 startedAtTime = None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['SESSION'])
@@ -822,12 +841,11 @@ class Session(Entity, Generatable):
         if actor and (not isinstance(actor, foaf.Agent)):
             raise TypeError('agent must implement foaf.Agent')
         else:
-            self._actor = None
+            self._set_obj_prop('actor', actor)
 
-        self._set_int_prop('actor', actor)
         self._set_str_prop('duration', duration) ## should we armour this with a regex?
-        self._set_int_prop('endedAtTime', endedAtTime)
-        self._set_int_prop('startedAtTime', startedAtTime)
+        self._set_str_prop('endedAtTime', endedAtTime)
+        self._set_str_prop('startedAtTime', startedAtTime)
 
     @property
     def actor(self):
@@ -845,7 +863,7 @@ class Session(Entity, Generatable):
         return self._get_prop('endedAtTime')
     @endedAtTime.setter
     def endedAtTime(self,new_time):
-        self._set_int_prop('endedAtTime', new_time)
+        self._set_str_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):
