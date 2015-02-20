@@ -50,6 +50,7 @@ _ACTTIME = '2015-01-16T05:00:00.000Z'
 _SHOWTIME = _ACTTIME
 _STARTONTIME = _ACTTIME
 _SUBMITTIME = '2015-02-28T11:59:59.000Z'
+_DURATION = 'PT3000S'
 
 
 ### NOTE
@@ -520,9 +521,11 @@ def build_session_event(learning_context = None,
                         target = None,
                         action = None):
     the_endtime = None
+    the_duration = None
     if target and (isinstance(target, caliper.entities.Session)):
         the_target = target
         the_target.endedAtTime = the_endtime = _ENDTIME
+        the_target.duration = the_duration = _DURATION
     else:
         the_target = caliper.entities.Frame(
             entity_id = target.id,
@@ -540,5 +543,6 @@ def build_session_event(learning_context = None,
         generated = session,
         target = the_target,
         startedAtTime = _STARTTIME,
-        endedAtTime = the_endtime
+        endedAtTime = the_endtime,
+        duration = the_duration
         )
