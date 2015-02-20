@@ -303,7 +303,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             if all( isinstance(item, six.string_types) for item in objectType ):
                 self._set_list_prop('objectType', objectType)
             else:
-                raise TypeError('keyword must be a list of keyword strings')
+                raise TypeError('objectType must be a list of object type strings')
         else:
             self._set_list_prop('objectType', None)
 
@@ -326,8 +326,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         return self._get_prop('datePublished')
 
     @property
-    def keyword(self):
-        return self._get_prop('keyword')
+    def keywords(self):
+        return self._get_prop('keywords')
 
     @property
     def objectType(self):
