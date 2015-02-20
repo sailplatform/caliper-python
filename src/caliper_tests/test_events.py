@@ -103,6 +103,8 @@ class AssessmentProfile(unittest.TestCase):
         self.assessment_item = self.assessment.assessmentItems[0]
         self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
                                                      assessment=self.assessment)
+        self.item_attempt = util.build_assessment_item_attempt(learning_context=self.learning_context,
+                                                               assessment=self.assessment)
         
     def testAssessmentEvent(self):
         assessment_event = util.build_assessment_event(
@@ -115,15 +117,31 @@ class AssessmentProfile(unittest.TestCase):
         self.assertEqual(assessment_event.as_json(),
                          util.get_fixture('caliperAssessmentEvent'))
 
-    def testAssessmentItemEvent(self):
+    def testAssessmentItemStartedEvent(self):
         assessment_item_event = util.build_assessment_item_event(
             learning_context = self.learning_context,
             assessment_item = self.assessment_item,
+            generated = util.build_assessment_item_attempt(learning_context=self.learning_context,
+                                                           assessment=self.assessment),
             action = caliper.profiles.AssessmentItemProfile.Actions['STARTED']
             )
 
         self.assertEqual(assessment_item_event.as_json(),
-                         util.get_fixture('caliperAssessmentItemEvent'))
+                         util.get_fixture('caliperAssessmentItemStartedEvent'))
+
+
+    def testAssessmentItemCompletedEvent(self):
+        assessment_item_event = util.build_assessment_item_event(
+            learning_context = self.learning_context,
+            assessment_item = self.assessment_item,
+            generated = util.build_assessment_item_response(assessment=self.assessment,
+                                                            attempt=self.item_attempt,
+                                                            values=['2 July 1776']),
+            action = caliper.profiles.AssessmentItemProfile.Actions['COMPLETED']
+            )
+
+        self.assertEqual(assessment_item_event.as_json(),
+                         util.get_fixture('caliperAssessmentItemCompletedEvent'))
 
 
 class AssignableProfile(unittest.TestCase):
@@ -197,8 +215,8 @@ class ReadingProfile(unittest.TestCase):
         self.assertEqual(navigation_event.as_json(),
                          util.get_fixture('caliperNavigationEvent'))
         
-    def testReadingEvent(self):
-        reading_event = util.build_epub_reading_event(
+    def testViewEvent(self):
+        reading_event = util.build_epub_view_event(
             learning_context = self.learning_context,
             event_object = self.epub,
             target = self.target,

@@ -313,7 +313,6 @@ def build_assessment():
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
-    pass
 
 ## build a test assessment attempt
 def build_assessment_attempt(learning_context=None,
@@ -326,7 +325,32 @@ def build_assessment_attempt(learning_context=None,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
         )
-    pass
+
+## build a test assessment item attempt
+def build_assessment_item_attempt(learning_context=None,
+                                  assessment=None):
+    return caliper.entities.Attempt(
+        entity_id = '{0}/{1}'.format(assessment.id,'item1/attempt1'),
+        assignable_id = assessment.id,
+        actor_id = learning_context.agent.id,
+        count = 1,
+        dateCreated = _CREATETIME,
+        startedAtTime = _STARTTIME
+        )
+
+## build a test assessment item response
+def build_assessment_item_response(assessment=None,
+                                   attempt=None,
+                                   values=None):
+    return caliper.entities.FillinBlankResponse(
+        entity_id = '{0}/{1}'.format(assessment.id,'item1/response1'),
+        assignable_id = attempt.assignable,
+        actor_id = attempt.actor,
+        attempt = attempt,
+        dateCreated = _CREATETIME,
+        startedAtTime = _STARTTIME,
+        values = values
+        )
 
 ## build a test assessment result
 def build_assessment_result(learning_context=None,
@@ -363,13 +387,16 @@ def build_assessment_event(learning_context = None,
 
 def build_assessment_item_event(learning_context = None,
                                 assessment_item = None,
+                                generated = None,
                                 action = None):
     return caliper.events.AssessmentItemEvent(
         edApp = learning_context.edApp,
         lisOrganization = learning_context.lisOrganization,
         actor = learning_context.agent,
         action = action,
+        isTimeDependent = False,
         event_object = assessment_item,
+        generated = generated,
         startedAtTime = _STARTTIME
         )
 
@@ -386,7 +413,6 @@ def build_assessment_outcome_event(learning_context = None,
         generated = result,
         startedAtTime = _STARTTIME
         )
-
 
 ### Media Profile ###
 ## Media event
@@ -426,28 +452,6 @@ def build_video_media_location():
         dateCreated = _CREATETIME
         )
 
-## View event
-def build_epub_reading_event(learning_context = None,
-                          event_object = None,
-                          target = None,
-                          action = None):
-    return caliper.events.ReadingEvent(
-        edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
-        actor = learning_context.agent,
-        action = action,
-        event_object = event_object,
-        target = caliper.entities.Frame(
-            entity_id = target.id,
-            name = target.name,
-            isPartOf = event_object,
-            dateCreated = _CREATETIME,
-            dateModified = _MODTIME,
-            index = 1,
-            ),
-        startedAtTime = _STARTTIME
-        )
-
 ## Navigation event
 def build_epub_navigation_event(learning_context = None,
                                 event_object = None,
@@ -471,6 +475,30 @@ def build_epub_navigation_event(learning_context = None,
         navigatedFrom = from_resource,
         startedAtTime = _STARTTIME
         )
+
+## View event
+def build_epub_view_event(learning_context = None,
+                          event_object = None,
+                          target = None,
+                          action = None):
+    return caliper.events.ViewEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = event_object,
+        target = caliper.entities.Frame(
+            entity_id = target.id,
+            name = target.name,
+            isPartOf = event_object,
+            dateCreated = _CREATETIME,
+            dateModified = _MODTIME,
+            index = 1,
+            ),
+        startedAtTime = _STARTTIME
+        )
+
+
 
 ### Session profile
 

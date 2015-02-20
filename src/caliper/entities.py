@@ -56,7 +56,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
         'LIS_PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
         'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
-        # 'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
+        'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
         'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
         'SESSION': 'http://purl.imsglobal.org/caliper/v1/Session',
         'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
@@ -303,7 +303,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             if all( isinstance(item, six.string_types) for item in objectType ):
                 self._set_list_prop('objectType', objectType)
             else:
-                raise TypeError('keyword must be a list of keyword strings')
+                raise TypeError('objectType must be a list of object type strings')
         else:
             self._set_list_prop('objectType', None)
 
@@ -326,8 +326,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         return self._get_prop('datePublished')
 
     @property
-    def keyword(self):
-        return self._get_prop('keyword')
+    def keywords(self):
+        return self._get_prop('keywords')
 
     @property
     def objectType(self):
@@ -542,7 +542,7 @@ class TextPositionSelector(CaliperSerializable):
     def start(self, new_start):
         self._set_str_prop('start', new_start)
 
-## Assignable entities
+## Generatable entities
                  
 class Attempt(Entity, Generatable):
 
@@ -609,6 +609,76 @@ class Attempt(Entity, Generatable):
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
 
+class Response(Entity, Generatable):
+    _types = {
+        # 'DRAGOBJECT': 'http://purl.imsglobal.org/caliper/v1/Response/DragObject',
+        # 'ESSAY': 'http://purl.imsglobal.org/caliper/v1/Response/Essay',
+        # 'HOTSPOT': 'http://purl.imsglobal.org/caliper/v1/Response/HotSpot',
+        'FILLINBLANK': 'http://purl.imsglobal.org/caliper/v1/Response/FillinBlank',
+        'MULTIPLECHOICE': 'http://purl.imsglobal.org/caliper/v1/Response/MultipleChoice',
+        'MULTIPLERESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response/MultipleResponse',
+        'SELECTTEXT': 'http://purl.imsglobal.org/caliper/v1/Response/SelectText',
+        # 'SHORTANSWER': 'http://purl.imsglobal.org/caliper/v1/Response/ShortAnswer',
+        # 'SLIDER': 'http://purl.imsglobal.org/caliper/v1/Response/Slider',
+        'TRUEFALSE': 'http://purl.imsglobal.org/caliper/v1/Response/TrueFalse'
+        }
+
+    def __init__(self,
+            assignable_id = None,
+            actor_id = None,
+            attempt = None,
+            duration = None,
+            endedAtTime =None,
+            startedAtTime = None,
+            values = None,
+            **kwargs):
+        Entity.__init__(self,**kwargs)
+
+        self._set_str_prop('@type', Entity.Types['RESPONSE'])
+
+        self._set_str_prop('actor', actor_id)
+        self._set_str_prop('assignable', assignable_id)
+
+        if attempt and not( isinstance(attempt, Attempt)):
+            raise TypeError('attempt must implement Attempt')
+        else:
+            self._set_list_prop('attempt', attempt)
+        
+        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_str_prop('endedAtTime', endedAtTime)
+        self._set_str_prop('startedAtTime', startedAtTime)
+        self._set_obj_prop('values', values)
+
+    @property
+    def assignable(self):
+        return self._get_prop('assignable')
+
+    @property
+    def actor(self):
+        return self._get_prop('actor')
+
+    @property
+    def duration(self):
+        return self._get_prop('duration')
+    @duration.setter
+    def duration(self, new_duration):
+        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+
+    @property
+    def endedAtTime(self):
+        return self._get_prop('endedAtTime')
+    @endedAtTime.setter
+    def endedAtTime(self,new_time):
+        self._set_str_prop('endedAtTime', new_time)
+
+    @property
+    def startedAtTime(self):
+        return self._get_prop('startedAtTime')
+
+    @property
+    def values(self):
+        return self._get_prop('values')
+
 ## Assessment entities
 class AssignableDigitalResource(DigitalResource, Assignable):
     _types = {
@@ -662,9 +732,18 @@ class Assessment(AssignableDigitalResource, qti.Assessment):
 
 class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
 
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 isTimeDependent = False,
+                 **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
+
+        self._set_bool_prop('isTimeDependent', isTimeDependent)
+
+    @property
+    def isTimeDependent(self):
+        return self._get_prop('isTimeDependent')
+
 
 ## Media entities
 class MediaLocation(DigitalResource, Targetable):
@@ -824,6 +903,79 @@ class Result(Entity, Generatable):
     @property
     def scoredBy(self):
         return self._get_prop('scoredBy')
+
+## Response entities
+class FillinBlankResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+
+        self._set_str_prop('@type', Response.Types['FILLINBLANK'])
+
+        if values and isinstance(values, collections.MutableSequence):
+          if all( isinstance(item, six.string_types) for item in values):
+            self._set_list_prop('values', values)
+          else:
+            raise TypeError('values must be a list of strings')
+        else:
+          self._set_list_prop('values', None)
+
+class MultipleChoiceResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+
+        self._set_str_prop('@type', Response.Types['MULTIPLECHOICE'])
+        self._set_str_prop('values', values)
+
+class MultipleResponseResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+
+        self._set_str_prop('@type', Response.Types['MULTIPLERESPONSE'])
+
+        if values and isinstance(values, collections.MutableSequence):
+          if all( isinstance(item, six.string_types) for item in values):
+            self._set_list_prop('values', values)
+          else:
+            raise TypeError('values must be alist of strings')
+        else:
+          self._set_list_prop('values', None)
+
+class SelectTextResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+
+        self._set_str_prop('@type', Response.Types['SELECTTEXT'])
+
+        if values and isinstance(values, collections.MutableSequence):
+          if all( isinstance(item, six.string_types) for item in values):
+            self._set_list_prop('values', values)
+          else:
+            raise TypeError('values must be alist of strings')
+        else:
+          self._set_list_prop('values', None)
+
+class TrueFalseResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+
+        self._set_str_prop('@type', Response.Types['TRUEFALSE'])
+        self._set_str_prop('values', values)
+
 
 
 ## Session entities

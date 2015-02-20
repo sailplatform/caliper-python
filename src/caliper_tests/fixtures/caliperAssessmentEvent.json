@@ -50,7 +50,8 @@
             "dateToSubmit": null,
             "maxAttempts": 2,
             "maxSubmits": 2,
-            "maxScore": 1.0
+            "maxScore": 1.0,
+            "isTimeDependent": false
         },{
             "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item2",
             "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
@@ -70,7 +71,8 @@
             "dateToSubmit": null,
             "maxAttempts": 2,
             "maxSubmits": 2,
-            "maxScore": 1.0
+            "maxScore": 1.0,
+            "isTimeDependent": false
         },{
             "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item3",
             "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
@@ -90,7 +92,8 @@
             "dateToSubmit": null,
             "maxAttempts": 2,
             "maxSubmits": 2,
-            "maxScore": 1.0
+            "maxScore": 1.0,
+            "isTimeDependent": false
         }]
     },
     "target": null,
