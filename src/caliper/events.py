@@ -230,6 +230,7 @@ class AssessmentItemEvent(Event):
     def __init__(self,
             action = None,
             event_object = None,
+            generated = None,
             **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
@@ -244,6 +245,11 @@ class AssessmentItemEvent(Event):
             raise TypeError('event_object must implement entities.AssessmentItem')
         else:
             self._set_obj_prop('object', event_object)
+
+        if generated and (not isinstance(generated, entities.Response)):
+            raise TypeError('generated must implement entities.Response')
+        else:
+            self._set_obj_prop('generated', generated)
 
 
 class AssignableEvent(Event):
