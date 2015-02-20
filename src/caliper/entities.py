@@ -614,6 +614,15 @@ class AssignableDigitalResource(DigitalResource, Assignable):
     _types = {
         'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/Assessment',
         'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem',
+        'ASSESSMENT_ITEM_DRAGOBJECT': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/DragObject',
+        'ASSESSMENT_ITEM_HOTSPOT': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/HotSpot',
+        'ASSESSMENT_ITEM_FILLINBLANK': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/FillinBlank',
+        'ASSESSMENT_ITEM_MULTIPLECHOICE': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/MultipleChoice',
+        'ASSESSMENT_ITEM_MULTIPLERESPONSE': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/MultipleResponse',
+        'ASSESSMENT_ITEM_SELECTTEXT': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/SelectText',
+        'ASSESSMENT_ITEM_SHORTANSWER': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/ShortAnswer',
+        'ASSESSMENT_ITEM_SLIDER': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/Slider',
+        'ASSESSMENT_ITEM_TRUEFALSE': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem/TrueFalse'
         }
 
     def __init__(self,
