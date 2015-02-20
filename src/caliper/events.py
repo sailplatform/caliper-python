@@ -246,8 +246,8 @@ class AssessmentItemEvent(Event):
         else:
             self._set_obj_prop('object', event_object)
 
-        if generated and (not isinstance(generated, entities.Response)):
-            raise TypeError('generated must implement entities.Response')
+        if generated and (not isinstance(generated, entities.Generatable)):
+            raise TypeError('generated must implement entities.Generatable')
         else:
             self._set_obj_prop('generated', generated)
 
@@ -400,5 +400,3 @@ class SessionEvent(Event):
         else:
             self._set_obj_prop('generated', generated)
             
-
-        
