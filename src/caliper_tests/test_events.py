@@ -213,8 +213,8 @@ class ReadingProfile(unittest.TestCase):
         self.assertEqual(navigation_event.as_json(),
                          util.get_fixture('caliperNavigationEvent'))
         
-    def testReadingEvent(self):
-        reading_event = util.build_epub_reading_event(
+    def testViewEvent(self):
+        reading_event = util.build_epub_view_event(
             learning_context = self.learning_context,
             event_object = self.epub,
             target = self.target,

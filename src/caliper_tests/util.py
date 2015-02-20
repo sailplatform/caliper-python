@@ -452,28 +452,6 @@ def build_video_media_location():
         dateCreated = _CREATETIME
         )
 
-## View event
-def build_epub_reading_event(learning_context = None,
-                          event_object = None,
-                          target = None,
-                          action = None):
-    return caliper.events.ReadingEvent(
-        edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
-        actor = learning_context.agent,
-        action = action,
-        event_object = event_object,
-        target = caliper.entities.Frame(
-            entity_id = target.id,
-            name = target.name,
-            isPartOf = event_object,
-            dateCreated = _CREATETIME,
-            dateModified = _MODTIME,
-            index = 1,
-            ),
-        startedAtTime = _STARTTIME
-        )
-
 ## Navigation event
 def build_epub_navigation_event(learning_context = None,
                                 event_object = None,
@@ -497,6 +475,30 @@ def build_epub_navigation_event(learning_context = None,
         navigatedFrom = from_resource,
         startedAtTime = _STARTTIME
         )
+
+## View event
+def build_epub_view_event(learning_context = None,
+                          event_object = None,
+                          target = None,
+                          action = None):
+    return caliper.events.ViewEvent(
+        edApp = learning_context.edApp,
+        lisOrganization = learning_context.lisOrganization,
+        actor = learning_context.agent,
+        action = action,
+        event_object = event_object,
+        target = caliper.entities.Frame(
+            entity_id = target.id,
+            name = target.name,
+            isPartOf = event_object,
+            dateCreated = _CREATETIME,
+            dateModified = _MODTIME,
+            index = 1,
+            ),
+        startedAtTime = _STARTTIME
+        )
+
+
 
 ### Session profile
 

@@ -399,4 +399,19 @@ class SessionEvent(Event):
             raise TypeError('generated must implement entities.Generatable')
         else:
             self._set_obj_prop('generated', generated)
+
             
+class ViewEvent(Event):
+
+    def __init__(self,
+                 action = None,
+                 **kwargs):
+        Event.__init__(self, **kwargs)
+        self._set_str_prop('@context', Event.Contexts['VIEW'])
+        self._set_str_prop('@type', Event.Types['VIEW'])
+
+        if action and (action not in profiles.ReadingProfile.Actions.values()):
+            raise TypeError('action must be in the list of ReadingProfile actions')
+        else:
+            self._set_str_prop('action', action)
+
