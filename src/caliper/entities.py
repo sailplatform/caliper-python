@@ -662,6 +662,8 @@ class Assessment(AssignableDigitalResource, qti.Assessment):
 
 class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
 
+    _cardinality = ('multiple','ordered','single')
+
     def __init__(self,
                  cardinality = None,
                  correctResponse = None,
@@ -670,7 +672,10 @@ class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
 
-        self._set_str_prop('cardinality', cardinality)
+        if cardinality and not(cardinality in _cardinality):
+            raise ValueError('cardinality must be one of: '+ str(_cardinality))
+        else:
+            self._set_str_prop('cardinality', cardinality)
 
         if correctResponse and not( isinstance(correctResponse, Response)):
             raise TypeError('correctResponse must implement Response')
