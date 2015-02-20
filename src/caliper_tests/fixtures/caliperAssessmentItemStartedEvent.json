@@ -30,10 +30,25 @@
         "dateToSubmit": null,
         "maxAttempts": 2,
         "maxSubmits": 2,
-        "maxScore": 1.0
+        "maxScore": 1.0,
+        "isTimeDependent": false
     },
     "target": null,
-    "generated": null,
+    "generated": {
+      "@id": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item1/attempt1",
+      "@type": "http://purl.imsglobal.org/caliper/v1/Attempt",
+      "name": null,
+      "description": null,
+      "properties": {},
+      "dateCreated": "2015-01-01T06:00:00.000Z",
+      "dateModified": null,
+      "assignable": "https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1",
+      "actor": "https://some-university.edu/user/554433",
+      "count": 1,
+      "startedAtTime": "2015-02-15T10:15:00.000Z",
+      "endedAtTime": null,
+      "duration": null
+    },
     "startedAtTime": "2015-02-15T10:15:00.000Z",
     "endedAtTime": null,
     "duration": null,
