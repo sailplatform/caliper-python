@@ -647,7 +647,7 @@ class Response(Entity, Generatable):
         self._set_str_prop('duration', duration) ## should we armour this with a regex?
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
-        self._set_obj_prop('values', values)
+        self._set_str_prop('values', values)
 
     @property
     def assignable(self):
@@ -678,6 +678,7 @@ class Response(Entity, Generatable):
     @property
     def values(self):
         return self._get_prop('values')
+
 
 ## Assessment entities
 class AssignableDigitalResource(DigitalResource, Assignable):
@@ -930,7 +931,6 @@ class MultipleChoiceResponse(Response):
         Response.__init__(self,**kwargs)
 
         self._set_str_prop('@type', Response.Types['MULTIPLECHOICE'])
-        self._set_str_prop('values', values)
 
 class MultipleResponseResponse(Response):
 
@@ -974,8 +974,6 @@ class TrueFalseResponse(Response):
         Response.__init__(self,**kwargs)
 
         self._set_str_prop('@type', Response.Types['TRUEFALSE'])
-        self._set_str_prop('values', values)
-
 
 
 ## Session entities
