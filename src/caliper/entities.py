@@ -596,7 +596,7 @@ class Attempt(Entity, Generatable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', new_duration) ## should we armour this with a regex?
 
     @property
     def endedAtTime(self):
@@ -662,7 +662,7 @@ class Response(Entity, Generatable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', new_duration) ## should we armour this with a regex?
 
     @property
     def endedAtTime(self):
@@ -1006,7 +1006,7 @@ class Session(Entity, Generatable, Targetable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', new_duration) ## should we armour this with a regex?
 
     @property
     def endedAtTime(self):
