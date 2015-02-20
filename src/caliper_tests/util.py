@@ -330,7 +330,7 @@ def build_assessment_attempt(learning_context=None,
 def build_assessment_item_attempt(learning_context=None,
                                   assessment=None):
     return caliper.entities.Attempt(
-        entity_id = '{0}/{1}'.format(assessment.id,'/item1/attempt1'),
+        entity_id = '{0}/{1}'.format(assessment.id,'item1/attempt1'),
         assignable_id = assessment.id,
         actor_id = learning_context.agent.id,
         count = 1,
@@ -341,15 +341,15 @@ def build_assessment_item_attempt(learning_context=None,
 ## build a test assessment item response
 def build_assessment_item_response(assessment=None,
                                    attempt=None,
-                                   value=None):
-    return caliper.entities.Response(
-        entity_id = '{0}/{1}'.format(assessment.id,'/item1/response1'),
+                                   values=None):
+    return caliper.entities.FillinBlankResponse(
+        entity_id = '{0}/{1}'.format(assessment.id,'item1/response1'),
         assignable_id = attempt.assignable,
         actor_id = attempt.actor,
         attempt = attempt,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME,
-        value = value
+        values = values
         )
 
 ## build a test assessment result

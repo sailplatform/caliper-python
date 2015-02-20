@@ -103,6 +103,8 @@ class AssessmentProfile(unittest.TestCase):
         self.assessment_item = self.assessment.assessmentItems[0]
         self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
                                                      assessment=self.assessment)
+        self.item_attempt = util.build_assessment_item_attempt(learning_context=self.learning_context,
+                                                               assessment=self.assessment)
         
     def testAssessmentEvent(self):
         assessment_event = util.build_assessment_event(
@@ -133,8 +135,8 @@ class AssessmentProfile(unittest.TestCase):
             learning_context = self.learning_context,
             assessment_item = self.assessment_item,
             generated = util.build_assessment_item_response(assessment=self.assessment,
-                                                            attempt=self.attempt,
-                                                            value='2 July 1776'),
+                                                            attempt=self.item_attempt,
+                                                            values=['2 July 1776']),
             action = caliper.profiles.AssessmentItemProfile.Actions['COMPLETED']
             )
 
