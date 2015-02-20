@@ -662,9 +662,35 @@ class Assessment(AssignableDigitalResource, qti.Assessment):
 
 class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
 
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 cardinality = None,
+                 correctResponse = None,
+                 isTimeDependent = False,
+                 **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
+
+        self._set_str_prop('cardinality', cardinality)
+
+        if correctResponse and not( isinstance(correctResponse, Response)):
+            raise TypeError('correctResponse must implement Response')
+        else:
+            self._set_obj_prop('correctResponse', correctResponse)
+
+        self._set_bool_prop('isTimeDependent', isTimeDependent)
+
+    @property
+    def cardinality(self):
+        return self._get_prop('cardinality')
+
+    @property
+    def correctResponse(self):
+        return self._get_prop('correctResponse')
+
+    @property
+    def isTimeDependent(self):
+        return self._get_prop('isTimeDependent')
+
 
 ## Media entities
 class MediaLocation(DigitalResource, Targetable):
