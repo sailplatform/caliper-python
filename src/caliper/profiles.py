@@ -53,7 +53,8 @@ class Profile(BaseProfile):
         
         'LOGGED_IN': 'logged in', # session.loggedIn
         'LOGGED_OUT': 'logged out', # session.loggedOut
-        
+
+        'VIEWED': 'viewed', # reading.viewed
         'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
         }
 

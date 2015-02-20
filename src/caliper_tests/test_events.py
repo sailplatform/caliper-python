@@ -220,7 +220,7 @@ class ReadingProfile(unittest.TestCase):
             learning_context = self.learning_context,
             event_object = self.epub,
             target = self.target,
-            action = caliper.profiles.ReadingProfile.Actions['VIEWED']
+            action = caliper.profiles.Profile.Actions['VIEWED']
             )
 
         self.assertEqual(reading_event.as_json(),
