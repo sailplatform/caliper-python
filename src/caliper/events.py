@@ -37,7 +37,7 @@
 
 from .base import BaseEvent, CaliperSerializable
 from . import entities, profiles
-from .extern import foaf
+from .extern import foaf, schemadotorg
 
 ## Base event class
 class Event(BaseEvent):
@@ -119,7 +119,10 @@ class Event(BaseEvent):
         else:
             self._set_obj_prop('group', lisOrganization)
 
-        self._set_str_prop('startedAtTime', startedAtTime)
+        if not startedAtTime:
+            raise ValueError('startedAtTime must have a time value')
+        else:
+            self._set_str_prop('startedAtTime', startedAtTime)
             
         if target and (not isinstance(target, entities.Targetable)):
             raise TypeError('target must implement entities.Targetable')
@@ -181,40 +184,61 @@ class AnnotationEvent(Event):
 
     def __init__(self,
             action = None,
+            actor = None,
             event_object = None,
+            target = None,
             **kwargs):
-        Event.__init__(self, **kwargs)
+        Event.__init__(self,
+                       **kwargs)
         self._set_str_prop('@context', Event.Contexts['ANNOTATION'])
         self._set_str_prop('@type', Event.Types['ANNOTATION'])
 
-        if action and (action not in profiles.AnnotationProfile.Actions.values()):
+        if action not in profiles.AnnotationProfile.Actions.values():
             raise ValueError('action must be in the list of AnnotationProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if event_object and (not isinstance(event_object, entities.Annotation)):
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.Annotation):
             raise TypeError('event_object must implement entities.Annotation')
         else:
             self._set_obj_prop('object', event_object)
+
+        if not isinstance(target, entities.DigitalResource):
+            raise TypeError('target must implement entities.DigitalResource')
+        else:
+            self._set_obj_prop('target', target)
 
 
 class AssessmentEvent(Event):
     
     def __init__(self,
             action = None,
+            actor = None,
             event_object = None,
             generated = None,
             **kwargs):
-        Event.__init__(self, **kwargs)
+        Event.__init__(self,
+                       target = None,
+                       **kwargs)
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT'])
 
-        if action and (action not in profiles.AssessmentProfile.Actions.values()):
+        if action not in profiles.AssessmentProfile.Actions.values():
             raise ValueError('action must be in the list of AssessmentProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if event_object and (not isinstance(event_object, entities.Assessment)):
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.Assessment):
             raise TypeError('event_object must implement entities.Assessment')
         else:
             self._set_obj_prop('object', event_object)
@@ -229,24 +253,32 @@ class AssessmentItemEvent(Event):
     
     def __init__(self,
             action = None,
+            actor = None,
             event_object = None,
             generated = None,
             **kwargs):
-        Event.__init__(self, **kwargs)
+        Event.__init__(self,
+                       target = None,
+                       **kwargs)
         self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', Event.Types['ASSESSMENT_ITEM'])
 
-        if action and (action not in profiles.AssessmentItemProfile.Actions.values()):
+        if action not in profiles.AssessmentItemProfile.Actions.values():
             raise ValueError('action must be in the list of AssessmentItemProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if event_object and (not isinstance(event_object, entities.AssessmentItem)):
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.AssessmentItem):
             raise TypeError('event_object must implement entities.AssessmentItem')
         else:
             self._set_obj_prop('object', event_object)
 
-        if generated and (not isinstance(generated, entities.Generatable)):
+        if not isinstance(generated, entities.Generatable):
             raise TypeError('generated must implement entities.Generatable')
         else:
             self._set_obj_prop('generated', generated)
@@ -263,17 +295,17 @@ class AssignableEvent(Event):
         self._set_str_prop('@context', Event.Contexts['ASSIGNABLE'])
         self._set_str_prop('@type', Event.Types['ASSIGNABLE'])
 
-        if action and (action not in profiles.AssignableProfile.Actions.values()):
+        if action not in profiles.AssignableProfile.Actions.values():
             raise TypeError('action must be in the list of AssignableProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if event_object and not( isinstance(event_object, entities.AssignableDigitalResource)):
+        if  not isinstance(event_object, entities.AssignableDigitalResource):
             raise TypeError('event_object must implement AssignableDigitalResource')
         else:
             self._set_obj_prop('object', event_object)
 
-        if generated and (not isinstance(generated, entities.Attempt)):
+        if not isinstance(generated, entities.Attempt):
             raise TypeError('generated must implement entities.Attempt')
         else:
             self._set_obj_prop('generated', generated)
@@ -283,6 +315,7 @@ class MediaEvent(Event):
 
     def __init__(self,
             action = None,
+            actor = None,
             event_object = None,
             target = None,
             **kwargs):
@@ -290,12 +323,17 @@ class MediaEvent(Event):
         self._set_str_prop('@context', Event.Contexts['MEDIA'])
         self._set_str_prop('@type', Event.Types['MEDIA'])
 
-        if action and (action not in profiles.MediaProfile.Actions.values()):
+        if action not in profiles.MediaProfile.Actions.values():
             raise TypeError('action must be in the list of MediaProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if event_object and not( isinstance(event_object, entities.MediaObject)):
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.MediaObject):
             raise TypeError('event_object must implement entities.MediaObject')
         else:
             self._set_obj_prop('object', event_object)
@@ -309,17 +347,35 @@ class MediaEvent(Event):
 class NavigationEvent(Event):
 
     def __init__(self,
+                 actor = None,
+                 event_object = None,
                  navigatedFrom = None,
+                 target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['NAVIGATION'])
         self._set_str_prop('@type', Event.Types['NAVIGATION'])
         self._set_str_prop('action', profiles.Profile.Actions['NAVIGATED_TO'])
 
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.DigitalResource):
+            raise TypeError('event_object must implement entities.DigitalResource')
+        else:
+            self._set_obj_prop('object', event_object)
+
         if navigatedFrom and not( isinstance(navigatedFrom, entities.DigitalResource)):
             raise TypeError('navigatedFrom must implement entities.DigitalResource')
         else:
             self._set_obj_prop('navigatedFrom', navigatedFrom)
+
+        if not isinstance(target, entities.DigitalResource):
+            raise TypeError('target must implement entities.DigitalResource')
+        else:
+            self._set_obj_prop('target', target)
 
     @property
     def navigatedFrom(self):
@@ -333,21 +389,23 @@ class OutcomeEvent(Event):
                  event_object = None,
                  generated = None,
                  **kwargs):
-        Event.__init__(self, **kwargs)
+        Event.__init__(self,
+                       target = None,
+                       **kwargs)
         self._set_str_prop('@context', Event.Contexts['OUTCOME'])
         self._set_str_prop('@type', Event.Types['OUTCOME'])
 
-        if action and (action not in profiles.OutcomeProfile.Actions.values()):
+        if  action not in profiles.OutcomeProfile.Actions.values():
             raise TypeError('action must be in the list of OutcomeProfile actions')
         else:
             self._set_str_prop('action', action)
                 
-        if event_object and not( isinstance(event_object, entities.Attempt)):
+        if not isinstance(event_object, entities.Attempt):
             raise TypeError('event_object must implement entities.Attempt')
         else:
             self._set_obj_prop('object', event_object)
 
-        if generated and not( isinstance(generated, entities.Result)):
+        if not isinstance(generated, entities.Result):
             raise TypeError('generated must implement entities.Result')
         else:
             self._set_obj_prop('generated', generated)
@@ -357,6 +415,7 @@ class ReadingEvent(Event):
 
     def __init__(self,
                  action = None,
+                 actor = None,
                  event_object = None,
                  target = None,
                  **kwargs):
@@ -364,13 +423,18 @@ class ReadingEvent(Event):
         self._set_str_prop('@context', Event.Contexts['READING'])
         self._set_str_prop('@type', Event.Types['READING'])
 
-        if action and (action not in profiles.ReadingProfile.Actions.values()):
+        if action not in profiles.ReadingProfile.Actions.values():
             raise TypeError('action must be in the list of ReadingProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if event_object and not( isinstance(event_object, entities.DigitalResource)):
-            raise TypeError('event_object must implement DigitalResource')
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.DigitalResource):
+            raise TypeError('event_object must implement entities.DigitalResource')
         else:
             self._set_obj_prop('object', event_object)
 
@@ -384,34 +448,74 @@ class SessionEvent(Event):
 
     def __init__(self,
                  action = None,
+                 actor = None,
+                 endedAtTime = None,
+                 event_object = None,
                  generated = None,
+                 target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['SESSION'])
         self._set_str_prop('@type', Event.Types['SESSION'])
 
-        if action and (action not in profiles.SessionProfile.Actions.values()):
+        if action not in profiles.SessionProfile.Actions.values():
             raise TypeError('action must be in the list of SessionProfile actions')
         else:
             self._set_str_prop('action', action)
 
-        if generated and not( isinstance(generated, entities.Generatable)):
-            raise TypeError('generated must implement entities.Generatable')
+        if action == profiles.SessionProfile.Actions['TIMEDOUT']:
+            if not isinstance(actor, entities.SoftwareApplication):
+                raise TypeError('actor must implement entities.SoftwareApplication')
         else:
-            self._set_obj_prop('generated', generated)
-
+            if not isinstance(actor, entities.Person):
+                raise TypeError('actor must implement entities.Person')
+        self._set_obj_prop('actor', actor)
             
+        if not isinstance(event_object, entities.SoftwareApplication):
+            raise TypeError('event_object must implement entities.SoftwareApplication')
+        else:
+            self._set_obj_prop('object', event_object)
+
+        if action == profiles.SessionProfile.Actions['LOGGEDIN']:
+            if not isinstance(generated, entities.Session):
+                raise TypeError('generated must implement entities.Session')
+            else:
+                self._set_obj_prop('generated', generated)
+            if not isinstance(target, entities.DigitalResource):
+                raise TypeError('target must impelement entities.DigitalResource')
+        else:
+            if not isinstance(target, entities.Session):
+                raise TypeError('target must impelement entities.Session')
+            if not endedAtTime:
+                raise ValueError('endedAtTime must have a time value')
+            else:
+                self._set_str_prop('endedAtTime', endedAtTime)
+        self._set_obj_prop('target', target)
+
+
 class ViewEvent(Event):
 
     def __init__(self,
                  action = None,
+                 actor = None,
+                 event_object = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['VIEW'])
         self._set_str_prop('@type', Event.Types['VIEW'])
 
-        if action and (action not in profiles.ReadingProfile.Actions.values()):
+        if action not in profiles.ReadingProfile.Actions.values():
             raise TypeError('action must be in the list of ReadingProfile actions')
         else:
             self._set_str_prop('action', action)
 
+        if not isinstance(actor, entities.Person):
+            raise TypeError('actor must implement entities.Person')
+        else:
+            self._set_obj_prop('actor', actor)
+
+        if not isinstance(event_object, entities.DigitalResource):
+            raise TypeError('event_object must implement entities.DigitalResource')
+        else:
+            self._set_obj_prop('object', event_object)
+            

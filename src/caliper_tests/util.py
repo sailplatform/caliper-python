@@ -194,9 +194,9 @@ def build_bookmark_annotation(target = None):
     return caliper.entities.BookmarkAnnotation(
         entity_id = 'https://someEduApp.edu/bookmarks/00001',
         bookmarkNotes = 'The Intolerable Acts (1774)--bad idea Lord North',
+        target = target,
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME,
-        target = target
+        dateModified = _MODTIME
         )
 
 def build_highlight_annotation(target = None):
@@ -225,8 +225,9 @@ def build_shared_annotation(target = None):
                 dateModified = _MODTIME
                 )
             ],
+        target = target,
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
         )
 
 def build_tag_annotation(target = None):

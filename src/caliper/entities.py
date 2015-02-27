@@ -73,7 +73,12 @@ class Entity(BaseEntity, schemadotorg.Thing):
             properties = {},
             **kwargs):
         BaseEntity.__init__(self, **kwargs)
-        self._set_str_prop('@id', entity_id)
+
+        if not entity_id:
+            raise ValueError('Entity must have an ID.')
+        else:
+            self._set_str_prop('@id', entity_id)
+            
         self._set_str_prop('@type', Entity.Types['ENTITY'])
         self._set_str_prop('dateCreated', dateCreated)
         self._set_str_prop('dateModified', dateModified)
@@ -217,7 +222,7 @@ class LearningContext(CaliperSerializable):
 
         CaliperSerializable.__init__(self)
 
-        if agent and (not isinstance(agent, foaf.Agent)):
+        if not isinstance(agent, foaf.Agent):
             raise TypeError('agent must implement foaf.Agent')
         else:
             self._set_obj_prop('agent', agent)
@@ -435,7 +440,7 @@ class Annotation(Entity):
         self._target = None
         self._set_str_prop('@type', Annotation.Types['ANNOTATION'])
 
-        if target and (not isinstance(target, CaliperSerializable)):
+        if not isinstance(target, CaliperSerializable):
             raise TypeError('target must implement CaliperSerializable')
         else:
             self._target = target
@@ -525,22 +530,36 @@ class TextPositionSelector(CaliperSerializable):
             end = None):
         CaliperSerializable.__init__(self)
 
-        self._set_str_prop('end', end)
-        self._set_str_prop('start', start)
+        if not isinstance(end, six.string_types):
+            raise ValueError('must provide an end string value')
+        else:
+            self._set_str_prop('end', end)
+
+        if not isinstance(start, six.string_types):
+            raise ValueError('must provide a start string value')
+        else:
+            self._set_str_prop('start', start)
 
     @property
     def end(self):
         return self._get_prop('end')
     @end.setter
     def end(self, new_end):
-        self._set_str_prop('end', new_end)
+        if not isinstance(new_end, six.string_types):
+            raise ValueError('must provide a new end string value')
+        else:
+            self._set_str_prop('end', new_end)
 
     @property
     def start(self):
         return self._get_prop('start')
     @start.setter
     def start(self, new_start):
-        self._set_str_prop('start', new_start)
+        if not isinstance(new_start, six.string_types):
+            raise ValueError('must provide a new start string value')
+        else:
+            self._set_str_prop('start', new_start)
+
 
 ## Generatable entities
                  
@@ -753,7 +772,9 @@ class MediaLocation(DigitalResource, Targetable):
             currentTime = None,
             entity_id = None,
             **kwargs):
-        DigitalResource.__init__(self, **kwargs)
+        ## since we explicitly callout entity_id as a keyword arg here
+        ## we need to pass it up the inheritance chain explicitly
+        DigitalResource.__init__(self, entity_id=entity_id, **kwargs)
         self._set_str_prop('@type', DigitalResource.Types['MEDIA_LOCATION'])
         ## Is it sufficient just to generate a random UUID here? Or does there
         ## need to be some specific value (as there seems to be in the Java client)??
@@ -853,8 +874,16 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['RESULT'])
 
-        self._set_str_prop('actor', actor_id)
-        self._set_str_prop('assignable', assignable_id)
+        if not isinstance(actor_id, six.string_types):
+            raise ValueError('actor ID must be a string ID for an actor Caliper entity')
+        else:
+            self._set_str_prop('actor', actor_id)
+
+        if not isinstance(assignable_id, six.string_types):
+            raise ValueError('assignable ID must be a string ID for an assignable Caliper entity')
+        else:
+            self._set_str_prop('assignable', assignable_id)
+            
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
@@ -987,9 +1016,9 @@ class Session(Entity, Generatable, Targetable):
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['SESSION'])
-        
-        if actor and (not isinstance(actor, foaf.Agent)):
-            raise TypeError('agent must implement foaf.Agent')
+
+        if not isinstance(actor, foaf.Agent):
+            raise TypeError('actor must implement foaf.Agent')
         else:
             self._set_obj_prop('actor', actor)
 
