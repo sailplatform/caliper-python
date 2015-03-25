@@ -6,38 +6,12 @@
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
         "description": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     },
     "action": "shared",
     "object": {
-        "@id": "https://someEduApp.edu/shared/9999",
-        "@type": "http://purl.imsglobal.org/caliper/v1/SharedAnnotation",
-        "name": null,
-        "description": null,
-        "properties": {},
-        "dateCreated": "2015-01-01T06:00:00.000Z",
-        "dateModified": "2015-02-02T11:30:00.000Z",
-        "withAgents": [{
-            "@id": "https://some-university.edu/students/657585",
-            "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
-            "name": null,
-            "description": null,
-            "properties": {},
-            "dateCreated": "2015-01-01T06:00:00.000Z",
-            "dateModified": "2015-02-02T11:30:00.000Z"
-        },{
-            "@id": "https://some-university.edu/students/667788",
-            "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
-            "name": null,
-            "description": null,
-            "properties": {},
-            "dateCreated": "2015-01-01T06:00:00.000Z",
-            "dateModified": "2015-02-02T11:30:00.000Z"
-        }]
-    },
-    "target": {
         "@id": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/3)",
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: John Adams",
@@ -54,18 +28,47 @@
             "alignedLearningObjective": [],
             "keywords": [],
             "isPartOf": null,
-            "properties": {},
+            "extensions": {},
             "dateCreated": "2015-01-01T06:00:00.000Z",
             "dateModified": "2015-02-02T11:30:00.000Z",
-            "datePublished": null
+            "datePublished": null,
+            "version": "2nd ed."
         },
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z",
         "datePublished": null,
+        "version": "2nd ed.",
         "index": 3
     },
-    "generated": null,
+    "target": null,
+    "generated": {
+        "@id": "https://someEduApp.edu/shared/9999",
+        "@type": "http://purl.imsglobal.org/caliper/v1/SharedAnnotation",
+        "name": null,
+        "description": null,
+        "extensions": {},
+        "dateCreated": "2015-01-01T06:00:00.000Z",
+        "dateModified": "2015-02-02T11:30:00.000Z",
+        "annotatedId": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/3)",
+        "withAgents": [{
+            "@id": "https://some-university.edu/students/657585",
+            "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+            "name": null,
+            "description": null,
+            "extensions": {},
+            "dateCreated": "2015-01-01T06:00:00.000Z",
+            "dateModified": "2015-02-02T11:30:00.000Z"
+            },{
+            "@id": "https://some-university.edu/students/667788",
+            "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+            "name": null,
+            "description": null,
+            "extensions": {},
+            "dateCreated": "2015-01-01T06:00:00.000Z",
+            "dateModified": "2015-02-02T11:30:00.000Z"
+            }]
+        },
     "startedAtTime": "2015-02-15T10:15:00.000Z",
     "endedAtTime": null,
     "duration": null,
@@ -74,7 +77,7 @@
         "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
         "description": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     },
@@ -87,7 +90,7 @@
         "name": "American Revolution 101",
         "description": null,
         "parentOrg": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     }

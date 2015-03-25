@@ -6,22 +6,12 @@
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
         "description": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     },
     "action": "bookmarked",
     "object": {
-        "@id": "https://someEduApp.edu/bookmarks/00001",
-        "@type": "http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation",
-        "name": null,
-        "description": null,
-        "properties": {},
-        "dateCreated": "2015-01-01T06:00:00.000Z",
-        "dateModified": "2015-02-02T11:30:00.000Z",
-        "bookmarkNotes": "The Intolerable Acts (1774)--bad idea Lord North"
-    },
-    "target": {
         "@id": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/2)",
         "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
         "name": "Key Figures: Lord North",
@@ -38,18 +28,31 @@
             "alignedLearningObjective": [],
             "keywords": [],
             "isPartOf": null,
-            "properties": {},
+            "extensions": {},
             "dateCreated": "2015-01-01T06:00:00.000Z",
             "dateModified": "2015-02-02T11:30:00.000Z",
-            "datePublished": null
+            "datePublished": null,
+            "version": "2nd ed."
         },
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z",
         "datePublished": null,
+        "version": "2nd ed.",
         "index": 2
     },
-    "generated": null,
+    "target": null,
+    "generated": {
+      "@id": "https://someEduApp.edu/bookmarks/00001",
+      "@type": "http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation",
+      "name": null,
+      "description": null,
+      "extensions": {},
+      "dateCreated": "2015-01-01T06:00:00.000Z",
+      "dateModified": "2015-02-02T11:30:00.000Z",
+      "annotatedId": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/2)",
+      "bookmarkNotes": "The Intolerable Acts (1774)--bad idea Lord North"
+    },
     "startedAtTime": "2015-02-15T10:15:00.000Z",
     "endedAtTime": null,
     "duration": null,
@@ -58,7 +61,7 @@
         "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Readium",
         "description": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     },
@@ -71,7 +74,7 @@
         "name": "American Revolution 101",
         "description": null,
         "parentOrg": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     }

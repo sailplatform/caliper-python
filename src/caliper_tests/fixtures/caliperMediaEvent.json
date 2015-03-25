@@ -6,7 +6,7 @@
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
         "name": null,
         "description": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     },
@@ -22,16 +22,17 @@
             "@type": "http://purl.imsglobal.org/caliper/v1/LearningObjective",
             "name": null,
             "description": null,
-            "properties": {},
+            "extensions": {},
             "dateCreated": "2015-01-01T06:00:00.000Z",
             "dateModified": null
         }],
         "keywords": [],
         "isPartOf": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z",
         "datePublished": null,
+        "version": "1.0",
         "duration": 1420
     },
     "target": {
@@ -43,10 +44,11 @@
         "alignedLearningObjective": [],
         "keywords": [],
         "isPartOf": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": null,
         "datePublished": null,
+        "version": "1.0",
         "currentTime": 710
     },
     "generated": null,
@@ -58,7 +60,7 @@
         "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
         "name": "Super Media Tool",
         "description": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     },
@@ -71,7 +73,7 @@
         "name": "American Revolution 101",
         "description": null,
         "parentOrg": null,
-        "properties": {},
+        "extensions": {},
         "dateCreated": "2015-01-01T06:00:00.000Z",
         "dateModified": "2015-02-02T11:30:00.000Z"
     }
