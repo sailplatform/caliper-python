@@ -240,7 +240,7 @@ class SessionProfile(unittest.TestCase):
             event_object = self.learning_context.edApp,
             session = self.session,
             target = util.build_epub_subchap431(),
-            action = caliper.profiles.SessionProfile.Actions['LOGGEDIN']
+            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
             )
 
         self.assertEqual(session_event.as_json(),
@@ -252,7 +252,7 @@ class SessionProfile(unittest.TestCase):
             actor = self.learning_context.agent,
             event_object = self.learning_context.edApp,
             target = self.session,
-            action = caliper.profiles.SessionProfile.Actions['LOGGEDOUT']            
+            action = caliper.profiles.SessionProfile.Actions['LOGGED_OUT']            
             )
 
         self.assertEqual(session_event.as_json(),
@@ -264,7 +264,7 @@ class SessionProfile(unittest.TestCase):
             actor = self.learning_context.edApp,
             event_object = self.learning_context.edApp,
             target = self.session,
-            action = caliper.profiles.SessionProfile.Actions['TIMEDOUT']            
+            action = caliper.profiles.SessionProfile.Actions['TIMED_OUT']            
             )
 
         self.assertEqual(session_event.as_json(),
