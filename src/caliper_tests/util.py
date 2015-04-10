@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python testing package (testing util functions)
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -51,6 +51,10 @@ _SHOWTIME = _ACTTIME
 _STARTONTIME = _ACTTIME
 _SUBMITTIME = '2015-02-28T11:59:59.000Z'
 _DURATION = 'PT3000S'
+_MEDIA_CURTIME = 710
+_MEDIA_DURTIME = 1420
+_VERNUM = '1.0'
+_VERED = '2nd ed.'
 
 
 ### NOTE
@@ -96,6 +100,36 @@ def build_AmRev101_course_section():
         dateModified = _MODTIME
         )
 
+def build_AmRev101_membership():
+    return caliper.entities.Membership(
+        entity_id = 'https://some-university.edu/membership/001',
+        member_id = 'https://some-university.edu/user/554433',
+        organization_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101',
+        roles = caliper.entities.Role.Roles['LEARNER'],
+        status = caliper.entities.Status.Statuses['ACTIVE'],
+        dateCreated = _CREATETIME
+        )
+
+def build_AmRev101_section_membership():
+    return caliper.entities.Membership(
+        entity_id = 'https://some-university.edu/membership/002',
+        member_id = 'https://some-university.edu/user/554433',
+        organization_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/section/001',
+        roles = caliper.entities.Role.Roles['LEARNER'],
+        status = caliper.entities.Status.Statuses['ACTIVE'],
+        dateCreated = _CREATETIME
+        )
+
+def build_AmRev101_group_membership():
+    return caliper.entities.Membership(
+        entity_id = 'https://some-university.edu/membership/003',
+        member_id = 'https://some-university.edu/user/554433',
+        organization_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/section/001/group/001',
+        roles = caliper.entities.Role.Roles['LEARNER'],
+        status = caliper.entities.Status.Statuses['ACTIVE'],
+        dateCreated = _CREATETIME
+        )
+
 def build_assessment_tool_learning_context():
     return caliper.entities.LearningContext(
         agent = build_student_554433(),
@@ -104,7 +138,7 @@ def build_assessment_tool_learning_context():
             name = 'Super Assessment Tool',
             dateCreated = _CREATETIME
             ),
-        lisOrganization = build_AmRev101_course_section()
+        group = build_AmRev101_course_section()
         )
 
 def build_video_media_tool_learning_context():
@@ -116,7 +150,7 @@ def build_video_media_tool_learning_context():
             dateCreated = _CREATETIME,
             dateModified = _MODTIME
             ),
-        lisOrganization = build_AmRev101_course_section()
+        group = build_AmRev101_course_section()
         )
 
 def build_readium_learning_context():
@@ -128,7 +162,7 @@ def build_readium_learning_context():
             dateCreated = _CREATETIME,
             dateModified = _MODTIME
             ),
-        lisOrganization = build_AmRev101_course_section()
+        group = build_AmRev101_course_section()
         )
 
 ## build a test EPUB volume
@@ -137,7 +171,8 @@ def build_epub_vol43():
         entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3)',
         name = 'The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)',
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERED
         )
 
 def build_epub_subchap431():
@@ -146,7 +181,8 @@ def build_epub_subchap431():
         name = 'Key Figures: George Washington',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERED
         )
 
 def build_epub_subchap432():
@@ -155,7 +191,8 @@ def build_epub_subchap432():
         name = 'Key Figures: Lord North',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERED
         )
 
 def build_epub_subchap433():
@@ -164,7 +201,8 @@ def build_epub_subchap433():
         name = 'Key Figures: John Adams',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERED
         )
 
 def build_epub_subchap434():
@@ -173,7 +211,8 @@ def build_epub_subchap434():
         name = 'The Stamp Act Crisis',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERED
         )
 
 
@@ -184,33 +223,34 @@ def build_AmRev101_landing_page():
         name = 'American Revolution 101 Landing Page',
         isPartOf = build_AmRev101_course_section(),
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERNUM
         )
 
 
 ### Annotation Profile ###
 ## build test annotations
-def build_bookmark_annotation(target = None):
+def build_bookmark_annotation(annotated = None):
     return caliper.entities.BookmarkAnnotation(
         entity_id = 'https://someEduApp.edu/bookmarks/00001',
         bookmarkNotes = 'The Intolerable Acts (1774)--bad idea Lord North',
-        target = target,
+        annotated_id = annotated.id,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
-def build_highlight_annotation(target = None):
+def build_highlight_annotation(annotated = None):
     selection = caliper.entities.TextPositionSelector(start='455', end='489')
     return caliper.entities.HighlightAnnotation(
         entity_id = 'https://someEduApp.edu/highlights/12345',
         selection = selection,
         selectionText = 'Life, Liberty and the pursuit of Happiness',
-        target = target,
+        annotated_id = annotated.id,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
-def build_shared_annotation(target = None):
+def build_shared_annotation(annotated = None):
     return caliper.entities.SharedAnnotation(
         entity_id = 'https://someEduApp.edu/shared/9999',
         withAgents = [
@@ -225,40 +265,41 @@ def build_shared_annotation(target = None):
                 dateModified = _MODTIME
                 )
             ],
-        target = target,
+        annotated_id = annotated.id,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         )
 
-def build_tag_annotation(target = None):
+def build_tag_annotation(annotated = None):
     return caliper.entities.TagAnnotation(
         entity_id = 'https://someEduApp.edu/tags/7654',
         tags = ['to-read', '1765', 'shared-with-project-team'],
-        target = target,
+        annotated_id = annotated.id,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
 ## build general annotation event
 def build_annotation_event(learning_context = None,
-                           annotation = None,
+                           event_object = None,
                            index = None,
-                           target = None,
+                           annotation = None,
                            action = None):
     return caliper.events.AnnotationEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
-        event_object = annotation,
-        target = caliper.entities.Frame(
-            entity_id = target.id,
-            name = target.name,
-            isPartOf = target.isPartOf,
+        event_object = caliper.entities.Frame(
+            entity_id = event_object.id,
+            name = event_object.name,
+            isPartOf = event_object.isPartOf,
             dateCreated = _CREATETIME,
             dateModified = _MODTIME,
+            version = event_object.version,
             index = index
             ),
+        generated = annotation,
         startedAtTime = _STARTTIME
         )
 
@@ -269,7 +310,7 @@ def build_assessment_assignable_event(learning_context = None,
                                       action = None):
     return caliper.events.AssignableEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         event_object = assessment,
@@ -292,6 +333,7 @@ def build_assessment_items():
                entity_id = '{0}{1}'.format(_id,particle),
                name = '{0} {1}'.format(_name,particle),
                isPartOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+               version = _VERNUM,
                maxAttempts = 2,
                maxSubmits = 2,
                maxScore = 1)
@@ -313,7 +355,8 @@ def build_assessment():
         maxScore = 3, # WARN original value is 5.0d, says Java impl
         assessmentItems = build_assessment_items(),
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERNUM
         )
 
 ## build a test assessment attempt
@@ -379,7 +422,7 @@ def build_assessment_event(learning_context = None,
                            action = None):
     return caliper.events.AssessmentEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         event_object = assessment,
@@ -393,7 +436,7 @@ def build_assessment_item_event(learning_context = None,
                                 action = None):
     return caliper.events.AssessmentItemEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         isTimeDependent = False,
@@ -408,7 +451,7 @@ def build_assessment_outcome_event(learning_context = None,
                                    action = None):
     return caliper.events.OutcomeEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         event_object = attempt,
@@ -424,7 +467,7 @@ def build_video_media_event(learning_context = None,
                             action = None):
     return caliper.events.MediaEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         event_object = event_object,
@@ -442,16 +485,18 @@ def build_video_with_learning_objective():
             entity_id = 'http://americanrevolution.com/personalities/learn',
             dateCreated = _CREATETIME
             )],
-        duration = 1420,
+        duration = _MEDIA_DURTIME,
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME
+        dateModified = _MODTIME,
+        version = _VERNUM
         )
 
 def build_video_media_location():
     return caliper.entities.MediaLocation(
         entity_id = build_video_with_learning_objective().id,
-        currentTime = 710,
-        dateCreated = _CREATETIME
+        currentTime = _MEDIA_CURTIME,
+        dateCreated = _CREATETIME,
+        version = _VERED
         )
 
 ## Navigation event
@@ -462,7 +507,7 @@ def build_epub_navigation_event(learning_context = None,
                                 action = None):
     return caliper.events.NavigationEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         event_object = event_object,
@@ -472,6 +517,7 @@ def build_epub_navigation_event(learning_context = None,
             isPartOf = event_object,
             dateCreated = _CREATETIME,
             dateModified = _MODTIME,
+            version = _VERED,
             index = 1
             ),
         navigatedFrom = from_resource,
@@ -485,7 +531,7 @@ def build_epub_view_event(learning_context = None,
                           action = None):
     return caliper.events.ViewEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = learning_context.agent,
         action = action,
         event_object = event_object,
@@ -495,6 +541,7 @@ def build_epub_view_event(learning_context = None,
             isPartOf = event_object,
             dateCreated = _CREATETIME,
             dateModified = _MODTIME,
+            version = _VERED,
             index = 1,
             ),
         startedAtTime = _STARTTIME
@@ -534,10 +581,11 @@ def build_session_event(learning_context = None,
             isPartOf = target.isPartOf,
             dateCreated = _CREATETIME,
             dateModified = _MODTIME,
+            version = _VERED,
             index = 1)
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
-        lisOrganization = learning_context.lisOrganization,
+        group = learning_context.group,
         actor = actor,
         action = action,
         event_object = event_object,

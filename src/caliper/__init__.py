@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python package
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -62,13 +62,13 @@ from .util import stats
 
 
 def build_default_sensor():
-    return Sensor(config_options=base.HttpOptions())
+    return Sensor.fashion_default_sensor_with_config(config_options=base.HttpOptions)
 
 def build_sensor_from_config(config_options):
-    return Sensor(config_options=config_options)
+    return Sensor.fashion_default_sensor_with_config(config_options=config_options)
 
 def build_sensor_for_client(client):
-    return Sensor(client=client)
+    return Sensor.fashion_default_sensor_with_client(client=client)
 
 ## set default logging handler to avoid "No handler found" warnings.
 ## Thanks to Kenneth Reitz' requests library for this pattern

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python package, entities module
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -38,10 +38,9 @@
 import collections
 from rfc3987 import parse as rfc3987_parse
 import six
-import uuid
 
-from .base import BaseEntity, CaliperSerializable
-from .extern import foaf, qti, schemadotorg
+from .base import BaseEntity, CaliperSerializable, BaseRole, BaseStatus
+from .extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
 ## Base entity class
@@ -49,13 +48,19 @@ class Entity(BaseEntity, schemadotorg.Thing):
 
     _types = {
         'AGENT': 'http://purl.imsglobal.org/caliper/v1/Agent',
+        'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/Annotation',
         'ATTEMPT': 'http://purl.imsglobal.org/caliper/v1/Attempt',
+        'COURSE_OFFERING': 'http://purl.imsglobal.org/caliper/v1/lis/CourseOffering',        
+        'COURSE_SECTION': 'http://purl.imsglobal.org/caliper/v1/lis/CourseSection',
         'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/DigitalResource',
         'ENTITY': 'http://purl.imsglobal.org/caliper/v1/Entity',
         'GENERATED': 'http://purl.imsglobal.org/caliper/v1/Generated',
+        'GROUP': 'http://purl.imsglobal.org/caliper/v1/lis/Group',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
-        'LIS_PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
-        'LIS_ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/lis/Organization',
+        'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
+        'MEMBERSHIP': 'http://purl.imsglobal.org/caliper/v1/lis/Membership',
+        'ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/w3c/Organization',
+        'PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
         'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
         'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
         'SESSION': 'http://purl.imsglobal.org/caliper/v1/Session',
@@ -70,7 +75,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
             dateModified = None,
             description = None,
             name = None,
-            properties = {},
+            extensions = {},
             **kwargs):
         BaseEntity.__init__(self, **kwargs)
 
@@ -84,7 +89,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
         self._set_str_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
-        self._set_obj_prop('properties', properties)
+        self._set_obj_prop('extensions', extensions)
 
     @property
     def id(self):
@@ -111,8 +116,8 @@ class Entity(BaseEntity, schemadotorg.Thing):
         return self._get_prop('name')
 
     @property
-    def properties(self):
-        return self._get_prop('properties')
+    def extensions(self):
+        return self._get_prop('extensions')
 
 ## Behavioural interfaces for entities ##
 class Assignable(CaliperSerializable):
@@ -154,51 +159,205 @@ class Targetable(CaliperSerializable):
     
 ### Derived entities ###
 
+## Membership entities
+
+class Role(BaseRole, w3c.Role):
+    _roles = {
+        'LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner',
+        'EXTERNAL_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#ExternalLearner',
+        'GUEST_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#GuestLearner',
+        'LEARNER_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Instructor',
+        'LEARNER_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Learner',
+        'NONCREDIT_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#NonCreditLearner',
+        'INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor',
+        'EXTERNAL_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#ExternalInstructor',
+        'GUEST_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#GuestInstructor',
+        'LECTURER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#Lecturer',
+        'PRIMARY_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#PrimaryInstructor',
+        'ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Administrator',
+        'ADMINISTRATOR_ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Administrator',
+        'ADMINISTRATOR_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Developer',
+        'ADMINISTRATOR_SUPPORT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Support',
+        'ADMINISTRATOR_SYSTEM_ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#SystemAdministrator',
+        'ADMINISTRATOR_EXTERNAL_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSupport',
+        'ADMINISTRATOR_EXTERNAL_SUPPORT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalDeveloper',
+        'ADMINISTRATOR_EXTERNAL_SYSTEM_ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSystemAdministrator',
+        'CONTENT_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#ContentDeveloper',
+        'CONTENT_DEVELOPER_CONTENT_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentDeveloper',
+        'CONTENT_DEVELOPER_LIBRARIAN': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#Librarian',
+        'CONTENT_DEVELOPER_CONTENT_EXPERT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentExpert',
+        'CONTENT_DEVELOPER_EXTERNAL_CONTENT_EXPERT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ExternalContentExpert',
+        'MANAGER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Manager',
+        'MANAGER_AREA_MANAGER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#AreaManager',
+        'MANAGER_COURSE_COORDINATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#CourseCoordinator',
+        'MANAGER_OBSERVER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#Observer',
+        'MANAGER_EXTERNAL_OBSERVER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#ExternalObserver',
+        'MEMBER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Member',
+        'MEMBER_MEMBER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Member#Member',
+        'MENTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor',
+        'MENTOR_MENTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Mentor',
+        'MENTOR_ADVISOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Advisor',
+        'MENTOR_AUDITOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Auditor',
+        'MENTOR_REVIEWER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Reviewer',
+        'MENTOR_TUTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Tutor',
+        'MENTOR_LEARNING_FACILITATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#LearningFacilitator',
+        'MENTOR_EXTERNAL_MENTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalMentor',
+        'MENTOR_EXTERNAL_ADVISOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAdvisor',
+        'MENTOR_EXTERNAL_AUDITOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAuditor',
+        'MENTOR_EXTERNAL_REVIEWER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalReviewer',
+        'MENTOR_EXTERNAL_TUTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalTutor',
+        'MENTOR_EXTERNAL_LEARNING_FACILITATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor/ExternalLearningFacilitator',
+        'TEACHING_ASSISTANT': 'http://purl.imsglobal.org/vocab/lis/v2/membership#TeachingAssistant',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistant',
+        'TEACHING_ASSISTANT_GRADER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#Grader',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_SECTION': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSection',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_SECTION_ASSOCIATION': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSectionAssociation',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_OFFERING': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantOffering',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_TEMPLATE': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantTemplate',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_GROUP': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantGroup',
+        }
+
+class Status(BaseStatus, w3c.Status):
+    _statuses = {
+        'ACTIVE': 'http://purl.imsglobal.org/vocab/lis/v2/status#Active',
+        'DELETED': 'http://purl.imsglobal.org/vocab/lis/v2/status#Deleted',
+        'INACTIVE': 'http://purl.imsglobal.org/vocab/lis/v2/status#Inactive',
+        }
+
+class Membership(Entity, w3c.Membership):
+
+    def __init__(self,
+                 member_id = None,
+                 organization_id = None,
+                 roles = None,
+                 status = None,
+                 **kwargs):
+        Entity.__init__(self,**kwargs)
+        self._set_str_prop('@type', Entity.Types['MEMBERSHIP'])
+        self._set_str_prop('member', member_id)
+        self._set_str_prop('organization', organization_id)
+
+        if roles and isinstance(roles, collections.MutableSequence):
+            if set(Role.Roles.values()).issubset(roles):
+                self._set_list_prop('roles', roles)
+            else:
+                raise TypeError('roles must be in the list of valid Role values')
+        elif roles:
+            raise TypeError('roles must be a list of valid Roles values')
+        else:
+            self._set_list_prop('roles', None)
+
+        if status not in Status.Statuses.values():
+            raise ValueError('status must be in the list of valid Status values')
+        else:
+            self._set_str_prop('status', status)
+
+    @property
+    def member(self):
+        return self._get_prop('member')
+
+    @property
+    def organization(self):
+        return self._get_prop('organization')
+
+    @property
+    def roles(self):
+        return self._get_prop('roles')
+
+    @property
+    def status(self):
+        return self._get_prop('status')
+
 ## Agent entities
-class SoftwareApplication(Entity, foaf.Agent, schemadotorg.SoftwareApplication):
+class Agent(Entity, foaf.Agent):
+    def __init__(self,
+                 membership = None,
+                 **kwargs):
+        Entity.__init__(self,**kwargs)
+        self._set_str_prop('@type', Entity.Types['AGENT'])
+
+        if membership and isinstance(membership, collections.MutableSequence):
+            if all( isinstance(item, Membership) for item in membership ):
+                self._set_list_prop('membership', membership)
+            else:
+                raise TypeError('membership must be a list of Memberships')
+        elif membership:
+            raise TypeError('membership must be a list of Memberships')
+        else:
+            self._set_list_prop('hasMembership', None)
+
+    @property
+    def membership(self):
+        return self._get_prop('hasMembership')
+
+class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
 
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['SOFTWARE_APPLICATION'])
 
-class Person(Entity, foaf.Agent):
+class Person(Agent):
 
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_str_prop('@type', Entity.Types['LIS_PERSON'])
+        self._set_str_prop('@type', Entity.Types['PERSON'])
 
-class Organization(Entity, foaf.Agent):
+## Organization entities
+class Organization(Entity, w3c.Organization):
     _types = {
-        'LIS_COURSE_SECTION': 'http://purl.imsglobal.org/caliper/v1/lis/CourseSection',
         }
 
     def __init__(self,
-            parentOrg=None,
-            **kwargs):
+                 membership = None,
+                 subOrganizationOf = None,
+                 **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_str_prop('@type', Entity.Types['LIS_ORGANIZATION'])
+        self._set_str_prop('@type', Entity.Types['ORGANIZATION'])
 
-        if parentOrg and (not isinstance(parentOrg, Organization)):
-            raise TypeError('parentOrg must implement Organization')
+        if membership and isinstance(membership, collections.MutableSequence):
+            if all( isinstance(item, Membership) for item in membership ):
+                self._set_list_prop('membership', membership)
+            else:
+                raise TypeError('membership must be a list of Memberships')
+        elif membership:
+            raise TypeError('membership must be a list of Memberships')
         else:
-            self._set_obj_prop('parentOrg', parentOrg)
+            self._set_list_prop('membership', None)
+
+        if subOrganizationOf and (not isinstance(subOrganizationOf, w3c.Organization)):
+            raise TypeError('subOrganizationOf must implement w3c.Organization')
+        else:
+            self._set_obj_prop('subOrganizationOf', subOrganizationOf)
 
     @property
-    def parentOrg(self):
-        return self._get_prop('parentOrg')
+    def membership(self):
+        return self._get_prop('membership')
 
-class CourseSection(Organization):
+    @property
+    def subOrganizationOf(self):
+        return self._get_prop('subOrganizationOf')
 
+class Course(Organization):
+    def __init__(self,**kwargs):
+        Organization.__init__(self,**kwargs)
+
+class CourseOffering(Course):
     def __init__(self,
+                 academicSession = None,
                  courseNumber = None,
                  label = None,
                  semester = None,
                  **kwargs):
         Organization.__init__(self, **kwargs)
-        self._set_str_prop('@type', Organization.Types['LIS_COURSE_SECTION'])
+        self._set_str_prop('@type', Entity.Types['COURSE_OFFERING'])
+        self._set_str_prop('academicSession', academicSession)
         self._set_str_prop('courseNumber', courseNumber)
         self._set_str_prop('label', label)
         self._set_str_prop('semester', semester)
+
+    @property
+    def academicSession(self):
+        return self._get_prop('academicSession')
 
     @property
     def courseNumber(self):
@@ -212,18 +371,36 @@ class CourseSection(Organization):
     def semester(self):
         return self._get_prop('semester')
 
+class CourseSection(CourseOffering):
+
+    def __init__(self,
+                 category = None,
+                 **kwargs):
+        CourseOffering.__init__(self, **kwargs)
+        self._set_str_prop('@type', Entity.Types['COURSE_SECTION'])
+        self._set_str_prop('category', category)
+
+    @property
+    def category(self):
+        return self._get_prop('category')
+
+class Group(Organization):
+
+    def __init__(self, **kwargs):
+        Organization.__init__(self,**kwargs)
+
 
 ## Learning Context
 class LearningContext(CaliperSerializable):
     def __init__(self,
                  agent = None,
                  edApp = None,
-                 lisOrganization = None):
+                 group = None):
 
         CaliperSerializable.__init__(self)
 
-        if not isinstance(agent, foaf.Agent):
-            raise TypeError('agent must implement foaf.Agent')
+        if not isinstance(agent, Agent):
+            raise TypeError('agent must implement Agent')
         else:
             self._set_obj_prop('agent', agent)
 
@@ -232,10 +409,10 @@ class LearningContext(CaliperSerializable):
         else:
             self._set_obj_prop('edApp', edApp)
 
-        if lisOrganization and (not isinstance(lisOrganization, Organization)):
-            raise TypeError('lisOrganization must implement Organization')
+        if group and (not isinstance(group, Organization)):
+            raise TypeError('group must implement Organization')
         else:
-            self._set_obj_prop('lisOrganization', lisOrganization)
+            self._set_obj_prop('group', group)
             
     @property
     def agent(self):
@@ -246,8 +423,8 @@ class LearningContext(CaliperSerializable):
         return self._get_prop('edApp')
 
     @property
-    def lisOrganization(self):
-        return self._get_prop('lisOrganization')
+    def group(self):
+        return self._get_prop('group')
 
 
 ## Learning objective
@@ -268,8 +445,6 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         'EPUB_SUB_CHAPTER': 'http://www.idpf.org/epub/vocab/structure/#subchapter',
         'EPUB_VOLUME': 'http://www.idpf.org/epub/vocab/structure/#volume',
         'FRAME': 'http://purl.imsglobal.org/caliper/v1/Frame',
-        'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
-        'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
         'READING': 'http://www.idpf.org/epub/vocab/structure',
         'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage',
         }
@@ -277,9 +452,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
     def __init__(self,
             alignedLearningObjective = None,
             datePublished = None,
+            isPartOf = None,
             keywords = None,
             objectType = None,
-            isPartOf = None,
+            version = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['DIGITAL_RESOURCE'])
@@ -295,6 +471,16 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             self._set_list_prop('alignedLearningObjective', None)
 
         self._set_str_prop('datePublished', datePublished)
+
+        if isPartOf:
+            if (isinstance(isPartOf, six.string_types)) and (rfc3987_parse(isPartOf, rule='URI')):
+                self._set_str_prop('isPartOf', isPartOf)
+            elif isinstance(isPartOf, CaliperSerializable):
+                self._set_obj_prop('isPartOf', isPartOf)
+            else:
+                raise TypeError('isPartOf must implement CaliperSerializable or be an URL for a caliper entity')
+        else:
+            self._set_obj_prop('isPartOf', isPartOf)
 
         if isinstance(keywords, collections.MutableSequence):
             if all( isinstance(item, six.string_types) for item in keywords):
@@ -312,15 +498,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         else:
             self._set_list_prop('objectType', None)
 
-        if isPartOf:
-            if (isinstance(isPartOf, six.string_types)) and (rfc3987_parse(isPartOf, rule='URI')):
-                self._set_str_prop('isPartOf', isPartOf)
-            elif isinstance(isPartOf, CaliperSerializable):
-                self._set_obj_prop('isPartOf', isPartOf)
-            else:
-                raise TypeError('isPartOf must implement CaliperSerializable or be an URL for a caliper entity')
-        else:
-            self._set_obj_prop('isPartOf', isPartOf)
+        self._set_str_prop('version', version)
+
             
     @property
     def alignedLearningObjective(self):
@@ -331,6 +510,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         return self._get_prop('datePublished')
 
     @property
+    def isPartOf(self):
+        return self._get_prop('isPartOf')
+
+    @property
     def keywords(self):
         return self._get_prop('keywords')
 
@@ -339,8 +522,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         return self._get_prop('objectType')
 
     @property
-    def isPartOf(self):
-        return self._get_prop('isPartOf')
+    def version(self):
+        return self._get_prop('version')
 
 class Frame(DigitalResource, Targetable):
 
@@ -355,42 +538,11 @@ class Frame(DigitalResource, Targetable):
     def index(self):
         return self._get_prop('index')
     
-class MediaObject(DigitalResource, schemadotorg.MediaObject):
+class Reading(DigitalResource):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@type', DigitalResource.Types['MEDIA_OBJECT'])
-
-class Reading(DigitalResource):
-
-    def __init__(self,
-            educationalUse = None,
-            learningResourceType = None,
-            timeRequired = None,
-            version = None,
-            **kwargs):
-        DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', DigitalResource.Types['READING'])
-        self._set_str_prop('educationalUse', educationalUse)
-        self._set_str_prop('learningResourceType', learningResourceType)
-        self._set_str_prop('timeRequired', timeRequired)
-        self._set_str_prop('version', version)
-
-    @property
-    def educationalUse(self):
-        return self._get_prop('educationalUse')
-
-    @property
-    def learningResourceType(self):
-        return self._get_prop('learningResourceType')
-
-    @property
-    def timeRequired(self):
-        return self._get_prop('timeRequired')
-
-    @property
-    def version(self):
-        return self._get_prop('version')
                      
 class WebPage(DigitalResource, schemadotorg.WebPage):
 
@@ -424,9 +576,8 @@ class EpubVolume(DigitalResource):
 
 
 ## Annotation entities
-class Annotation(Entity):
+class Annotation(Entity, Generatable):
     _types = {
-        'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/Annotation',
         'BOOKMARK_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation',
         'HIGHLIGHT_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/HighlightAnnotation',
         'SHARED_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/SharedAnnotation',
@@ -434,21 +585,15 @@ class Annotation(Entity):
         }
 
     def __init__(self,
-            target = None,
+            annotated_id = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
-        self._target = None
-        self._set_str_prop('@type', Annotation.Types['ANNOTATION'])
-
-        if not isinstance(target, CaliperSerializable):
-            raise TypeError('target must implement CaliperSerializable')
-        else:
-            self._target = target
+        self._set_str_prop('@type', Entity.Types['ANNOTATION'])
+        self._set_str_prop('annotatedId', annotated_id)
 
     @property
-    def target(self):
-        return self._target
-
+    def annotatedId(self):
+        return self._get_prop('annotatedId')
             
 class BookmarkAnnotation(Annotation):
 
@@ -590,7 +735,6 @@ class Attempt(Entity, Generatable):
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['ATTEMPT'])
-
         self._set_str_prop('actor', actor_id)
         self._set_str_prop('assignable', assignable_id)
         self._set_int_prop('count', count)
@@ -652,9 +796,7 @@ class Response(Entity, Generatable):
             values = None,
             **kwargs):
         Entity.__init__(self,**kwargs)
-
         self._set_str_prop('@type', Entity.Types['RESPONSE'])
-
         self._set_str_prop('actor', actor_id)
         self._set_str_prop('assignable', assignable_id)
 
@@ -717,7 +859,6 @@ class AssignableDigitalResource(DigitalResource, Assignable):
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', DigitalResource.Types['ASSIGNABLE_DIGITAL_RESOURCE'])
-
         self._set_str_prop('dateToActivate', dateToActivate)
         self._set_str_prop('dateToShow', dateToShow)
         self._set_str_prop('dateToStartOn', dateToStartOn)
@@ -730,7 +871,7 @@ class AssignableDigitalResource(DigitalResource, Assignable):
     def maxScore(self):
         return self._get_prop('maxScore')
     
-class Assessment(AssignableDigitalResource, qti.Assessment):
+class Assessment(AssignableDigitalResource):
 
     def __init__(self,
             assessmentItems = None,
@@ -750,14 +891,13 @@ class Assessment(AssignableDigitalResource, qti.Assessment):
     def assessmentItems(self):
         return self._get_prop('assessmentItems')
 
-class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
+class AssessmentItem(AssignableDigitalResource):
 
     def __init__(self,
                  isTimeDependent = False,
                  **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
-
         self._set_bool_prop('isTimeDependent', isTimeDependent)
 
     @property
@@ -766,52 +906,39 @@ class AssessmentItem(AssignableDigitalResource, qti.AssessmentItem):
 
 
 ## Media entities
-class MediaLocation(DigitalResource, Targetable):
-
-    def __init__(self,
-            currentTime = None,
-            entity_id = None,
-            **kwargs):
-        ## since we explicitly callout entity_id as a keyword arg here
-        ## we need to pass it up the inheritance chain explicitly
-        DigitalResource.__init__(self, entity_id=entity_id, **kwargs)
-        self._set_str_prop('@type', DigitalResource.Types['MEDIA_LOCATION'])
-        ## Is it sufficient just to generate a random UUID here? Or does there
-        ## need to be some specific value (as there seems to be in the Java client)??
-        self._uuid = uuid.uuid4()
-        if not entity_id:
-            self._set_str_prop('@id', '{0}/{1}'.format(
-                self._get_prop('@type'),
-                self._uuid
-                ))
-        else:
-            self._set_str_prop('@id', entity_id)
-        self._set_int_prop('currentTime', currentTime)
-
-    @property
-    def currentTime(self):
-        return self._get_prop('currentTime')
-
-
-        
+    
 class MediaObject(DigitalResource, schemadotorg.MediaObject):
     _types = {
         'AUDIO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/AudioObject',
         'IMAGE_OBJECT': 'http://purl.imsglobal.org/caliper/v1/ImageObject',
         'VIDEO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/VideoObject',
+        'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
         }
 
     def __init__(self,
             duration = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@type', DigitalResource.Types['MEDIA_OBJECT'])
+        self._set_str_prop('@type', Entity.Types['MEDIA_OBJECT'])
         self._set_int_prop('duration', duration) ## Is this the same as an Attempt duration?
 
     @property
     def duration(self):
         return self._get_prop('duration')
 
+class MediaLocation(DigitalResource, Targetable):
+
+    def __init__(self,
+            currentTime = None,
+            **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@type', MediaObject.Types['MEDIA_LOCATION'])
+        self._set_int_prop('currentTime', currentTime)
+
+    @property
+    def currentTime(self):
+        return self._get_prop('currentTime')
+    
 class AudioObject(MediaObject, schemadotorg.AudioObject):
 
     def __init__(self,

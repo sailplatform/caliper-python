@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python testing package (testing sensor cases)
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -50,38 +50,47 @@ class TestEvent(unittest.TestCase):
         self.epub = util.build_epub_vol43()
         self.from_resource = util.build_AmRev101_landing_page()
         self.target = util.build_epub_subchap431()
+        self.iterations = 4
 
     def testEvent(self):
-        iterations = 4
-        for i in range(iterations):
+        for i in range(self.iterations):
             self.sensor.send(
                 util.build_epub_navigation_event(
                     learning_context = self.learning_context,
                     event_object = self.epub,
-                    action = caliper.profiles.ReadingProfile.Actions['NAVIGATED_TO'],
+                    action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                     from_resource = self.from_resource,
                     target = self.target
                     )
                 )
-        counted = self.sensor.statistics.measures.count
-        self.sensor.statistics.clear()
-        self.assertEqual(counted, iterations)
+        for stats in self.sensor.statistics:
+            counted = stats.measures.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted,self.iterations)
+            self.assertEqual(succeeded,self.iterations)
+            self.assertEqual(failed,0)
 
     def testEventBatch(self):
-        iterations = 4
         batch = [
             util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 event_object = self.epub,
-                action = caliper.profiles.ReadingProfile.Actions['NAVIGATED_TO'],
+                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.target
                 )
-            for x in range(iterations)]
+            for x in range(self.iterations)]
         self.sensor.send_batch(batch)
-        count = self.sensor.statistics.measures.count
-        self.sensor.statistics.clear()
-        self.assertEqual(count, iterations)
+        for stats in self.sensor.statistics:
+            counted = stats.measures.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted,self.iterations)
+            self.assertEqual(succeeded,self.iterations)
+            self.assertEqual(failed,0)
 
 if __name__ == '__main__':
     unittest.main()

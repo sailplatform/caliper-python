@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python testing package (testing events cases)
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -47,24 +47,23 @@ class AnnotationProfile(unittest.TestCase):
         self.learning_context = util.build_readium_learning_context()
 
     def testBookmarkAnnotationEvent(self):
-        target = util.build_epub_subchap432()
+        event_object = util.build_epub_subchap432()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
-            annotation = util.build_bookmark_annotation(target=target),
+            annotation = util.build_bookmark_annotation(annotated=event_object),
             index = 2,
-            target = target,
+            event_object = event_object,
             action = caliper.profiles.AnnotationProfile.Actions['BOOKMARKED']
             )
-
         self.assertEqual(annotation_event.as_json(),
                          util.get_fixture('caliperBookmarkAnnotationEvent'))
 
     def testHighlightAnnotationEvent(self):
-        target = util.build_epub_subchap431()
+        event_object = util.build_epub_subchap431()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
-            annotation = util.build_highlight_annotation(target=target),
-            target = target,
+            annotation = util.build_highlight_annotation(annotated=event_object),
+            event_object = event_object,
             index = 1,
             action = caliper.profiles.AnnotationProfile.Actions['HIGHLIGHTED']
             )
@@ -72,11 +71,11 @@ class AnnotationProfile(unittest.TestCase):
                          util.get_fixture('caliperHighlightAnnotationEvent'))
 
     def testSharedAnnotationEvent(self):
-        target = util.build_epub_subchap433()
+        event_object = util.build_epub_subchap433()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
-            annotation = util.build_shared_annotation(target=target),
-            target = target,
+            annotation = util.build_shared_annotation(annotated=event_object),
+            event_object = event_object,
             index = 3,
             action = caliper.profiles.AnnotationProfile.Actions['SHARED']
             )
@@ -84,11 +83,11 @@ class AnnotationProfile(unittest.TestCase):
                          util.get_fixture('caliperSharedAnnotationEvent'))
 
     def testTagAnnotationEvent(self):
-        target = util.build_epub_subchap434()
+        event_object = util.build_epub_subchap434()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
-            annotation = util.build_tag_annotation(target=target),
-            target = target,
+            annotation = util.build_tag_annotation(annotated=event_object),
+            event_object = event_object,
             index = 4,
             action = caliper.profiles.AnnotationProfile.Actions['TAGGED']
             )
@@ -209,7 +208,7 @@ class ReadingProfile(unittest.TestCase):
             event_object = self.epub,
             from_resource = util.build_AmRev101_landing_page(),
             target = self.target,
-            action = caliper.profiles.ReadingProfile.Actions['NAVIGATED_TO']
+            action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO']
             )
 
         self.assertEqual(navigation_event.as_json(),
@@ -220,7 +219,7 @@ class ReadingProfile(unittest.TestCase):
             learning_context = self.learning_context,
             event_object = self.epub,
             target = self.target,
-            action = caliper.profiles.Profile.Actions['VIEWED']
+            action = caliper.profiles.CaliperProfile.Actions['VIEWED']
             )
 
         self.assertEqual(reading_event.as_json(),

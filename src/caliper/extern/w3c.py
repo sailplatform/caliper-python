@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# Caliper-python package, QTI external defs module
+# Caliper-python package, W3C external defs module
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -35,11 +35,18 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-## qti
-class Assessment(object):
+## Organization
+class Organization(object):
     pass
 
-class AssessmentItem(object):
+## Membership
+class Membership(object):
     pass
 
+## Status
+class Status(object):
+    pass
 
+## Role
+class Role(object):
+    pass
