@@ -238,7 +238,7 @@ class Membership(Entity, w3c.Membership):
         self._set_str_prop('organization', organization_id)
 
         if roles and isinstance(roles, collections.MutableSequence):
-            if set(Role.Roles.values()).issubset(roles):
+            if set(roles).issubset(set(Role.Roles.values())):
                 self._set_list_prop('roles', roles)
             else:
                 raise TypeError('roles must be in the list of valid Role values')
@@ -270,6 +270,7 @@ class Membership(Entity, w3c.Membership):
 
 ## Agent entities
 class Agent(Entity, foaf.Agent):
+
     def __init__(self,
                  membership = None,
                  **kwargs):
@@ -278,13 +279,11 @@ class Agent(Entity, foaf.Agent):
 
         if membership and isinstance(membership, collections.MutableSequence):
             if all( isinstance(item, Membership) for item in membership ):
-                self._set_list_prop('membership', membership)
+                self._set_list_prop('hasMembership', membership)
             else:
                 raise TypeError('membership must be a list of Memberships')
-        elif membership:
-            raise TypeError('membership must be a list of Memberships')
         else:
-            self._set_list_prop('hasMembership', None)
+            self._set_list_prop('hasMembership', membership)
 
     @property
     def membership(self):
@@ -293,13 +292,13 @@ class Agent(Entity, foaf.Agent):
 class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
 
     def __init__(self, **kwargs):
-        Entity.__init__(self, **kwargs)
+        Agent.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['SOFTWARE_APPLICATION'])
 
 class Person(Agent):
 
     def __init__(self, **kwargs):
-        Entity.__init__(self, **kwargs)
+        Agent.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['PERSON'])
 
 ## Organization entities
@@ -338,22 +337,20 @@ class Organization(Entity, w3c.Organization):
         return self._get_prop('subOrganizationOf')
 
 class Course(Organization):
+
     def __init__(self,**kwargs):
         Organization.__init__(self,**kwargs)
 
 class CourseOffering(Course):
+
     def __init__(self,
                  academicSession = None,
                  courseNumber = None,
-                 label = None,
-                 semester = None,
                  **kwargs):
         Organization.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['COURSE_OFFERING'])
         self._set_str_prop('academicSession', academicSession)
         self._set_str_prop('courseNumber', courseNumber)
-        self._set_str_prop('label', label)
-        self._set_str_prop('semester', semester)
 
     @property
     def academicSession(self):
@@ -388,10 +385,12 @@ class Group(Organization):
 
     def __init__(self, **kwargs):
         Organization.__init__(self,**kwargs)
+        self._set_str_prop('@type', Entity.Types['GROUP'])
 
 
 ## Learning Context
 class LearningContext(CaliperSerializable):
+
     def __init__(self,
                  agent = None,
                  edApp = None,

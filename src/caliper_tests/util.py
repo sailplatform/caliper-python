@@ -41,15 +41,17 @@ import caliper, caliper_tests
 import json
 
 
-_CREATETIME = '2015-01-01T06:00:00.000Z'
-_MODTIME = '2015-02-02T11:30:00.000Z'
-_STARTTIME = '2015-02-15T10:15:00.000Z'
-_ENDTIME = '2015-02-15T11:05:00.000Z'
-_PUBTIME = '2015-01-15T09:30:00.000Z'
-_ACTTIME = '2015-01-16T05:00:00.000Z'
+_DEBUG = False
+
+_CREATETIME = '2015-08-01T06:00:00.000Z'
+_MODTIME = '2015-09-02T11:30:00.000Z'
+_STARTTIME = '2015-09-15T10:15:00.000Z'
+_ENDTIME = '2015-09-15T11:05:00.000Z'
+_PUBTIME = '2015-08-15T09:30:00.000Z'
+_ACTTIME = '2015-08-16T05:00:00.000Z'
 _SHOWTIME = _ACTTIME
 _STARTONTIME = _ACTTIME
-_SUBMITTIME = '2015-02-28T11:59:59.000Z'
+_SUBMITTIME = '2015-09-28T11:59:59.000Z'
 _DURATION = 'PT3000S'
 _MEDIA_CURTIME = 710
 _MEDIA_DURTIME = 1420
@@ -64,6 +66,7 @@ _VERED = '2nd ed.'
 ### that the tests can find all the json fixture files in that sub-directory
 ###
 _FIXTURE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures' + os.path.sep
+_FIXTURE_OUT_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures_out' + os.path.sep
 
 ## general state and utility functions used by many tests
 def get_testing_options():
@@ -79,33 +82,75 @@ def get_fixture(fixture_name):
             r = f.read().replace('\n','')
     return json.dumps(json.loads(r), sort_keys=True)
 
+## without DEBUG, a no-op: useful to generate more readable/diffable
+## side-by-side comparisons of the stock fixtures with the generated events
+def put_fixture(fixture_name, event, debug=_DEBUG):
+    if debug:
+        loc = _FIXTURE_OUT_DIR+fixture_name
+        with open(loc+'_out.json', 'w') as f:
+            f.write(event.as_json()
+                    .replace('{"','{\n"')
+                    .replace(', "',',\n"')
+                    )
+        with open(loc+'.json', 'w') as f:
+            f.write(get_fixture(fixture_name)
+                    .replace('{"','{\n"')
+                    .replace(', "',',\n"')
+                    )
+    else:
+        pass
+
 ### Shared entity resources ###
 ## build a test learning context
 def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://some-university.edu/user/554433',
         dateCreated = _CREATETIME,
+        dateModified = _MODTIME,
+        membership = [
+            build_AmRev101_membership(),
+            build_AmRev101_section_membership(),
+            build_AmRev101_group_membership()
+            ]
+        )
+
+def build_AmRev101_course():
+    return caliper.entities.CourseOffering(
+        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101',
+        academicSession = 'Fall-2015',
+        courseNumber = 'POL101',
+        name = 'Political Science 101: The American Revolution',
+        dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
 def build_AmRev101_course_section():
     return caliper.entities.CourseSection(
-        entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101',
-        semester = 'Spring-2014',
-        courseNumber = 'AmRev-101',
-        # sectionNumber = '001',
-        label = 'Am Rev 101',
+        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001',
+        academicSession = 'Fall-2015',
+        courseNumber = 'POL101',
+        membership = [ build_AmRev101_section_membership() ],
         name = 'American Revolution 101',
+        subOrganizationOf = build_AmRev101_course(),
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
+        )
+
+def build_AmRev101_group_001():
+    return caliper.entities.Group(
+        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001',
+        name = 'Discussion Group 001',
+        membership = [build_AmRev101_group_membership()],
+        subOrganizationOf = build_AmRev101_course_section(),
+        dateCreated = _CREATETIME
         )
 
 def build_AmRev101_membership():
     return caliper.entities.Membership(
         entity_id = 'https://some-university.edu/membership/001',
         member_id = 'https://some-university.edu/user/554433',
-        organization_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101',
-        roles = caliper.entities.Role.Roles['LEARNER'],
+        organization_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101',
+        roles = [caliper.entities.Role.Roles['LEARNER']],
         status = caliper.entities.Status.Statuses['ACTIVE'],
         dateCreated = _CREATETIME
         )
@@ -114,8 +159,8 @@ def build_AmRev101_section_membership():
     return caliper.entities.Membership(
         entity_id = 'https://some-university.edu/membership/002',
         member_id = 'https://some-university.edu/user/554433',
-        organization_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/section/001',
-        roles = caliper.entities.Role.Roles['LEARNER'],
+        organization_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001',
+        roles = [caliper.entities.Role.Roles['LEARNER']],
         status = caliper.entities.Status.Statuses['ACTIVE'],
         dateCreated = _CREATETIME
         )
@@ -124,8 +169,8 @@ def build_AmRev101_group_membership():
     return caliper.entities.Membership(
         entity_id = 'https://some-university.edu/membership/003',
         member_id = 'https://some-university.edu/user/554433',
-        organization_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/section/001/group/001',
-        roles = caliper.entities.Role.Roles['LEARNER'],
+        organization_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001',
+        roles = [caliper.entities.Role.Roles['LEARNER']],
         status = caliper.entities.Status.Statuses['ACTIVE'],
         dateCreated = _CREATETIME
         )
@@ -138,31 +183,45 @@ def build_assessment_tool_learning_context():
             name = 'Super Assessment Tool',
             dateCreated = _CREATETIME
             ),
-        group = build_AmRev101_course_section()
+        group = build_AmRev101_group_001()
+        )
+
+def build_media_app():
+    return caliper.entities.SoftwareApplication(
+        entity_id = 'https://com.sat/super-media-tool',
+        name = 'Super Media Tool',
+        dateCreated = _CREATETIME,
+        dateModified = _MODTIME
         )
 
 def build_video_media_tool_learning_context():
     return caliper.entities.LearningContext(
         agent = build_student_554433(),
-        edApp = caliper.entities.SoftwareApplication(
-            entity_id = 'https://com.sat/super-media-tool',
-            name = 'Super Media Tool',
-            dateCreated = _CREATETIME,
-            dateModified = _MODTIME
-            ),
-        group = build_AmRev101_course_section()
+        edApp = build_media_app(),
+        group = build_AmRev101_group_001()
         )
 
-def build_readium_learning_context():
+def build_readium_app():
+    return caliper.entities.SoftwareApplication(
+        entity_id = 'https://github.com/readium/readium-js-viewer',
+        name = 'Readium',
+        dateCreated = _CREATETIME,
+        dateModified = _MODTIME
+        )
+
+def build_readium_app_learning_context():
+    app = build_readium_app()
+    return caliper.entities.LearningContext(
+        agent = app,
+        edApp = app,
+        group = build_AmRev101_group_001()
+        )
+
+def build_readium_student_learning_context():
     return caliper.entities.LearningContext(
         agent = build_student_554433(),
-        edApp = caliper.entities.SoftwareApplication(
-            entity_id = 'https://github.com/readium/readium-js-viewer',
-            name = 'Readium',
-            dateCreated = _CREATETIME,
-            dateModified = _MODTIME
-            ),
-        group = build_AmRev101_course_section()
+        edApp = build_readium_app(),
+        group = build_AmRev101_group_001()
         )
 
 ## build a test EPUB volume
@@ -219,9 +278,9 @@ def build_epub_subchap434():
 ## build a course landing page
 def build_AmRev101_landing_page():
     return caliper.entities.WebPage(
-        entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/index.html',
+        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/index.html',
         name = 'American Revolution 101 Landing Page',
-        isPartOf = build_AmRev101_course_section(),
+        isPartOf = build_AmRev101_course(),
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         version = _VERNUM
@@ -327,12 +386,12 @@ def build_assessment_assignable_event(learning_context = None,
 ### Assessment Profile and Outcome Profile ###
 ## build a test assessment
 def build_assessment_items():
-    _id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1/item'
+    _id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1/item'
     _name = 'Assessment Item'
     return [caliper.entities.AssessmentItem(
                entity_id = '{0}{1}'.format(_id,particle),
                name = '{0} {1}'.format(_name,particle),
-               isPartOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+               isPartOf = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1',
                version = _VERNUM,
                maxAttempts = 2,
                maxSubmits = 2,
@@ -342,9 +401,9 @@ def build_assessment_items():
 
 def build_assessment():
     return caliper.entities.Assessment(
-        entity_id = 'https://some-university.edu/politicalScience/2014/american-revolution-101/assessment1',
+        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1',
         name = 'American Revolution - Key Figures Assessment',
-        isPartOf = 'https://some-university.edu/politicalScience/2014/american-revolution-101',
+        isPartOf = 'https://some-university.edu/politicalScience/2015/american-revolution-101',
         datePublished = _PUBTIME,
         dateToActivate = _ACTTIME,
         dateToShow = _SHOWTIME,
@@ -496,7 +555,7 @@ def build_video_media_location():
         entity_id = build_video_with_learning_objective().id,
         currentTime = _MEDIA_CURTIME,
         dateCreated = _CREATETIME,
-        version = _VERED
+        version = _VERNUM
         )
 
 ## Navigation event
