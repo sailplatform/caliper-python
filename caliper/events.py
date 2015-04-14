@@ -35,9 +35,9 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-from .base import BaseEvent, CaliperSerializable
-from . import entities, profiles
-from .extern import foaf, schemadotorg
+from caliper.base import BaseEvent, CaliperSerializable
+from caliper import entities, profiles
+from caliper.extern import foaf, schemadotorg
 
 ## Base event class
 class Event(BaseEvent):

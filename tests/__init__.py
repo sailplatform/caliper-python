@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Caliper-python package
+# Caliper-python testing package
 #
 # Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
@@ -35,53 +35,5 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-"""
-Caliper library
-~~~~~~~~~~~~~~~
-
-Caliper is a library, written in python, to help you implement an IMS
-Caliper-compliant sensor or endpoint for you learning services.
-
-:copyright: (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
-:license: GPLv3. See LICENSE for more details.
-"""
-
-__title__ = 'caliper_python'
-__version__ = '0.0.1'
-__build__ = 0x000001
-__author__ = 'IMS Global Learning Consortium, Inc.'
-__license__ = 'GPLv3'
-__copyright__ = 'Copyright 2014 IMS Global Learning Consortium, Inc.'
-
-# import base, actions, entities, events, profiles, request, sensor
-# import extern, util
-
-from . import base, entities, events, profiles, request, sensor
-from .sensor import Sensor as Sensor
-from .util import stats
-
-
-def build_default_sensor():
-    return Sensor.fashion_default_sensor_with_config(config_options=base.HttpOptions)
-
-def build_sensor_from_config(config_options):
-    return Sensor.fashion_default_sensor_with_config(config_options=config_options)
-
-def build_sensor_for_client(client):
-    return Sensor.fashion_default_sensor_with_client(client=client)
-
-## set default logging handler to avoid "No handler found" warnings.
-## Thanks to Kenneth Reitz' requests library for this pattern
-
-import logging
-try: # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
-
-
-logger = logging.getLogger(__name__).addHandler(NullHandler())
-
+from . import util
 

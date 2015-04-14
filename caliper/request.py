@@ -41,7 +41,7 @@ import json
 import requests
 import uuid
 
-from .base import CaliperSerializable, HttpOptions
+from caliper.base import CaliperSerializable, HttpOptions
 
 class EventStoreEnvelope(CaliperSerializable):
     def __init__(self,

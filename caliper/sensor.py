@@ -39,11 +39,11 @@ import collections
 import six
 import uuid
 
-from .base import Options, HttpOptions
-from .entities import Entity
-from .events import Event
-from .request import EventStoreRequestor, HttpRequestor
-from .util.stats import Statistics
+from caliper.base import Options, HttpOptions
+from caliper.entities import Entity
+from caliper.events import Event
+from caliper.request import EventStoreRequestor, HttpRequestor
+from caliper.util.stats import Statistics
 
 class Client(object):
 

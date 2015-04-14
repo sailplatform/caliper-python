@@ -36,8 +36,8 @@
 # email licenses@imsglobal.org
 
 import sys, os
-sys.path.insert(0, os.path.abspath('..'))
-import caliper, caliper_tests
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import caliper, tests
 import json
 
 
@@ -65,8 +65,8 @@ _VERED = '2nd ed.'
 ### into the caliper_tests module's directory in a 'fixtures' subdirectory so
 ### that the tests can find all the json fixture files in that sub-directory
 ###
-_FIXTURE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures' + os.path.sep
-_FIXTURE_OUT_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures_out' + os.path.sep
+_FIXTURE_DIR = os.path.dirname(tests.__file__) + os.path.sep + 'fixtures' + os.path.sep
+_FIXTURE_OUT_DIR = os.path.dirname(tests.__file__) + os.path.sep + 'fixtures_out' + os.path.sep
 
 ## general state and utility functions used by many tests
 def get_testing_options():
