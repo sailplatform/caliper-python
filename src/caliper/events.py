@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python package, events module
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -77,7 +77,7 @@ class Event(BaseEvent):
             endedAtTime = None,
             event_object = None,
             generated = None,
-            lisOrganization = None,
+            group = None,
             startedAtTime = None,
             target = None,
             **kwargs):
@@ -85,8 +85,8 @@ class Event(BaseEvent):
         self._set_str_prop('@context', Event.Contexts['EVENT'])
         self._set_str_prop('@type', Event.Types['EVENT'])
 
-        if action and (action not in profiles.Profile.Actions.values()):
-            raise ValueError('action must be in the list of base Profile actions')
+        if action and (action not in profiles.CaliperProfile.Actions.values()):
+            raise ValueError('action must be in the list of CaliperProfile actions')
         else:
             self._set_str_prop('action', action)
 
@@ -114,10 +114,10 @@ class Event(BaseEvent):
         else:
             self._set_obj_prop('generated', generated)
 
-        if lisOrganization and (not isinstance(lisOrganization, entities.Organization)):
-            raise TypeError('lisOrganization must implement entities.Organization')
+        if group and (not isinstance(group, entities.Organization)):
+            raise TypeError('group must implement entities.Organization')
         else:
-            self._set_obj_prop('group', lisOrganization)
+            self._set_obj_prop('group', group)
 
         if not startedAtTime:
             raise ValueError('startedAtTime must have a time value')
@@ -163,7 +163,7 @@ class Event(BaseEvent):
         return self._get_prop('generated')
 
     @property
-    def lisOrganization(self):
+    def group(self):
         return self._get_prop('group')
     
     @property
@@ -186,7 +186,7 @@ class AnnotationEvent(Event):
             action = None,
             actor = None,
             event_object = None,
-            target = None,
+            generated = None,
             **kwargs):
         Event.__init__(self,
                        **kwargs)
@@ -203,15 +203,15 @@ class AnnotationEvent(Event):
         else:
             self._set_obj_prop('actor', actor)
 
-        if not isinstance(event_object, entities.Annotation):
-            raise TypeError('event_object must implement entities.Annotation')
+        if not isinstance(event_object, entities.DigitalResource):
+            raise TypeError('event_object must implement entities.DigitalResource')
         else:
             self._set_obj_prop('object', event_object)
 
-        if not isinstance(target, entities.DigitalResource):
-            raise TypeError('target must implement entities.DigitalResource')
+        if not isinstance(generated, entities.Annotation):
+            raise TypeError('generated must implement entities.Annotation')
         else:
-            self._set_obj_prop('target', target)
+            self._set_obj_prop('generated', generated)
 
 
 class AssessmentEvent(Event):
@@ -355,7 +355,7 @@ class NavigationEvent(Event):
         Event.__init__(self, **kwargs)
         self._set_str_prop('@context', Event.Contexts['NAVIGATION'])
         self._set_str_prop('@type', Event.Types['NAVIGATION'])
-        self._set_str_prop('action', profiles.Profile.Actions['NAVIGATED_TO'])
+        self._set_str_prop('action', profiles.CaliperProfile.Actions['NAVIGATED_TO'])
 
         if not isinstance(actor, entities.Person):
             raise TypeError('actor must implement entities.Person')
@@ -463,12 +463,12 @@ class SessionEvent(Event):
         else:
             self._set_str_prop('action', action)
 
-        if action == profiles.SessionProfile.Actions['TIMEDOUT']:
+        if action == profiles.SessionProfile.Actions['TIMED_OUT']:
             if not isinstance(actor, entities.SoftwareApplication):
-                raise TypeError('actor must implement entities.SoftwareApplication')
+                raise TypeError('for TIMED_OUT action, actor must implement entities.SoftwareApplication')
         else:
             if not isinstance(actor, entities.Person):
-                raise TypeError('actor must implement entities.Person')
+                raise TypeError('for actions other than TIMED_OUT, actor must implement entities.Person')
         self._set_obj_prop('actor', actor)
             
         if not isinstance(event_object, entities.SoftwareApplication):
@@ -476,18 +476,18 @@ class SessionEvent(Event):
         else:
             self._set_obj_prop('object', event_object)
 
-        if action == profiles.SessionProfile.Actions['LOGGEDIN']:
+        if action == profiles.SessionProfile.Actions['LOGGED_IN']:
             if not isinstance(generated, entities.Session):
-                raise TypeError('generated must implement entities.Session')
+                raise TypeError('for LOGGED_IN action, generated must implement entities.Session')
             else:
                 self._set_obj_prop('generated', generated)
             if not isinstance(target, entities.DigitalResource):
-                raise TypeError('target must impelement entities.DigitalResource')
+                raise TypeError('for LOGGED_IN, target must impelement entities.DigitalResource')
         else:
             if not isinstance(target, entities.Session):
-                raise TypeError('target must impelement entities.Session')
+                raise TypeError('for actions other than LOGGED_IN, target must impelement entities.Session')
             if not endedAtTime:
-                raise ValueError('endedAtTime must have a time value')
+                raise ValueError('for actions other than LOGGED_IN, endedAtTime must have a time value')
             else:
                 self._set_str_prop('endedAtTime', endedAtTime)
         self._set_obj_prop('target', target)

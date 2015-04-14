@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python package, profiles module
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -35,133 +35,153 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-import collections
-import six
+from .base import BaseProfile
 
-from .base import BaseProfile, CaliperSerializable
-from .entities import Assignable, Generatable, Targetable
-from .entities import (Assessment, AssessmentItem, AssignableDigitalResource,
-                       Attempt, DigitalResource, LearningContext, MediaLocation,
-                       MediaObject, )
-
-## Base profile class
-
-class Profile(BaseProfile):
+class CaliperProfile(BaseProfile):
     _actions = {
-        'DOWNLOADED': 'downloaded', # item.downloaded
-        'UPLOADED': 'uploaded', # item.uploaded
-        
-        'LOGGED_IN': 'logged in', # session.loggedIn
-        'LOGGED_OUT': 'logged out', # session.loggedOut
-
-        'VIEWED': 'viewed', # reading.viewed
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'ABANDONED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Abandoned',
+        'ACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Activated',
+        'ATTACHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Attached',
+        'BOOKMARKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked',
+        'CHANGED_RESOLUTION': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedResolution',
+        'CHANGED_SIZE': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSize',
+        'CHANGED_SPEED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSpeed',
+        'CHANGED_VOLUME': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedVolume',
+        'CLASSIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Classified',
+        'CLOSED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ClosedPopout',
+        'COMMENTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Commented',
+        'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
+        'DEACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated',
+        'DESCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Described',
+        'DISLIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Disliked',
+        'DISABLED_CLOSED_CAPTIONING': 'http://purl.imsglobal.org/vocab/caliper/v1/action#DisabledClosedCaptioning',
+        'ENABLED_CLOSED_CAPTIONING': 'http://purl.imsglobal.org/vocab/caliper/v1/action#EnabledClosedCaptioning',
+        'ENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ended',
+        'ENTERED_FULLSCREEN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#EnteredFullscreen',
+        'EXITED_FULLSCREEN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ExitedFullscreen',
+        'FORWARDED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ForwardedTo',
+        'GRADED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Graded',
+        'HID': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Hid',
+        'HIGHLIGHTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Highlighted',
+        'JUMPED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#JumpedTo',
+        'IDENTIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Identified',
+        'LIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Liked',
+        'LINKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Linked',
+        'LOGGED_IN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn',
+        'LOGGED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut',
+        'MUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Muted',
+        'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
+        'OPENED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#OpenedPopout',
+        'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
+        'RANKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ranked',
+        'QUESTIONED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Questioned',
+        'RECOMMENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Recommended',
+        'REPLIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Replied',
+        'RESTARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted',
+        'RESUMED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Resumed',
+        'REVIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed',
+        'REWOUND': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Rewound',
+        'SEARCHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Searched',
+        'SHARED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Shared',
+        'SHOWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Showed',
+        'SKIPPED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
+        'SUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Subscribed',
+        'TAGGED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged',
+        'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
+        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
+        'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
         }
 
 ## Derived profiles ##
 
-class AnnotationProfile(Profile):
+class AnnotationProfile(CaliperProfile):
     _actions = {
-        'ATTACHED': 'attached', # annotation.attached
-        'BOOKMARKED': 'bookmarked', # annotation.bookmarked
-        'CLASSIFIED': 'classified', # annotation.classified
-        'COMMENTED': 'commented', # annotation.commented
-        'DESCRIBED': 'described', # annotation.described
-        'HIGHLIGHTED': 'highlighted', # annotation.highlighted
-        'IDENTIFIED': 'identified', # annotation.identified
-        'LIKED': 'liked', # annotation.liked
-        'LINKED': 'linked', # annotation.linked
-        'QUESTIONED': 'questioned', # annotation.questioned
-        'RANKED': 'ranked', # annotation.ranked
-        'RECOMMENDED': 'recommended', # annotation.recommended
-        'REPLIED': 'replied', # annotation.replied
-        'SHARED': 'shared', # annotation.shared
-        'SUBSCRIBED': 'subscribed', # annotation.subscribed
-        'TAGGED': 'tagged', # annotation.tagged
+        'ATTACHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Attached',
+        'BOOKMARKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked',
+        'CLASSIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Classified',
+        'COMMENTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Commented',
+        'DESCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Described',
+        'DISLIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Disliked',
+        'HIGHLIGHTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Highlighted',
+        'IDENTIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Identified',
+        'LIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Liked',
+        'LINKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Linked',
+        'QUESTIONED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Questioned',
+        'RECOMMENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Recommended',
+        'REPLIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Replied',
+        'SHARED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Shared',
+        'SUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Subscribed',
+        'TAGGED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged',
         }
         
-class AssessmentProfile(Profile):
+class AssessmentProfile(CaliperProfile):
     _actions = {
-        'PAUSED': 'paused', # assessment.paused
-        'RESTARTED': 'restarted', # assessment.restarted
-        'STARTED': 'started', # assessment.started
-        'SUBMITTED': 'submitted', # assessment.submitted
-        
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
+        'RESTARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
         }
 
-class AssessmentItemProfile(Profile):
+class AssessmentItemProfile(CaliperProfile):
     _actions = {
-        'COMPLETED': 'completed', # assessment.item.completed
-        'SKIPPED': 'skipped', # assessment.item.skipped
-        'STARTED': 'started', # assessment.item.started
-        'REVIEWED': 'reviewed', # assessment.item.reviewed
-        'VIEWED': 'viewed', # assessment.item.viewed
-        
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
+        'REVIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed',
+        'SKIPPED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
         }
 
-class AssignableProfile(Profile):
+class AssignableProfile(CaliperProfile):
     _actions = {
-        'ABANDONED': 'abandoned', # assignable.abandoned
-        'ACTIVATED': 'activated', # assignable.activated
-        'COMPLETED': 'completed', # assignable.completed
-        'DEACTIVATED': 'deactivated', # assignable.deactivated
-        'HID': 'hid', # assignable.hid
-        'REVIEWED': 'reviewed', # assignable.reviewed
-        'SHOWED': 'showed', # assignable.showed
-        'STARTED': 'started', # assignable.started
-        'SUBMITTED': 'submitted', # assignable.submitted
-        
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'ABANDONED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Abandoned',
+        'ACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Activated',
+        'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
+        'DEACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated',
+        'HID': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Hid',
+        'REVIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed',
+        'SHOWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Showed',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
         }
 
-class MediaProfile(Profile):
+class MediaProfile(CaliperProfile):
     _actions = {
-        'DISABLEDCLOSEDCAPTIONING': 'disabled closed captioning', # media.accessibility.disabledClosedCaptioning
-        'ENABLEDCLOSECAPTIONING': 'enabled closed captioning', # media.accessibility.enabledClosedCaptioning
-
-        'CHANGEDVOLUME': 'changed volume', # media.audio.changedVolume
-        'MUTED': 'muted', # media.audio.muted
-        'UNMUTED': 'unmuted', # media.audio.unmuted
-
-        'CHANGEDSPEED': 'changed speed', # media.playback.changedSpeed
-        'ENDED': 'ended', # media.playback.ended
-        'FORWARDEDTO': 'forwarded to', # media.playback.forwardedTo
-        'JUMPEDTO': 'jumped to', # media.playback.jumpedTo
-        'PAUSED': 'paused', # media.playback.paused
-        'RESUMED': 'resumed', # media.playback.resumed
-        'REWINDED': 'rewinded to', # media.playback.rewindedTo
-        'STARTED': 'started', # media.playback.started
-
-        'CHANGEDRESOLUTION': 'changed resolution', # media.viewer.changedResolution
-        'CHANGEDSIZE': 'changed viewer size', # media.viewer.changedSize
-        'CLOSEDPOPOUT': 'closed popout', # media.viewer.closedPopout
-        'ENTEREDFULLSCREEN': 'entered full screen', # media.viewer.enteredFullScreen
-        'EXITEDFULLSCREEN': 'exited full screen', # media.viewer.exitedFullScreen
-        'OPENEDPOPOUT': 'opened popout', # media.viewer.openedPopout
-        
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'CHANGED_RESOLUTION': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedResolution',
+        'CHANGED_SIZE': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSize',
+        'CHANGED_SPEED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSpeed',
+        'CHANGED_VOLUME': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedVolume',
+        'CLOSED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ClosedPopout',
+        'DISABLED_CLOSED_CAPTIONING': 'http://purl.imsglobal.org/vocab/caliper/v1/action#DisabledClosedCaptioning',
+        'ENABLED_CLOSED_CAPTIONING': 'http://purl.imsglobal.org/vocab/caliper/v1/action#EnabledClosedCaptioning',
+        'ENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ended',
+        'ENTERED_FULLSCREEN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#EnteredFullscreen',
+        'EXITED_FULLSCREEN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ExitedFullscreen',
+        'FORWARDED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ForwardedTo',
+        'JUMPED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#JumpedTo',
+        'MUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Muted',
+        'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
+        'OPENED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#OpenedPopout',
+        'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
+        'RESUMED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Resumed',
+        'REWOUND': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Rewound',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
         }
         
-class OutcomeProfile(Profile):
+class OutcomeProfile(CaliperProfile):
     _actions = {
-        'GRADED': 'graded', # outcome.graded
-        
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'GRADED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Graded',
         }
 
-class ReadingProfile(Profile):
+class ReadingProfile(CaliperProfile):
     _actions = {
-        'SEARCHED': 'searched', # reading.searched
-        'VIEWED': 'viewed', # reading.viewed
-
-        'NAVIGATED_TO': 'navigated to', # navigation.navigatedTo
+        'SEARCHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Searched',
+        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',        
         }
 
-class SessionProfile(Profile):
+class SessionProfile(CaliperProfile):
     _actions = {
-        'LOGGEDIN': 'logged in', # session.loggedIn
-        'LOGGEDOUT': 'logged out', # session.loggedOut
-        'TIMEDOUT': 'timed out', # session.timedOut
+        'LOGGED_IN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn',
+        'LOGGED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut',
+        'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
         }

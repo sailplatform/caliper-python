@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python package, base module
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -246,7 +246,26 @@ class MetaProfile(type):
         return cls._actions
 
 @six.add_metaclass(MetaProfile)
-class BaseProfile(CaliperSerializable):
-    def __init__(self, **kwargs):
-        CaliperSerializable.__init__(self)
+class BaseProfile(object):
+    pass
+
+### Roles ###
+class MetaRole(type):
+    @property
+    def Roles(cls):
+        return cls._roles
+
+@six.add_metaclass(MetaRole)
+class BaseRole(object):
+    pass
+
+### Statuses ###
+class MetaStatus(type):
+    @property
+    def Statuses(cls):
+        return cls._statuses
+
+@six.add_metaclass(MetaStatus)
+class BaseStatus(object):
+    pass
 

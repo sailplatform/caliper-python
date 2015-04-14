@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Caliper-python package, sensor module
 #
-# Copyright (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
+# Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 # Trademark Information- http://www.imsglobal.org/copyright.html
 
 # IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
@@ -36,6 +36,8 @@
 # email licenses@imsglobal.org
 
 import collections
+import six
+import uuid
 
 from .base import Options, HttpOptions
 from .entities import Entity
@@ -116,31 +118,60 @@ class Client(object):
        
                     
 class Sensor(object):
-    def __init__(self,
-                 client=None,
-                 config_options=None,
-                 **kwargs):
-        if client and isinstance(client, Client):
-            self._client = client
-        else:
-            self._client = Client(config_options=config_options)
+
+    def __init__(self):
+        self._clients = {}
+
+    @staticmethod
+    def fashion_default_sensor_with_config(config_options=None):
+        if not( isinstance(config_options, HttpOptions)):
+            raise TypeError('config_options must implement HttpOptions')
+        s = Sensor()
+        s.register_client('default',Client(config_options=config_options))
+        return s
+
+    @staticmethod
+    def fashion_default_sensor_with_client(client=None):
+        if not( isinstance(client, Client)):
+            raise TypeError('client must implement Client')
+        s = Sensor()
+        s.register_client('default',client)
+        return s
 
     def describe(self, entity=None):
-        self._client.describe(entity=entity)
+        for client in self._clients.values():
+            client.describe(entity=entity)
 
     def describe_batch(self, entity_list=None):
-        self._client.describe_batch(entity_list=entity_list)
+        for client in self._clients.values():
+            client.describe_batch(entity_list=entity_list)
 
     def send(self, event=None):
-        self._client.send(event=event)
+        for client in self._clients.values():
+            client.send(event=event)
 
     def send_batch(self, event_list=None):
-        self._client.send_batch(event_list=event_list)
+        for client in self._clients.values():
+            client.send_batch(event_list=event_list)
 
+    ## Do we really need this now that a Sensor has a list of clients?
     @property
     def statistics(self):
-        return self._client.stats
+        return [ client.stats for client in self._clients.values() ]
 
     @property
-    def client(self):
-        return self._client
+    def client_registry(self):
+        return self._clients
+
+    def register_client(self, key, client):
+        if not( isinstance(client, Client)):
+            raise TypeError('client must implement Client')
+
+        if not( isinstance(key, six.string_types)):
+            raise ValueError('key must be a string to use as a client registration key')
+
+        self._clients.update({key:client})
+
+    def unregister_client(self,key):
+        if key in self._clients:
+            del self._clients[key]
