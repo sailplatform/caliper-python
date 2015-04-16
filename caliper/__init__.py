@@ -45,6 +45,7 @@ Caliper-compliant sensor or endpoint for you learning services.
 :copyright: (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
 :license: GPLv3. See LICENSE for more details.
 """
+from __future__ import absolute_import
 
 __title__ = 'caliper_python'
 __version__ = '0.0.1'
@@ -53,14 +54,12 @@ __author__ = 'IMS Global Learning Consortium, Inc.'
 __license__ = 'GPLv3'
 __copyright__ = 'Copyright 2014 IMS Global Learning Consortium, Inc.'
 
-# import base, actions, entities, events, profiles, request, sensor
-# import extern, util
-# from . import base, entities, events, profiles, request, sensor, extern, sensor, util
-from .sensor import Sensor as Sensor
+from caliper.sensor import Sensor as Sensor
+import caliper.base as base
 
 
 def build_default_sensor():
-    return Sensor.fashion_default_sensor_with_config(config_options=base.HttpOptions)
+    return Sensor.fashion_default_sensor_with_config(config_options=base.HttpOptions())
 
 def build_sensor_from_config(config_options):
     return Sensor.fashion_default_sensor_with_config(config_options=config_options)
