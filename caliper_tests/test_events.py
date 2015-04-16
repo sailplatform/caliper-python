@@ -35,13 +35,17 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
+from __future__ import absolute_import
+
+
 import sys, os
+import unittest
 
 sys.path.insert(0, os.path.abspath('..'))
 import caliper
-from tests import util
 
-import unittest
+import tests.util
+
 
 class AnnotationProfile(unittest.TestCase):
     def setUp(self):
