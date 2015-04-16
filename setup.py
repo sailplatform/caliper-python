@@ -9,21 +9,18 @@ import os
 import sys
 from codecs import open
 
-sys.path.insert(0,'./src')
-import caliper
-
 try:
-    from setuptools import setup, find_packages
-    packages = find_packages('src')
+    from setuptools import setup
 except ImportError:
     from distutils.core import setup
-    packages = ['caliper',]
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-requires = ['requests >= 2.0.0',
+_packages = ['caliper']
+
+_requires = ['requests >= 2.0.0',
             'rfc3987 >= 1.3.4',
             'six >= 1.8.0',
              ]
@@ -41,11 +38,10 @@ setup(
     maintainer = 'IMS Global',
     maintainer_email = 'info@imsglobal.org',
     url = 'https://github.com/IMSGlobal/caliper-python',
-    packages = packages,
-    package_dir = {'':'src'},
+    packages = _packages,
     package_data = {'': ['LICENSE', 'NOTICE' ] },
     include_package_data = True,
-    install_requires = requires,
+    install_requires = _requires,
     license = 'GPLv3',
     zip_safe = False,
     classifiers = (

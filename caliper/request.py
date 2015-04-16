@@ -35,13 +35,16 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
+from __future__ import absolute_import
+
+
 import collections
 import datetime
 import json
 import requests
 import uuid
 
-from .base import CaliperSerializable, HttpOptions
+from caliper.base import CaliperSerializable, HttpOptions
 
 class EventStoreEnvelope(CaliperSerializable):
     def __init__(self,

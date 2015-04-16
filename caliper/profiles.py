@@ -35,7 +35,10 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-from .base import BaseProfile
+from __future__ import absolute_import
+
+
+from caliper.base import BaseProfile
 
 class CaliperProfile(BaseProfile):
     _actions = {

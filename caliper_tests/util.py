@@ -36,9 +36,10 @@
 # email licenses@imsglobal.org
 
 import sys, os
-sys.path.insert(0, os.path.abspath('..'))
-import caliper, caliper_tests
 import json
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import caliper, caliper_tests
 
 
 _DEBUG = False

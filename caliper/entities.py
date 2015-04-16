@@ -35,12 +35,15 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
+from __future__ import absolute_import
+
+
 import collections
 from rfc3987 import parse as rfc3987_parse
 import six
 
-from .base import BaseEntity, CaliperSerializable, BaseRole, BaseStatus
-from .extern import foaf, schemadotorg, w3c
+from caliper.base import BaseEntity, CaliperSerializable, BaseRole, BaseStatus
+from caliper.extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
 ## Base entity class

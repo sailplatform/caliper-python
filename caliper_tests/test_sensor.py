@@ -35,12 +35,16 @@
 # If you are interested in licensing the IMS Global Caliper Analytics APIs please
 # email licenses@imsglobal.org
 
-import sys, os
-sys.path.insert(0, os.path.abspath('..'))
-import caliper, caliper_tests
-from caliper_tests import util
+from __future__ import absolute_import
 
+
+import sys, os
 import unittest
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import caliper
+import caliper_tests.util as util
+
 
 class TestEvent(unittest.TestCase):
     def setUp(self):
