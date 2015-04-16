@@ -14,11 +14,15 @@ try:
 except ImportError:
     from distutils.core import setup
 
+
+import caliper
+
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-_packages = ['caliper']
+
+_packages = ['caliper', 'caliper_tests']
 
 _requires = ['requests >= 2.0.0',
             'rfc3987 >= 1.3.4',
@@ -31,21 +35,21 @@ with open('HISTORY.rst', 'r', 'utf-8') as f:
           history = f.read()
 
 setup(
-    name = 'caliper-python',
+    name = caliper.__title__,
     version = caliper.__version__,
     description = 'Caliper API for Python. Provides implementation for the IMS Caliper Sensor API.',
     long_description = readme + '\n\n' + history,
-    maintainer = 'IMS Global',
+    maintainer = caliper.__author__,
     maintainer_email = 'info@imsglobal.org',
     url = 'https://github.com/IMSGlobal/caliper-python',
     packages = _packages,
     package_data = {'': ['LICENSE', 'NOTICE' ] },
     include_package_data = True,
     install_requires = _requires,
-    license = 'GPLv3',
+    license = caliper.__license__,
     zip_safe = False,
     classifiers = (
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 3 - Beta',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
