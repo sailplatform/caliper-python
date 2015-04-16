@@ -37,12 +37,14 @@
 
 from __future__ import absolute_import
 
+
 import sys, os
 import unittest
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper
 import caliper_tests.util as util
+
 
 class TestEvent(unittest.TestCase):
     def setUp(self):

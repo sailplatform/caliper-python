@@ -41,10 +41,9 @@ from __future__ import absolute_import
 import sys, os
 import unittest
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper
-
-import tests.util
+import caliper_tests.util as util
 
 
 class AnnotationProfile(unittest.TestCase):
