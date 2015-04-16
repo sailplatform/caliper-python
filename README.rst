@@ -12,6 +12,7 @@ provides an implementation of the Caliper Sensor API.
    of this code to outside participants is strictly prohibited. By accessing
    these materials you agree to abide by these rules. This code is in draft
    form and will change substantially.
+   
 
 Dependencies
 ============
@@ -29,65 +30,99 @@ To work with this package (maintain, use, run tests) you'll need to have these
 third-party packages in your local Python environment.
 
 
+Which platform
+--------------
+We developed `Caliper-python` primarily using the Python 3 platform; however,
+we've taken steps to make it portably usbale with Python 2 as well. Changes to
+the code base should ensure the tests run clean under Python 3 *and* 2.
+
+
+
 Build and install
 =================
-To build the library and use, follow these steps:
+We built the `Caliper-python` to be packagable for loading from PyPi, or direct
+from a source bundle, with `pip`.
 
-#. Still to do -- write new instructions for build and install.
+If it's on PyPi, you can simply install it into your site-packages with::
 
-.. ..
-   ..
-      Historical instructions from Prashant's original work
+  pip install caliper-python
 
-      .. highlight:: bash
+Building and installing from a source bundle
+--------------------------------------------
+If you want to install it from a source bundle, then use these steps:
 
-      #. Clone the `repository from github
-         <https://github.com/IMSGlobal/caliper-python.git>`_ into your desired
-         application directory::
+#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python.git>`_
+   onto your local machine.
 
-           git clone https://github.com/IMSGlobal/caliper-python.git
+#. Use pip to install the package as a writable source bundle; there's no need
+   to do a package build step ahead of time::
 
-      #. Set the URL for your Sensor endpoint in :file:`caliper/options.py`.
+     pip install -e caliper-python
 
-      #. To test the project, run :file:`test-caliper.py` in the repository's top
-         directory::
+Changing and testing
+--------------------
+All the caliper-python code you would use to build and use a caliper sensor in
+your application you can find in the `caliper` main module. The package also
+includes a set of test files in a `caliper_tests` main module; we did this not
+because we expect you'll use `caliper_tests` in production, but so that the
+various tests sub-modules in `caliper_test` can have portable visibility to one
+another.
 
-           python test-caliper.py
+In general, whenever you might make changes to code in `caliper`, you should,
+from within `caliper_tests`, run the unit tests::
 
-      #. Build the package, in the repository's top directory::
-
-           python setup.py build
-
-         If you need to create a distribution of the package, you can use these
-         command lines (from the top directory) to build a binary, or source,
-         distribution::
-
-           python setup.py sdist
-           python setup.py bdist
-
-      #. Install the package into your local python environment::
-
-           python setup.py install
+  python3 test_sensory.py
+  python3 test_events.py
 
 
-      Using the library
-      =================
-      After installation, you can use the library in your code, like this:
+**Fixtures**. Your copy of the caliper-python repository (or the package) may
+include a set of JSON fixtures in :file:`caliper_tests/fixtures` -- these are
+the canonical event serializations used to test the sensor against. The
+canonical source for these fixtures you can find in the
+`Caliper common fixtures repository <https://github.com/IMSGlobal/caliper-common-fixtures>`_.
+If there's a local version of these fixtures that came with your
+`caliper-python` package or repository, then it's likely the code has been
+built to test aginst these fixtures.
 
-      .. code-block:: python
+Ideally, if you make changes to `caliper-python` you should ensure that your
+changes will test well against the fixtures from the main common fixtures
+repository. When IMS makes updates to the `caliper-python` repository, it
+ensures that the updates do test well against the common fixtures repository.
 
-         import caliper
-         import caliper.utils
 
-         # ... your code here
-
-         caliper.init("YOUR_API_KEY", log_level
-
-      Happy coding!
-   ..
-.. ..
 
 Copyright and License
 =====================
-©2014 IMS Global Learning Consortium, Inc.  All Rights Reserved.
-For license information contact, info@imsglobal.org
+Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
+Trademark Information- http://www.imsglobal.org/copyright.html
+
+IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
+Software via GNU General Public License version 3.0 GPL v3. This license
+contains terms incompatible with use in closed-source software including a
+copyleft provision.
+
+IMS Global also makes available an Alternative License based on the GNU Lesser
+General Public License. LGPL v3 Licensees (via the Alternative License) are
+required to be IMS Global members. Membership in IMS is a commitment by a
+supplier to the IMS community for ongoing support for achieving "plug and play"
+integration.  IMS Membership dues pay for ongoing maintenance for the
+Alternative License to be applicable to updates to the Caliper Analytics
+APIs. The rationale for this dual-license approach and membership component is
+to help assure a requisite level of ongoing development, project management,
+and support for the software.
+
+Licensees of IMS Global Caliper Analytics APIs are strongly encouraged to
+become active contributors to the Caliper Analytics project and other projects
+within IMS Global. Prospective licensees should understand that their initial
+base contribution and ongoing membership fees are insufficient to fully fund
+the ongoing development and maintenance of Caliper APIs and that voluntary
+contributions are the primary "fuel" ensuring any open source project's
+viability. Contributions can include development, bug fixing, bug reporting,
+performance analysis, and other aspects of the overall development process.
+
+Contributor status at the "github" level will be individual-based. Contributors
+will need to sign an IMS Global Contributor License Agreement (CLA) that grants
+IMS Global a license to contributions.
+
+If you are interested in licensing the IMS Global Caliper Analytics APIs please
+email licenses@imsglobal.org
