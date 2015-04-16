@@ -5,13 +5,11 @@ Caliper-python
 `Caliper-python` is a Python client for `Caliper <http://imsglobal.org/>`_ that
 provides an implementation of the Caliper Sensor API.
 
-.. note::
-
-   Access to this draft code is reserved for IMS Contributing Members who are
-   active participants of the IMS Learning Analytics Task Force. Dissemination
-   of this code to outside participants is strictly prohibited. By accessing
-   these materials you agree to abide by these rules. This code is in draft
-   form and will change substantially.
+**NOTE**: Access to this draft code is reserved for IMS Contributing Members
+who are active participants of the IMS Learning Analytics Task
+Force. Dissemination of this code to outside participants is strictly
+prohibited. By accessing these materials you agree to abide by these
+rules. This code is in draft form and will change substantially.
    
 
 Dependencies
@@ -76,7 +74,7 @@ from within `caliper_tests`, run the unit tests::
 
 
 **Fixtures**. Your copy of the caliper-python repository (or the package) may
-include a set of JSON fixtures in :file:`caliper_tests/fixtures` -- these are
+include a set of JSON fixtures in `caliper_tests/fixtures` -- these are
 the canonical event serializations used to test the sensor against. The
 canonical source for these fixtures you can find in the
 `Caliper common fixtures repository <https://github.com/IMSGlobal/caliper-common-fixtures>`_.
@@ -96,7 +94,7 @@ Copyright and License
 Copyright (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information- http://www.imsglobal.org/copyright.html
 
-IMS Global Caliper Analytics™ APIs are publicly licensed as Open Source
+IMS Global Caliper Analytics(tm) APIs are publicly licensed as Open Source
 Software via GNU General Public License version 3.0 GPL v3. This license
 contains terms incompatible with use in closed-source software including a
 copyleft provision.
