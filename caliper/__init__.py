@@ -42,17 +42,17 @@ Caliper library
 Caliper is a library, written in python, to help you implement an IMS
 Caliper-compliant sensor or endpoint for you learning services.
 
-:copyright: (c) 2014 IMS Global Learning Consortium, Inc. All Rights Reserved.
-:license: GPLv3. See LICENSE for more details.
+:copyright: (c) 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
+:license: GPLv3 or LPGLv3. See LICENSE for more details.
 """
 from __future__ import absolute_import
 
 __title__ = 'caliper_python'
-__version__ = '0.0.1'
-__build__ = 0x000001
+__version__ = '0.9.0'
+__build__ = 0x000900
 __author__ = 'IMS Global Learning Consortium, Inc.'
-__license__ = 'GPLv3'
-__copyright__ = 'Copyright 2014 IMS Global Learning Consortium, Inc.'
+__license__ = 'GPLv3; LGPLv3 for IMS Global Members'
+__copyright__ = 'Copyright 2015 IMS Global Learning Consortium, Inc.'
 
 from caliper.sensor import Sensor as Sensor
 import caliper.base as base
