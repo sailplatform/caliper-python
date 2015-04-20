@@ -122,34 +122,39 @@ class HttpOptions(Options):
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
     def __init__(self):
+        self._objects = {}
         self._props = {}
-        self._prop_name_map = {}
 
-    def _set_prop(self,k,v,name=None):
+    def _set_object(self,k,v):
+        self._objects.update({k:v})
+
+    def _set_prop(self,k,v):
         self._props.update({k:v})
-        if name:
-            self._prop_name_map.update({k:name})
 
-    def _set_float_prop(self,k,v,name=None):
+    def _set_float_prop(self,k,v):
         if v == None:
-            self._set_prop(k,None,name)
+            self._set_prop(k,None)
         else:
-            self._set_prop(k, float(v), name)
+            self._set_prop(k, float(v))
 
-    def _set_bool_prop(self,k,v,name=None):
+    def _set_bool_prop(self,k,v):
         if v == None:
-            self._set_prop(k, None, name)
+            self._set_prop(k, None)
         else:
-            self._set_prop(k, bool(v), name)
+            self._set_prop(k, bool(v))
+
+    def _set_id_prop(self,k,v):
+        self._set_str_prop(k, getattr(v, 'id', None))
+        self._set_object(k,v)
             
-    def _set_int_prop(self,k,v,name=None):
+    def _set_int_prop(self,k,v):
         if v == None:
-            self._set_prop(k,None,name)
+            self._set_prop(k,None)
         else:
-            self._set_prop(k, int(v), name)
+            self._set_prop(k, int(v))
 
-    def _set_list_prop(self,k,v,name=None):
-        self._set_prop(k,v or [],name)
+    def _set_list_prop(self,k,v):
+        self._set_prop(k,v or [])
 
     def _append_list_prop(self,k,v):
         if (not k in self._props) or (self._props[k] is None):
@@ -159,26 +164,26 @@ class CaliperSerializable(object):
         else:
             raise ValueError('attempt to append to a non-list property')
 
-    def _set_obj_prop(self,k,v,name=None):
-        self._set_prop(k,v,name)
+    def _set_obj_prop(self,k,v):
+        self._set_prop(k,v)
 
-    def _set_str_prop(self,k,v,name=None):
+    def _set_str_prop(self,k,v):
         if v == None:
-            self._set_prop(k,None,name)
+            self._set_prop(k,None)
         else:
-            self._set_prop(k, str(v), name)
+            self._set_prop(k, str(v))
+
+    def _get_object(self,k):
+        try:
+            return self._objects[k]
+        except KeyError:
+            return None
 
     def _get_prop(self,k):
         try:
             return self._props[k]
         except KeyError:
             return None
-
-    def _get_propname(self,k):
-        try:
-            return self._prop_name_map[k]
-        except KeyError:
-            return k
 
     def _unpack_list(self,l):
         r = []
@@ -195,10 +200,6 @@ class CaliperSerializable(object):
         r = {}
         for k,v in self._props.items():
 
-            # set default name and value for next item
-            name = self._get_propname(k)
-            value = None
-            
             # handle value based on its type: list, composite, or basic type
             if isinstance(v, collections.MutableSequence):
                 value = self._unpack_list(v)
@@ -206,7 +207,7 @@ class CaliperSerializable(object):
                 value = v.as_dict()
             else:
                 value = v
-            r.update({name:value})
+            r.update({k:value})
             
         return copy.deepcopy(r)
 

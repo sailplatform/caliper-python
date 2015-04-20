@@ -42,7 +42,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 
 
-_DEBUG = False
+_DEBUG = True
 
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
@@ -294,7 +294,7 @@ def build_bookmark_annotation(annotated = None):
     return caliper.entities.BookmarkAnnotation(
         entity_id = 'https://someEduApp.edu/bookmarks/00001',
         bookmarkNotes = 'The Intolerable Acts (1774)--bad idea Lord North',
-        annotated_id = annotated.id,
+        annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
@@ -305,7 +305,7 @@ def build_highlight_annotation(annotated = None):
         entity_id = 'https://someEduApp.edu/highlights/12345',
         selection = selection,
         selectionText = 'Life, Liberty and the pursuit of Happiness',
-        annotated_id = annotated.id,
+        annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
@@ -325,7 +325,7 @@ def build_shared_annotation(annotated = None):
                 dateModified = _MODTIME
                 )
             ],
-        annotated_id = annotated.id,
+        annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         )
@@ -334,7 +334,7 @@ def build_tag_annotation(annotated = None):
     return caliper.entities.TagAnnotation(
         entity_id = 'https://someEduApp.edu/tags/7654',
         tags = ['to-read', '1765', 'shared-with-project-team'],
-        annotated_id = annotated.id,
+        annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
@@ -376,8 +376,8 @@ def build_assessment_assignable_event(learning_context = None,
         event_object = assessment,
         generated = caliper.entities.Attempt(
             entity_id = '{0}/{1}'.format(assessment.id, 'attempt1'),
-            assignable_id = assessment.id,
-            actor_id = learning_context.agent.id,
+            assignable = assessment,
+            actor = learning_context.agent,
             count = 1,
             dateCreated = _CREATETIME,
             startedAtTime = _STARTTIME),
@@ -424,8 +424,8 @@ def build_assessment_attempt(learning_context=None,
                              assessment=None):
     return caliper.entities.Attempt(
         entity_id = '{0}/{1}'.format(assessment.id,'attempt1'),
-        assignable_id = assessment.id,
-        actor_id = learning_context.agent.id,
+        assignable = assessment,
+        actor = learning_context.agent,
         count = 1,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
@@ -436,8 +436,8 @@ def build_assessment_item_attempt(learning_context=None,
                                   assessment=None):
     return caliper.entities.Attempt(
         entity_id = '{0}/{1}'.format(assessment.id,'item1/attempt1'),
-        assignable_id = assessment.id,
-        actor_id = learning_context.agent.id,
+        assignable = assessment,
+        actor = learning_context.agent,
         count = 1,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
@@ -449,8 +449,8 @@ def build_assessment_item_response(assessment=None,
                                    values=None):
     return caliper.entities.FillinBlankResponse(
         entity_id = '{0}/{1}'.format(assessment.id,'item1/response1'),
-        assignable_id = attempt.assignable,
-        actor_id = attempt.actor,
+        assignable = attempt.assignable,
+        actor = attempt.actor,
         attempt = attempt,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME,
@@ -462,8 +462,8 @@ def build_assessment_result(learning_context=None,
                             attempt=None):
     return caliper.entities.Result(
         entity_id = '{0}/{1}'.format(attempt.id, 'result'),
-        actor_id = learning_context.agent.id,
-        assignable_id = attempt.assignable,
+        actor = learning_context.agent,
+        assignable = attempt.assignable,
         comment = 'Well done.',
         curvedTotalScore = 3.0,
         curveFactor = 0.0,
