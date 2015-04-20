@@ -587,15 +587,24 @@ class Annotation(Entity, Generatable):
         }
 
     def __init__(self,
-            annotated_id = None,
+            annotated = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['ANNOTATION'])
-        self._set_str_prop('annotatedId', annotated_id)
+
+        if annotated and (not isinstance(annotated, DigitalResource)):
+            raise TypeError('annotated must implement DigitalResource')
+        else:
+            self._set_id_prop('annotated', annotated)
 
     @property
-    def annotatedId(self):
-        return self._get_prop('annotatedId')
+    def annotated(self):
+        return self._get_object('annotated')
+
+    @property
+    def annotated_id(self):
+        return self._get_prop('annotated')
+    
             
 class BookmarkAnnotation(Annotation):
 
@@ -728,8 +737,8 @@ class Attempt(Entity, Generatable):
                 positive).
     '''
     def __init__(self,
-            assignable_id = None,
-            actor_id = None,
+            assignable = None,
+            actor = None,
             count = None,
             duration = None,
             endedAtTime =None,
@@ -737,8 +746,17 @@ class Attempt(Entity, Generatable):
             **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['ATTEMPT'])
-        self._set_str_prop('actor', actor_id)
-        self._set_str_prop('assignable', assignable_id)
+
+        if actor and (not isinstance(actor, Agent)):
+            raise TypeError('actor must implement Agent')
+        else:
+            self._set_id_prop('actor', actor)
+        
+        if assignable and (not isinstance(assignable, DigitalResource)):
+            raise TypeError('assignable must implement DigitalResource')
+        else:
+            self._set_id_prop('assignable', assignable)
+        
         self._set_int_prop('count', count)
         self._set_str_prop('duration', duration) ## should we armour this with a regex?
         self._set_str_prop('endedAtTime', endedAtTime)
@@ -746,10 +764,18 @@ class Attempt(Entity, Generatable):
             
     @property
     def assignable(self):
+        return self._get_object('assignable')
+
+    @property
+    def assignable_id(self):
         return self._get_prop('assignable')
 
     @property
     def actor(self):
+        return self._get_object('actor')
+
+    @property
+    def actor_id(self):
         return self._get_prop('actor')
 
     @property
@@ -789,8 +815,8 @@ class Response(Entity, Generatable):
         }
 
     def __init__(self,
-            assignable_id = None,
-            actor_id = None,
+            assignable = None,
+            actor = None,
             attempt = None,
             duration = None,
             endedAtTime =None,
@@ -799,9 +825,17 @@ class Response(Entity, Generatable):
             **kwargs):
         Entity.__init__(self,**kwargs)
         self._set_str_prop('@type', Entity.Types['RESPONSE'])
-        self._set_str_prop('actor', actor_id)
-        self._set_str_prop('assignable', assignable_id)
 
+        if actor and (not isinstance(actor, Agent)):
+            raise TypeError('actor must implement Agent')
+        else:
+            self._set_id_prop('actor', actor)
+        
+        if assignable and (not isinstance(assignable, DigitalResource)):
+            raise TypeError('assignable must implement DigitalResource')
+        else:
+            self._set_id_prop('assignable', assignable)
+        
         if attempt and not( isinstance(attempt, Attempt)):
             raise TypeError('attempt must implement Attempt')
         else:
@@ -989,8 +1023,8 @@ class VideoObject(MediaObject, schemadotorg.VideoObject):
 class Result(Entity, Generatable):
 
     def __init__(self,
-            actor_id = None,
-            assignable_id = None,
+            actor = None,
+            assignable = None,
             comment = None,
             curvedTotalScore = 0.0,
             curveFactor = 0.0,
@@ -1003,16 +1037,16 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['RESULT'])
 
-        if not isinstance(actor_id, six.string_types):
-            raise ValueError('actor ID must be a string ID for an actor Caliper entity')
+        if actor and (not isinstance(actor, Agent)):
+            raise TypeError('actor must implement Agent')
         else:
-            self._set_str_prop('actor', actor_id)
-
-        if not isinstance(assignable_id, six.string_types):
-            raise ValueError('assignable ID must be a string ID for an assignable Caliper entity')
+            self._set_id_prop('actor', actor)
+        
+        if assignable and (not isinstance(assignable, DigitalResource)):
+            raise TypeError('assignable must implement DigitalResource')
         else:
-            self._set_str_prop('assignable', assignable_id)
-            
+            self._set_id_prop('assignable', assignable)
+        
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)

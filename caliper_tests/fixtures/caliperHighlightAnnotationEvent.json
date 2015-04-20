@@ -87,7 +87,7 @@
         "extensions": {},
         "dateCreated": "2015-08-01T06:00:00.000Z",
         "dateModified": "2015-09-02T11:30:00.000Z",
-        "annotatedId": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)",
+        "annotated": "https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)",
         "selection": {
             "start": "455",
             "end": "489"
