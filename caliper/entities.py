@@ -474,15 +474,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
 
         self._set_str_prop('datePublished', datePublished)
 
-        if isPartOf:
-            if (isinstance(isPartOf, six.string_types)) and (rfc3987_parse(isPartOf, rule='URI')):
-                self._set_str_prop('isPartOf', isPartOf)
-            elif isinstance(isPartOf, CaliperSerializable):
-                self._set_obj_prop('isPartOf', isPartOf)
-            else:
-                raise TypeError('isPartOf must implement CaliperSerializable or be an URL for a caliper entity')
+        if isPartOf and (not isinstance(isPartOf, DigitalResource)):
+            raise TypeError('isPartOf must implement DigitalResource')
         else:
-            self._set_obj_prop('isPartOf', isPartOf)
+            self._set_id_prop('isPartOf', isPartOf)
 
         if isinstance(keywords, collections.MutableSequence):
             if all( isinstance(item, six.string_types) for item in keywords):
@@ -513,7 +508,13 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
 
     @property
     def isPartOf(self):
-        return self._get_prop('isPartOf')
+        return self._get_object('isPartOf')
+    @isPartOf.setter
+    def isPartOf(self, new_object):
+        if new_object and (not isinstance(new_object, DigitalResource)):
+            raise TypeError('new object must implement DigitalResource')
+        else:
+            self._set_id_prop('isPartOf', new_object)
 
     @property
     def keywords(self):
@@ -926,6 +927,16 @@ class Assessment(AssignableDigitalResource):
     @property
     def assessmentItems(self):
         return self._get_prop('assessmentItems')
+    @assessmentItems.setter
+    def assessmentItems(self, new_items):
+        if isinstance(new_items, collections.MutableSequence):
+            if all( isinstance(item, AssessmentItem) for item in new_items):
+                self._set_list_prop('assessmentItems', new_items)
+            else:
+                raise TypeError('new items must be a list of AssessmentItems')
+        else:
+            self._set_list_prop('assessmentItems', None)
+        
 
 class AssessmentItem(AssignableDigitalResource):
 
