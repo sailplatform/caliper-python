@@ -281,7 +281,6 @@ def build_AmRev101_landing_page():
     return caliper.entities.WebPage(
         entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/index.html',
         name = 'American Revolution 101 Landing Page',
-        isPartOf = build_AmRev101_course(),
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         version = _VERNUM
@@ -386,13 +385,11 @@ def build_assessment_assignable_event(learning_context = None,
 
 ### Assessment Profile and Outcome Profile ###
 ## build a test assessment
-def build_assessment_items():
-    _id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1/item'
-    _name = 'Assessment Item'
+def build_assessment_items(assessment = None):
     return [caliper.entities.AssessmentItem(
-               entity_id = '{0}{1}'.format(_id,particle),
-               name = '{0} {1}'.format(_name,particle),
-               isPartOf = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1',
+               entity_id = '{0}/item{1}'.format(assessment.id,particle),
+               name = 'Assessment Item {1}'.format(assessment.name,particle),
+               isPartOf = assessment,
                version = _VERNUM,
                maxAttempts = 2,
                maxSubmits = 2,
@@ -401,10 +398,9 @@ def build_assessment_items():
         ]
 
 def build_assessment():
-    return caliper.entities.Assessment(
+    asmnt = caliper.entities.Assessment(
         entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1',
         name = 'American Revolution - Key Figures Assessment',
-        isPartOf = 'https://some-university.edu/politicalScience/2015/american-revolution-101',
         datePublished = _PUBTIME,
         dateToActivate = _ACTTIME,
         dateToShow = _SHOWTIME,
@@ -413,11 +409,12 @@ def build_assessment():
         maxAttempts = 2,
         maxSubmits = 2,
         maxScore = 3, # WARN original value is 5.0d, says Java impl
-        assessmentItems = build_assessment_items(),
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
-        version = _VERNUM
-        )
+        version = _VERNUM )
+    asmnt.assessmentItems = build_assessment_items(assessment=asmnt)
+    return asmnt
+    
 
 ## build a test assessment attempt
 def build_assessment_attempt(learning_context=None,
