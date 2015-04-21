@@ -69,7 +69,7 @@ another.
 In general, whenever you might make changes to code in `caliper`, you should,
 from within `caliper_tests`, run the unit tests::
 
-  python3 test_sensory.py
+  python3 test_sensor.py
   python3 test_events.py
 
 
