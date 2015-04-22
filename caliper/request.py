@@ -3,7 +3,8 @@
 #
 # This file is part of the IMS Caliper Analytics(tm) and is licensed to IMS
 # Global Learning Consortium, Inc. (http://www.imsglobal.org) under one or more
-# contributor license agreements.
+# contributor license agreements. See the NOTICE file distributed with this
+# work for additional information.
 #
 # IMS Caliper is free software: you can redistribute it and/or modify it under
 # the terms of the GNU Lesser General Public License as published by the Free
