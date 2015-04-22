@@ -93,7 +93,7 @@ Copyright and License
 =====================
 Copyright © 2015 IMS Global Learning Consortium, Inc. All Rights Reserved.
 
-Trademark Information-http://www.imsglobal.org/copyright.html
+Trademark Information -- http://www.imsglobal.org/copyright.html
 
 IMS Global Learning Consortium, Inc. Caliper Analytics™ APIs are publicly
 licensed as Open Source Software via the GNU Lesser General Public License,
@@ -127,7 +127,7 @@ Contributor status at the "Github" level will be individual-based. Contributors
 will need to sign an IMS Global Contributor License Agreement (CLA) that grants
 IMS Global a license to contributions.  If you are interested in licensing the
 IMS Global Caliper Analytics APIs/code libraries please email IMS Global
-licenses@imsglobal.org
+(mailto:licenses@imsglobal.org).
 
 IMS Caliper is free software: you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
@@ -139,4 +139,4 @@ PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 details.
 
 You should have received a copy of the GNU Lesser General Public License along
-with this program. If not, see <http://www.gnu.org/licenses/>.
+with this program. If not, see http://www.gnu.org/licenses/.
