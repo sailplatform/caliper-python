@@ -32,8 +32,7 @@ import caliper_tests.util as util
 
 class TestEvent(unittest.TestCase):
     def setUp(self):
-        self.sensor = caliper.build_sensor_from_config(
-            config_options = util.get_testing_options())
+        self.sensor = util.build_default_sensor()
         self.learning_context = util.build_readium_student_learning_context()
         self.epub = util.build_epub_vol43()
         self.from_resource = util.build_AmRev101_landing_page()
