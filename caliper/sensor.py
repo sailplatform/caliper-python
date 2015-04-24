@@ -106,32 +106,25 @@ class Client(object):
                     
 class Sensor(object):
 
-    def __init__(self):
+    def __init__(self, entity_id=None):
+        self._id = entity_id
         self._clients = {}
 
     @staticmethod
-    def fashion_default_sensor_with_config(config_options=None):
+    def fashion_default_sensor_with_config(config_options=None, sensor_id=None):
         if not( isinstance(config_options, HttpOptions)):
             raise TypeError('config_options must implement HttpOptions')
-        s = Sensor()
+        s = Sensor(entity_id=sensor_id)
         s.register_client('default',Client(config_options=config_options))
         return s
 
     @staticmethod
-    def fashion_default_sensor_with_client(client=None):
+    def fashion_default_sensor_with_client(client=None, sensor_id=None):
         if not( isinstance(client, Client)):
             raise TypeError('client must implement Client')
-        s = Sensor()
+        s = Sensor(entity_id=sensor_id)
         s.register_client('default',client)
         return s
-
-    def describe(self, entity=None):
-        for client in self._clients.values():
-            client.describe(entity=entity)
-
-    def describe_batch(self, entity_list=None):
-        for client in self._clients.values():
-            client.describe_batch(entity_list=entity_list)
 
     def send(self, event=None):
         for client in self._clients.values():

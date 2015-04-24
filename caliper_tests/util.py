@@ -28,6 +28,8 @@ import caliper, caliper_tests
 
 _DEBUG = False
 
+_SENSOR_ID = 'http://learning-app.some-university.edu/sensor'
+
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
 _STARTTIME = '2015-09-15T10:15:00.000Z'
@@ -58,6 +60,11 @@ def get_testing_options():
     return caliper.base.HttpOptions(
         host='http://httpbin.org/post',
         api_key='6xp7jKrOSOWOgy3acxHFWA')
+
+def build_default_sensor():
+    return caliper.build_default_sensor_from_config(
+        config_options=get_testing_options(),
+        sensor_id=_SENSOR_ID) 
 
 def get_fixture(fixture_name):
     loc = _FIXTURE_DIR+fixture_name+'.json'

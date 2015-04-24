@@ -32,10 +32,10 @@ import six
 class Options(object):
     _config = {
         'API_KEY': None,
-        'HOST' : None,
-        'CONNECTION_TIMEOUT': None,
-        'SO_TIMEOUT': None,
         'CONNECTION_REQUEST_TIMEOUT': None,
+        'CONNECTION_TIMEOUT': None,
+        'HOST' : None,
+        'SO_TIMEOUT': None,
         }
 
     def __init__(self):
@@ -50,34 +50,6 @@ class Options(object):
             self._config['API_KEY'] = str(new_key)
         else:
             raise ValueError('new key value must be a string')
-        
-    @property
-    def HOST(self):
-        return self._config['HOST']
-    @HOST.setter
-    def HOST(self,new_host):
-        if rfc3987_parse(new_host, rule='URI'):
-            self._config['HOST'] = str(new_host)
-
-    @property
-    def CONNECTION_TIMEOUT(self):
-        return self._config['CONNECTION_TIMEOUT']
-    @CONNECTION_TIMEOUT.setter
-    def CONNECTION_TIMEOUT(self, new_timeout):
-        if int(new_timeout) >= 1000:
-            self._config['CONNECTION_TIMEOUT'] = int(new_timeout)
-        else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
-
-    @property
-    def SO_TIMEOUT(self):
-        return self._config['SO_TIMEOUT']
-    @SO_TIMEOUT.setter
-    def SO_TIMEOUT(self, new_timeout):
-        if int(new_timeout) >= 1000:
-            self._config['SO_TIMEOUT'] = int(new_timeout)
-        else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
 
     @property
     def CONNECTION_REQUEST_TIMEOUT(self):
@@ -89,19 +61,50 @@ class Options(object):
         else:
             raise ValueError('new timeout value must be at least 1000 milliseconds')
         
+    @property
+    def CONNECTION_TIMEOUT(self):
+        return self._config['CONNECTION_TIMEOUT']
+    @CONNECTION_TIMEOUT.setter
+    def CONNECTION_TIMEOUT(self, new_timeout):
+        if int(new_timeout) >= 1000:
+            self._config['CONNECTION_TIMEOUT'] = int(new_timeout)
+        else:
+            raise ValueError('new timeout value must be at least 1000 milliseconds')
+
+    @property
+    def HOST(self):
+        return self._config['HOST']
+    @HOST.setter
+    def HOST(self,new_host):
+        if rfc3987_parse(new_host, rule='URI'):
+            self._config['HOST'] = str(new_host)
+
+    @property
+    def SO_TIMEOUT(self):
+        return self._config['SO_TIMEOUT']
+    @SO_TIMEOUT.setter
+    def SO_TIMEOUT(self, new_timeout):
+        if int(new_timeout) >= 1000:
+            self._config['SO_TIMEOUT'] = int(new_timeout)
+        else:
+            raise ValueError('new timeout value must be at least 1000 milliseconds')
+        
 class HttpOptions(Options):
     def __init__(self,
             api_key='CaliperKey',
-            host='http://httpbin.org/post',
+            connection_request_timeout=10000,
             connection_timeout=10000,
+            host='http://httpbin.org/post',
+            sensor_id=None,
             so_timeout=10000,
-            connection_request_timeout=10000):
+            ):
         Options.__init__(self)
         self.API_KEY=api_key
-        self.HOST=host
-        self.CONNECTION_TIMEOUT=connection_timeout
-        self.SO_TIMEOUT=so_timeout
         self.CONNECTION_REQUEST_TIMEOUT=connection_request_timeout
+        self.CONNECTION_TIMEOUT=connection_timeout
+        self.HOST=host
+        self.SENSOR_ID=sensor_id
+        self.SO_TIMEOUT=so_timeout
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):

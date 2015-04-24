@@ -32,44 +32,57 @@ from caliper.base import CaliperSerializable, HttpOptions
 
 class EventStoreEnvelope(CaliperSerializable):
     def __init__(self,
-            content_data=None,
-            content_type=None,
-            envelope_id=None,
-            time=None):
+            data = None,
+            envelope_id = None,
+            envelope_type = 'http://purl.imsglobal.org/caliper/v1/Envelope',
+            send_time = None,
+            sensor = None):
         CaliperSerializable.__init__(self)
-        self._set_obj_prop('data', content_data)
-        self._set_str_prop('id', envelope_id)
-        self._set_str_prop('time', time)
-        self._set_str_prop('type', content_type)
+        self._set_str_prop('@id', envelope_id)
+        self._set_str_prop('@type', envelope_type)
+
+        if data and isinstance(data, collections.MutableSequence):
+            if all( isinstance(item, CaliperSerializable) for item in data):
+                self._set_list_prop('data', data)
+            else:
+                raise TypeError('data must be a list of caliper entites or events')
+        else:
+            self._set_list_prop('data', data)
+
+        self._set_str_prop('sendTime', send_time)
+        self._set_id_prop('sensor', sensor)
         
+    @property
+    def data(self):
+        return self._get_prop('data')
+    @data.setter
+    def data(self, new_data):
+        if new_data and isinstance(new_data, collections.MutableSequence):
+            if all( isinstance(item, CaliperSerializable) for item in new_data):
+                self._set_list_prop('data', new_data)
+            else:
+                raise TypeError('new_data must be a list of caliper entites or events')
+        else:
+            self._set_list_prop('data', new_data)
+
     @property
     def envelope_id(self):
-        return self._get_prop('envelope_id')
+        return self._get_prop('@id')
     @envelope_id.setter
     def envelope_id(self, v):
-        self._set_str_prop('id', v)
+        self._set_str_prop('@id', v)
     
     @property
-    def time(self):
-        return self._get_prop('time')
-    @time.setter
-    def time(self, v):
-        self._set_str_prop('time', v)
+    def sendTime(self):
+        return self._get_prop('sendTime')
+    @sendTime.setter
+    def sendTime(self, v):
+        self._set_str_prop('sendTime', v)
 
     @property
-    def content_data(self):
-        return self._get_prop('data')
-    @content_data.setter
-    def content_data(self, v):
-        self._set_obj_prop('data', v)
+    def sensor(self):
+        return self._get_prop('sensor')
 
-    @property
-    def content_type(self):
-        return self._get_prop('type')
-    @content_type.setter
-    def content_type(self, v):
-        self._set_str_prop('type', v)
-        
 
 class EventStoreRequestor(object):
 
@@ -94,11 +107,10 @@ class EventStoreRequestor(object):
             caliper_id = None,
             send_time = None):
         envelope = EventStoreEnvelope(
-            content_data = caliper_object,
-            envelope_id = caliper_id,
-            time = send_time,
-            content_type = 'caliperEvent')
-        
+            data = caliper_object,
+
+            send_time = send_time)
+                
         return envelope.as_json()
 
 class HttpRequestor(EventStoreRequestor):
