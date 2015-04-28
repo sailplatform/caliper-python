@@ -68,6 +68,8 @@ class Entity(BaseEntity, schemadotorg.Thing):
 
         if not entity_id:
             raise ValueError('Entity must have an ID.')
+        elif not rfc3987_parse(entity_id, rule='URI'):
+            raise ValueError('Entity ID must be an IRI')
         else:
             self._set_str_prop('@id', entity_id)
             
