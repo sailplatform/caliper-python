@@ -77,26 +77,26 @@ class Client(object):
                 self._stats.update_failed(1)
             update_func(1)
         
-    def describe(self, entity=None):
-        self.describe_batch([entity])
+    def describe(self, entity=None, sensor_id=None):
+        self.describe_batch(entity_list=[entity], sensor_id=None)
         
-    def describe_batch(self, entity_list=None):
+    def describe_batch(self, entity_list=None, sensor_id=None):
         if isinstance(entity_list, collections.MutableSequence):
             if all( isinstance(item, Entity) for item in entity_list):
-                results = self._requestor.send_batch(caliper_object_list=entity_list)
+                results = self._requestor.send_batch(caliper_object_list=entity_list, sensor_id=sensor_id)
                 self._process_results(results,self.stats.update_describes)
             else:
                 raise TypeError('entity_list must be a list of entities.Entity')
         else:
             raise TypeError('entity_list should be a list')
 
-    def send(self, event=None):
-        self.send_batch([event])
+    def send(self, event=None, sensor_id=None):
+        self.send_batch(event_list=[event], sensor_id=sensor_id)
         
-    def send_batch(self, event_list=None): 
+    def send_batch(self, event_list=None, sensor_id=None): 
         if isinstance(event_list, collections.MutableSequence):
             if all( isinstance(item, Event) for item in event_list):
-                results = self._requestor.send_batch(caliper_object_list=event_list)
+                results = self._requestor.send_batch(caliper_object_list=event_list, sensor_id=sensor_id)
                 self._process_results(results,self.stats.update_measures)
             else:
                 raise TypeError('event_list must be a list of entities.Event')
@@ -106,15 +106,15 @@ class Client(object):
                     
 class Sensor(object):
 
-    def __init__(self, entity_id=None):
-        self._id = entity_id
+    def __init__(self, sensor_id=None):
+        self._id = sensor_id
         self._clients = {}
 
     @staticmethod
     def fashion_default_sensor_with_config(config_options=None, sensor_id=None):
         if not( isinstance(config_options, HttpOptions)):
             raise TypeError('config_options must implement HttpOptions')
-        s = Sensor(entity_id=sensor_id)
+        s = Sensor(sensor_id=sensor_id)
         s.register_client('default',Client(config_options=config_options))
         return s
 
@@ -122,19 +122,22 @@ class Sensor(object):
     def fashion_default_sensor_with_client(client=None, sensor_id=None):
         if not( isinstance(client, Client)):
             raise TypeError('client must implement Client')
-        s = Sensor(entity_id=sensor_id)
+        s = Sensor(sensor_id=sensor_id)
         s.register_client('default',client)
         return s
 
     def send(self, event=None):
         for client in self._clients.values():
-            client.send(event=event)
+            client.send(event=event, sensor_id=self.id)
 
     def send_batch(self, event_list=None):
         for client in self._clients.values():
-            client.send_batch(event_list=event_list)
+            client.send_batch(event_list=event_list, sensor_id=self.id)
 
-    ## Do we really need this now that a Sensor has a list of clients?
+    @property
+    def id(self):
+        return self._id
+
     @property
     def statistics(self):
         return [ client.stats for client in self._clients.values() ]
