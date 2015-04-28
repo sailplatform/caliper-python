@@ -41,15 +41,14 @@ class TestEvent(unittest.TestCase):
 
     def testEvent(self):
         for i in range(self.iterations):
-            self.sensor.send(
-                util.build_epub_navigation_event(
-                    learning_context = self.learning_context,
-                    event_object = self.epub,
-                    action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
-                    from_resource = self.from_resource,
-                    target = self.target
-                    )
-                )
+            event = util.build_epub_navigation_event(
+                learning_context = self.learning_context,
+                event_object = self.epub,
+                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                from_resource = self.from_resource,
+                target = self.target
+            )
+            self.sensor.send(event)
         for stats in self.sensor.statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
