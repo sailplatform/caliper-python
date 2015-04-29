@@ -211,7 +211,17 @@ class MetaEntity(type):
 class BaseEntity(CaliperSerializable):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
-    pass
+
+### Envelope ###
+class MetaEnvelope(type):
+    @property
+    def Contexts(cls):
+        return cls._contexts
+
+@six.add_metaclass(MetaEnvelope)
+class BaseEnvelope(CaliperSerializable):
+    def __init__(self, **kwargs):
+        CaliperSerializable.__init__(self)
 
 ### Events ###
 class MetaEvent(type):
