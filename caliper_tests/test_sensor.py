@@ -39,6 +39,21 @@ class TestEvent(unittest.TestCase):
         self.target = util.build_epub_subchap431()
         self.iterations = 4
 
+    def testPayload(self):
+        fixture = 'eventStorePayload'
+        event = util.build_epub_navigation_event(
+                learning_context = self.learning_context,
+                event_object = self.epub,
+                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                from_resource = self.from_resource,
+                target = self.target
+            )
+        envelope = util.get_caliper_envelope(self.sensor, [event])
+        util.put_fixture(fixture, envelope)
+        self.assertEqual(envelope.as_json(),
+                         util.get_fixture(fixture))
+        
+
     def testEvent(self):
         for i in range(self.iterations):
             event = util.build_epub_navigation_event(
