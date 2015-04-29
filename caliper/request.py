@@ -28,15 +28,21 @@ import json
 import requests
 import uuid
 
-from caliper.base import CaliperSerializable, HttpOptions
+from caliper.base import BaseEnvelope, CaliperSerializable, HttpOptions
 
-class EventStoreEnvelope(CaliperSerializable):
+class Envelope(BaseEnvelope):
+
+    _contexts = {
+        'ENVELOPE': 'http://purl.imsglobal/org/caliper/ctx/v1/Envelope'
+        }
+    
     def __init__(self,
             data = None,
             send_time = None,
-            sensor_id = None):
-        CaliperSerializable.__init__(self)
-        self._set_str_prop('@context', 'http://purl.imsglobal.org/caliper/ctx/v1/Envelope')
+            sensor_id = None,
+            **kwargs):
+        BaseEnvelope.__init__(self, **kwargs)
+        self._set_str_prop('@context', Envelope.Contexts['ENVELOPE'])
         if data and isinstance(data, collections.MutableSequence):
             if all( isinstance(item, CaliperSerializable) for item in data):
                 self._set_list_prop('data', data)
@@ -47,6 +53,10 @@ class EventStoreEnvelope(CaliperSerializable):
 
         self._set_str_prop('sendTime', send_time)
         self._set_str_prop('sensor', sensor_id)
+
+    @property
+    def context(self):
+        returnself._get_prop('@context')
         
     @property
     def data(self):
@@ -97,7 +107,7 @@ class EventStoreRequestor(object):
             caliper_object = None,
             send_time = None,
             sensor_id = None):
-        envelope = EventStoreEnvelope(
+        envelope = Envelope(
             data = caliper_object,
             send_time = send_time,
             sensor_id = sensor_id)
