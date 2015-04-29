@@ -26,12 +26,13 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 
 
-_DEBUG = False
+_DEBUG = True
 
 _SENSOR_ID = 'http://learning-app.some-university.edu/sensor'
 
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
+_EVENT_SEND_TIME = '2015-09-15T11:05:01.000Z'
 _STARTTIME = '2015-09-15T10:15:00.000Z'
 _ENDTIME = '2015-09-15T11:05:00.000Z'
 _PUBTIME = '2015-08-15T09:30:00.000Z'
@@ -76,11 +77,11 @@ def get_fixture(fixture_name):
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
-def put_fixture(fixture_name, event, debug=_DEBUG):
+def put_fixture(fixture_name, caliper_object, debug=_DEBUG):
     if debug:
         loc = _FIXTURE_OUT_DIR+fixture_name
         with open(loc+'_out.json', 'w') as f:
-            f.write(event.as_json()
+            f.write(caliper_object.as_json()
                     .replace('{"','{\n"')
                     .replace(', "',',\n"')
                     )
@@ -91,6 +92,17 @@ def put_fixture(fixture_name, event, debug=_DEBUG):
                     )
     else:
         pass
+
+
+### Sensor/event payloads ###
+## build a caliper envelope ##
+def get_caliper_envelope(sensor=None, caliper_object_list=None):
+    return caliper.request.Envelope(
+        data = caliper_object_list,
+        send_time = _EVENT_SEND_TIME,
+        sensor_id = sensor.id
+        )
+    
 
 ### Shared entity resources ###
 ## build a test learning context
