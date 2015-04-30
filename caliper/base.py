@@ -35,7 +35,7 @@ class Options(object):
         'CONNECTION_REQUEST_TIMEOUT': None,
         'CONNECTION_TIMEOUT': None,
         'HOST' : None,
-        'SO_TIMEOUT': None,
+        'SOCKET_TIMEOUT': None,
         }
 
     def __init__(self):
@@ -80,12 +80,12 @@ class Options(object):
             self._config['HOST'] = str(new_host)
 
     @property
-    def SO_TIMEOUT(self):
-        return self._config['SO_TIMEOUT']
-    @SO_TIMEOUT.setter
-    def SO_TIMEOUT(self, new_timeout):
+    def SOCKET_TIMEOUT(self):
+        return self._config['SOCKET_TIMEOUT']
+    @SOCKET_TIMEOUT.setter
+    def SOCKET_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
-            self._config['SO_TIMEOUT'] = int(new_timeout)
+            self._config['SOCKET_TIMEOUT'] = int(new_timeout)
         else:
             raise ValueError('new timeout value must be at least 1000 milliseconds')
         
@@ -95,14 +95,14 @@ class HttpOptions(Options):
             connection_request_timeout=10000,
             connection_timeout=10000,
             host='http://httpbin.org/post',
-            so_timeout=10000,
+            socket_timeout=10000,
             ):
         Options.__init__(self)
         self.API_KEY=api_key
         self.CONNECTION_REQUEST_TIMEOUT=connection_request_timeout
         self.CONNECTION_TIMEOUT=connection_timeout
         self.HOST=host
-        self.SO_TIMEOUT=so_timeout
+        self.SOCKET_TIMEOUT=socket_timeout
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
