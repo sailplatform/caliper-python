@@ -138,8 +138,7 @@ might send a basic navigation event to a caliper endpoint::
           event_object = the_caliper_DigitalResource_the_actor_is_using,
           navigatedFrom = the_caliper_DigitalResource_the_actor_came_from,
           target = the_caliper_DigitalResource_the_actor_is_going_to,
-          endedAtTime = the_time_when_the_actor_did_the_action
-      )
+          endedAtTime = the_time_when_the_actor_did_the_action )
 
   # Once built, you use your sensor to send your event
   the_sensor.send(the_event)
