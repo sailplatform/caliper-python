@@ -126,6 +126,14 @@ class Sensor(object):
         s.register_client('default',Client(config_options=config_options))
         return s
 
+    def describe(self, entity=None):
+        for client in self._clients.values():
+            client.describe(event=event, sensor_id=self.id)
+
+    def describe_batch(self, entity_list=None):
+        for client in self._clients.values():
+            client.describe_batch(entity_list=entity_list, sensor_id=self.id)
+
     def send(self, event=None):
         for client in self._clients.values():
             client.send(event=event, sensor_id=self.id)
