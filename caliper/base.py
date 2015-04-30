@@ -95,7 +95,6 @@ class HttpOptions(Options):
             connection_request_timeout=10000,
             connection_timeout=10000,
             host='http://httpbin.org/post',
-            sensor_id=None,
             so_timeout=10000,
             ):
         Options.__init__(self)
@@ -103,7 +102,6 @@ class HttpOptions(Options):
         self.CONNECTION_REQUEST_TIMEOUT=connection_request_timeout
         self.CONNECTION_TIMEOUT=connection_timeout
         self.HOST=host
-        self.SENSOR_ID=sensor_id
         self.SO_TIMEOUT=so_timeout
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
