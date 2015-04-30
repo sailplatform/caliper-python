@@ -111,19 +111,19 @@ class Sensor(object):
         self._clients = {}
 
     @staticmethod
-    def fashion_default_sensor_with_config(config_options=None, sensor_id=None):
-        if not( isinstance(config_options, HttpOptions)):
-            raise TypeError('config_options must implement HttpOptions')
-        s = Sensor(sensor_id=sensor_id)
-        s.register_client('default',Client(config_options=config_options))
-        return s
-
-    @staticmethod
     def fashion_default_sensor_with_client(client=None, sensor_id=None):
         if not( isinstance(client, Client)):
             raise TypeError('client must implement Client')
         s = Sensor(sensor_id=sensor_id)
         s.register_client('default',client)
+        return s
+
+    @staticmethod
+    def fashion_sensor_with_config(config_options=None, sensor_id=None):
+        if not( isinstance(config_options, HttpOptions)):
+            raise TypeError('config_options must implement HttpOptions')
+        s = Sensor(sensor_id=sensor_id)
+        s.register_client('default',Client(config_options=config_options))
         return s
 
     def send(self, event=None):

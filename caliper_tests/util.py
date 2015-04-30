@@ -63,7 +63,7 @@ def get_testing_options():
         api_key='6xp7jKrOSOWOgy3acxHFWA')
 
 def build_default_sensor():
-    return caliper.build_default_sensor_from_config(
+    return caliper.build_sensor_from_config(
         config_options=get_testing_options(),
         sensor_id=_SENSOR_ID) 
 

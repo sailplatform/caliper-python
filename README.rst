@@ -2,8 +2,8 @@
 Caliper-python
 ==============
 
-`Caliper-python` is a Python client for `Caliper <http://imsglobal.org/>`_ that
-provides an implementation of the Caliper Sensor API.
+`Caliper-python` is a Python client package for `Caliper <http://imsglobal.org/>`_
+that provides an implementation of the Caliper Sensor API.
 
 **NOTE**: Access to this draft code is reserved for IMS Contributing Members
 who are active participants of the IMS Learning Analytics Task
@@ -14,7 +14,7 @@ rules. This code is in draft form and will change substantially.
 
 Dependencies
 ============
-To effectively use this `Caliper-python` package, you will need to have Python,
+To effectively use this `caliper-python` package, you will need to have Python,
 pip, and setuptools installed. This package also depends on several third-party
 packages:
 
@@ -30,15 +30,16 @@ third-party packages in your local Python environment.
 
 Which platform
 --------------
-We developed `Caliper-python` primarily using the Python 3 platform; however,
-we've taken steps to make it portably usbale with Python 2 as well. Changes to
-the code base should ensure the tests run clean under Python 3 *and* 2.
+We developed `caliper-python` primarily using the Python 3 platform; however,
+we've taken steps to make it portably usbale with Python 2 as well (using
+the `six` package). Changes to the code base should ensure the tests run clean
+under Python 3 *and* 2.
 
 
 
 Build and install
 =================
-We built the `Caliper-python` to be packagable for loading from PyPi, or direct
+We built `caliper-python` to be packagable for loading from PyPi, or direct
 from a source bundle, with `pip`.
 
 If it's on PyPi, you can simply install it into your site-packages with::
@@ -59,7 +60,7 @@ If you want to install it from a source bundle, then use these steps:
 
 Changing and testing
 --------------------
-All the caliper-python code you would use to build and use a caliper sensor in
+All the `caliper-python` code you would use to build and use a caliper sensor in
 your application you can find in the `caliper` main module. The package also
 includes a set of test files in a `caliper_tests` main module; we did this not
 because we expect you'll use `caliper_tests` in production, but so that the
@@ -73,7 +74,7 @@ from within `caliper_tests`, run the unit tests::
   python3 test_events.py
 
 
-**Fixtures**. Your copy of the caliper-python repository (or the package) may
+**Fixtures**. Your copy of the `caliper-python` repository (or the package) may
 include a set of JSON fixtures in `caliper_tests/fixtures` -- these are
 the canonical event serializations used to test the sensor against. The
 canonical source for these fixtures you can find in the
@@ -87,6 +88,66 @@ changes will test well against the fixtures from the main common fixtures
 repository. When IMS makes updates to the `caliper-python` repository, it
 ensures that the updates do test well against the common fixtures repository.
 
+
+Using the package
+=================
+We made `caliper-python` with a lean integration layer for your application. To
+use the package, your application needs only::
+
+  import caliper
+
+Your application will need awareness of these parts of the package:
+
+* The `caliper.HttpOptions` class (for use with simple HTTP transport to a Caliper
+endpoint).
+
+* The `caliper.Sensor` class and its API.
+
+* The appropriate `caliper.profiles` metric profile enumeration classes that
+  contain the metric profile actions you want to support.
+
+* The `Event` and `Entity` subclasses (found in `caliper.events` and
+  `caliper.entities`, respectively) that you will need to use for the metric
+  profile actions you want to support.
+
+Here is a very simple example code scrap that demonstrates how an application
+might send a basic navigation event to a caliper endpoint::
+
+  import caliper
+
+  the_config = caliper.HttpOptions(
+        host='http://caliper-endpoint.your-school.edu/events/',
+        api_key='your-caliper-API-key' )
+
+  the_sensor = caliper.build_sensor_from_config(
+          sensor_id = 'http://learning-app.your-school.edu/sensor',
+          config_options = the_config )
+
+  # Here, you will have caliper entity representations of the various
+  # learning objects and entities in your wider system, and you provide
+  # them into the constructor for the event that has just happened.
+  #
+  # Note that you don't have to pass an action into the constructor because
+  # the NavigationEvent only supports one action, part of the
+  # Caliper base profile: caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO']
+  #
+  the_event = caliper.events.NavigationEvent(
+          actor = the_user_currently_acting_as_caliper_Actor_entity,
+          edApp = your_application_as_caliper_SoftwareApplication_entity,
+          group = the_course_offering_in_play_as_caliper_Organization_entity,
+          event_object = the_caliper_DigitalResource_the_actor_is_using,
+          navigatedFrom = the_caliper_DigitalResource_the_actor_came_from,
+          target = the_caliper_DigitalResource_the_actor_is_going_to,
+          endedAtTime = the_time_when_the_actor_did_the_action
+      )
+
+  # Once built, you use your sensor to send your event
+  the_sensor.send(the_event)
+
+Your actual use of the caliper code will certainly be more complex than
+this. For assistance getting from this very simple example through to more
+complex and realistic code-use, we encourage you to look at the unit tests in
+the package, and the common fixtures they test against.
 
 
 Copyright and License

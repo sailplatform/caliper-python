@@ -41,19 +41,21 @@ from caliper.sensor import Sensor as Sensor
 from caliper.base import HttpOptions as HttpOptions
 import caliper.entities as entities
 import caliper.events as events
+import caliper.profiles as profiles
 
 
 def build_default_sensor(sensor_id=None):
-    return Sensor.fashion_default_sensor_with_config(sensor_id=sensor_id,
-                                                     config_options=HttpOptions())
-
-def build_default_sensor_from_config(config_options=None, sensor_id=None):
-    return Sensor.fashion_default_sensor_with_config(config_options=config_options or HttpOptions(),
-                                                     sensor_id=sensor_id)
+    return Sensor.fashion_sensor_with_config(config_options=HttpOptions(),
+                                             sensor_id=sensor_id)
 
 def build_default_sensor_for_client(client=None, sensor_id=None):
     return Sensor.fashion_default_sensor_with_client(client=client,
                                                      sensor_id=sensor_id)
+
+def build_sensor_from_config(config_options=None, sensor_id=None):
+    return Sensor.fashion_sensor_with_config(config_options=config_options or HttpOptions(),
+                                                     sensor_id=sensor_id)
+
 
 ## set default logging handler to avoid "No handler found" warnings.
 ## Thanks to Kenneth Reitz' requests library for this pattern
