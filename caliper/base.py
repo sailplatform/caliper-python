@@ -18,14 +18,25 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from future.standard_library import install_aliases
+install_aliases()
+from future.utils import with_metaclass
+from builtins import *
 
 
 import collections
 import copy
 import json
-from rfc3987 import parse as rfc3987_parse
-import six
 
+## convenience functions
+from uritools import urisplit
+def is_valid_URI(uri):
+    parts = urisplit(uri)
+    if parts.scheme or parts.authority or parts.path or parts.fragment:
+        return True
+    else:
+        return False
 
 ### Default configuration values ###
 
@@ -46,7 +57,7 @@ class Options(object):
         return self._config['API_KEY']
     @API_KEY.setter
     def API_KEY(self, new_key):
-        if isinstance(new_key, six.string_types):
+        if isinstance(new_key, str):
             self._config['API_KEY'] = str(new_key)
         else:
             raise ValueError('new key value must be a string')
@@ -76,7 +87,7 @@ class Options(object):
         return self._config['HOST']
     @HOST.setter
     def HOST(self,new_host):
-        if rfc3987_parse(new_host, rule='URI'):
+        if is_valid_URI(new_host):
             self._config['HOST'] = str(new_host)
 
     @property
@@ -205,8 +216,7 @@ class MetaEntity(type):
     def Types(cls):
         return cls._types
 
-@six.add_metaclass(MetaEntity)
-class BaseEntity(CaliperSerializable):
+class BaseEntity(with_metaclass(MetaEntity, CaliperSerializable)):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
 
@@ -216,8 +226,7 @@ class MetaEnvelope(type):
     def Contexts(cls):
         return cls._contexts
 
-@six.add_metaclass(MetaEnvelope)
-class BaseEnvelope(CaliperSerializable):
+class BaseEnvelope(with_metaclass(MetaEnvelope, CaliperSerializable)):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
 
@@ -231,8 +240,7 @@ class MetaEvent(type):
     def Contexts(cls):
         return cls._contexts
 
-@six.add_metaclass(MetaEvent)
-class BaseEvent(CaliperSerializable):
+class BaseEvent(with_metaclass(MetaEvent, CaliperSerializable)):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
 
@@ -242,8 +250,7 @@ class MetaProfile(type):
     def Actions(cls):
         return cls._actions
 
-@six.add_metaclass(MetaProfile)
-class BaseProfile(object):
+class BaseProfile(with_metaclass(MetaProfile, object)):
     pass
 
 ### Roles ###
@@ -252,8 +259,7 @@ class MetaRole(type):
     def Roles(cls):
         return cls._roles
 
-@six.add_metaclass(MetaRole)
-class BaseRole(object):
+class BaseRole(with_metaclass(MetaRole, object)):
     pass
 
 ### Statuses ###
@@ -262,7 +268,6 @@ class MetaStatus(type):
     def Statuses(cls):
         return cls._statuses
 
-@six.add_metaclass(MetaStatus)
-class BaseStatus(object):
+class BaseStatus(with_metaclass(MetaStatus, object)):
     pass
 

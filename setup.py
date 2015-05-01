@@ -24,9 +24,9 @@ if sys.argv[-1] == 'publish':
 
 _packages = ['caliper', 'caliper_tests']
 
-_requires = ['requests >= 2.0.0',
-            'rfc3987 >= 1.3.4',
-            'six >= 1.8.0',
+_requires = ['future >= 0.14.3',
+             'requests >= 2.0.0',
+             'uritools >= 0.12.0'
              ]
 
 with open('README.rst', 'r', 'utf-8') as f:

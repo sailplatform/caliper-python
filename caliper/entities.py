@@ -18,15 +18,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from future.standard_library import install_aliases
+install_aliases()
+from builtins import *
 
 
 import collections
-from rfc3987 import parse as rfc3987_parse
-import six
 
 from caliper.base import BaseEntity, CaliperSerializable, BaseRole, BaseStatus
+from caliper.base import is_valid_URI
 from caliper.extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
@@ -68,8 +69,8 @@ class Entity(BaseEntity, schemadotorg.Thing):
 
         if not entity_id:
             raise ValueError('Entity must have an ID.')
-        elif not rfc3987_parse(entity_id, rule='URI'):
-            raise ValueError('Entity ID must be an IRI')
+        elif not is_valid_URI(entity_id):
+            raise ValueError('Entity ID must be a valid URI')
         else:
             self._set_str_prop('@id', entity_id)
             
@@ -466,7 +467,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             self._set_id_prop('isPartOf', isPartOf)
 
         if isinstance(keywords, collections.MutableSequence):
-            if all( isinstance(item, six.string_types) for item in keywords):
+            if all( isinstance(item, str) for item in keywords):
                 self._set_list_prop('keywords', keywords)
             else:
                 raise TypeError('keywords must be a list of keyword strings')
@@ -474,7 +475,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             self._set_list_prop('keywords', None)
 
         if isinstance(objectType, collections.MutableSequence):
-            if all( isinstance(item, six.string_types) for item in objectType ):
+            if all( isinstance(item, str) for item in objectType ):
                 self._set_list_prop('objectType', objectType)
             else:
                 raise TypeError('objectType must be a list of object type strings')
@@ -659,7 +660,7 @@ class TagAnnotation(Annotation):
         self._set_str_prop('@type', Annotation.Types['TAG_ANNOTATION'])
 
         if isinstance(tags, collections.MutableSequence):
-            if all( isinstance(item, six.string_types) for item in tags):
+            if all( isinstance(item, str) for item in tags):
                 self._set_list_prop('tags', tags)
             else:
                 raise TypeError('tags must be a list of strings')
@@ -673,12 +674,12 @@ class TextPositionSelector(CaliperSerializable):
             end = None):
         CaliperSerializable.__init__(self)
 
-        if not isinstance(end, six.string_types):
+        if not isinstance(end, str):
             raise ValueError('must provide an end string value')
         else:
             self._set_str_prop('end', end)
 
-        if not isinstance(start, six.string_types):
+        if not isinstance(start, str):
             raise ValueError('must provide a start string value')
         else:
             self._set_str_prop('start', start)
@@ -688,7 +689,7 @@ class TextPositionSelector(CaliperSerializable):
         return self._get_prop('end')
     @end.setter
     def end(self, new_end):
-        if not isinstance(new_end, six.string_types):
+        if not isinstance(new_end, str):
             raise ValueError('must provide a new end string value')
         else:
             self._set_str_prop('end', new_end)
@@ -698,7 +699,7 @@ class TextPositionSelector(CaliperSerializable):
         return self._get_prop('start')
     @start.setter
     def start(self, new_start):
-        if not isinstance(new_start, six.string_types):
+        if not isinstance(new_start, str):
             raise ValueError('must provide a new start string value')
         else:
             self._set_str_prop('start', new_start)
@@ -1105,7 +1106,7 @@ class FillinBlankResponse(Response):
         self._set_str_prop('@type', Response.Types['FILLINBLANK'])
 
         if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, six.string_types) for item in values):
+          if all( isinstance(item, str) for item in values):
             self._set_list_prop('values', values)
           else:
             raise TypeError('values must be a list of strings')
@@ -1131,7 +1132,7 @@ class MultipleResponseResponse(Response):
         self._set_str_prop('@type', Response.Types['MULTIPLERESPONSE'])
 
         if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, six.string_types) for item in values):
+          if all( isinstance(item, str) for item in values):
             self._set_list_prop('values', values)
           else:
             raise TypeError('values must be alist of strings')
@@ -1148,7 +1149,7 @@ class SelectTextResponse(Response):
         self._set_str_prop('@type', Response.Types['SELECTTEXT'])
 
         if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, six.string_types) for item in values):
+          if all( isinstance(item, str) for item in values):
             self._set_list_prop('values', values)
           else:
             raise TypeError('values must be alist of strings')

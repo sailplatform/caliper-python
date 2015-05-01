@@ -10,7 +10,7 @@ who are active participants of the IMS Learning Analytics Task
 Force. Dissemination of this code to outside participants is strictly
 prohibited. By accessing these materials you agree to abide by these
 rules. This code is in draft form and will change substantially.
-   
+
 
 Dependencies
 ============
@@ -18,23 +18,21 @@ To effectively use this `caliper-python` package, you will need to have Python,
 pip, and setuptools installed. This package also depends on several third-party
 packages:
 
-* requests
+* future -- (MIT licensed)
 
-* rfc3987
+* requests -- (Apache 2 licensed)
 
-* six
+* uritools -- (MIT licesed)
 
 To work with this package (maintain, use, run tests) you'll need to have these
 third-party packages in your local Python environment.
-
 
 Which platform
 --------------
 We developed `caliper-python` primarily using the Python 3 platform; however,
 we've taken steps to make it portably usbale with Python 2 as well (using
-the `six` package). Changes to the code base should ensure the tests run clean
+the `future` package). Changes to the code base should ensure the tests run clean
 under Python 3 *and* 2.
-
 
 
 Build and install

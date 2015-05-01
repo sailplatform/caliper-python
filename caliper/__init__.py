@@ -28,7 +28,10 @@ Caliper-compliant sensor or endpoint for you learning services.
 
 :license: GPLv3 or LPGLv3. See LICENSE for more details.
 """
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from future.standard_library import install_aliases
+install_aliases()
+from builtins import *
 
 __title__ = 'caliper_python'
 __version__ = '0.9.0'
@@ -37,6 +40,7 @@ __author__ = 'IMS Global Learning Consortium, Inc.'
 __license__ = 'LGPLv3'
 
 import os
+
 from caliper.sensor import Sensor as Sensor
 from caliper.base import HttpOptions as HttpOptions
 import caliper.entities as entities
