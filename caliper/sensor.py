@@ -18,12 +18,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from future.standard_library import install_aliases
+install_aliases()
+from builtins import *
 
 
 import collections
-import six
 import uuid
 
 from caliper.base import Options, HttpOptions
@@ -158,7 +159,7 @@ class Sensor(object):
         if not( isinstance(client, Client)):
             raise TypeError('client must implement Client')
 
-        if not( isinstance(key, six.string_types)):
+        if not( isinstance(key, str)):
             raise ValueError('key must be a string to use as a client registration key')
 
         self._clients.update({key:client})
