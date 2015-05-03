@@ -30,10 +30,10 @@ import copy
 import json
 
 ## convenience functions
-from uritools import urisplit
+## TODO: do better URI testing here; right now this is consistent with
+##       the other impls.
 def is_valid_URI(uri):
-    parts = urisplit(uri)
-    if parts.scheme or parts.authority or parts.path or parts.fragment:
+    if isinstance(uri, str):
         return True
     else:
         return False
@@ -58,7 +58,7 @@ class Options(object):
     @API_KEY.setter
     def API_KEY(self, new_key):
         if isinstance(new_key, str):
-            self._config['API_KEY'] = str(new_key)
+            self._config['API_KEY'] = new_key
         else:
             raise ValueError('new key value must be a string')
 

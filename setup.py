@@ -26,7 +26,6 @@ _packages = ['caliper', 'caliper_tests']
 
 _requires = ['future >= 0.14.3',
              'requests >= 2.0.0',
-             'uritools >= 0.12.0'
              ]
 
 with open('README.rst', 'r', 'utf-8') as f:

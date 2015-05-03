@@ -22,8 +22,6 @@ packages:
 
 * requests -- (Apache 2 licensed)
 
-* uritools -- (MIT licesed)
-
 To work with this package (maintain, use, run tests) you'll need to have these
 third-party packages in your local Python environment.
 
