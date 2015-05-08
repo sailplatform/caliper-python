@@ -464,7 +464,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         if isPartOf and (not isinstance(isPartOf, schemadotorg.CreativeWork)):
             raise TypeError('isPartOf must implement schemadotorg.CreativeWork')
         else:
-            self._set_id_prop('isPartOf', isPartOf)
+            self._set_obj_prop('isPartOf', isPartOf)
 
         if isinstance(keywords, collections.MutableSequence):
             if all( isinstance(item, str) for item in keywords):
@@ -495,13 +495,13 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
 
     @property
     def isPartOf(self):
-        return self._get_object('isPartOf')
+        return self._get_prop('isPartOf')
     @isPartOf.setter
     def isPartOf(self, new_object):
         if new_object and (not isinstance(new_object, schemadotorg.CreativeWork)):
             raise TypeError('new object must implement schemadotorg.CreativeWork')
         else:
-            self._set_id_prop('isPartOf', new_object)
+            self._set_obj_prop('isPartOf', new_object)
 
     @property
     def keywords(self):
