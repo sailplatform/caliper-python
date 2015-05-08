@@ -120,8 +120,7 @@ class AssessmentProfile(unittest.TestCase):
         assessment_item_event = util.build_assessment_item_event(
             learning_context = self.learning_context,
             assessment_item = self.assessment_item,
-            generated = util.build_assessment_item_attempt(learning_context=self.learning_context,
-                                                           assessment=self.assessment),
+            generated = self.item_attempt,
             action = caliper.profiles.AssessmentItemProfile.Actions['STARTED']
             )
         util.put_fixture(fixture, assessment_item_event)
