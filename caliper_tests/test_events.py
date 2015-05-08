@@ -97,7 +97,7 @@ class AssessmentProfile(unittest.TestCase):
     def setUp(self):
         self.learning_context = util.build_assessment_tool_learning_context()
         self.assessment = util.build_assessment()
-        self.assessment_item = self.assessment.assessmentItems[0]
+        self.assessment_item = util.build_assessment_items(assessment=self.assessment)[0]
         self.attempt = util.build_assessment_attempt(learning_context=self.learning_context,
                                                      assessment=self.assessment)
         self.item_attempt = util.build_assessment_item_attempt(learning_context=self.learning_context,

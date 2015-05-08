@@ -406,7 +406,7 @@ def build_assessment_items(assessment = None):
         ]
 
 def build_assessment():
-    asmnt = caliper.entities.Assessment(
+    return caliper.entities.Assessment(
         entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1',
         name = 'American Revolution - Key Figures Assessment',
         datePublished = _PUBTIME,
@@ -420,8 +420,6 @@ def build_assessment():
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         version = _VERNUM )
-    asmnt.assessmentItems = build_assessment_items(assessment=asmnt)
-    return asmnt
     
 
 ## build a test assessment attempt
