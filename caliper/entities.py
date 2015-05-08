@@ -897,33 +897,9 @@ class AssignableDigitalResource(DigitalResource, Assignable):
     
 class Assessment(AssignableDigitalResource):
 
-    def __init__(self,
-            assessmentItems = None,
-            **kwargs):
+    def __init__(self, **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT'])
-
-        if isinstance(assessmentItems, collections.MutableSequence):
-            if all( isinstance(item, AssessmentItem) for item in assessmentItems):
-                self._set_list_prop('assessmentItems', assessmentItems)
-            else:
-                raise TypeError('assessmentItems must be a list of AssessmentItems')
-        else:
-            self._set_list_prop('assessmentItems', None)
-
-    @property
-    def assessmentItems(self):
-        return self._get_prop('assessmentItems')
-    @assessmentItems.setter
-    def assessmentItems(self, new_items):
-        if isinstance(new_items, collections.MutableSequence):
-            if all( isinstance(item, AssessmentItem) for item in new_items):
-                self._set_list_prop('assessmentItems', new_items)
-            else:
-                raise TypeError('new items must be a list of AssessmentItems')
-        else:
-            self._set_list_prop('assessmentItems', None)
-        
 
 class AssessmentItem(AssignableDigitalResource):
 
