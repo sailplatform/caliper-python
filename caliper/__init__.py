@@ -39,13 +39,11 @@ __build__ = 0x010000
 __author__ = 'IMS Global Learning Consortium, Inc.'
 __license__ = 'LGPLv3'
 
-import os
+import logging, os
 
 from caliper.sensor import Sensor as Sensor
 from caliper.base import HttpOptions as HttpOptions
-import caliper.entities as entities
-import caliper.events as events
-import caliper.profiles as profiles
+__all__ = ['Sensor', 'HttpOptions']
 
 
 def build_default_sensor(sensor_id=None):
@@ -63,16 +61,6 @@ def build_sensor_from_config(config_options=None, sensor_id=None):
 
 ## set default logging handler to avoid "No handler found" warnings.
 ## Thanks to Kenneth Reitz' requests library for this pattern
-
-import logging
-try: # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
-
-
-logger = logging.getLogger(__name__).addHandler(NullHandler())
+logger = logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
