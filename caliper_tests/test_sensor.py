@@ -35,7 +35,8 @@ import caliper_tests.util as util
 class TestEvent(unittest.TestCase):
     def setUp(self):
         self.sensor = util.build_default_sensor()
-        self.learning_context = util.build_readium_student_learning_context()
+        self.learning_context = util.build_readium_app_learning_context()
+        self.student = util.build_student_554433()
         self.epub = util.build_epub_vol43()
         self.from_resource = util.build_AmRev101_landing_page()
         self.target = util.build_epub_subchap431()
@@ -45,6 +46,7 @@ class TestEvent(unittest.TestCase):
         fixture = 'eventStorePayload'
         event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
+                actor = self.student,
                 event_object = self.epub,
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
@@ -60,6 +62,7 @@ class TestEvent(unittest.TestCase):
         for i in range(self.iterations):
             event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
+                actor = self.student,
                 event_object = self.epub,
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
@@ -79,6 +82,7 @@ class TestEvent(unittest.TestCase):
         batch = [
             util.build_epub_navigation_event(
                 learning_context = self.learning_context,
+                actor = self.student,
                 event_object = self.epub,
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,

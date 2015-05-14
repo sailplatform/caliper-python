@@ -67,6 +67,7 @@ class Event(BaseEvent):
             event_object = None,
             generated = None,
             group = None,
+            membership = None,
             startedAtTime = None,
             target = None,
             **kwargs):
@@ -107,6 +108,11 @@ class Event(BaseEvent):
             raise TypeError('group must implement entities.Organization')
         else:
             self._set_obj_prop('group', group)
+
+        if membership and (not isinstance(membership, entities.Membership)):
+            raise TypeError('membership must implement entities.Membership')
+        else:
+            self._set_obj_prop('membership', membership)
 
         if not startedAtTime:
             raise ValueError('startedAtTime must have a time value')
