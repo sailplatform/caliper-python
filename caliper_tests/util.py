@@ -115,12 +115,7 @@ def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://some-university.edu/user/554433',
         dateCreated = _CREATETIME,
-        dateModified = _MODTIME,
-        membership = [
-            build_AmRev101_membership(),
-            build_AmRev101_section_membership(),
-            build_AmRev101_group_membership()
-            ]
+        dateModified = _MODTIME
         )
 
 def build_AmRev101_course():
@@ -138,7 +133,6 @@ def build_AmRev101_course_section():
         entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001',
         academicSession = 'Fall-2015',
         courseNumber = 'POL101',
-        membership = [ build_AmRev101_section_membership() ],
         name = 'American Revolution 101',
         subOrganizationOf = build_AmRev101_course(),
         dateCreated = _CREATETIME,
@@ -149,36 +143,17 @@ def build_AmRev101_group_001():
     return caliper.entities.Group(
         entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001',
         name = 'Discussion Group 001',
-        membership = [build_AmRev101_group_membership()],
         subOrganizationOf = build_AmRev101_course_section(),
         dateCreated = _CREATETIME
         )
 
 def build_AmRev101_membership():
     return caliper.entities.Membership(
-        entity_id = 'https://some-university.edu/membership/001',
-        member_id = 'https://some-university.edu/user/554433',
-        organization_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101',
-        roles = [caliper.entities.Role.Roles['LEARNER']],
-        status = caliper.entities.Status.Statuses['ACTIVE'],
-        dateCreated = _CREATETIME
-        )
-
-def build_AmRev101_section_membership():
-    return caliper.entities.Membership(
-        entity_id = 'https://some-university.edu/membership/002',
-        member_id = 'https://some-university.edu/user/554433',
-        organization_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001',
-        roles = [caliper.entities.Role.Roles['LEARNER']],
-        status = caliper.entities.Status.Statuses['ACTIVE'],
-        dateCreated = _CREATETIME
-        )
-
-def build_AmRev101_group_membership():
-    return caliper.entities.Membership(
-        entity_id = 'https://some-university.edu/membership/003',
-        member_id = 'https://some-university.edu/user/554433',
-        organization_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001',
+        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/roster/554433',
+        member = build_student_554433(),
+        organization = build_AmRev101_course_section(),
+        description = 'Roster entry',
+        name = 'American Revolution 101',
         roles = [caliper.entities.Role.Roles['LEARNER']],
         status = caliper.entities.Status.Statuses['ACTIVE'],
         dateCreated = _CREATETIME
@@ -186,13 +161,13 @@ def build_AmRev101_group_membership():
 
 def build_assessment_tool_learning_context():
     return caliper.entities.LearningContext(
-        agent = build_student_554433(),
         edApp = caliper.entities.SoftwareApplication(
             entity_id = 'https://com.sat/super-assessment-tool',
             name = 'Super Assessment Tool',
             dateCreated = _CREATETIME
             ),
-        group = build_AmRev101_group_001()
+        group = build_AmRev101_group_001(),
+        membership = build_AmRev101_membership()
         )
 
 def build_media_app():
@@ -205,9 +180,9 @@ def build_media_app():
 
 def build_video_media_tool_learning_context():
     return caliper.entities.LearningContext(
-        agent = build_student_554433(),
         edApp = build_media_app(),
-        group = build_AmRev101_group_001()
+        group = build_AmRev101_group_001(),
+        membership = build_AmRev101_membership()
         )
 
 def build_readium_app():
@@ -219,18 +194,10 @@ def build_readium_app():
         )
 
 def build_readium_app_learning_context():
-    app = build_readium_app()
     return caliper.entities.LearningContext(
-        agent = app,
-        edApp = app,
-        group = build_AmRev101_group_001()
-        )
-
-def build_readium_student_learning_context():
-    return caliper.entities.LearningContext(
-        agent = build_student_554433(),
         edApp = build_readium_app(),
-        group = build_AmRev101_group_001()
+        group = build_AmRev101_group_001(),
+        membership = build_AmRev101_membership()
         )
 
 ## build a test EPUB volume
@@ -348,6 +315,7 @@ def build_tag_annotation(annotated = None):
 
 ## build general annotation event
 def build_annotation_event(learning_context = None,
+                           actor = None,
                            event_object = None,
                            index = None,
                            annotation = None,
@@ -355,7 +323,8 @@ def build_annotation_event(learning_context = None,
     return caliper.events.AnnotationEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = caliper.entities.Frame(
             entity_id = event_object.id,
@@ -373,18 +342,20 @@ def build_annotation_event(learning_context = None,
 ### Assignable Profile ###
 ## build assignable event
 def build_assessment_assignable_event(learning_context = None,
+                                      actor = None,
                                       assessment = None,
                                       action = None):
     return caliper.events.AssignableEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = assessment,
         generated = caliper.entities.Attempt(
             entity_id = '{0}/{1}'.format(assessment.id, 'attempt1'),
             assignable = assessment,
-            actor = learning_context.agent,
+            actor = actor,
             count = 1,
             dateCreated = _CREATETIME,
             startedAtTime = _STARTTIME),
@@ -423,24 +394,24 @@ def build_assessment():
     
 
 ## build a test assessment attempt
-def build_assessment_attempt(learning_context=None,
+def build_assessment_attempt(actor = None,
                              assessment=None):
     return caliper.entities.Attempt(
         entity_id = '{0}/{1}'.format(assessment.id,'attempt1'),
         assignable = assessment,
-        actor = learning_context.agent,
+        actor = actor,
         count = 1,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
         )
 
 ## build a test assessment item attempt
-def build_assessment_item_attempt(learning_context=None,
+def build_assessment_item_attempt(actor = None,
                                   assessment=None):
     return caliper.entities.Attempt(
         entity_id = '{0}/{1}'.format(assessment.id,'item1/attempt1'),
         assignable = assessment,
-        actor = learning_context.agent,
+        actor = actor,
         count = 1,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
@@ -462,10 +433,11 @@ def build_assessment_item_response(assessment=None,
 
 ## build a test assessment result
 def build_assessment_result(learning_context=None,
+                            actor = None,
                             attempt=None):
     return caliper.entities.Result(
         entity_id = '{0}/{1}'.format(attempt.id, 'result'),
-        actor = learning_context.agent,
+        actor = actor,
         assignable = attempt.assignable,
         comment = 'Well done.',
         curvedTotalScore = 3.0,
@@ -480,13 +452,15 @@ def build_assessment_result(learning_context=None,
 
 ## Asessement event
 def build_assessment_event(learning_context = None,
+                           actor = None,
                            assessment = None,
                            attempt = None,
                            action = None):
     return caliper.events.AssessmentEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = assessment,
         generated = attempt,
@@ -494,13 +468,15 @@ def build_assessment_event(learning_context = None,
         )
 
 def build_assessment_item_event(learning_context = None,
+                                actor = None,
                                 assessment_item = None,
                                 generated = None,
                                 action = None):
     return caliper.events.AssessmentItemEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         isTimeDependent = False,
         event_object = assessment_item,
@@ -509,13 +485,15 @@ def build_assessment_item_event(learning_context = None,
         )
 
 def build_assessment_outcome_event(learning_context = None,
+                                   actor = None,
                                    attempt = None,
                                    result = None,
                                    action = None):
     return caliper.events.OutcomeEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = attempt,
         generated = result,
@@ -525,13 +503,15 @@ def build_assessment_outcome_event(learning_context = None,
 ### Media Profile ###
 ## Media event
 def build_video_media_event(learning_context = None,
+                            actor = None,
                             event_object = None,
                             location = None,
                             action = None):
     return caliper.events.MediaEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = event_object,
         target = location,
@@ -564,6 +544,7 @@ def build_video_media_location():
 
 ## Navigation event
 def build_epub_navigation_event(learning_context = None,
+                                actor = None,
                                 event_object = None,
                                 from_resource = None,
                                 target = None,
@@ -571,7 +552,8 @@ def build_epub_navigation_event(learning_context = None,
     return caliper.events.NavigationEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = event_object,
         target = caliper.entities.Frame(
@@ -589,13 +571,15 @@ def build_epub_navigation_event(learning_context = None,
 
 ## View event
 def build_epub_view_event(learning_context = None,
+                          actor = None,
                           event_object = None,
                           target = None,
                           action = None):
     return caliper.events.ViewEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        actor = learning_context.agent,
+        membership = learning_context.membership,
+        actor = actor,
         action = action,
         event_object = event_object,
         target = caliper.entities.Frame(
@@ -614,14 +598,14 @@ def build_epub_view_event(learning_context = None,
 
 ### Session profile
 
-def build_readium_session(learning_context=None):
+def build_readium_session(actor = None):
     return caliper.entities.Session(
         entity_id = 'https://github.com/readium/session-123456789',
         name = 'session-123456789',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         startedAtTime = _STARTTIME,
-        actor = learning_context.agent
+        actor = actor
         )
 
 ## Session event
@@ -633,6 +617,9 @@ def build_session_event(learning_context = None,
                         action = None):
     the_endtime = None
     the_duration = None
+    the_membership = None
+    if action != caliper.profiles.SessionProfile.Actions['TIMED_OUT']:
+        the_membership = learning_context.membership
     if target and (isinstance(target, caliper.entities.Session)):
         the_target = target
         the_target.endedAtTime = the_endtime = _ENDTIME
@@ -649,6 +636,7 @@ def build_session_event(learning_context = None,
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
+        membership = the_membership,
         actor = actor,
         action = action,
         event_object = event_object,

@@ -217,15 +217,23 @@ class Status(BaseStatus, w3c.Status):
 class Membership(Entity, w3c.Membership):
 
     def __init__(self,
-                 member_id = None,
-                 organization_id = None,
+                 member = None,
+                 organization = None,
                  roles = None,
                  status = None,
                  **kwargs):
         Entity.__init__(self,**kwargs)
         self._set_str_prop('@type', Entity.Types['MEMBERSHIP'])
-        self._set_str_prop('member', member_id)
-        self._set_str_prop('organization', organization_id)
+
+        if member and (not isinstance(member, Person)):
+            raise TypeError('member must implement Person')
+        else:
+            self._set_id_prop('member', member)
+
+        if organization and (not isinstance(organization, Organization)):
+            raise TypeError('organization must implement Organization')
+        else:
+            self._set_id_prop('organization', organization)
 
         if roles and isinstance(roles, collections.MutableSequence):
             if set(roles).issubset(set(Role.Roles.values())):
@@ -261,23 +269,9 @@ class Membership(Entity, w3c.Membership):
 ## Agent entities
 class Agent(Entity, foaf.Agent):
 
-    def __init__(self,
-                 membership = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Entity.__init__(self,**kwargs)
         self._set_str_prop('@type', Entity.Types['AGENT'])
-
-        if membership and isinstance(membership, collections.MutableSequence):
-            if all( isinstance(item, Membership) for item in membership ):
-                self._set_list_prop('hasMembership', membership)
-            else:
-                raise TypeError('membership must be a list of Memberships')
-        else:
-            self._set_list_prop('hasMembership', membership)
-
-    @property
-    def membership(self):
-        return self._get_prop('hasMembership')
 
 class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
 
@@ -297,30 +291,15 @@ class Organization(Entity, w3c.Organization):
         }
 
     def __init__(self,
-                 membership = None,
                  subOrganizationOf = None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@type', Entity.Types['ORGANIZATION'])
 
-        if membership and isinstance(membership, collections.MutableSequence):
-            if all( isinstance(item, Membership) for item in membership ):
-                self._set_list_prop('membership', membership)
-            else:
-                raise TypeError('membership must be a list of Memberships')
-        elif membership:
-            raise TypeError('membership must be a list of Memberships')
-        else:
-            self._set_list_prop('membership', None)
-
         if subOrganizationOf and (not isinstance(subOrganizationOf, w3c.Organization)):
             raise TypeError('subOrganizationOf must implement w3c.Organization')
         else:
             self._set_obj_prop('subOrganizationOf', subOrganizationOf)
-
-    @property
-    def membership(self):
-        return self._get_prop('membership')
 
     @property
     def subOrganizationOf(self):
@@ -382,16 +361,11 @@ class Group(Organization):
 class LearningContext(CaliperSerializable):
 
     def __init__(self,
-                 agent = None,
                  edApp = None,
-                 group = None):
+                 group = None,
+                 membership = None):
 
         CaliperSerializable.__init__(self)
-
-        if not isinstance(agent, Agent):
-            raise TypeError('agent must implement Agent')
-        else:
-            self._set_obj_prop('agent', agent)
 
         if edApp and (not isinstance(edApp, SoftwareApplication)):
             raise TypeError('edApp must implement SoftwareApplication')
@@ -402,11 +376,12 @@ class LearningContext(CaliperSerializable):
             raise TypeError('group must implement Organization')
         else:
             self._set_obj_prop('group', group)
-            
-    @property
-    def agent(self):
-        return self._get_prop('agent')
 
+        if membership and (not isinstance(membership, Membership)):
+            raise TypeError('membership must implement Membership')
+        else:
+            self._set_obj_prop('membership', membership)
+            
     @property
     def edApp(self):
         return self._get_prop('edApp')
@@ -414,6 +389,10 @@ class LearningContext(CaliperSerializable):
     @property
     def group(self):
         return self._get_prop('group')
+
+    @property
+    def membership(self):
+        return self._get_prop('membership')
 
 
 ## Learning objective
