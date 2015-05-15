@@ -22,15 +22,17 @@ packages:
 
 * requests -- (Apache 2 licensed)
 
+* tox -- (soft-dependency used only for tests, MIT licensed)
+
 To work with this package (maintain, use, run tests) you'll need to have these
 third-party packages in your local Python environment.
 
 Which platform
 --------------
-We developed `caliper-python` primarily using the Python 3.3+ platform; however,
+We developed `caliper-python` primarily using the Python 3.4+ platform; however,
 we've taken steps to make it portably usbale with Python 2.7 as well (using
 the `future` package). Changes to the code base should ensure the tests run clean
-under Python 3 *and* 2.
+under Python 3.4 *and* 2.7.
 
 
 Build and install
@@ -63,12 +65,9 @@ because we expect you'll use `caliper_tests` in production, but so that the
 various tests sub-modules in `caliper_test` can have portable visibility to one
 another.
 
-In general, whenever you might make changes to code in `caliper`, you should,
-from within `caliper_tests`, run the unit tests::
-
-  python3 test_sensor.py
-  python3 test_events.py
-
+**Testing**. In general, whenever you might make changes to code in `caliper`,
+you should run the unit tests. From the package's top-level directory, just use
+`tox` to run all the tests on both Python 2.7 and Python 3.4.
 
 **Fixtures**. Your copy of the `caliper-python` repository (or the package) may
 include a set of JSON fixtures in `caliper_tests/fixtures` -- these are
