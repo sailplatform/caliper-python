@@ -10,9 +10,9 @@ import sys
 from codecs import open
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup, find_packages
 
 
 import caliper
@@ -22,11 +22,13 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 
-_packages = ['caliper', 'caliper_tests']
+_packages = [ 'caliper',
+              'caliper.extern',
+              'caliper.util',
+              'caliper_tests' ]
 
-_requires = ['future >= 0.14.3',
-             'requests >= 2.0.0',
-             ]
+_requires = [ 'future >= 0.14.3',
+              'requests >= 2.0.0' ]
 
 with open('README.rst', 'r', 'utf-8') as f:
           readme = f.read()
@@ -41,9 +43,8 @@ setup(
     maintainer = caliper.__author__,
     maintainer_email = 'info@imsglobal.org',
     url = 'https://github.com/IMSGlobal/caliper-python',
-    packages = _packages,
-    package_data = {'': ['LICENSE', 'NOTICE' ] },
     include_package_data = True,
+    package_data = {'caliper_tests' : ['fixtures/*.json'] },
     install_requires = _requires,
     license = caliper.__license__,
     zip_safe = False,
