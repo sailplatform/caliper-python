@@ -31,7 +31,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 
 
-_DEBUG = False
+_DEBUG = True
 
 _SENSOR_ID = 'http://learning-app.some-university.edu/sensor'
 
@@ -609,40 +609,67 @@ def build_readium_session(actor = None):
         )
 
 ## Session event
-def build_session_event(learning_context = None,
-                        actor = None,
-                        event_object = None,
-                        session = None,
-                        target = None,
-                        action = None):
-    the_endtime = None
-    the_duration = None
-    the_membership = None
-    if action != caliper.profiles.SessionProfile.Actions['TIMED_OUT']:
-        the_membership = learning_context.membership
-    if target and (isinstance(target, caliper.entities.Session)):
-        the_target = target
-        the_target.endedAtTime = the_endtime = _ENDTIME
-        the_target.duration = the_duration = _DURATION
-    else:
-        the_target = caliper.entities.Frame(
-            entity_id = target.id,
-            name = target.name,
-            isPartOf = target.isPartOf,
-            dateCreated = _CREATETIME,
-            dateModified = _MODTIME,
-            version = _VERED,
-            index = 1)
+def build_session_login_event(learning_context = None,
+                              actor = None,
+                              event_object = None,
+                              session = None,
+                              target = None,
+                              action = None):
+    the_target = caliper.entities.Frame(
+        entity_id = target.id,
+        name = target.name,
+        isPartOf = target.isPartOf,
+        dateCreated = _CREATETIME,
+        dateModified = _MODTIME,
+        version = _VERED,
+        index = 1)
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
-        membership = the_membership,
+        membership = learning_context.membership,
         actor = actor,
         action = action,
+        target = the_target,
         event_object = event_object,
         generated = session,
-        target = the_target,
+        startedAtTime = _STARTTIME
+        )
+
+def build_session_logout_event(learning_context = None,
+                               actor = None,
+                               event_object = None,
+                               session = None,
+                               target = None,
+                               action = None):
+    target.endedAtTime = _ENDTIME
+    target.duration = _DURATION
+    return caliper.events.SessionEvent(
+        edApp = learning_context.edApp,
+        group = learning_context.group,
+        membership = learning_context.membership,
+        actor = actor,
+        action = action,
+        target = target,
+        event_object = event_object,
+        generated = session,
         startedAtTime = _STARTTIME,
-        endedAtTime = the_endtime,
-        duration = the_duration
+        endedAtTime = _ENDTIME,
+        duration = _DURATION
+        )
+
+def build_session_timeout_event(learning_context = None,
+                                actor = None,
+                                event_object = None,
+                                action = None):
+    event_object.endedAtTime = _ENDTIME
+    event_object.duration = _DURATION
+    return caliper.events.SessionEvent(
+        edApp = learning_context.edApp,
+        group = learning_context.group,
+        actor = learning_context.edApp,
+        action = action,
+        event_object = event_object,
+        startedAtTime = event_object.startedAtTime,
+        endedAtTime = _ENDTIME,
+        duration = _DURATION
         )

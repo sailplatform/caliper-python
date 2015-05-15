@@ -458,33 +458,36 @@ class SessionEvent(Event):
         else:
             self._set_str_prop('action', action)
 
-        if action == profiles.SessionProfile.Actions['TIMED_OUT']:
-            if not isinstance(actor, entities.SoftwareApplication):
-                raise TypeError('for TIMED_OUT action, actor must implement entities.SoftwareApplication')
-        else:
-            if not isinstance(actor, entities.Person):
-                raise TypeError('for actions other than TIMED_OUT, actor must implement entities.Person')
-        self._set_obj_prop('actor', actor)
-            
-        if not isinstance(event_object, entities.SoftwareApplication):
-            raise TypeError('event_object must implement entities.SoftwareApplication')
-        else:
-            self._set_obj_prop('object', event_object)
-
         if action == profiles.SessionProfile.Actions['LOGGED_IN']:
             if not isinstance(generated, entities.Session):
-                raise TypeError('for LOGGED_IN action, generated must implement entities.Session')
-            else:
-                self._set_obj_prop('generated', generated)
+                raise TypeError('for LOGGED_IN, generated must implement entities.Session')
             if not isinstance(target, entities.DigitalResource):
                 raise TypeError('for LOGGED_IN, target must impelement entities.DigitalResource')
-        else:
-            if not isinstance(target, entities.Session):
-                raise TypeError('for actions other than LOGGED_IN, target must impelement entities.Session')
+            if not isinstance(actor, entities.Person):
+                raise TypeError('for LOGGED_IN, actor must implement entities.Person')
+            if not isinstance(event_object, entities.SoftwareApplication):
+                raise TypeError('for LOGGED_IN, event_object must implement entities.SoftwareApplication')
+        elif action == profiles.SessionProfile.Actions['LOGGED_OUT']:
+            if not isinstance(actor, entities.Person):
+                raise TypeError('for LOGGED_OUT, actor must implement entities.Person')
             if not endedAtTime:
-                raise ValueError('for actions other than LOGGED_IN, endedAtTime must have a time value')
-            else:
-                self._set_str_prop('endedAtTime', endedAtTime)
+                raise ValueError('for LOGGED_OUT, endedAtTime must have a time value')
+            if not isinstance(event_object, entities.SoftwareApplication):
+                raise TypeError('for LOGGED_OUT, event_object must implement entities.SoftwareApplication')
+            if not isinstance(target, entities.Session):
+                raise TypeError('for LOGGED_OUT, target must impelement entities.Session')
+        elif action == profiles.SessionProfile.Actions['TIMED_OUT']:
+            if not isinstance(actor, entities.SoftwareApplication):
+                raise TypeError('for TIMED_OUT, actor must implement entities.SoftwareApplication')
+            if not endedAtTime:
+                raise ValueError('for TIMED_OUT, endedAtTime must have a time value')
+            if not isinstance(event_object, entities.Session):
+                raise TypeError('for TIMED_OUT, event_object must implement entities.Session')
+            
+        self._set_obj_prop('actor', actor)
+        self._set_str_prop('endedAtTime', endedAtTime)
+        self._set_obj_prop('generated', generated)
+        self._set_obj_prop('object', event_object)
         self._set_obj_prop('target', target)
 
 
