@@ -110,7 +110,15 @@ def get_caliper_envelope(sensor=None, caliper_object_list=None):
     
 
 ### Shared entity resources ###
-## build a test learning context
+def build_federated_session(actor=None):
+    return caliper.entities.Session(
+        entity_id = 'https://learning-platform.some-university.edu/federatedSession/123456789',
+        actor = actor,
+        dateCreated = _CREATETIME,
+        startedAtTime = _STARTTIME
+        )
+
+    
 def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://some-university.edu/user/554433',
@@ -546,6 +554,7 @@ def build_video_media_location():
 def build_epub_navigation_event(learning_context = None,
                                 actor = None,
                                 event_object = None,
+                                federated_session = None,
                                 from_resource = None,
                                 target = None,
                                 action = None):
@@ -555,6 +564,7 @@ def build_epub_navigation_event(learning_context = None,
         membership = learning_context.membership,
         actor = actor,
         action = action,
+        federatedSession = federated_session,
         event_object = event_object,
         target = caliper.entities.Frame(
             entity_id = target.id,

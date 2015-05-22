@@ -65,6 +65,7 @@ class Event(BaseEvent):
             edApp = None,
             endedAtTime = None,
             event_object = None,
+            federatedSession = None,
             generated = None,
             group = None,
             membership = None,
@@ -98,6 +99,11 @@ class Event(BaseEvent):
             raise TypeError('event_object must implement CaliperSerializable')
         else:
             self._set_obj_prop('object', event_object)
+
+        if federatedSession and (not isinstance(federatedSession, entities.Session)):
+            raise TypeError('federatedSession must implement Session')
+        else:
+            self._set_id_prop('federatedSession', federatedSession)
 
         if generated and (not isinstance(generated, entities.Generatable)):
             raise TypeError('generated must implement entities.Generatable')
@@ -152,6 +158,10 @@ class Event(BaseEvent):
     @property
     def endedAtTime(self):
         return self._get_prop('endedAtTime')
+
+    @property
+    def federatedSession(self):
+        return self._get_prop('federatedSession')
 
     @property
     def generated(self):
