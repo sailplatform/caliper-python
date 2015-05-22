@@ -94,7 +94,7 @@ use the package, your application needs only::
 Your application will need awareness of these parts of the package:
 
 * The `caliper.HttpOptions` class (for use with simple HTTP transport to a Caliper
-endpoint).
+  endpoint).
 
 * The `caliper.Sensor` class and its API.
 
