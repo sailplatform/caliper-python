@@ -31,19 +31,22 @@ from caliper.extern import foaf, schemadotorg
 ## Base event class
 class Event(BaseEvent):
 
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, individual contexts start getting split out
     _contexts = {
-        'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/AnnotationEvent',
-        'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/AssessmentEvent',
-        'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/AssessmentItemEvent',
-        'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1/AssignableEvent',
-        'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Event',
-        'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/MediaEvent',
-        'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/NavigationEvent',
-        'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/OutcomeEvent',
-        'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/ReadingEvent',
-        'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/SessionEvent',
-        'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/ViewEvent',
-        }    
+        'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        }
+        
     _types = {
         'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
         'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',

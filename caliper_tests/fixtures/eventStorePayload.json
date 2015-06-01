@@ -1,10 +1,10 @@
 {
-  "@context": "http://purl.imsglobal.org/caliper/ctx/v1/Envelope",
+  "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
   "sensor": "http://learning-app.some-university.edu/sensor",
   "sendTime": "2015-09-15T11:05:01.000Z",
   "data": [
     {
-      "@context": "http://purl.imsglobal.org/ctx/caliper/v1/NavigationEvent",
+      "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@type": "http://purl.imsglobal.org/caliper/v1/NavigationEvent",
       "actor": {
         "@id": "https://some-university.edu/user/554433",

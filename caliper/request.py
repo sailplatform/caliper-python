@@ -34,7 +34,7 @@ from caliper.base import BaseEnvelope, CaliperSerializable, HttpOptions
 class Envelope(BaseEnvelope):
 
     _contexts = {
-        'ENVELOPE': 'http://purl.imsglobal.org/caliper/ctx/v1/Envelope'
+        'ENVELOPE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context', 
         }
     
     def __init__(self,

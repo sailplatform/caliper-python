@@ -1,5 +1,5 @@
 {
-  "@context": "http://purl.imsglobal.org/ctx/caliper/v1/SessionEvent",
+  "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
   "@type": "http://purl.imsglobal.org/caliper/v1/SessionEvent",
   "actor": {
     "@id": "https://github.com/readium/readium-js-viewer",
