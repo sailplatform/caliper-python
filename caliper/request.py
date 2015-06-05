@@ -33,17 +33,12 @@ from caliper.base import BaseEnvelope, CaliperSerializable, HttpOptions
 
 class Envelope(BaseEnvelope):
 
-    _contexts = {
-        'ENVELOPE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context', 
-        }
-    
     def __init__(self,
             data = None,
             send_time = None,
             sensor_id = None,
             **kwargs):
         BaseEnvelope.__init__(self, **kwargs)
-        self._set_str_prop('@context', Envelope.Contexts['ENVELOPE'])
         if data and isinstance(data, collections.MutableSequence):
             if all( isinstance(item, CaliperSerializable) for item in data):
                 self._set_list_prop('data', data)
@@ -55,10 +50,6 @@ class Envelope(BaseEnvelope):
         self._set_str_prop('sendTime', send_time)
         self._set_str_prop('sensor', sensor_id)
 
-    @property
-    def context(self):
-        returnself._get_prop('@context')
-        
     @property
     def data(self):
         return self._get_prop('data')
