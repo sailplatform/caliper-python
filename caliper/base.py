@@ -216,15 +216,17 @@ class MetaEntity(type):
     def Types(cls):
         return cls._types
 
+    @property
+    def Contexts(cls):
+        return cls._contexts
+
 class BaseEntity(with_metaclass(MetaEntity, CaliperSerializable)):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
 
 ### Envelope ###
 class MetaEnvelope(type):
-    @property
-    def Contexts(cls):
-        return cls._contexts
+    pass
 
 class BaseEnvelope(with_metaclass(MetaEnvelope, CaliperSerializable)):
     def __init__(self, **kwargs):

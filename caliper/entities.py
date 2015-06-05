@@ -34,6 +34,31 @@ from caliper.extern import foaf, schemadotorg, w3c
 ## Base entity class
 class Entity(BaseEntity, schemadotorg.Thing):
 
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, indivdual contexts start getting split out
+    _contexts = {
+        'AGENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ATTEMPT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'COURSE_OFFERING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',        
+        'COURSE_SECTION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ENTITY': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'GENERATED': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'GROUP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MEDIA_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MEMBERSHIP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ORGANIZATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'PERSON': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'RESPONSE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'RESULT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'TARGET': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        }
+
     _types = {
         'AGENT': 'http://purl.imsglobal.org/caliper/v1/Agent',
         'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/Annotation',
@@ -73,7 +98,8 @@ class Entity(BaseEntity, schemadotorg.Thing):
             raise ValueError('Entity ID must be a valid URI')
         else:
             self._set_str_prop('@id', entity_id)
-            
+
+        self._set_str_prop('@context', Entity.Contexts['ENTITY'])
         self._set_str_prop('@type', Entity.Types['ENTITY'])
         self._set_str_prop('dateCreated', dateCreated)
         self._set_str_prop('dateModified', dateModified)
@@ -223,6 +249,7 @@ class Membership(Entity, w3c.Membership):
                  status = None,
                  **kwargs):
         Entity.__init__(self,**kwargs)
+        self._set_str_prop('@context', Entity.Contexts['MEMBERSHIP'])
         self._set_str_prop('@type', Entity.Types['MEMBERSHIP'])
 
         if member and (not isinstance(member, Person)):
@@ -271,18 +298,21 @@ class Agent(Entity, foaf.Agent):
 
     def __init__(self, **kwargs):
         Entity.__init__(self,**kwargs)
+        self._set_str_prop('@context', Entity.Contexts['AGENT'])
         self._set_str_prop('@type', Entity.Types['AGENT'])
 
 class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
 
     def __init__(self, **kwargs):
         Agent.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['SOFTWARE_APPLICATION'])
         self._set_str_prop('@type', Entity.Types['SOFTWARE_APPLICATION'])
 
 class Person(Agent):
 
     def __init__(self, **kwargs):
         Agent.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['PERSON'])
         self._set_str_prop('@type', Entity.Types['PERSON'])
 
 ## Organization entities
@@ -294,6 +324,7 @@ class Organization(Entity, w3c.Organization):
                  subOrganizationOf = None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['ORGANIZATION'])
         self._set_str_prop('@type', Entity.Types['ORGANIZATION'])
 
         if subOrganizationOf and (not isinstance(subOrganizationOf, w3c.Organization)):
@@ -317,6 +348,7 @@ class CourseOffering(Course):
                  courseNumber = None,
                  **kwargs):
         Organization.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['COURSE_OFFERING'])
         self._set_str_prop('@type', Entity.Types['COURSE_OFFERING'])
         self._set_str_prop('academicSession', academicSession)
         self._set_str_prop('courseNumber', courseNumber)
@@ -343,6 +375,7 @@ class CourseSection(CourseOffering):
                  category = None,
                  **kwargs):
         CourseOffering.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['COURSE_SECTION'])        
         self._set_str_prop('@type', Entity.Types['COURSE_SECTION'])
         self._set_str_prop('category', category)
 
@@ -354,6 +387,7 @@ class Group(Organization):
 
     def __init__(self, **kwargs):
         Organization.__init__(self,**kwargs)
+        self._set_str_prop('@context', Entity.Contexts['GROUP'])
         self._set_str_prop('@type', Entity.Types['GROUP'])
 
 
@@ -400,11 +434,25 @@ class LearningObjective(Entity):
 
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['LEARNING_OBJECTIVE'])
         self._set_str_prop('@type', Entity.Types['LEARNING_OBJECTIVE'])
 
     
 ## Creative works
 class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
+
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, indivdual contexts start getting split out
+    _contexts = {
+        'ASSIGNABLE_DIGITAL_RESOURCE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'EPUB_CHAPTER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'EPUB_PART': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'EPUB_SUB_CHAPTER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'EPUB_VOLUME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'FRAME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'WEB_PAGE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        }
 
     _types = {
         'ASSIGNABLE_DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/AssignableDigitalResource',
@@ -426,6 +474,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             version = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['DIGITAL_RESOURCE'])
         self._set_str_prop('@type', Entity.Types['DIGITAL_RESOURCE'])
         
         if alignedLearningObjective and isinstance(alignedLearningObjective, collections.MutableSequence):
@@ -500,6 +549,7 @@ class Frame(DigitalResource, Targetable):
             index = 0,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['FRAME'])
         self._set_str_prop('@type', DigitalResource.Types['FRAME'])
         self._set_int_prop('index', index)
 
@@ -511,41 +561,57 @@ class Reading(DigitalResource):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['READING'])
         self._set_str_prop('@type', DigitalResource.Types['READING'])
                      
 class WebPage(DigitalResource, schemadotorg.WebPage):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['WEB_PAGE'])
         self._set_str_prop('@type', DigitalResource.Types['WEB_PAGE'])
 
 class EpubChapter(DigitalResource):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['EPUB_CHAPTER'])
         self._set_str_prop('@type', DigitalResource.Types['EPUB_CHAPTER'])
     
 class EpubPart(DigitalResource):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['EPUB_PART'])
         self._set_str_prop('@type', DigitalResource.Types['EPUB_PART'])
 
 class EpubSubChapter(DigitalResource):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['EPUB_SUB_CHAPTER'])
         self._set_str_prop('@type', DigitalResource.Types['EPUB_SUB_CHAPTER'])
 
 class EpubVolume(DigitalResource):
 
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['EPUB_VOLUME'])
         self._set_str_prop('@type', DigitalResource.Types['EPUB_VOLUME'])
 
 
 ## Annotation entities
 class Annotation(Entity, Generatable):
+
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, indivdual contexts start getting split out
+    _contexts = {
+        'BOOKMARK_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'HIGHLIGHT_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'SHARED_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'TAG_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        }
+        
     _types = {
         'BOOKMARK_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation',
         'HIGHLIGHT_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/HighlightAnnotation',
@@ -557,6 +623,7 @@ class Annotation(Entity, Generatable):
             annotated = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['ANNOTATION'])
         self._set_str_prop('@type', Entity.Types['ANNOTATION'])
 
         if annotated and (not isinstance(annotated, DigitalResource)):
@@ -579,6 +646,7 @@ class BookmarkAnnotation(Annotation):
             bookmarkNotes = None,
             **kwargs):
         Annotation.__init__(self, **kwargs)
+        self._set_str_prop('@context', Annotation.Contexts['BOOKMARK_ANNOTATION'])
         self._set_str_prop('@type', Annotation.Types['BOOKMARK_ANNOTATION'])
         self._set_str_prop('bookmarkNotes', bookmarkNotes)
                  
@@ -593,6 +661,7 @@ class HighlightAnnotation(Annotation):
             selectionText = None,
             **kwargs):
         Annotation.__init__(self, **kwargs)
+        self._set_str_prop('@context', Annotation.Contexts['HIGHLIGHT_ANNOTATION'])
         self._set_str_prop('@type', Annotation.Types['HIGHLIGHT_ANNOTATION'])
 
         if selection and (not isinstance(selection, TextPositionSelector)):
@@ -616,6 +685,7 @@ class SharedAnnotation(Annotation):
             withAgents = None,
             **kwargs):
         Annotation.__init__(self, **kwargs)
+        self._set_str_prop('@context', Annotation.Contexts['SHARED_ANNOTATION'])
         self._set_str_prop('@type', Annotation.Types['SHARED_ANNOTATION'])
 
         if isinstance(withAgents, collections.MutableSequence):
@@ -636,6 +706,7 @@ class TagAnnotation(Annotation):
             tags = None,
             **kwargs):
         Annotation.__init__(self, **kwargs)
+        self._set_str_prop('@context', Annotation.Contexts['TAG_ANNOTATION'])
         self._set_str_prop('@type', Annotation.Types['TAG_ANNOTATION'])
 
         if isinstance(tags, collections.MutableSequence):
@@ -712,6 +783,7 @@ class Attempt(Entity, Generatable):
             startedAtTime = None,
             **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['ATTEMPT'])
         self._set_str_prop('@type', Entity.Types['ATTEMPT'])
 
         if actor and (not isinstance(actor, Agent)):
@@ -768,6 +840,22 @@ class Attempt(Entity, Generatable):
         return self._get_prop('startedAtTime')
 
 class Response(Entity, Generatable):
+
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, indivdual contexts start getting split out
+    _contexts = {
+        # 'DRAGOBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        # 'ESSAY': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        # 'HOTSPOT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'FILLINBLANK': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MULTIPLECHOICE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MULTIPLERESPONSE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'SELECTTEXT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        # 'SHORTANSWER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        # 'SLIDER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'TRUEFALSE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context'
+        }
+    
     _types = {
         # 'DRAGOBJECT': 'http://purl.imsglobal.org/caliper/v1/Response/DragObject',
         # 'ESSAY': 'http://purl.imsglobal.org/caliper/v1/Response/Essay',
@@ -791,6 +879,7 @@ class Response(Entity, Generatable):
             values = None,
             **kwargs):
         Entity.__init__(self,**kwargs)
+        self._set_str_prop('@context', Entity.Contexts['RESPONSE'])
         self._set_str_prop('@type', Entity.Types['RESPONSE'])
 
         if actor and (not isinstance(actor, Agent)):
@@ -846,6 +935,14 @@ class Response(Entity, Generatable):
 
 ## Assessment entities
 class AssignableDigitalResource(DigitalResource, Assignable):
+
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, indivdual contexts start getting split out
+    _contexts = {
+        'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        }
+    
     _types = {
         'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/Assessment',
         'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem',
@@ -861,6 +958,7 @@ class AssignableDigitalResource(DigitalResource, Assignable):
             maxScore = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', DigitalResource.Contexts['ASSIGNABLE_DIGITAL_RESOURCE'])        
         self._set_str_prop('@type', DigitalResource.Types['ASSIGNABLE_DIGITAL_RESOURCE'])
         self._set_str_prop('dateToActivate', dateToActivate)
         self._set_str_prop('dateToShow', dateToShow)
@@ -878,6 +976,7 @@ class Assessment(AssignableDigitalResource):
 
     def __init__(self, **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', AssignableDigitalResource.Contexts['ASSESSMENT'])
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT'])
 
 class AssessmentItem(AssignableDigitalResource):
@@ -886,6 +985,7 @@ class AssessmentItem(AssignableDigitalResource):
                  isTimeDependent = False,
                  **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', AssignableDigitalResource.Contexts['ASSESSMENT_ITEM'])        
         self._set_str_prop('@type', AssignableDigitalResource.Types['ASSESSMENT_ITEM'])
         self._set_bool_prop('isTimeDependent', isTimeDependent)
 
@@ -897,6 +997,16 @@ class AssessmentItem(AssignableDigitalResource):
 ## Media entities
     
 class MediaObject(DigitalResource, schemadotorg.MediaObject):
+
+    ## Use the base context value here, but preserve the context labels
+    ## in case, in the future, indivdual contexts start getting split out
+    _contexts = {
+        'AUDIO_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'IMAGE_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'VIDEO_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MEDIA_LOCATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        }
+    
     _types = {
         'AUDIO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/AudioObject',
         'IMAGE_OBJECT': 'http://purl.imsglobal.org/caliper/v1/ImageObject',
@@ -908,6 +1018,7 @@ class MediaObject(DigitalResource, schemadotorg.MediaObject):
             duration = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['MEDIA_OBJECT'])
         self._set_str_prop('@type', Entity.Types['MEDIA_OBJECT'])
         self._set_int_prop('duration', duration) ## Is this the same as an Attempt duration?
 
@@ -921,6 +1032,7 @@ class MediaLocation(DigitalResource, Targetable):
             currentTime = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', MediaObject.Contexts['MEDIA_LOCATION'])
         self._set_str_prop('@type', MediaObject.Types['MEDIA_LOCATION'])
         self._set_int_prop('currentTime', currentTime)
 
@@ -937,6 +1049,7 @@ class AudioObject(MediaObject, schemadotorg.AudioObject):
             volumeMin = None,
             **kwargs):
         MediaObject.__init__(self, **kwargs)
+        self._set_str_prop('@context', MediaObject.Contexts['AUDIO_OBJECT'])
         self._set_str_prop('@type', MediaObject.Types['AUDIO_OBJECT'])
         self._set_bool_prop('muted', muted)
         self._set_str_prop('volumeLevel', volumeLevel)
@@ -964,12 +1077,14 @@ class ImageObject(MediaObject, schemadotorg.ImageObject):
 
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
+        self._set_str_prop('@context', MediaObject.Contexts['IMAGE_OBJECT'])
         self._set_str_prop('@type', MediaObject.Types['IMAGE_OBJECT'])
 
 class VideoObject(MediaObject, schemadotorg.VideoObject):
 
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
+        self._set_str_prop('@context', MediaObject.Contexts['VIDEO_OBJECT'])
         self._set_str_prop('@type', MediaObject.Types['VIDEO_OBJECT'])
 
 ## Outcome entities
@@ -988,6 +1103,7 @@ class Result(Entity, Generatable):
             totalScore = 0.0,
             **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['RESULT'])
         self._set_str_prop('@type', Entity.Types['RESULT'])
 
         if actor and (not isinstance(actor, Agent)):
@@ -1057,7 +1173,7 @@ class FillinBlankResponse(Response):
                  values = None,
                  **kwargs):
         Response.__init__(self,**kwargs)
-
+        self._set_str_prop('@context', Response.Contexts['FILLINBLANK'])
         self._set_str_prop('@type', Response.Types['FILLINBLANK'])
 
         if values and isinstance(values, collections.MutableSequence):
@@ -1074,7 +1190,7 @@ class MultipleChoiceResponse(Response):
                  values = None,
                  **kwargs):
         Response.__init__(self,**kwargs)
-
+        self._set_str_prop('@context', Response.Contexts['MULTIPLECHOICE'])
         self._set_str_prop('@type', Response.Types['MULTIPLECHOICE'])
 
 class MultipleResponseResponse(Response):
@@ -1083,7 +1199,7 @@ class MultipleResponseResponse(Response):
                  values = None,
                  **kwargs):
         Response.__init__(self,**kwargs)
-
+        self._set_str_prop('@context', Response.Contexts['MULTIPLERESPONSE'])
         self._set_str_prop('@type', Response.Types['MULTIPLERESPONSE'])
 
         if values and isinstance(values, collections.MutableSequence):
@@ -1100,7 +1216,7 @@ class SelectTextResponse(Response):
                  values = None,
                  **kwargs):
         Response.__init__(self,**kwargs)
-
+        self._set_str_prop('@context', Response.Contexts['SELECTTEXT'])
         self._set_str_prop('@type', Response.Types['SELECTTEXT'])
 
         if values and isinstance(values, collections.MutableSequence):
@@ -1117,7 +1233,7 @@ class TrueFalseResponse(Response):
                  values = None,
                  **kwargs):
         Response.__init__(self,**kwargs)
-
+        self._set_str_prop('@context', Response.Contexts['TRUEFALSE'])
         self._set_str_prop('@type', Response.Types['TRUEFALSE'])
 
 
@@ -1131,6 +1247,7 @@ class Session(Entity, Generatable, Targetable):
                  startedAtTime = None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('@context', Entity.Contexts['SESSION'])
         self._set_str_prop('@type', Entity.Types['SESSION'])
 
         if not isinstance(actor, foaf.Agent):

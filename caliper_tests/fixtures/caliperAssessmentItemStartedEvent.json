@@ -2,6 +2,7 @@
   "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
   "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent",
   "actor": {
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://some-university.edu/user/554433",
     "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
     "name": null,
@@ -12,6 +13,7 @@
   },
   "action": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started",
   "object": {
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1/item1",
     "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
     "name": "Assessment Item 1",
@@ -20,6 +22,7 @@
     "alignedLearningObjective": [],
     "keywords": [],
     "isPartOf": {
+      "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1",
       "@type": "http://purl.imsglobal.org/caliper/v1/Assessment",
       "name": "American Revolution - Key Figures Assessment",
@@ -57,6 +60,7 @@
   },
   "target": null,
   "generated": {
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1/item1/attempt1",
     "@type": "http://purl.imsglobal.org/caliper/v1/Attempt",
     "name": null,
@@ -75,6 +79,7 @@
   "endedAtTime": null,
   "duration": null,
   "edApp": {
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://com.sat/super-assessment-tool",
     "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
     "name": "Super Assessment Tool",
@@ -84,11 +89,13 @@
     "dateModified": null
   },
   "group": {
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001",
     "@type": "http://purl.imsglobal.org/caliper/v1/lis/Group",
     "name": "Discussion Group 001",
     "description": null,
     "subOrganizationOf": {
+      "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/section/001",
       "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection",
       "courseNumber": "POL101",
@@ -97,6 +104,7 @@
       "category": null,
       "academicSession": "Fall-2015",
       "subOrganizationOf": {
+        "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
         "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering",
         "courseNumber": "POL101",
@@ -117,6 +125,7 @@
     "dateModified": null
   },
   "membership": {
+    "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/roster/554433",
     "@type": "http://purl.imsglobal.org/caliper/v1/lis/Membership",
     "name": "American Revolution 101",
