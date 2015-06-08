@@ -37,14 +37,12 @@ class Entity(BaseEntity, schemadotorg.Thing):
     ## Use the base context value here, but preserve the context labels
     ## in case, in the future, indivdual contexts start getting split out
     _contexts = {
-        'AGENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'ATTEMPT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'COURSE_OFFERING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',        
         'COURSE_SECTION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'ENTITY': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'GENERATED': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'GROUP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'MEDIA_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
@@ -55,19 +53,16 @@ class Entity(BaseEntity, schemadotorg.Thing):
         'RESULT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'TARGET': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         }
 
     _types = {
-        'AGENT': 'http://purl.imsglobal.org/caliper/v1/Agent',
         'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/Annotation',
         'ATTEMPT': 'http://purl.imsglobal.org/caliper/v1/Attempt',
         'COURSE_OFFERING': 'http://purl.imsglobal.org/caliper/v1/lis/CourseOffering',        
         'COURSE_SECTION': 'http://purl.imsglobal.org/caliper/v1/lis/CourseSection',
         'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/DigitalResource',
         'ENTITY': 'http://purl.imsglobal.org/caliper/v1/Entity',
-        'GENERATED': 'http://purl.imsglobal.org/caliper/v1/Generated',
         'GROUP': 'http://purl.imsglobal.org/caliper/v1/lis/Group',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
         'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
@@ -78,7 +73,6 @@ class Entity(BaseEntity, schemadotorg.Thing):
         'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
         'SESSION': 'http://purl.imsglobal.org/caliper/v1/Session',
         'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
-        'TARGET': 'http://purl.imsglobal.org/caliper/v1/Target',
         'VIEW': 'http://purl.imsglobal.org/caliper/v1/View',
         }
 
@@ -298,8 +292,6 @@ class Agent(Entity, foaf.Agent):
 
     def __init__(self, **kwargs):
         Entity.__init__(self,**kwargs)
-        self._set_str_prop('@context', Entity.Contexts['AGENT'])
-        self._set_str_prop('@type', Entity.Types['AGENT'])
 
 class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
 
@@ -461,7 +453,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         'EPUB_SUB_CHAPTER': 'http://www.idpf.org/epub/vocab/structure/#subchapter',
         'EPUB_VOLUME': 'http://www.idpf.org/epub/vocab/structure/#volume',
         'FRAME': 'http://purl.imsglobal.org/caliper/v1/Frame',
-        'READING': 'http://www.idpf.org/epub/vocab/structure',
+        'READING': 'http://purl.imsglobal.org/caliper/v1/Reading',
         'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage',
         }
         
@@ -857,16 +849,16 @@ class Response(Entity, Generatable):
         }
     
     _types = {
-        # 'DRAGOBJECT': 'http://purl.imsglobal.org/caliper/v1/Response/DragObject',
-        # 'ESSAY': 'http://purl.imsglobal.org/caliper/v1/Response/Essay',
-        # 'HOTSPOT': 'http://purl.imsglobal.org/caliper/v1/Response/HotSpot',
-        'FILLINBLANK': 'http://purl.imsglobal.org/caliper/v1/Response/FillinBlank',
-        'MULTIPLECHOICE': 'http://purl.imsglobal.org/caliper/v1/Response/MultipleChoice',
-        'MULTIPLERESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response/MultipleResponse',
-        'SELECTTEXT': 'http://purl.imsglobal.org/caliper/v1/Response/SelectText',
-        # 'SHORTANSWER': 'http://purl.imsglobal.org/caliper/v1/Response/ShortAnswer',
-        # 'SLIDER': 'http://purl.imsglobal.org/caliper/v1/Response/Slider',
-        'TRUEFALSE': 'http://purl.imsglobal.org/caliper/v1/Response/TrueFalse'
+        # 'DRAGOBJECT': 'http://purl.imsglobal.org/caliper/v1/DragObjectResponse',
+        # 'ESSAY': 'http://purl.imsglobal.org/caliper/v1/EssayResponse',
+        # 'HOTSPOT': 'http://purl.imsglobal.org/caliper/v1/HotSpotResponse',
+        'FILLINBLANK': 'http://purl.imsglobal.org/caliper/v1/FillinBlankResponse',
+        'MULTIPLECHOICE': 'http://purl.imsglobal.org/caliper/v1/MultipleChoiceResponse',
+        'MULTIPLERESPONSE': 'http://purl.imsglobal.org/caliper/v1/MultipleResponseResponse',
+        'SELECTTEXT': 'http://purl.imsglobal.org/caliper/v1/SelectTextResponse',
+        # 'SHORTANSWER': 'http://purl.imsglobal.org/caliper/v1/ShortAnswerResponse',
+        # 'SLIDER': 'http://purl.imsglobal.org/caliper/v1/SliderResponse',
+        'TRUEFALSE': 'http://purl.imsglobal.org/caliper/v1/TrueFalseResponse'
         }
 
     def __init__(self,
