@@ -62,7 +62,7 @@
   "generated": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.edu/politicalScience/2015/american-revolution-101/assessment/001/item/001/response/001",
-    "@type": "http://purl.imsglobal.org/caliper/v1/Response/FillinBlank",
+    "@type": "http://purl.imsglobal.org/caliper/v1/FillinBlankResponse",
     "name": null,
     "description": null,
     "extensions": {},
