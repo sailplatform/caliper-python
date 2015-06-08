@@ -31,9 +31,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 
 
-_DEBUG = False
+_DEBUG = True
 
-_SENSOR_ID = 'http://learning-app.some-university.edu/sensor'
+_SENSOR_ID = 'https://example.edu/sensor/001'
 
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
@@ -112,7 +112,7 @@ def get_caliper_envelope(sensor=None, caliper_object_list=None):
 ### Shared entity resources ###
 def build_federated_session(actor=None):
     return caliper.entities.Session(
-        entity_id = 'https://learning-platform.some-university.edu/federatedSession/123456789',
+        entity_id = 'https://example.edu/lms/federatedSession/123456789',
         actor = actor,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
@@ -121,14 +121,14 @@ def build_federated_session(actor=None):
     
 def build_student_554433():
     return caliper.entities.Person(
-        entity_id = 'https://some-university.edu/user/554433',
+        entity_id = 'https://example.edu/user/554433',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
 def build_AmRev101_course():
     return caliper.entities.CourseOffering(
-        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101',
+        entity_id = 'https://example.edu/politicalScience/2015/american-revolution-101',
         academicSession = 'Fall-2015',
         courseNumber = 'POL101',
         name = 'Political Science 101: The American Revolution',
@@ -138,7 +138,7 @@ def build_AmRev101_course():
 
 def build_AmRev101_course_section():
     return caliper.entities.CourseSection(
-        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001',
+        entity_id = 'https://example.edu/politicalScience/2015/american-revolution-101/section/001',
         academicSession = 'Fall-2015',
         courseNumber = 'POL101',
         name = 'American Revolution 101',
@@ -149,7 +149,7 @@ def build_AmRev101_course_section():
 
 def build_AmRev101_group_001():
     return caliper.entities.Group(
-        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001',
+        entity_id = 'https://example.edu/politicalScience/2015/american-revolution-101/section/001/group/001',
         name = 'Discussion Group 001',
         subOrganizationOf = build_AmRev101_course_section(),
         dateCreated = _CREATETIME
@@ -157,7 +157,7 @@ def build_AmRev101_group_001():
 
 def build_AmRev101_membership():
     return caliper.entities.Membership(
-        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/roster/554433',
+        entity_id = 'https://example.edu/politicalScience/2015/american-revolution-101/roster/554433',
         member = build_student_554433(),
         organization = build_AmRev101_course_section(),
         description = 'Roster entry',
@@ -170,7 +170,7 @@ def build_AmRev101_membership():
 def build_assessment_tool_learning_context():
     return caliper.entities.LearningContext(
         edApp = caliper.entities.SoftwareApplication(
-            entity_id = 'https://com.sat/super-assessment-tool',
+            entity_id = 'https://example.com/super-assessment-tool',
             name = 'Super Assessment Tool',
             dateCreated = _CREATETIME
             ),
@@ -180,7 +180,7 @@ def build_assessment_tool_learning_context():
 
 def build_media_app():
     return caliper.entities.SoftwareApplication(
-        entity_id = 'https://com.sat/super-media-tool',
+        entity_id = 'https://example.com/super-media-tool',
         name = 'Super Media Tool',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
@@ -195,8 +195,8 @@ def build_video_media_tool_learning_context():
 
 def build_readium_app():
     return caliper.entities.SoftwareApplication(
-        entity_id = 'https://github.com/readium/readium-js-viewer',
-        name = 'Readium',
+        entity_id = 'https://example.com/viewer',
+        name = 'ePub',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
@@ -211,7 +211,7 @@ def build_readium_app_learning_context():
 ## build a test EPUB volume
 def build_epub_vol43():
     return caliper.entities.EpubVolume(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3)',
+        entity_id = 'https://example.com/viewer/book/34843#epubcfi(/4/3)',
         name = 'The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
@@ -220,7 +220,7 @@ def build_epub_vol43():
 
 def build_epub_subchap431():
     return caliper.entities.EpubSubChapter(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/1)',
+        entity_id = 'https://example.com/viewer/book/34843#epubcfi(/4/3/1)',
         name = 'Key Figures: George Washington',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
@@ -230,7 +230,7 @@ def build_epub_subchap431():
 
 def build_epub_subchap432():
     return caliper.entities.EpubSubChapter(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/2)',
+        entity_id = 'https://example.com/viewer/book/34843#epubcfi(/4/3/2)',
         name = 'Key Figures: Lord North',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
@@ -240,7 +240,7 @@ def build_epub_subchap432():
 
 def build_epub_subchap433():
     return caliper.entities.EpubSubChapter(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/3)',
+        entity_id = 'https://example.com/viewer/book/34843#epubcfi(/4/3/3)',
         name = 'Key Figures: John Adams',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
@@ -250,7 +250,7 @@ def build_epub_subchap433():
 
 def build_epub_subchap434():
     return caliper.entities.EpubSubChapter(
-        entity_id = 'https://github.com/readium/readium-js-viewer/book/34843#epubcfi(/4/3/4)',
+        entity_id = 'https://example.com/viewer/book/34843#epubcfi(/4/3/4)',
         name = 'The Stamp Act Crisis',
         isPartOf = build_epub_vol43(),
         dateCreated = _CREATETIME,
@@ -262,7 +262,7 @@ def build_epub_subchap434():
 ## build a course landing page
 def build_AmRev101_landing_page():
     return caliper.entities.WebPage(
-        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/index.html',
+        entity_id = 'https://example.edu/politicalScience/2015/american-revolution-101/index.html',
         name = 'American Revolution 101 Landing Page',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
@@ -274,7 +274,7 @@ def build_AmRev101_landing_page():
 ## build test annotations
 def build_bookmark_annotation(annotated = None):
     return caliper.entities.BookmarkAnnotation(
-        entity_id = 'https://someEduApp.edu/bookmarks/00001',
+        entity_id = 'https://example.edu/bookmarks/00001',
         bookmarkNotes = 'The Intolerable Acts (1774)--bad idea Lord North',
         annotated = annotated,
         dateCreated = _CREATETIME,
@@ -284,7 +284,7 @@ def build_bookmark_annotation(annotated = None):
 def build_highlight_annotation(annotated = None):
     selection = caliper.entities.TextPositionSelector(start='455', end='489')
     return caliper.entities.HighlightAnnotation(
-        entity_id = 'https://someEduApp.edu/highlights/12345',
+        entity_id = 'https://example.edu/highlights/12345',
         selection = selection,
         selectionText = 'Life, Liberty and the pursuit of Happiness',
         annotated = annotated,
@@ -294,15 +294,15 @@ def build_highlight_annotation(annotated = None):
 
 def build_shared_annotation(annotated = None):
     return caliper.entities.SharedAnnotation(
-        entity_id = 'https://someEduApp.edu/shared/9999',
+        entity_id = 'https://example.edu/shared/9999',
         withAgents = [
             caliper.entities.Person(
-                entity_id = 'https://some-university.edu/students/657585',
+                entity_id = 'https://example.edu/user/657585',
                 dateCreated = _CREATETIME,
                 dateModified = _MODTIME
                 ),
             caliper.entities.Person(
-                entity_id = 'https://some-university.edu/students/667788',
+                entity_id = 'https://example.edu/user/667788',
                 dateCreated = _CREATETIME,
                 dateModified = _MODTIME
                 )
@@ -314,7 +314,7 @@ def build_shared_annotation(annotated = None):
 
 def build_tag_annotation(annotated = None):
     return caliper.entities.TagAnnotation(
-        entity_id = 'https://someEduApp.edu/tags/7654',
+        entity_id = 'https://example.edu/tags/7654',
         tags = ['to-read', '1765', 'shared-with-project-team'],
         annotated = annotated,
         dateCreated = _CREATETIME,
@@ -361,7 +361,7 @@ def build_assessment_assignable_event(learning_context = None,
         action = action,
         event_object = assessment,
         generated = caliper.entities.Attempt(
-            entity_id = '{0}/{1}'.format(assessment.id, 'attempt1'),
+            entity_id = '{0}/{1}'.format(assessment.id, 'attempt/5678'),
             assignable = assessment,
             actor = actor,
             count = 1,
@@ -374,19 +374,19 @@ def build_assessment_assignable_event(learning_context = None,
 ## build a test assessment
 def build_assessment_items(assessment = None):
     return [caliper.entities.AssessmentItem(
-               entity_id = '{0}/item{1}'.format(assessment.id,particle),
-               name = 'Assessment Item {1}'.format(assessment.name,particle),
+               entity_id = '{0}/item/{1}'.format(assessment.id,particle),
+               name = 'Assessment Item {1}'.format(assessment.name,particle[-1]),
                isPartOf = assessment,
                version = _VERNUM,
                maxAttempts = 2,
                maxSubmits = 2,
                maxScore = 1)
-            for particle in ['1','2','3']
+            for particle in ['001','002','003']
         ]
 
 def build_assessment():
     return caliper.entities.Assessment(
-        entity_id = 'https://some-university.edu/politicalScience/2015/american-revolution-101/assessment1',
+        entity_id = 'https://example.edu/politicalScience/2015/american-revolution-101/assessment/001',
         name = 'American Revolution - Key Figures Assessment',
         datePublished = _PUBTIME,
         dateToActivate = _ACTTIME,
@@ -405,7 +405,7 @@ def build_assessment():
 def build_assessment_attempt(actor = None,
                              assessment=None):
     return caliper.entities.Attempt(
-        entity_id = '{0}/{1}'.format(assessment.id,'attempt1'),
+        entity_id = '{0}/{1}'.format(assessment.id,'attempt/5678'),
         assignable = assessment,
         actor = actor,
         count = 1,
@@ -417,7 +417,7 @@ def build_assessment_attempt(actor = None,
 def build_assessment_item_attempt(actor = None,
                                   assessment=None):
     return caliper.entities.Attempt(
-        entity_id = '{0}/{1}'.format(assessment.id,'item1/attempt1'),
+        entity_id = '{0}/{1}'.format(assessment.id,'item/001/attempt/789'),
         assignable = assessment,
         actor = actor,
         count = 1,
@@ -430,7 +430,7 @@ def build_assessment_item_response(assessment=None,
                                    attempt=None,
                                    values=None):
     return caliper.entities.FillinBlankResponse(
-        entity_id = '{0}/{1}'.format(assessment.id,'item1/response1'),
+        entity_id = '{0}/{1}'.format(assessment.id,'item/001/response/001'),
         assignable = attempt.assignable,
         actor = attempt.actor,
         attempt = attempt,
@@ -530,10 +530,10 @@ def build_video_media_event(learning_context = None,
 ## build a test video and location
 def build_video_with_learning_objective():
     return caliper.entities.VideoObject(
-        entity_id = 'https://com.sat/super-media-tool/video/video1',
+        entity_id = 'https://example.com/super-media-tool/video/1225',
         name = 'American Revolution - Key Figures Video',
         alignedLearningObjective = [caliper.entities.LearningObjective(
-            entity_id = 'http://americanrevolution.com/personalities/learn',
+            entity_id = 'https://example.edu/american-revolution-101/personalities/learn',
             dateCreated = _CREATETIME
             )],
         duration = _MEDIA_DURTIME,
@@ -610,7 +610,7 @@ def build_epub_view_event(learning_context = None,
 
 def build_readium_session(actor = None):
     return caliper.entities.Session(
-        entity_id = 'https://github.com/readium/session-123456789',
+        entity_id = 'https://example.com/viewer/session-123456789',
         name = 'session-123456789',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,

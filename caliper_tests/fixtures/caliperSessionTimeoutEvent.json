@@ -3,9 +3,9 @@
   "@type": "http://purl.imsglobal.org/caliper/v1/SessionEvent",
   "actor": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-    "@id": "https://github.com/readium/readium-js-viewer",
+    "@id": "https://example.com/viewer",
     "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-    "name": "Readium",
+    "name": "ePub",
     "description": null,
     "extensions": {},
     "dateCreated": "2015-08-01T06:00:00.000Z",
@@ -14,7 +14,7 @@
   "action": "http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut",
   "object": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-    "@id": "https://github.com/readium/session-123456789",
+    "@id": "https://example.com/viewer/session-123456789",
     "@type": "http://purl.imsglobal.org/caliper/v1/Session",
     "name": "session-123456789",
     "description": null,
@@ -23,7 +23,7 @@
     "dateModified": "2015-09-02T11:30:00.000Z",
     "actor": {
       "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-      "@id": "https://some-university.edu/user/554433",
+      "@id": "https://example.edu/user/554433",
       "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
       "name": null,
       "description": null,
@@ -42,9 +42,9 @@
   "duration": "PT3000S",
   "edApp": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-    "@id": "https://github.com/readium/readium-js-viewer",
+    "@id": "https://example.com/viewer",
     "@type": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication",
-    "name": "Readium",
+    "name": "ePub",
     "description": null,
     "extensions": {},
     "dateCreated": "2015-08-01T06:00:00.000Z",
@@ -52,13 +52,13 @@
   },
   "group": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-    "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/section/001/group/001",
+    "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001/group/001",
     "@type": "http://purl.imsglobal.org/caliper/v1/lis/Group",
     "name": "Discussion Group 001",
     "description": null,
     "subOrganizationOf": {
       "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-      "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101/section/001",
+      "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001",
       "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection",
       "courseNumber": "POL101",
       "name": "American Revolution 101",
@@ -67,7 +67,7 @@
       "academicSession": "Fall-2015",
       "subOrganizationOf": {
         "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
-        "@id": "https://some-university.edu/politicalScience/2015/american-revolution-101",
+        "@id": "https://example.edu/politicalScience/2015/american-revolution-101",
         "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering",
         "courseNumber": "POL101",
         "name": "Political Science 101: The American Revolution",
