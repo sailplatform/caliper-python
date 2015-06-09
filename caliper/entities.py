@@ -45,7 +45,6 @@ class Entity(BaseEntity, schemadotorg.Thing):
         'ENTITY': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'GROUP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'MEDIA_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'MEMBERSHIP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'ORGANIZATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'PERSON': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
@@ -65,7 +64,6 @@ class Entity(BaseEntity, schemadotorg.Thing):
         'ENTITY': 'http://purl.imsglobal.org/caliper/v1/Entity',
         'GROUP': 'http://purl.imsglobal.org/caliper/v1/lis/Group',
         'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
-        'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
         'MEMBERSHIP': 'http://purl.imsglobal.org/caliper/v1/lis/Membership',
         'ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/w3c/Organization',
         'PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
@@ -442,6 +440,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         'EPUB_SUB_CHAPTER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'EPUB_VOLUME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'FRAME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MEDIA_LOCATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+        'MEDIA_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'WEB_PAGE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         }
@@ -453,6 +453,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         'EPUB_SUB_CHAPTER': 'http://www.idpf.org/epub/vocab/structure/#subchapter',
         'EPUB_VOLUME': 'http://www.idpf.org/epub/vocab/structure/#volume',
         'FRAME': 'http://purl.imsglobal.org/caliper/v1/Frame',
+        'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
+        'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
         'READING': 'http://purl.imsglobal.org/caliper/v1/Reading',
         'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage',
         }
@@ -996,22 +998,20 @@ class MediaObject(DigitalResource, schemadotorg.MediaObject):
         'AUDIO_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'IMAGE_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         'VIDEO_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'MEDIA_LOCATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
         }
     
     _types = {
         'AUDIO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/AudioObject',
         'IMAGE_OBJECT': 'http://purl.imsglobal.org/caliper/v1/ImageObject',
         'VIDEO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/VideoObject',
-        'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
         }
 
     def __init__(self,
             duration = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@context', Entity.Contexts['MEDIA_OBJECT'])
-        self._set_str_prop('@type', Entity.Types['MEDIA_OBJECT'])
+        self._set_str_prop('@context', DigitalResource.Contexts['MEDIA_OBJECT'])
+        self._set_str_prop('@type', DigitalResource.Types['MEDIA_OBJECT'])
         self._set_int_prop('duration', duration) ## Is this the same as an Attempt duration?
 
     @property
@@ -1024,8 +1024,8 @@ class MediaLocation(DigitalResource, Targetable):
             currentTime = None,
             **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@context', MediaObject.Contexts['MEDIA_LOCATION'])
-        self._set_str_prop('@type', MediaObject.Types['MEDIA_LOCATION'])
+        self._set_str_prop('@context', DigitalResource.Contexts['MEDIA_LOCATION'])
+        self._set_str_prop('@type', DigitalResource.Types['MEDIA_LOCATION'])
         self._set_int_prop('currentTime', currentTime)
 
     @property
