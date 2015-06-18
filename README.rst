@@ -20,6 +20,8 @@ packages:
 
 * future -- (MIT licensed)
 
+* oauthlib -- (3-clause BSD licensed)
+
 * requests -- (Apache 2 licensed)
 
 * tox -- (soft-dependency used only for tests, MIT licensed)

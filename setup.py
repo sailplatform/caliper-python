@@ -28,6 +28,7 @@ _packages = [ 'caliper',
               'caliper_tests' ]
 
 _requires = [ 'future >= 0.14.3',
+              'oauthlib >= 0.7.2',
               'requests >= 2.7.0' ]
 
 with open('README.rst', 'r', 'utf-8') as f:

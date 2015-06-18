@@ -32,8 +32,9 @@ import json
 ## convenience functions
 ## TODO: do better URI testing here; right now this is consistent with
 ##       the other impls.
+from oauthlib import uri_validate as oauthlib_uri_validate
 def is_valid_URI(uri):
-    if isinstance(uri, str):
+    if oauthlib_uri_validate.is_uri(uri):
         return True
     else:
         return False
@@ -140,7 +141,10 @@ class CaliperSerializable(object):
             self._set_prop(k, bool(v))
 
     def _set_id_prop(self,k,v):
-        self._set_str_prop(k, getattr(v, 'id', None))
+        the_id = getattr(v, 'id', None)
+        if the_id and not is_valid_URI(the_id):
+            raise ValueError('ID value must be a valid URI')
+        self._set_str_prop(k, the_id)
         self._set_object(k,v)
             
     def _set_int_prop(self,k,v):

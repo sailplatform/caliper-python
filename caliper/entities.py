@@ -115,7 +115,6 @@ ENTITY_TYPES = {
     'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage'}
 
 
-
 ### Fundamental entities ###
 ## Base entity class
 class Entity(CaliperSerializable, schemadotorg.Thing):
