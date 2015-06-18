@@ -232,20 +232,6 @@ class BaseEnvelope(with_metaclass(MetaEnvelope, CaliperSerializable)):
     def __init__(self, **kwargs):
         CaliperSerializable.__init__(self)
 
-### Events ###
-class MetaEvent(type):
-    @property
-    def Types(cls):
-        return cls._types
-
-    @property
-    def Contexts(cls):
-        return cls._contexts
-
-class BaseEvent(with_metaclass(MetaEvent, CaliperSerializable)):
-    def __init__(self, **kwargs):
-        CaliperSerializable.__init__(self)
-
 ### Profiles ###
 class MetaProfile(type):
     @property
