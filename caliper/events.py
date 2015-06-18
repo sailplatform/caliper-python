@@ -28,7 +28,7 @@ from caliper.base import CaliperSerializable
 from caliper import entities, profiles
 from caliper.extern import foaf, schemadotorg
 
-TYPES = {
+EVENT_TYPES = {
     'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
     'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',
     'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent',
@@ -42,7 +42,7 @@ TYPES = {
     'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
     }
 
-CONTEXTS = {
+EVENT_CONTEXTS = {
     'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
     'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
     'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
@@ -75,8 +75,8 @@ class Event(CaliperSerializable):
             target = None,
             **kwargs):
         CaliperSerializable.__init__(self)
-        self._set_str_prop('@context', CONTEXTS['EVENT'])
-        self._set_str_prop('@type', TYPES['EVENT'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['EVENT'])
+        self._set_str_prop('@type', EVENT_TYPES['EVENT'])
 
         if action and (action not in profiles.CaliperProfile.Actions.values()):
             raise ValueError('action must be in the list of CaliperProfile actions')
@@ -197,8 +197,8 @@ class AnnotationEvent(Event):
             **kwargs):
         Event.__init__(self,
                        **kwargs)
-        self._set_str_prop('@context', CONTEXTS['ANNOTATION'])
-        self._set_str_prop('@type', TYPES['ANNOTATION'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ANNOTATION'])
+        self._set_str_prop('@type', EVENT_TYPES['ANNOTATION'])
 
         if action not in profiles.AnnotationProfile.Actions.values():
             raise ValueError('action must be in the list of AnnotationProfile actions')
@@ -232,8 +232,8 @@ class AssessmentEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', CONTEXTS['ASSESSMENT'])
-        self._set_str_prop('@type', TYPES['ASSESSMENT'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT'])
+        self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT'])
 
         if action not in profiles.AssessmentProfile.Actions.values():
             raise ValueError('action must be in the list of AssessmentProfile actions')
@@ -267,8 +267,8 @@ class AssessmentItemEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', CONTEXTS['ASSESSMENT_ITEM'])
-        self._set_str_prop('@type', TYPES['ASSESSMENT_ITEM'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT_ITEM'])
+        self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
 
         if action not in profiles.AssessmentItemProfile.Actions.values():
             raise ValueError('action must be in the list of AssessmentItemProfile actions')
@@ -299,8 +299,8 @@ class AssignableEvent(Event):
             generated = None,
             **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', CONTEXTS['ASSIGNABLE'])
-        self._set_str_prop('@type', TYPES['ASSIGNABLE'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ASSIGNABLE'])
+        self._set_str_prop('@type', EVENT_TYPES['ASSIGNABLE'])
 
         if action not in profiles.AssignableProfile.Actions.values():
             raise TypeError('action must be in the list of AssignableProfile actions')
@@ -327,8 +327,8 @@ class MediaEvent(Event):
             target = None,
             **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', CONTEXTS['MEDIA'])
-        self._set_str_prop('@type', TYPES['MEDIA'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['MEDIA'])
+        self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
 
         if action not in profiles.MediaProfile.Actions.values():
             raise TypeError('action must be in the list of MediaProfile actions')
@@ -360,8 +360,8 @@ class NavigationEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', CONTEXTS['NAVIGATION'])
-        self._set_str_prop('@type', TYPES['NAVIGATION'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['NAVIGATION'])
+        self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
         self._set_str_prop('action', profiles.CaliperProfile.Actions['NAVIGATED_TO'])
 
         if not isinstance(actor, entities.Person):
@@ -399,8 +399,8 @@ class OutcomeEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', CONTEXTS['OUTCOME'])
-        self._set_str_prop('@type', TYPES['OUTCOME'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['OUTCOME'])
+        self._set_str_prop('@type', EVENT_TYPES['OUTCOME'])
 
         if  action not in profiles.OutcomeProfile.Actions.values():
             raise TypeError('action must be in the list of OutcomeProfile actions')
@@ -427,8 +427,8 @@ class ReadingEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', CONTEXTS['READING'])
-        self._set_str_prop('@type', TYPES['READING'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['READING'])
+        self._set_str_prop('@type', EVENT_TYPES['READING'])
 
         if action not in profiles.ReadingProfile.Actions.values():
             raise TypeError('action must be in the list of ReadingProfile actions')
@@ -462,8 +462,8 @@ class SessionEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', CONTEXTS['SESSION'])
-        self._set_str_prop('@type', TYPES['SESSION'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['SESSION'])
+        self._set_str_prop('@type', EVENT_TYPES['SESSION'])
 
         if action not in profiles.SessionProfile.Actions.values():
             raise TypeError('action must be in the list of SessionProfile actions')
@@ -511,8 +511,8 @@ class ViewEvent(Event):
                  event_object = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', CONTEXTS['VIEW'])
-        self._set_str_prop('@type', TYPES['VIEW'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['VIEW'])
+        self._set_str_prop('@type', EVENT_TYPES['VIEW'])
 
         if action not in profiles.ReadingProfile.Actions.values():
             raise TypeError('action must be in the list of ReadingProfile actions')

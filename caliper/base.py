@@ -210,20 +210,6 @@ class CaliperSerializable(object):
     def as_json(self):
         return json.dumps(self.as_dict(),sort_keys=True)
 
-### Entities ###
-class MetaEntity(type):
-    @property
-    def Types(cls):
-        return cls._types
-
-    @property
-    def Contexts(cls):
-        return cls._contexts
-
-class BaseEntity(with_metaclass(MetaEntity, CaliperSerializable)):
-    def __init__(self, **kwargs):
-        CaliperSerializable.__init__(self)
-
 ### Envelope ###
 class MetaEnvelope(type):
     pass
