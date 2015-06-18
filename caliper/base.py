@@ -210,14 +210,6 @@ class CaliperSerializable(object):
     def as_json(self):
         return json.dumps(self.as_dict(),sort_keys=True)
 
-### Envelope ###
-class MetaEnvelope(type):
-    pass
-
-class BaseEnvelope(with_metaclass(MetaEnvelope, CaliperSerializable)):
-    def __init__(self, **kwargs):
-        CaliperSerializable.__init__(self)
-
 ### Profiles ###
 class MetaProfile(type):
     @property

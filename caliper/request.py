@@ -29,16 +29,16 @@ import json
 import requests
 import uuid
 
-from caliper.base import BaseEnvelope, CaliperSerializable, HttpOptions
+from caliper.base import CaliperSerializable, HttpOptions
 
-class Envelope(BaseEnvelope):
+class Envelope(CaliperSerializable):
 
     def __init__(self,
             data = None,
             send_time = None,
             sensor_id = None,
             **kwargs):
-        BaseEnvelope.__init__(self, **kwargs)
+        CaliperSerializable.__init__(self)
         if data and isinstance(data, collections.MutableSequence):
             if all( isinstance(item, CaliperSerializable) for item in data):
                 self._set_list_prop('data', data)
