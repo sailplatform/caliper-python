@@ -24,42 +24,41 @@ install_aliases()
 from builtins import *
 
 
-from caliper.base import BaseEvent, CaliperSerializable
+from caliper.base import CaliperSerializable
 from caliper import entities, profiles
 from caliper.extern import foaf, schemadotorg
 
-## Base event class
-class Event(BaseEvent):
+EVENT_TYPES = {
+    'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
+    'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',
+    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent',
+    'ASSIGNABLE': 'http://purl.imsglobal.org/caliper/v1/AssignableEvent',
+    'EVENT': 'http://purl.imsglobal.org/caliper/v1/Event',
+    'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
+    'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
+    'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
+    'READING': 'http://purl.imsglobal.org/caliper/v1/ReadingEvent',
+    'SESSION': 'http://purl.imsglobal.org/caliper/v1/SessionEvent',
+    'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
+    }
 
-    ## Use the base context value here, but preserve the context labels
-    ## in case, in the future, individual contexts start getting split out
-    _contexts = {
-        'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-        }
-        
-    _types = {
-        'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
-        'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',
-        'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent',
-        'ASSIGNABLE': 'http://purl.imsglobal.org/caliper/v1/AssignableEvent',
-        'EVENT': 'http://purl.imsglobal.org/caliper/v1/Event',
-        'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
-        'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
-        'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
-        'READING': 'http://purl.imsglobal.org/caliper/v1/ReadingEvent',
-        'SESSION': 'http://purl.imsglobal.org/caliper/v1/SessionEvent',
-        'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
-        }
+EVENT_CONTEXTS = {
+    'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
+    }
+
+
+## Base event class
+class Event(CaliperSerializable):
 
     def __init__(self,
             action = None,
@@ -75,9 +74,9 @@ class Event(BaseEvent):
             startedAtTime = None,
             target = None,
             **kwargs):
-        BaseEvent.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['EVENT'])
-        self._set_str_prop('@type', Event.Types['EVENT'])
+        CaliperSerializable.__init__(self)
+        self._set_str_prop('@context', EVENT_CONTEXTS['EVENT'])
+        self._set_str_prop('@type', EVENT_TYPES['EVENT'])
 
         if action and (action not in profiles.CaliperProfile.Actions.values()):
             raise ValueError('action must be in the list of CaliperProfile actions')
@@ -198,8 +197,8 @@ class AnnotationEvent(Event):
             **kwargs):
         Event.__init__(self,
                        **kwargs)
-        self._set_str_prop('@context', Event.Contexts['ANNOTATION'])
-        self._set_str_prop('@type', Event.Types['ANNOTATION'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ANNOTATION'])
+        self._set_str_prop('@type', EVENT_TYPES['ANNOTATION'])
 
         if action not in profiles.AnnotationProfile.Actions.values():
             raise ValueError('action must be in the list of AnnotationProfile actions')
@@ -233,8 +232,8 @@ class AssessmentEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', Event.Contexts['ASSESSMENT'])
-        self._set_str_prop('@type', Event.Types['ASSESSMENT'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT'])
+        self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT'])
 
         if action not in profiles.AssessmentProfile.Actions.values():
             raise ValueError('action must be in the list of AssessmentProfile actions')
@@ -268,8 +267,8 @@ class AssessmentItemEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', Event.Contexts['ASSESSMENT_ITEM'])
-        self._set_str_prop('@type', Event.Types['ASSESSMENT_ITEM'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT_ITEM'])
+        self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
 
         if action not in profiles.AssessmentItemProfile.Actions.values():
             raise ValueError('action must be in the list of AssessmentItemProfile actions')
@@ -300,8 +299,8 @@ class AssignableEvent(Event):
             generated = None,
             **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['ASSIGNABLE'])
-        self._set_str_prop('@type', Event.Types['ASSIGNABLE'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['ASSIGNABLE'])
+        self._set_str_prop('@type', EVENT_TYPES['ASSIGNABLE'])
 
         if action not in profiles.AssignableProfile.Actions.values():
             raise TypeError('action must be in the list of AssignableProfile actions')
@@ -328,8 +327,8 @@ class MediaEvent(Event):
             target = None,
             **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['MEDIA'])
-        self._set_str_prop('@type', Event.Types['MEDIA'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['MEDIA'])
+        self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
 
         if action not in profiles.MediaProfile.Actions.values():
             raise TypeError('action must be in the list of MediaProfile actions')
@@ -361,8 +360,8 @@ class NavigationEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['NAVIGATION'])
-        self._set_str_prop('@type', Event.Types['NAVIGATION'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['NAVIGATION'])
+        self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
         self._set_str_prop('action', profiles.CaliperProfile.Actions['NAVIGATED_TO'])
 
         if not isinstance(actor, entities.Person):
@@ -400,8 +399,8 @@ class OutcomeEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', Event.Contexts['OUTCOME'])
-        self._set_str_prop('@type', Event.Types['OUTCOME'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['OUTCOME'])
+        self._set_str_prop('@type', EVENT_TYPES['OUTCOME'])
 
         if  action not in profiles.OutcomeProfile.Actions.values():
             raise TypeError('action must be in the list of OutcomeProfile actions')
@@ -428,8 +427,8 @@ class ReadingEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['READING'])
-        self._set_str_prop('@type', Event.Types['READING'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['READING'])
+        self._set_str_prop('@type', EVENT_TYPES['READING'])
 
         if action not in profiles.ReadingProfile.Actions.values():
             raise TypeError('action must be in the list of ReadingProfile actions')
@@ -463,8 +462,8 @@ class SessionEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['SESSION'])
-        self._set_str_prop('@type', Event.Types['SESSION'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['SESSION'])
+        self._set_str_prop('@type', EVENT_TYPES['SESSION'])
 
         if action not in profiles.SessionProfile.Actions.values():
             raise TypeError('action must be in the list of SessionProfile actions')
@@ -512,8 +511,8 @@ class ViewEvent(Event):
                  event_object = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', Event.Contexts['VIEW'])
-        self._set_str_prop('@type', Event.Types['VIEW'])
+        self._set_str_prop('@context', EVENT_CONTEXTS['VIEW'])
+        self._set_str_prop('@type', EVENT_TYPES['VIEW'])
 
         if action not in profiles.ReadingProfile.Actions.values():
             raise TypeError('action must be in the list of ReadingProfile actions')
