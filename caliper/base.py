@@ -200,7 +200,7 @@ class CaliperSerializable(object):
         r = {}
         for k,v in self._props.items():
 
-            # handle value based on its type: list, composite, or basic type
+            # handle value based on its type: list, caliper-aware composite, plain dict, or basic type
             if no_nulls and v == None:
                 continue
             elif isinstance(v, collections.MutableSequence):
