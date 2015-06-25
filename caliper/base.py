@@ -187,30 +187,28 @@ class CaliperSerializable(object):
 
     def _unpack_list(self,l,no_nulls=False):
         r = []
-        n = no_nulls
         for item in l:
             if isinstance(item, collections.MutableSequence):
-                r.append(self._unpack_list(item,no_nulls=n))
+                r.append(self._unpack_list(item,no_nulls=no_nulls))
             elif isinstance(item, CaliperSerializable):
-                r.append(item.as_dict(no_nulls=n))
+                r.append(item.as_dict(no_nulls=no_nulls))
             else:
                 r.append(item)
         return r
 
     def as_dict(self,no_nulls=False):
         r = {}
-        n = no_nulls
         for k,v in self._props.items():
 
             # handle value based on its type: list, composite, or basic type
-            if n and v == None:
+            if no_nulls and v == None:
                 continue
             elif isinstance(v, collections.MutableSequence):
-                value = self._unpack_list(v,no_nulls=n)
+                value = self._unpack_list(v,no_nulls=no_nulls)
             elif isinstance(v, CaliperSerializable):
-                value = v.as_dict(no_nulls=n)
+                value = v.as_dict(no_nulls=no_nulls)
             elif isinstance(v, collections.MutableMapping):
-                if n and not v:
+                if no_nulls and not v:
                     continue
                 value = v
             else:
