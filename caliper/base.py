@@ -185,34 +185,42 @@ class CaliperSerializable(object):
         except KeyError:
             return None
 
-    def _unpack_list(self,l):
+    def _unpack_list(self,l,no_nulls=False):
         r = []
+        n = no_nulls
         for item in l:
             if isinstance(item, collections.MutableSequence):
-                r.append(self._unpack_list(item))
+                r.append(self._unpack_list(item,no_nulls=n))
             elif isinstance(item, CaliperSerializable):
-                r.append(item.as_dict())
+                r.append(item.as_dict(no_nulls=n))
             else:
                 r.append(item)
         return r
 
-    def as_dict(self):
+    def as_dict(self,no_nulls=False):
         r = {}
+        n = no_nulls
         for k,v in self._props.items():
 
             # handle value based on its type: list, composite, or basic type
-            if isinstance(v, collections.MutableSequence):
-                value = self._unpack_list(v)
+            if n and v == None:
+                continue
+            elif isinstance(v, collections.MutableSequence):
+                value = self._unpack_list(v,no_nulls=n)
             elif isinstance(v, CaliperSerializable):
-                value = v.as_dict()
+                value = v.as_dict(no_nulls=n)
+            elif isinstance(v, collections.MutableMapping):
+                if n and not v:
+                    continue
+                value = v
             else:
                 value = v
             r.update({k:value})
             
         return copy.deepcopy(r)
 
-    def as_json(self):
-        return json.dumps(self.as_dict(),sort_keys=True)
+    def as_json(self,no_nulls=False):
+        return json.dumps(self.as_dict(no_nulls=no_nulls),sort_keys=True)
 
 ### Profiles ###
 class MetaProfile(type):

@@ -271,6 +271,21 @@ class SessionProfile(unittest.TestCase):
         self.assertEqual(session_event.as_json(),
                          util.get_fixture(fixture))
 
+    def testSessionLoginThinEvent(self):
+        fixture = 'caliperSessionLoginThinEvent'
+        session_event = util.build_session_login_event(
+            learning_context = self.learning_context,
+            actor = self.student,
+            event_object = self.learning_context.edApp,
+            session = util.build_readium_session(actor=self.student),
+            target = util.build_epub_subchap431(),
+            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
+            )
+        util.put_fixture(fixture, session_event, no_nulls=True)
+        self.assertEqual(session_event.as_json(no_nulls=True),
+                         util.get_fixture(fixture))
+        
+
     def testSessionLogoutEvent(self):
         fixture = 'caliperSessionLogoutEvent'
         session_event = util.build_session_logout_event(

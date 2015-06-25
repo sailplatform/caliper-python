@@ -31,7 +31,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 
 
-_DEBUG = False
+_DEBUG = True
 
 _SENSOR_ID = 'https://example.edu/sensor/001'
 
@@ -82,11 +82,11 @@ def get_fixture(fixture_name):
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
-def put_fixture(fixture_name, caliper_object, debug=_DEBUG):
+def put_fixture(fixture_name, caliper_object, no_nulls=False, debug=_DEBUG):
     if debug:
         loc = _FIXTURE_OUT_DIR+fixture_name
         with open(loc+'_out.json', 'w') as f:
-            f.write(caliper_object.as_json()
+            f.write(caliper_object.as_json(no_nulls=no_nulls)
                     .replace('{"','{\n"')
                     .replace(', "',',\n"')
                     )
