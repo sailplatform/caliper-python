@@ -114,48 +114,6 @@ ENTITY_TYPES = {
     'VIEW': 'http://purl.imsglobal.org/caliper/v1/View',
     'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage'}
 
-ENTITY_CLASSES = {
-    ENTITY_TYPES['ANNOTATION']: 'caliper.entities.Annotation',
-    ENTITY_TYPES['ASSESSMENT']: 'caliper.entities.Assessment',
-    ENTITY_TYPES['ASSESSMENT_ITEM']: 'caliper.entities.AssessmentItem',
-    ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE']: 'caliper.entities.AssignableDigitalResource',
-    ENTITY_TYPES['ATTEMPT']: 'caliper.entities.Attempt',
-    ENTITY_TYPES['AUDIO_OBJECT']: 'caliper.entities.AudioObject',
-    ENTITY_TYPES['BOOKMARK_ANNOTATION']: 'caliper.entities.BookmarkAnnotation',
-    ENTITY_TYPES['COURSE_OFFERING']: 'caliper.entities.CourseOffering',
-    ENTITY_TYPES['COURSE_SECTION']: 'caliper.entities.CourseSection',
-    ENTITY_TYPES['DIGITAL_RESOURCE']: 'caliper.entities.DigitalResource',
-    ENTITY_TYPES['ENTITY']: 'caliper.entities.Entity',
-    ENTITY_TYPES['EPUB_CHAPTER']: 'caliper.entities.EpubChapter',
-    ENTITY_TYPES['EPUB_PART']: 'caliper.entities.EpubPart',
-    ENTITY_TYPES['EPUB_SUB_CHAPTER']: 'caliper.entities.EpubSubChapter',
-    ENTITY_TYPES['EPUB_VOLUME']: 'caliper.entities.EpubVolume',
-    ENTITY_TYPES['FILLINBLANK']: 'caliper.entities.FillinBlankResponse',
-    ENTITY_TYPES['FRAME']: 'caliper.entities.Frame',
-    ENTITY_TYPES['GROUP']: 'caliper.entities.Group',
-    ENTITY_TYPES['HIGHLIGHT_ANNOTATION']: 'caliper.entities.HighlightAnnotation',
-    ENTITY_TYPES['IMAGE_OBJECT']: 'caliper.entities.ImageObject',
-    ENTITY_TYPES['LEARNING_OBJECTIVE']: 'caliper.entities.LearningObjective',
-    ENTITY_TYPES['MEDIA_LOCATION']: 'caliper.entities.MediaLocation',
-    ENTITY_TYPES['MEDIA_OBJECT']: 'caliper.entities.MediaObject',
-    ENTITY_TYPES['MEMBERSHIP']: 'caliper.entities.Membership',
-    ENTITY_TYPES['MULTIPLECHOICE']: 'caliper.entities.MultipleChoiceResponse',
-    ENTITY_TYPES['MULTIPLERESPONSE']: 'caliper.entities.MultipleResponseResponse',
-    ENTITY_TYPES['ORGANIZATION']: 'caliper.entities.Organization',
-    ENTITY_TYPES['PERSON']: 'caliper.entities.Person',
-    ENTITY_TYPES['READING']: 'caliper.entities.Reading',
-    ENTITY_TYPES['RESPONSE']: 'caliper.entities.Response',
-    ENTITY_TYPES['RESULT']: 'caliper.entities.Result',
-    ENTITY_TYPES['SELECTTEXT']: 'caliper.entities.SelectTextResponse',
-    ENTITY_TYPES['SESSION']: 'caliper.entities.Session',
-    ENTITY_TYPES['SHARED_ANNOTATION']: 'caliper.entities.SharedAnnotation',
-    ENTITY_TYPES['SOFTWARE_APPLICATION']: 'caliper.entities.SoftwareApplication',
-    ENTITY_TYPES['TAG_ANNOTATION']: 'caliper.entities.TagAnnotation',
-    ENTITY_TYPES['TRUEFALSE']: 'caliper.entities.TrueFalseResponse',
-    ENTITY_TYPES['VIDEO_OBJECT']: 'caliper.entities.VideoObject',
-    ENTITY_TYPES['WEB_PAGE']: 'caliper.entities.WebPage'
-    }
-
 
 ### Fundamental entities ###
 ## Base entity class
