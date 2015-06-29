@@ -173,38 +173,31 @@ class CaliperSerializable(object):
         else:
             self._set_prop(k, str(v))
 
-    def _get_object(self,k):
-        try:
-            return self._objects[k]
-        except KeyError:
-            return None
-
     def _get_prop(self,k):
-        try:
-            return self._props[k]
-        except KeyError:
-            return None
+        return self._objects.get(k) or self._props.get(k)
 
-    def _unpack_list(self,l):
+    def _unpack_list(self,l,include_objects=True):
         r = []
         for item in l:
             if isinstance(item, collections.MutableSequence):
-                r.append(self._unpack_list(item))
+                r.append(self._unpack_list(item,include_objects=include_objects))
             elif isinstance(item, CaliperSerializable):
-                r.append(item.as_dict())
+                r.append(item.as_dict(include_objects=include_objects))
             else:
                 r.append(item)
         return r
 
-    def as_dict(self):
+    def as_dict(self,include_objects=True):
         r = {}
         for k,v in self._props.items():
 
             # handle value based on its type: list, composite, or basic type
             if isinstance(v, collections.MutableSequence):
-                value = self._unpack_list(v)
+                value = self._unpack_list(v,include_objects=include_objects)
             elif isinstance(v, CaliperSerializable):
-                value = v.as_dict()
+                value = v.as_dict(include_objects=include_objects)
+            elif include_objects and (k in self._objects):
+                value = self._objects[k]
             else:
                 value = v
             r.update({k:value})
@@ -212,7 +205,7 @@ class CaliperSerializable(object):
         return copy.deepcopy(r)
 
     def as_json(self):
-        return json.dumps(self.as_dict(),sort_keys=True)
+        return json.dumps(self.as_dict(include_objects=False),sort_keys=True)
 
 ### Profiles ###
 class MetaProfile(type):

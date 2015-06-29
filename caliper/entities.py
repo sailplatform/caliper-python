@@ -436,7 +436,8 @@ class LearningContext(CaliperSerializable):
     def __init__(self,
                  edApp = None,
                  group = None,
-                 membership = None):
+                 membership = None,
+                 session = None):
 
         CaliperSerializable.__init__(self)
 
@@ -454,6 +455,11 @@ class LearningContext(CaliperSerializable):
             raise TypeError('membership must implement Membership')
         else:
             self._set_obj_prop('membership', membership)
+
+        if session and (not isinstance(session, Session)):
+            raise TypeError('session must implement Session')
+        else:
+            self._set_obj_prop('session', session)
             
     @property
     def edApp(self):
@@ -466,6 +472,10 @@ class LearningContext(CaliperSerializable):
     @property
     def membership(self):
         return self._get_prop('membership')
+
+    @property
+    def session(self):
+        return self._get_prop('session')
 
 
 ## Learning objective
@@ -632,7 +642,7 @@ class Annotation(Entity, Generatable):
 
     @property
     def annotated(self):
-        return self._get_object('annotated')
+        return self._get_prop('annotated')
 
     @property
     def annotated_id(self):
@@ -802,7 +812,7 @@ class Attempt(Entity, Generatable):
             
     @property
     def assignable(self):
-        return self._get_object('assignable')
+        return self._get_prop('assignable')
 
     @property
     def assignable_id(self):
@@ -810,7 +820,7 @@ class Attempt(Entity, Generatable):
 
     @property
     def actor(self):
-        return self._get_object('actor')
+        return self._get_prop('actor')
 
     @property
     def actor_id(self):
