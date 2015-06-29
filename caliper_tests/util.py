@@ -167,7 +167,8 @@ def build_AmRev101_membership():
         dateCreated = _CREATETIME
         )
 
-def build_assessment_tool_learning_context():
+def build_assessment_tool_learning_context(actor=None):
+    a = actor or build_student_554433()
     return caliper.entities.LearningContext(
         edApp = caliper.entities.SoftwareApplication(
             entity_id = 'https://example.com/super-assessment-tool',
@@ -175,7 +176,8 @@ def build_assessment_tool_learning_context():
             dateCreated = _CREATETIME
             ),
         group = build_AmRev101_group_001(),
-        membership = build_AmRev101_membership()
+        membership = build_AmRev101_membership(),
+        session = build_federated_session(actor=a)
         )
 
 def build_media_app():
@@ -186,11 +188,13 @@ def build_media_app():
         dateModified = _MODTIME
         )
 
-def build_video_media_tool_learning_context():
+def build_video_media_tool_learning_context(actor=None):
+    a = actor or build_student_554433()
     return caliper.entities.LearningContext(
         edApp = build_media_app(),
         group = build_AmRev101_group_001(),
-        membership = build_AmRev101_membership()
+        membership = build_AmRev101_membership(),
+        session = build_federated_session(actor=a)
         )
 
 def build_readium_app():
@@ -201,11 +205,13 @@ def build_readium_app():
         dateModified = _MODTIME
         )
 
-def build_readium_app_learning_context():
+def build_readium_app_learning_context(actor=None):
+    a = actor or build_student_554433()
     return caliper.entities.LearningContext(
         edApp = build_readium_app(),
         group = build_AmRev101_group_001(),
-        membership = build_AmRev101_membership()
+        membership = build_AmRev101_membership(),
+        session = build_readium_session(actor=a)
         )
 
 ## build a test EPUB volume
