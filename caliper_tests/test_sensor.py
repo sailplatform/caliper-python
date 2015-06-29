@@ -35,9 +35,8 @@ import caliper_tests.util as util
 class TestEvent(unittest.TestCase):
     def setUp(self):
         self.sensor = util.build_default_sensor()
-        self.learning_context = util.build_readium_app_learning_context()
         self.student = util.build_student_554433()
-        self.federated_session = util.build_federated_session(actor=self.student)
+        self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub = util.build_epub_vol43()
         self.from_resource = util.build_AmRev101_landing_page()
         self.target = util.build_epub_subchap431()
@@ -49,7 +48,7 @@ class TestEvent(unittest.TestCase):
                 learning_context = self.learning_context,
                 actor = self.student,
                 event_object = self.epub,
-                federated_session = self.federated_session,
+                federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.target

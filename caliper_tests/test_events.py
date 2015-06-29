@@ -35,7 +35,7 @@ import caliper_tests.util as util
 class AnnotationProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_readium_app_learning_context()
+        self.learning_context = util.build_readium_app_learning_context(actor=self.student)
 
     def testBookmarkAnnotationEvent(self):
         fixture = 'caliperBookmarkAnnotationEvent'
@@ -101,7 +101,7 @@ class AnnotationProfile(unittest.TestCase):
 class AssessmentProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_assessment_tool_learning_context()
+        self.learning_context = util.build_assessment_tool_learning_context(actor=self.student)
         self.assessment = util.build_assessment()
         self.assessment_item = util.build_assessment_items(assessment=self.assessment)[0]
         self.attempt = util.build_assessment_attempt(actor = self.student,
@@ -155,7 +155,7 @@ class AssessmentProfile(unittest.TestCase):
 class AssignableProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_assessment_tool_learning_context()
+        self.learning_context = util.build_assessment_tool_learning_context(actor=self.student)
         self.assessment = util.build_assessment()
 
     def testAssignableEvent(self):
@@ -173,7 +173,7 @@ class AssignableProfile(unittest.TestCase):
 class MediaProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_video_media_tool_learning_context()
+        self.learning_context = util.build_video_media_tool_learning_context(actor=self.student)
         self.video = util.build_video_with_learning_objective()
         self.location = util.build_video_media_location()
 
@@ -193,7 +193,7 @@ class MediaProfile(unittest.TestCase):
 class OutcomeProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_assessment_tool_learning_context()
+        self.learning_context = util.build_assessment_tool_learning_context(actor=self.student)
         self.assessment = util.build_assessment()
         self.attempt = util.build_assessment_attempt(actor = self.student,
                                                      assessment=self.assessment)
@@ -218,7 +218,7 @@ class OutcomeProfile(unittest.TestCase):
 class ReadingProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_readium_app_learning_context()
+        self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub = util.build_epub_vol43()
         self.target = util.build_epub_subchap431()
 
@@ -253,7 +253,7 @@ class ReadingProfile(unittest.TestCase):
 class SessionProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_readium_app_learning_context()
+        self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub = util.build_epub_vol43()
 
 
@@ -263,7 +263,7 @@ class SessionProfile(unittest.TestCase):
             learning_context = self.learning_context,
             actor = self.student,
             event_object = self.learning_context.edApp,
-            session = util.build_readium_session(actor=self.student),
+            session = self.learning_context.session,
             target = util.build_epub_subchap431(),
             action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
             )
@@ -292,7 +292,7 @@ class SessionProfile(unittest.TestCase):
             learning_context = self.learning_context,
             actor = self.student,
             event_object = self.learning_context.edApp,
-            target = util.build_readium_session(actor=self.student),
+            target = self.learning_context.session,
             action = caliper.profiles.SessionProfile.Actions['LOGGED_OUT']            
             )
         util.put_fixture(fixture, session_event)
@@ -304,7 +304,7 @@ class SessionProfile(unittest.TestCase):
         session_event = util.build_session_timeout_event(
             learning_context = self.learning_context,
             actor = self.learning_context.edApp,
-            event_object = util.build_readium_session(actor=self.student),
+            event_object = self.learning_context.session,
             action = caliper.profiles.SessionProfile.Actions['TIMED_OUT']            
             )
         util.put_fixture(fixture, session_event)

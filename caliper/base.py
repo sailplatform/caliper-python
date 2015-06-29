@@ -173,44 +173,37 @@ class CaliperSerializable(object):
         else:
             self._set_prop(k, str(v))
 
-    def _get_object(self,k):
-        try:
-            return self._objects[k]
-        except KeyError:
-            return None
-
     def _get_prop(self,k):
-        try:
-            return self._props[k]
-        except KeyError:
-            return None
+        return self._objects.get(k) or self._props.get(k)
 
-    def _unpack_list(self,l,no_nulls=False):
+    def _unpack_list(self,l,include_objects=True,no_nulls=False):
         r = []
         for item in l:
             if isinstance(item, collections.MutableSequence):
-                r.append(self._unpack_list(item,no_nulls=no_nulls))
+                r.append(self._unpack_list(item,include_objects=include_objects,no_nulls=no_nulls))
             elif isinstance(item, CaliperSerializable):
-                r.append(item.as_dict(no_nulls=no_nulls))
+                r.append(item.as_dict(include_objects=include_objects,no_nulls=no_nulls))
             else:
                 r.append(item)
         return r
 
-    def as_dict(self,no_nulls=False):
+    def as_dict(self,include_objects=True,no_nulls=False):
         r = {}
         for k,v in self._props.items():
 
-            # handle value based on its type: list, caliper-aware composite, plain dict, or basic type
+            # handle value based on its type: list, composite, or basic type
             if no_nulls and v == None:
                 continue
             elif isinstance(v, collections.MutableSequence):
-                value = self._unpack_list(v,no_nulls=no_nulls)
+                value = self._unpack_list(v,include_objects=include_objects,no_nulls=no_nulls)
             elif isinstance(v, CaliperSerializable):
-                value = v.as_dict(no_nulls=no_nulls)
+                value = v.as_dict(include_objects=include_objects,no_nulls=no_nulls)
             elif isinstance(v, collections.MutableMapping):
                 if no_nulls and not v:
                     continue
                 value = v
+            elif include_objects and (k in self._objects):
+                value = self._objects[k]
             else:
                 value = v
             r.update({k:value})
@@ -218,7 +211,7 @@ class CaliperSerializable(object):
         return copy.deepcopy(r)
 
     def as_json(self,no_nulls=False):
-        return json.dumps(self.as_dict(no_nulls=no_nulls),sort_keys=True)
+        return json.dumps(self.as_dict(include_objects=False,no_nulls=no_nulls),sort_keys=True)
 
 ### Profiles ###
 class MetaProfile(type):
