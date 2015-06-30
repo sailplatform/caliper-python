@@ -1256,7 +1256,7 @@ class Session(Entity, Generatable, Targetable):
 
     @property
     def actor(self):
-        return self._actor
+        return self._get_prop('actor')
 
     @property
     def duration(self):
