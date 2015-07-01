@@ -14,19 +14,17 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
-
 import caliper
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-
 _packages = [ 'caliper',
               'caliper.extern',
               'caliper.util',
               'caliper_tests' ]
-
+    
 _requires = [ 'future >= 0.14.3',
               'oauthlib >= 0.7.2',
               'requests >= 2.7.0' ]
@@ -44,7 +42,7 @@ setup(
     maintainer = caliper.__author__,
     maintainer_email = 'info@imsglobal.org',
     url = 'https://github.com/IMSGlobal/caliper-python',
-    include_package_data = True,
+    packages = _packages,
     package_data = {'caliper_tests' : ['fixtures/*.json'] },
     install_requires = _requires,
     license = caliper.__license__,

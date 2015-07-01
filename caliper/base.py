@@ -25,16 +25,12 @@ from future.utils import with_metaclass
 from builtins import *
 
 
-import collections
-import copy
-import json
+import collections, copy, json
+from oauthlib import uri_validate as oauthlib_uri_validate
 
 ## convenience functions
-## TODO: do better URI testing here; right now this is consistent with
-##       the other impls.
-from oauthlib import uri_validate as oauthlib_uri_validate
 def is_valid_URI(uri):
-    if oauthlib_uri_validate.is_uri(uri):
+    if isinstance(uri, str) and oauthlib_uri_validate.is_uri(uri):
         return True
     else:
         return False
