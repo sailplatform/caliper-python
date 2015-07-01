@@ -24,38 +24,11 @@ install_aliases()
 from builtins import *
 
 
+from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
+from caliper.constants import ENTITY_TYPES
 from caliper.base import CaliperSerializable
 from caliper import entities, profiles
 from caliper.extern import foaf, schemadotorg
-
-EVENT_TYPES = {
-    'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
-    'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',
-    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent',
-    'ASSIGNABLE': 'http://purl.imsglobal.org/caliper/v1/AssignableEvent',
-    'EVENT': 'http://purl.imsglobal.org/caliper/v1/Event',
-    'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
-    'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
-    'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
-    'READING': 'http://purl.imsglobal.org/caliper/v1/ReadingEvent',
-    'SESSION': 'http://purl.imsglobal.org/caliper/v1/SessionEvent',
-    'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
-    }
-
-EVENT_CONTEXTS = {
-    'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    }
-
 
 ## Base event class
 class Event(CaliperSerializable):
