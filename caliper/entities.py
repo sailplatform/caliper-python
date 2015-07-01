@@ -26,135 +26,9 @@ from builtins import *
 
 import collections
 
-from caliper.base import CaliperSerializable, BaseRole, BaseStatus
-from caliper.base import is_valid_URI
+from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, ENTITY_CLASSES
+from caliper.base import CaliperSerializable, BaseRole, BaseStatus, is_valid_URI
 from caliper.extern import foaf, schemadotorg, w3c
-
-ENTITY_CONTEXTS = {
-    'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSIGNABLE_DIGITAL_RESOURCE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ATTEMPT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'AUDIO_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'BOOKMARK_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'COURSE_OFFERING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'COURSE_SECTION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ENTITY': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'EPUB_CHAPTER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'EPUB_PART': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'EPUB_SUB_CHAPTER': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'EPUB_VOLUME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'FILLINBLANK': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'FRAME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'GROUP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'HIGHLIGHT_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'IMAGE_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MEDIA_LOCATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MEDIA_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MEMBERSHIP': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MULTIPLECHOICE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MULTIPLERESPONSE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ORGANIZATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'PERSON': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'RESPONSE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'RESULT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'SELECTTEXT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'SHARED_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'TAG_ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'TRUEFALSE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'VIDEO_OBJECT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'WEB_PAGE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context'}
-
-ENTITY_TYPES = {
-    'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/Annotation',
-    'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/Assessment',
-    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItem',
-    'ASSIGNABLE_DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/AssignableDigitalResource',
-    'ATTEMPT': 'http://purl.imsglobal.org/caliper/v1/Attempt',
-    'AUDIO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/AudioObject',
-    'BOOKMARK_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation',
-    'COURSE_OFFERING': 'http://purl.imsglobal.org/caliper/v1/lis/CourseOffering',
-    'COURSE_SECTION': 'http://purl.imsglobal.org/caliper/v1/lis/CourseSection',
-    'DIGITAL_RESOURCE': 'http://purl.imsglobal.org/caliper/v1/DigitalResource',
-    'ENTITY': 'http://purl.imsglobal.org/caliper/v1/Entity',
-    'EPUB_CHAPTER': 'http://www.idpf.org/epub/vocab/structure/#chapter',
-    'EPUB_PART': 'http://www.idpf.org/epub/vocab/structure/#part',
-    'EPUB_SUB_CHAPTER': 'http://www.idpf.org/epub/vocab/structure/#subchapter',
-    'EPUB_VOLUME': 'http://www.idpf.org/epub/vocab/structure/#volume',
-    'FILLINBLANK': 'http://purl.imsglobal.org/caliper/v1/FillinBlankResponse',
-    'FRAME': 'http://purl.imsglobal.org/caliper/v1/Frame',
-    'GROUP': 'http://purl.imsglobal.org/caliper/v1/lis/Group',
-    'HIGHLIGHT_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/HighlightAnnotation',
-    'IMAGE_OBJECT': 'http://purl.imsglobal.org/caliper/v1/ImageObject',
-    'LEARNING_OBJECTIVE': 'http://purl.imsglobal.org/caliper/v1/LearningObjective',
-    'MEDIA_LOCATION': 'http://purl.imsglobal.org/caliper/v1/MediaLocation',
-    'MEDIA_OBJECT': 'http://purl.imsglobal.org/caliper/v1/MediaObject',
-    'MEMBERSHIP': 'http://purl.imsglobal.org/caliper/v1/lis/Membership',
-    'MULTIPLECHOICE': 'http://purl.imsglobal.org/caliper/v1/MultipleChoiceResponse',
-    'MULTIPLERESPONSE': 'http://purl.imsglobal.org/caliper/v1/MultipleResponseResponse',
-    'ORGANIZATION': 'http://purl.imsglobal.org/caliper/v1/w3c/Organization',
-    'PERSON': 'http://purl.imsglobal.org/caliper/v1/lis/Person',
-    'READING': 'http://purl.imsglobal.org/caliper/v1/Reading',
-    'RESPONSE': 'http://purl.imsglobal.org/caliper/v1/Response',
-    'RESULT': 'http://purl.imsglobal.org/caliper/v1/Result',
-    'SELECTTEXT': 'http://purl.imsglobal.org/caliper/v1/SelectTextResponse',
-    'SESSION': 'http://purl.imsglobal.org/caliper/v1/Session',
-    'SHARED_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/SharedAnnotation',
-    'SOFTWARE_APPLICATION': 'http://purl.imsglobal.org/caliper/v1/SoftwareApplication',
-    'TAG_ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/TagAnnotation',
-    'TRUEFALSE': 'http://purl.imsglobal.org/caliper/v1/TrueFalseResponse',
-    'VIDEO_OBJECT': 'http://purl.imsglobal.org/caliper/v1/VideoObject',
-    'VIEW': 'http://purl.imsglobal.org/caliper/v1/View',
-    'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage'}
-
-ENTITY_CLASSES = {
-    ENTITY_TYPES['ANNOTATION']: 'caliper.entities.Annotation',
-    ENTITY_TYPES['ASSESSMENT']: 'caliper.entities.Assessment',
-    ENTITY_TYPES['ASSESSMENT_ITEM']: 'caliper.entities.AssessmentItem',
-    ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE']: 'caliper.entities.AssignableDigitalResource',
-    ENTITY_TYPES['ATTEMPT']: 'caliper.entities.Attempt',
-    ENTITY_TYPES['AUDIO_OBJECT']: 'caliper.entities.AudioObject',
-    ENTITY_TYPES['BOOKMARK_ANNOTATION']: 'caliper.entities.BookmarkAnnotation',
-    ENTITY_TYPES['COURSE_OFFERING']: 'caliper.entities.CourseOffering',
-    ENTITY_TYPES['COURSE_SECTION']: 'caliper.entities.CourseSection',
-    ENTITY_TYPES['DIGITAL_RESOURCE']: 'caliper.entities.DigitalResource',
-    ENTITY_TYPES['ENTITY']: 'caliper.entities.Entity',
-    ENTITY_TYPES['EPUB_CHAPTER']: 'caliper.entities.EpubChapter',
-    ENTITY_TYPES['EPUB_PART']: 'caliper.entities.EpubPart',
-    ENTITY_TYPES['EPUB_SUB_CHAPTER']: 'caliper.entities.EpubSubChapter',
-    ENTITY_TYPES['EPUB_VOLUME']: 'caliper.entities.EpubVolume',
-    ENTITY_TYPES['FILLINBLANK']: 'caliper.entities.FillinBlankResponse',
-    ENTITY_TYPES['FRAME']: 'caliper.entities.Frame',
-    ENTITY_TYPES['GROUP']: 'caliper.entities.Group',
-    ENTITY_TYPES['HIGHLIGHT_ANNOTATION']: 'caliper.entities.HighlightAnnotation',
-    ENTITY_TYPES['IMAGE_OBJECT']: 'caliper.entities.ImageObject',
-    ENTITY_TYPES['LEARNING_OBJECTIVE']: 'caliper.entities.LearningObjective',
-    ENTITY_TYPES['MEDIA_LOCATION']: 'caliper.entities.MediaLocation',
-    ENTITY_TYPES['MEDIA_OBJECT']: 'caliper.entities.MediaObject',
-    ENTITY_TYPES['MEMBERSHIP']: 'caliper.entities.Membership',
-    ENTITY_TYPES['MULTIPLECHOICE']: 'caliper.entities.MultipleChoiceResponse',
-    ENTITY_TYPES['MULTIPLERESPONSE']: 'caliper.entities.MultipleResponseResponse',
-    ENTITY_TYPES['ORGANIZATION']: 'caliper.entities.Organization',
-    ENTITY_TYPES['PERSON']: 'caliper.entities.Person',
-    ENTITY_TYPES['READING']: 'caliper.entities.Reading',
-    ENTITY_TYPES['RESPONSE']: 'caliper.entities.Response',
-    ENTITY_TYPES['RESULT']: 'caliper.entities.Result',
-    ENTITY_TYPES['SELECTTEXT']: 'caliper.entities.SelectTextResponse',
-    ENTITY_TYPES['SESSION']: 'caliper.entities.Session',
-    ENTITY_TYPES['SHARED_ANNOTATION']: 'caliper.entities.SharedAnnotation',
-    ENTITY_TYPES['SOFTWARE_APPLICATION']: 'caliper.entities.SoftwareApplication',
-    ENTITY_TYPES['TAG_ANNOTATION']: 'caliper.entities.TagAnnotation',
-    ENTITY_TYPES['TRUEFALSE']: 'caliper.entities.TrueFalseResponse',
-    ENTITY_TYPES['VIDEO_OBJECT']: 'caliper.entities.VideoObject',
-    ENTITY_TYPES['WEB_PAGE']: 'caliper.entities.WebPage'
-    }
 
 
 ### Fundamental entities ###
@@ -335,15 +209,8 @@ class Membership(Entity, w3c.Membership):
         self._set_str_prop('@context', ENTITY_CONTEXTS['MEMBERSHIP'])
         self._set_str_prop('@type', ENTITY_TYPES['MEMBERSHIP'])
 
-        if member and (not isinstance(member, Person)):
-            raise TypeError('member must implement Person')
-        else:
-            self._set_id_prop('member', member)
-
-        if organization and (not isinstance(organization, Organization)):
-            raise TypeError('organization must implement Organization')
-        else:
-            self._set_id_prop('organization', organization)
+        self._set_id_prop('member', member, ENTITY_TYPES['PERSON'])
+        self._set_id_prop('organization', organization, ENTITY_TYPES['ORGANIZATION'])
 
         if roles and isinstance(roles, collections.MutableSequence):
             if set(roles).issubset(set(Role.Roles.values())):
@@ -677,10 +544,7 @@ class Annotation(Entity, Generatable):
         self._set_str_prop('@context', ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
 
-        if annotated and (not isinstance(annotated, DigitalResource)):
-            raise TypeError('annotated must implement DigitalResource')
-        else:
-            self._set_id_prop('annotated', annotated)
+        self._set_id_prop('annotated', annotated, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
     @property
     def annotated(self):
@@ -826,8 +690,8 @@ class Attempt(Entity, Generatable):
                 positive).
     '''
     def __init__(self,
-            assignable = None,
             actor = None,
+            assignable = None,
             count = None,
             duration = None,
             endedAtTime =None,
@@ -837,15 +701,8 @@ class Attempt(Entity, Generatable):
         self._set_str_prop('@context', ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('@type', ENTITY_TYPES['ATTEMPT'])
 
-        if actor and (not isinstance(actor, Agent)):
-            raise TypeError('actor must implement Agent')
-        else:
-            self._set_id_prop('actor', actor)
-        
-        if assignable and (not isinstance(assignable, DigitalResource)):
-            raise TypeError('assignable must implement DigitalResource')
-        else:
-            self._set_id_prop('assignable', assignable)
+        self._set_id_prop('actor', actor, 'AGENT')
+        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'])
         
         self._set_int_prop('count', count)
         self._set_str_prop('duration', duration) ## should we armour this with a regex?
@@ -905,15 +762,8 @@ class Response(Entity, Generatable):
         self._set_str_prop('@context', ENTITY_CONTEXTS['RESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['RESPONSE'])
 
-        if actor and (not isinstance(actor, Agent)):
-            raise TypeError('actor must implement Agent')
-        else:
-            self._set_id_prop('actor', actor)
-        
-        if assignable and (not isinstance(assignable, DigitalResource)):
-            raise TypeError('assignable must implement DigitalResource')
-        else:
-            self._set_id_prop('assignable', assignable)
+        self._set_id_prop('actor', actor, 'AGENT')
+        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'])
         
         if attempt and not( isinstance(attempt, Attempt)):
             raise TypeError('attempt must implement Attempt')
@@ -1101,16 +951,9 @@ class Result(Entity, Generatable):
         self._set_str_prop('@context', ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('@type', ENTITY_TYPES['RESULT'])
 
-        if actor and (not isinstance(actor, Agent)):
-            raise TypeError('actor must implement Agent')
-        else:
-            self._set_id_prop('actor', actor)
-        
-        if assignable and (not isinstance(assignable, DigitalResource)):
-            raise TypeError('assignable must implement DigitalResource')
-        else:
-            self._set_id_prop('assignable', assignable)
-        
+        self._set_id_prop('actor', actor, 'AGENT')
+        self._set_id_prop('assignable', assignable, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
+
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)

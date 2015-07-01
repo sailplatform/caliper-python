@@ -25,22 +25,25 @@ from future.utils import with_metaclass
 from builtins import *
 
 
-import collections
-import copy
-import json
+import collections, copy, importlib, json
+from oauthlib import uri_validate as oauthlib_uri_validate
+
+from caliper.constants import CALIPER_CLASSES
 
 ## convenience functions
-## TODO: do better URI testing here; right now this is consistent with
-##       the other impls.
-from oauthlib import uri_validate as oauthlib_uri_validate
 def is_valid_URI(uri):
-    if oauthlib_uri_validate.is_uri(uri):
+    if isinstance(uri, str) and oauthlib_uri_validate.is_uri(uri):
         return True
     else:
         return False
 
-### Default configuration values ###
+def is_subtype(tname1, tname2):
+    m1,c1 = CALIPER_CLASSES.get(tname1).rsplit('.',1)
+    m2,c2 = CALIPER_CLASSES.get(tname2).rsplit('.',1)    
+    return issubclass( getattr(importlib.import_module(m1),c1),
+                       getattr(importlib.import_module(m2),c2))
 
+### Default configuration values ###
 class Options(object):
     _config = {
         'API_KEY': None,
@@ -132,26 +135,34 @@ class CaliperSerializable(object):
         if v == None:
             self._set_prop(k,None)
         else:
-            self._set_prop(k, float(v))
+            self._set_prop(k,float(v))
 
     def _set_bool_prop(self,k,v):
         if v == None:
-            self._set_prop(k, None)
+            self._set_prop(k,None)
         else:
-            self._set_prop(k, bool(v))
+            self._set_prop(k,bool(v))
 
-    def _set_id_prop(self,k,v):
-        the_id = getattr(v, 'id', None)
-        if the_id and not is_valid_URI(the_id):
-            raise ValueError('ID value must be a valid URI')
-        self._set_str_prop(k, the_id)
-        self._set_object(k,v)
+    def _set_id_prop(self,k,v,t):
+        val = None
+        if is_valid_URI(v):
+            val = v
+        elif (isinstance(v, CaliperSerializable)
+              and is_subtype(v.type,t) ):
+            val = v.id
+            self._set_object(k,v)
+        elif (isinstance(v, collections.MutableMapping)
+              and is_subtype(v.get('@type'),t)
+              and is_valid_URI(v.get('@id')) ):
+            val = v.get('@id')
+            self._set_object(k,v)
+        self._set_str_prop(k,val)
             
     def _set_int_prop(self,k,v):
         if v == None:
             self._set_prop(k,None)
         else:
-            self._set_prop(k, int(v))
+            self._set_prop(k,int(v))
 
     def _set_list_prop(self,k,v):
         self._set_prop(k,v or [])
@@ -171,7 +182,7 @@ class CaliperSerializable(object):
         if v == None:
             self._set_prop(k,None)
         else:
-            self._set_prop(k, str(v))
+            self._set_prop(k,str(v))
 
     def _get_prop(self,k):
         return self._objects.get(k) or self._props.get(k)

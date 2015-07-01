@@ -25,11 +25,7 @@ from builtins import *
 
 import collections, importlib
 
-from caliper import entities, events
-
-CALIPER_CLASSES = {}
-CALIPER_CLASSES.update(entities.ENTITY_CLASSES)
-CALIPER_CLASSES.update(events.EVENT_CLASSES)
+from caliper.constants import CALIPER_CLASSES
 
 def from_json_dict(d):
     type_path = CALIPER_CLASSES.get(d.get('@type'))

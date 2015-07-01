@@ -23,52 +23,11 @@ from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
 
-
+from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
+from caliper.constants import ENTITY_TYPES
 from caliper.base import CaliperSerializable
 from caliper import entities, profiles
 from caliper.extern import foaf, schemadotorg
-
-EVENT_CONTEXTS = {
-    'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSESSMENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'READING': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1/Context',
-    }
-
-EVENT_TYPES = {
-    'ANNOTATION': 'http://purl.imsglobal.org/caliper/v1/AnnotationEvent',
-    'ASSESSMENT': 'http://purl.imsglobal.org/caliper/v1/AssessmentEvent',
-    'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent',
-    'ASSIGNABLE': 'http://purl.imsglobal.org/caliper/v1/AssignableEvent',
-    'EVENT': 'http://purl.imsglobal.org/caliper/v1/Event',
-    'MEDIA': 'http://purl.imsglobal.org/caliper/v1/MediaEvent',
-    'NAVIGATION': 'http://purl.imsglobal.org/caliper/v1/NavigationEvent',
-    'OUTCOME': 'http://purl.imsglobal.org/caliper/v1/OutcomeEvent',
-    'READING': 'http://purl.imsglobal.org/caliper/v1/ReadingEvent',
-    'SESSION': 'http://purl.imsglobal.org/caliper/v1/SessionEvent',
-    'VIEW': 'http://purl.imsglobal.org/caliper/v1/ViewEvent',
-    }
-
-EVENT_CLASSES = {
-    EVENT_TYPES['ANNOTATION']: 'caliper.events.AnnotationEvent',
-    EVENT_TYPES['ASSESSMENT']: 'caliper.events.AssessmentEvent',
-    EVENT_TYPES['ASSESSMENT_ITEM']: 'caliper.events.AssessmentItemEvent',
-    EVENT_TYPES['ASSIGNABLE']: 'caliper.events.AssignableEvent',
-    EVENT_TYPES['EVENT']: 'caliper.events.Event',
-    EVENT_TYPES['MEDIA']: 'caliper.events.MediaEvent',
-    EVENT_TYPES['NAVIGATION']: 'caliper.events.NavigationEvent',
-    EVENT_TYPES['OUTCOME']: 'caliper.events.OutcomeEvent',
-    EVENT_TYPES['READING']: 'caliper.events.ReadingEvent',
-    EVENT_TYPES['SESSION']: 'caliper.events.SessionEvent',
-    EVENT_TYPES['VIEW']: 'caliper.events.ViewEvent',
-    }
 
 
 ## Base event class
@@ -116,10 +75,7 @@ class Event(CaliperSerializable):
         else:
             self._set_obj_prop('object', event_object)
 
-        if federatedSession and (not isinstance(federatedSession, entities.Session)):
-            raise TypeError('federatedSession must implement Session')
-        else:
-            self._set_id_prop('federatedSession', federatedSession)
+        self._set_id_prop('federatedSession', federatedSession, ENTITY_TYPES['SESSION'])
 
         if generated and (not isinstance(generated, entities.Generatable)):
             raise TypeError('generated must implement entities.Generatable')
