@@ -110,7 +110,6 @@ ENTITY_TYPES = {
     'WEB_PAGE': 'http://purl.imsglobal.org/caliper/v1/WebPage'}
 
 ENTITY_CLASSES = {
-    'AGENT': 'caliper.entities.Agent',
     ENTITY_TYPES['ANNOTATION']: 'caliper.entities.Annotation',
     ENTITY_TYPES['ASSESSMENT']: 'caliper.entities.Assessment',
     ENTITY_TYPES['ASSESSMENT_ITEM']: 'caliper.entities.AssessmentItem',

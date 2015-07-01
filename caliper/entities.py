@@ -27,12 +27,12 @@ from builtins import *
 import collections
 
 from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS
-from caliper.base import CaliperSerializable, BaseRole, BaseStatus, is_valid_URI
+from caliper.base import CaliperSerializable, BaseEntity, BaseRole, BaseStatus, is_valid_URI
 from caliper.extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
 ## Base entity class
-class Entity(CaliperSerializable, schemadotorg.Thing):
+class Entity(BaseEntity, schemadotorg.Thing):
 
     ## Use the base context value here, but preserve the context labels
     ## in case, in the future, indivdual contexts start getting split out
@@ -46,7 +46,7 @@ class Entity(CaliperSerializable, schemadotorg.Thing):
             name = None,
             extensions = {},
             **kwargs):
-        CaliperSerializable.__init__(self)
+        BaseEntity.__init__(self)
 
         if not entity_id:
             raise ValueError('Entity must have an ID.')
@@ -92,7 +92,7 @@ class Entity(CaliperSerializable, schemadotorg.Thing):
         return self._get_prop('extensions')
 
 ## Behavioural interfaces for entities ##
-class Assignable(CaliperSerializable):
+class Assignable(BaseEntity):
 
     @property
     def datePublished(self):
@@ -122,10 +122,10 @@ class Assignable(CaliperSerializable):
     def maxSubmits(self):
         return self._get_prop('maxSubmits')
 
-class Generatable(CaliperSerializable):
+class Generatable(BaseEntity):
     pass
 
-class Targetable(CaliperSerializable):
+class Targetable(BaseEntity):
     pass
 
     
@@ -273,11 +273,7 @@ class Organization(Entity, w3c.Organization):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ORGANIZATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ORGANIZATION'])
-
-        if subOrganizationOf and (not isinstance(subOrganizationOf, w3c.Organization)):
-            raise TypeError('subOrganizationOf must implement w3c.Organization')
-        else:
-            self._set_obj_prop('subOrganizationOf', subOrganizationOf)
+        self._set_obj_prop('subOrganizationOf', subOrganizationOf, ENTITY_TYPES['ORGANIZATION'])
 
     @property
     def subOrganizationOf(self):
@@ -346,28 +342,11 @@ class LearningContext(CaliperSerializable):
                  group = None,
                  membership = None,
                  session = None):
-
         CaliperSerializable.__init__(self)
-
-        if edApp and (not isinstance(edApp, SoftwareApplication)):
-            raise TypeError('edApp must implement SoftwareApplication')
-        else:
-            self._set_obj_prop('edApp', edApp)
-
-        if group and (not isinstance(group, Organization)):
-            raise TypeError('group must implement Organization')
-        else:
-            self._set_obj_prop('group', group)
-
-        if membership and (not isinstance(membership, Membership)):
-            raise TypeError('membership must implement Membership')
-        else:
-            self._set_obj_prop('membership', membership)
-
-        if session and (not isinstance(session, Session)):
-            raise TypeError('session must implement Session')
-        else:
-            self._set_obj_prop('session', session)
+        self._set_obj_prop('edApp', edApp, ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        self._set_obj_prop('group', group, ENTITY_TYPES['ORGANIZATION'])
+        self._set_obj_prop('membership', membership, ENTITY_TYPES['MEMBERSHIP'])
+        self._set_obj_prop('session', session, ENTITY_TYPES['SESSION'])
             
     @property
     def edApp(self):
@@ -421,11 +400,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             self._set_list_prop('alignedLearningObjective', None)
 
         self._set_str_prop('datePublished', datePublished)
-
-        if isPartOf and (not isinstance(isPartOf, schemadotorg.CreativeWork)):
-            raise TypeError('isPartOf must implement schemadotorg.CreativeWork')
-        else:
-            self._set_obj_prop('isPartOf', isPartOf)
+        self._set_obj_prop('isPartOf', isPartOf, schemadotorg.CreativeWork)
 
         if isinstance(keywords, collections.MutableSequence):
             if all( isinstance(item, str) for item in keywords):
@@ -459,10 +434,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         return self._get_prop('isPartOf')
     @isPartOf.setter
     def isPartOf(self, new_object):
-        if new_object and (not isinstance(new_object, schemadotorg.CreativeWork)):
-            raise TypeError('new object must implement schemadotorg.CreativeWork')
-        else:
-            self._set_obj_prop('isPartOf', new_object)
+        self._set_obj_prop('isPartOf', isPartOf, schemadotorg.CreativeWork)
 
     @property
     def keywords(self):
@@ -542,7 +514,6 @@ class Annotation(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
-
         self._set_id_prop('annotated', annotated, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
     @property
@@ -577,12 +548,7 @@ class HighlightAnnotation(Annotation):
         Annotation.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['HIGHLIGHT_ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['HIGHLIGHT_ANNOTATION'])
-
-        if selection and (not isinstance(selection, TextPositionSelector)):
-            raise TypeError ('selection must implement TextPositionSelector')
-        else:
-            self._set_obj_prop('selection', selection)
-        
+        self._set_obj_prop('selection', selection, TextPositionSelector)
         self._set_str_prop('selectionText', selectionText)
                  
     @property
@@ -603,10 +569,10 @@ class SharedAnnotation(Annotation):
         self._set_str_prop('@type', ENTITY_TYPES['SHARED_ANNOTATION'])
 
         if isinstance(withAgents, collections.MutableSequence):
-            if all( isinstance(item, foaf.Agent) for item in withAgents):
+            if all( isinstance(item, Agent) for item in withAgents):
                 self._set_list_prop('withAgents', withAgents)
             else:
-                raise TypeError('withAgents must be a list of objects that implement foaf.Agent')
+                raise TypeError('withAgents must be a list of objects that implement Agent')
         else:
             self._set_list_prop('withAgents', None)
 
@@ -699,12 +665,10 @@ class Attempt(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('@type', ENTITY_TYPES['ATTEMPT'])
-
-        self._set_id_prop('actor', actor, 'AGENT')
+        self._set_id_prop('actor', actor, Agent)
         self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        
         self._set_int_prop('count', count)
-        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
             
@@ -733,7 +697,7 @@ class Attempt(Entity, Generatable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', new_duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', new_duration)
 
     @property
     def endedAtTime(self):
@@ -760,16 +724,15 @@ class Response(Entity, Generatable):
         Entity.__init__(self,**kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['RESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['RESPONSE'])
-
-        self._set_id_prop('actor', actor, 'AGENT')
+        self._set_id_prop('actor', actor, Agent)
         self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        
+
         if attempt and not( isinstance(attempt, Attempt)):
             raise TypeError('attempt must implement Attempt')
         else:
             self._set_list_prop('attempt', attempt)
         
-        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
         self._set_str_prop('values', values)
@@ -949,22 +912,15 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('@type', ENTITY_TYPES['RESULT'])
-
-        self._set_id_prop('actor', actor, 'AGENT')
-        self._set_id_prop('assignable', assignable, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
-
+        self._set_id_prop('actor', actor, Agent)
+        self._set_id_prop('assignable', assignable, Assignable)
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
         self._set_float_prop('extraCreditScore', extraCreditScore)
         self._set_float_prop('normalScore', normalScore)
         self._set_float_prop('penaltyScore', penaltyScore)
-
-        if scoredBy and (not isinstance(scoredBy, foaf.Agent)):
-            raise TypeError('scoredBy must implement foaf.Agent')
-        else:
-            self._set_obj_prop('scoredBy', scoredBy)
-        
+        self._set_obj_prop('scoredBy', scoredBy, Agent)
         self._set_float_prop('totalScore', totalScore)
 
     @property
@@ -1038,7 +994,7 @@ class MultipleResponseResponse(Response):
         Response.__init__(self,**kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLERESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['MULTIPLERESPONSE'])
-
+        
         if values and isinstance(values, collections.MutableSequence):
           if all( isinstance(item, str) for item in values):
             self._set_list_prop('values', values)
@@ -1086,12 +1042,7 @@ class Session(Entity, Generatable, Targetable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['SESSION'])
-
-        if not isinstance(actor, foaf.Agent):
-            raise TypeError('actor must implement foaf.Agent')
-        else:
-            self._set_obj_prop('actor', actor)
-
+        self._set_obj_prop('actor', actor, Agent)
         self._set_str_prop('duration', duration) ## should we armour this with a regex?
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)

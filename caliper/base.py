@@ -36,9 +36,13 @@ def is_valid_URI(uri):
     else:
         return False
 
-def is_subtype(tname1, tname2):
-    m1,c1 = CALIPER_CLASSES.get(tname1).rsplit('.',1)
-    m2,c2 = CALIPER_CLASSES.get(tname2).rsplit('.',1)    
+def is_subtype(type_name, type_or_type_name):
+    m1,c1 = CALIPER_CLASSES.get(type_name).rsplit('.',1)
+    if isinstance(type_or_type_name, type):
+        m2 = type_or_type_name.__module__
+        c2 = type_or_type_name.__name__
+    else:
+        m2,c2 = CALIPER_CLASSES.get(type_or_type_name).rsplit('.',1)    
     return issubclass( getattr(importlib.import_module(m1),c1),
                        getattr(importlib.import_module(m2),c2))
 
@@ -146,7 +150,7 @@ class CaliperSerializable(object):
         val = None
         if is_valid_URI(v):
             val = v
-        elif (isinstance(v, CaliperSerializable)
+        elif (isinstance(v, BaseEntity) 
               and is_subtype(v.type,t) ):
             val = v.id
             self._set_object(k,v)
@@ -174,8 +178,11 @@ class CaliperSerializable(object):
         else:
             raise ValueError('attempt to append to a non-list property')
 
-    def _set_obj_prop(self,k,v):
-        self._set_prop(k,v)
+    def _set_obj_prop(self,k,v,t=None):
+        val = v
+        if isinstance(v, BaseEntity) and not(is_subtype(v.type,t)):
+            val = None
+        self._set_prop(k,val)
 
     def _set_str_prop(self,k,v):
         if v == None:
@@ -245,6 +252,15 @@ class CaliperSerializable(object):
         if '@context' in self._props:
             r.update({'@context':self._props['@context']})
         return json.dumps(r,sort_keys=True)
+
+### Entities and Events ###
+class BaseEntity(CaliperSerializable):
+    def __init__(self):
+        CaliperSerializable.__init__(self)
+
+class BaseEvent(CaliperSerializable):
+    def __init__(self):
+        CaliperSerializable.__init__(self)
 
 ### Profiles ###
 class MetaProfile(type):
