@@ -29,7 +29,6 @@ from caliper.base import CaliperSerializable
 from caliper import entities, profiles
 from caliper.extern import foaf, schemadotorg
 
-
 ## Base event class
 class Event(CaliperSerializable):
 

@@ -26,10 +26,9 @@ from builtins import *
 
 import collections
 
-from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, ENTITY_CLASSES
+from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS
 from caliper.base import CaliperSerializable, BaseRole, BaseStatus, is_valid_URI
 from caliper.extern import foaf, schemadotorg, w3c
-
 
 ### Fundamental entities ###
 ## Base entity class

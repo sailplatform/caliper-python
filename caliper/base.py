@@ -24,7 +24,6 @@ install_aliases()
 from future.utils import with_metaclass
 from builtins import *
 
-
 import collections, copy, importlib, json
 from oauthlib import uri_validate as oauthlib_uri_validate
 
