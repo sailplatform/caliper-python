@@ -62,4 +62,12 @@ def from_json_dict(d):
 
 
 def from_json_list(l):
-    return [from_json_dict(item) for item in l] or None
+    r = []
+    for item in l:
+        if isinstance(item, collections.MutableSequence):
+            r.append(from_json_list(item))
+        elif isinstance(item, collections.MutableMapping) and item.get('@type'):
+            r.append(from_json_dict(item))
+        else:
+            r.append(item)
+    return r or None
