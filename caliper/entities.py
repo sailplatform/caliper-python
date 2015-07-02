@@ -23,11 +23,11 @@ from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
 
-
 import collections
 
 from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS
-from caliper.base import CaliperSerializable, BaseEntity, BaseRole, BaseStatus, is_valid_URI
+from caliper.base import CaliperSerializable, BaseEntity, BaseRole, BaseStatus
+from caliper.base import is_valid_URI, ensure_type
 from caliper.extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
@@ -44,10 +44,8 @@ class Entity(BaseEntity, schemadotorg.Thing):
             dateModified = None,
             description = None,
             name = None,
-            extensions = {},
-            **kwargs):
+            extensions = {}):
         BaseEntity.__init__(self)
-
         self._set_id_prop('@id', entity_id, str, req=True)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ENTITY'])
         self._set_str_prop('@type', ENTITY_TYPES['ENTITY'])
@@ -324,14 +322,11 @@ class CourseSection(CourseOffering):
 
 class Group(Organization):
 
-    def __init__(self,
-                 subOrganizationOf = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Organization.__init__(self,**kwargs)
+        ensure_type(self.subOrganizationOf, Course)
         self._set_str_prop('@context', ENTITY_CONTEXTS['GROUP'])
         self._set_str_prop('@type', ENTITY_TYPES['GROUP'])
-        self._set_obj_prop('subOrganizationOf', subOrganizationOf, Course ,req=True)
-
 
 ## Learning Context
 class LearningContext(CaliperSerializable):
@@ -764,7 +759,7 @@ class Response(Entity, Generatable):
         self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
-        self._set_str_prop('values', values)
+        self._set_list_prop('values', values)
 
     @property
     def assignable(self):
@@ -798,69 +793,48 @@ class Response(Entity, Generatable):
 
 class FillinBlankResponse(Response):
 
-    def __init__(self,
-                 values = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
+        if self.values and isinstance(self.values, collections.MutableSequence):
+          if not( all( isinstance(item, str) for item in self.values) ):
+            raise TypeError('values must be a list of strings')
         self._set_str_prop('@context', ENTITY_CONTEXTS['FILLINBLANK'])
         self._set_str_prop('@type', ENTITY_TYPES['FILLINBLANK'])
 
-        if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, str) for item in values):
-            self._set_list_prop('values', values)
-          else:
-            raise TypeError('values must be a list of strings')
-        else:
-          self._set_list_prop('values', None)
 
 class MultipleChoiceResponse(Response):
 
-    def __init__(self,
-                 values = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLECHOICE'])
         self._set_str_prop('@type', ENTITY_TYPES['MULTIPLECHOICE'])
 
+
 class MultipleResponseResponse(Response):
 
-    def __init__(self,
-                 values = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
+        if self.values and isinstance(self.values, collections.MutableSequence):
+          if not( all( isinstance(item, str) for item in self.values) ):
+            raise TypeError('values must be a list of strings')
         self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLERESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['MULTIPLERESPONSE'])
         
-        if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, str) for item in values):
-            self._set_list_prop('values', values)
-          else:
-            raise TypeError('values must be alist of strings')
-        else:
-          self._set_list_prop('values', None)
 
 class SelectTextResponse(Response):
 
-    def __init__(self,
-                 values = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
+        if self.values and isinstance(values, collections.MutableSequence):
+          if not( all( isinstance(item, str) for item in self.values) ):
+            self._set_list_prop('values', self.values)
         self._set_str_prop('@context', ENTITY_CONTEXTS['SELECTTEXT'])
         self._set_str_prop('@type', ENTITY_TYPES['SELECTTEXT'])
 
-        if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, str) for item in values):
-            self._set_list_prop('values', values)
-          else:
-            raise TypeError('values must be alist of strings')
-        else:
-          self._set_list_prop('values', None)
 
 class TrueFalseResponse(Response):
 
-    def __init__(self,
-                 values = None,
-                 **kwargs):
+    def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['TRUEFALSE'])
         self._set_str_prop('@type', ENTITY_TYPES['TRUEFALSE'])
@@ -875,7 +849,7 @@ class MediaObject(DigitalResource, schemadotorg.MediaObject):
         DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['MEDIA_OBJECT'])
         self._set_str_prop('@type', ENTITY_TYPES['MEDIA_OBJECT'])
-        self._set_int_prop('duration', duration) ## Is this the same as an Attempt duration?
+        self._set_int_prop('duration', duration)
 
     @property
     def duration(self):

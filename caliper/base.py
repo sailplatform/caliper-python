@@ -36,15 +36,24 @@ def is_valid_URI(uri):
     else:
         return False
 
-def is_subtype(type_name, type_or_type_name):
-    m1,c1 = CALIPER_CLASSES.get(type_name).rsplit('.',1)
-    if isinstance(type_or_type_name, type):
-        m2 = type_or_type_name.__module__
-        c2 = type_or_type_name.__name__
+def is_subtype(type_1, type_2):
+    if isinstance(type_1, type):
+        m1 = type_1.__module__
+        c1 = type_1.__name__
     else:
-        m2,c2 = CALIPER_CLASSES.get(type_or_type_name).rsplit('.',1)    
+        m1,c1 = CALIPER_CLASSES.get(type_1).rsplit('.',1)
+    if isinstance(type_2, type):
+        m2 = type_2.__module__
+        c2 = type_2.__name__
+    else:
+        m2,c2 = CALIPER_CLASSES.get(type_2).rsplit('.',1)
     return issubclass( getattr(importlib.import_module(m1),c1),
                        getattr(importlib.import_module(m2),c2))
+
+def ensure_type(p,t):
+    if not( (isinstance(p, BaseEntity) and is_subtype(p.type,t)) or
+            (isinstance(p, collections.MutableMapping) and is_subtype(p['@type'],t)) ):
+        raise TypeError("Property must be of type {0}".format(str(t)))
 
 ### Default configuration values ###
 class Options(object):
@@ -184,10 +193,12 @@ class CaliperSerializable(object):
             raise ValueError('attempt to append to a non-list property')
 
     def _set_obj_prop(self,k,v,t=None,req=False):
-        val = v
+        if req and (v==None):
+            raise ValueError('{0} must have a non-null value'.format(str(k)))
         if isinstance(v, BaseEntity) and not(is_subtype(v.type,t)):
-            val = None
-        self._set_prop(k,val,req=req)
+            self._set_prop(k,None)
+        else:
+            self._set_prop(k,v)
 
     def _set_str_prop(self,k,v,req=False):
         if v == None:

@@ -492,7 +492,6 @@ def build_assessment_item_event(learning_context = None,
         membership = learning_context.membership,
         actor = actor,
         action = action,
-        isTimeDependent = False,
         event_object = assessment_item,
         generated = generated,
         startedAtTime = _STARTTIME
