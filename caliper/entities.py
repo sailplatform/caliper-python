@@ -48,13 +48,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
             **kwargs):
         BaseEntity.__init__(self)
 
-        if not entity_id:
-            raise ValueError('Entity must have an ID.')
-        elif not is_valid_URI(entity_id):
-            raise ValueError('Entity ID must be a valid URI')
-        else:
-            self._set_str_prop('@id', entity_id)
-
+        self._set_id_prop('@id', entity_id, str, req=True)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ENTITY'])
         self._set_str_prop('@type', ENTITY_TYPES['ENTITY'])
         self._set_str_prop('dateCreated', dateCreated)
@@ -90,6 +84,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
     @property
     def extensions(self):
         return self._get_prop('extensions')
+
 
 ## Behavioural interfaces for entities ##
 class Assignable(BaseEntity):
@@ -132,7 +127,6 @@ class Targetable(BaseEntity):
 ### Derived entities ###
 
 ## Membership entities
-
 class Role(BaseRole, w3c.Role):
     _roles = {
         'LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner',
@@ -208,8 +202,8 @@ class Membership(Entity, w3c.Membership):
         self._set_str_prop('@context', ENTITY_CONTEXTS['MEMBERSHIP'])
         self._set_str_prop('@type', ENTITY_TYPES['MEMBERSHIP'])
 
-        self._set_id_prop('member', member, ENTITY_TYPES['PERSON'])
-        self._set_id_prop('organization', organization, ENTITY_TYPES['ORGANIZATION'])
+        self._set_id_prop('member', member, ENTITY_TYPES['PERSON'], req=True)
+        self._set_id_prop('organization', organization, ENTITY_TYPES['ORGANIZATION'], req=True)
 
         if roles and isinstance(roles, collections.MutableSequence):
             if set(roles).issubset(set(Role.Roles.values())):
@@ -224,7 +218,7 @@ class Membership(Entity, w3c.Membership):
         if status not in Status.Statuses.values():
             raise ValueError('status must be in the list of valid Status values')
         else:
-            self._set_str_prop('status', status)
+            self._set_str_prop('status', status, req=True)
 
     @property
     def member(self):
@@ -241,6 +235,7 @@ class Membership(Entity, w3c.Membership):
     @property
     def status(self):
         return self._get_prop('status')
+
 
 ## Agent entities
 class Agent(Entity, foaf.Agent):
@@ -261,6 +256,7 @@ class Person(Agent):
         Agent.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['PERSON'])
         self._set_str_prop('@type', ENTITY_TYPES['PERSON'])
+
 
 ## Organization entities
 class Organization(Entity, w3c.Organization):
@@ -328,10 +324,13 @@ class CourseSection(CourseOffering):
 
 class Group(Organization):
 
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 subOrganizationOf = None,
+                 **kwargs):
         Organization.__init__(self,**kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['GROUP'])
         self._set_str_prop('@type', ENTITY_TYPES['GROUP'])
+        self._set_obj_prop('subOrganizationOf', subOrganizationOf, Course ,req=True)
 
 
 ## Learning Context
@@ -456,7 +455,7 @@ class Frame(DigitalResource, Targetable):
         DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['FRAME'])
         self._set_str_prop('@type', ENTITY_TYPES['FRAME'])
-        self._set_int_prop('index', index)
+        self._set_int_prop('index', index, req=True)
 
     @property
     def index(self):
@@ -514,7 +513,7 @@ class Annotation(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
-        self._set_id_prop('annotated', annotated, ENTITY_TYPES['DIGITAL_RESOURCE'])
+        self._set_id_prop('annotated', annotated, ENTITY_TYPES['DIGITAL_RESOURCE'],req=True)
 
     @property
     def annotated(self):
@@ -604,39 +603,74 @@ class TextPositionSelector(CaliperSerializable):
             end = None):
         CaliperSerializable.__init__(self)
 
-        if not isinstance(end, str):
-            raise ValueError('must provide an end string value')
-        else:
-            self._set_str_prop('end', end)
-
-        if not isinstance(start, str):
-            raise ValueError('must provide a start string value')
-        else:
-            self._set_str_prop('start', start)
+        self._set_str_prop('end', end, req=True)
+        self._set_str_prop('start', start, req=True)
 
     @property
     def end(self):
         return self._get_prop('end')
     @end.setter
     def end(self, new_end):
-        if not isinstance(new_end, str):
-            raise ValueError('must provide a new end string value')
-        else:
-            self._set_str_prop('end', new_end)
+        self._set_str_prop('end', new_end, req=True)
 
     @property
     def start(self):
         return self._get_prop('start')
     @start.setter
     def start(self, new_start):
-        if not isinstance(new_start, str):
-            raise ValueError('must provide a new start string value')
-        else:
-            self._set_str_prop('start', new_start)
+        self._set_str_prop('start', new_start, req=True)
 
 
-## Generatable entities
-                 
+## Assessment entities
+class AssignableDigitalResource(DigitalResource, Assignable):
+
+    def __init__(self,
+            dateToActivate = None,
+            dateToShow = None,
+            dateToStartOn = None,
+            dateToSubmit = None,
+            maxAttempts = None,
+            maxSubmits = None,
+            maxScore = None,
+            **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['ASSIGNABLE_DIGITAL_RESOURCE'])        
+        self._set_str_prop('@type', ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
+        self._set_str_prop('dateToActivate', dateToActivate)
+        self._set_str_prop('dateToShow', dateToShow)
+        self._set_str_prop('dateToStartOn', dateToStartOn)
+        self._set_str_prop('dateToSubmit', dateToSubmit)
+        self._set_int_prop('maxAttempts', maxAttempts)
+        self._set_int_prop('maxSubmits', maxSubmits)
+        self._set_float_prop('maxScore', maxScore)
+
+    @property
+    def maxScore(self):
+        return self._get_prop('maxScore')
+    
+class Assessment(AssignableDigitalResource):
+
+    def __init__(self, **kwargs):
+        AssignableDigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['ASSESSMENT'])
+        self._set_str_prop('@type', ENTITY_TYPES['ASSESSMENT'])
+
+class AssessmentItem(AssignableDigitalResource):
+
+    def __init__(self,
+                 isTimeDependent = False,
+                 **kwargs):
+        AssignableDigitalResource.__init__(self, **kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['ASSESSMENT_ITEM'])        
+        self._set_str_prop('@type', ENTITY_TYPES['ASSESSMENT_ITEM'])
+        self._set_bool_prop('isTimeDependent', isTimeDependent, req=True)
+
+    @property
+    def isTimeDependent(self):
+        return self._get_prop('isTimeDependent')
+
+
+## Attempt and Response entities
 class Attempt(Entity, Generatable):
 
     '''
@@ -665,12 +699,12 @@ class Attempt(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('@type', ENTITY_TYPES['ATTEMPT'])
-        self._set_id_prop('actor', actor, Agent)
-        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        self._set_int_prop('count', count)
+        self._set_id_prop('actor', actor, Agent, req=True)
+        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
+        self._set_int_prop('count', count, req=True)
         self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
-        self._set_str_prop('startedAtTime', startedAtTime)
+        self._set_str_prop('startedAtTime', startedAtTime, req=True)
             
     @property
     def assignable(self):
@@ -724,14 +758,9 @@ class Response(Entity, Generatable):
         Entity.__init__(self,**kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['RESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['RESPONSE'])
-        self._set_id_prop('actor', actor, Agent)
-        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'])
-
-        if attempt and not( isinstance(attempt, Attempt)):
-            raise TypeError('attempt must implement Attempt')
-        else:
-            self._set_list_prop('attempt', attempt)
-        
+        self._set_id_prop('actor', actor, Agent, req=True)
+        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
+        self._set_obj_prop('attempt', attempt, ENTITY_TYPES['ATTEMPT'], req=True)
         self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
@@ -767,58 +796,77 @@ class Response(Entity, Generatable):
     def values(self):
         return self._get_prop('values')
 
-
-## Assessment entities
-class AssignableDigitalResource(DigitalResource, Assignable):
+class FillinBlankResponse(Response):
 
     def __init__(self,
-            dateToActivate = None,
-            dateToShow = None,
-            dateToStartOn = None,
-            dateToSubmit = None,
-            maxAttempts = None,
-            maxSubmits = None,
-            maxScore = None,
-            **kwargs):
-        DigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['ASSIGNABLE_DIGITAL_RESOURCE'])        
-        self._set_str_prop('@type', ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
-        self._set_str_prop('dateToActivate', dateToActivate)
-        self._set_str_prop('dateToShow', dateToShow)
-        self._set_str_prop('dateToStartOn', dateToStartOn)
-        self._set_str_prop('dateToSubmit', dateToSubmit)
-        self._set_int_prop('maxAttempts', maxAttempts)
-        self._set_int_prop('maxSubmits', maxSubmits)
-        self._set_float_prop('maxScore', maxScore)
-
-    @property
-    def maxScore(self):
-        return self._get_prop('maxScore')
-    
-class Assessment(AssignableDigitalResource):
-
-    def __init__(self, **kwargs):
-        AssignableDigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['ASSESSMENT'])
-        self._set_str_prop('@type', ENTITY_TYPES['ASSESSMENT'])
-
-class AssessmentItem(AssignableDigitalResource):
-
-    def __init__(self,
-                 isTimeDependent = False,
+                 values = None,
                  **kwargs):
-        AssignableDigitalResource.__init__(self, **kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['ASSESSMENT_ITEM'])        
-        self._set_str_prop('@type', ENTITY_TYPES['ASSESSMENT_ITEM'])
-        self._set_bool_prop('isTimeDependent', isTimeDependent)
+        Response.__init__(self,**kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['FILLINBLANK'])
+        self._set_str_prop('@type', ENTITY_TYPES['FILLINBLANK'])
 
-    @property
-    def isTimeDependent(self):
-        return self._get_prop('isTimeDependent')
+        if values and isinstance(values, collections.MutableSequence):
+          if all( isinstance(item, str) for item in values):
+            self._set_list_prop('values', values)
+          else:
+            raise TypeError('values must be a list of strings')
+        else:
+          self._set_list_prop('values', None)
+
+class MultipleChoiceResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLECHOICE'])
+        self._set_str_prop('@type', ENTITY_TYPES['MULTIPLECHOICE'])
+
+class MultipleResponseResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLERESPONSE'])
+        self._set_str_prop('@type', ENTITY_TYPES['MULTIPLERESPONSE'])
+        
+        if values and isinstance(values, collections.MutableSequence):
+          if all( isinstance(item, str) for item in values):
+            self._set_list_prop('values', values)
+          else:
+            raise TypeError('values must be alist of strings')
+        else:
+          self._set_list_prop('values', None)
+
+class SelectTextResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['SELECTTEXT'])
+        self._set_str_prop('@type', ENTITY_TYPES['SELECTTEXT'])
+
+        if values and isinstance(values, collections.MutableSequence):
+          if all( isinstance(item, str) for item in values):
+            self._set_list_prop('values', values)
+          else:
+            raise TypeError('values must be alist of strings')
+        else:
+          self._set_list_prop('values', None)
+
+class TrueFalseResponse(Response):
+
+    def __init__(self,
+                 values = None,
+                 **kwargs):
+        Response.__init__(self,**kwargs)
+        self._set_str_prop('@context', ENTITY_CONTEXTS['TRUEFALSE'])
+        self._set_str_prop('@type', ENTITY_TYPES['TRUEFALSE'])
 
 
 ## Media entities
-    
 class MediaObject(DigitalResource, schemadotorg.MediaObject):
 
     def __init__(self,
@@ -894,6 +942,7 @@ class VideoObject(MediaObject, schemadotorg.VideoObject):
         self._set_str_prop('@context', ENTITY_CONTEXTS['VIDEO_OBJECT'])
         self._set_str_prop('@type', ENTITY_TYPES['VIDEO_OBJECT'])
 
+
 ## Outcome entities
 class Result(Entity, Generatable):
 
@@ -912,8 +961,8 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('@type', ENTITY_TYPES['RESULT'])
-        self._set_id_prop('actor', actor, Agent)
-        self._set_id_prop('assignable', assignable, Assignable)
+        self._set_id_prop('actor', actor, Agent, req=True)
+        self._set_id_prop('assignable', assignable, Assignable, req=True)
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
@@ -959,76 +1008,6 @@ class Result(Entity, Generatable):
     def scoredBy(self):
         return self._get_prop('scoredBy')
 
-## Response entities
-class FillinBlankResponse(Response):
-
-    def __init__(self,
-                 values = None,
-                 **kwargs):
-        Response.__init__(self,**kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['FILLINBLANK'])
-        self._set_str_prop('@type', ENTITY_TYPES['FILLINBLANK'])
-
-        if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, str) for item in values):
-            self._set_list_prop('values', values)
-          else:
-            raise TypeError('values must be a list of strings')
-        else:
-          self._set_list_prop('values', None)
-
-class MultipleChoiceResponse(Response):
-
-    def __init__(self,
-                 values = None,
-                 **kwargs):
-        Response.__init__(self,**kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLECHOICE'])
-        self._set_str_prop('@type', ENTITY_TYPES['MULTIPLECHOICE'])
-
-class MultipleResponseResponse(Response):
-
-    def __init__(self,
-                 values = None,
-                 **kwargs):
-        Response.__init__(self,**kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLERESPONSE'])
-        self._set_str_prop('@type', ENTITY_TYPES['MULTIPLERESPONSE'])
-        
-        if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, str) for item in values):
-            self._set_list_prop('values', values)
-          else:
-            raise TypeError('values must be alist of strings')
-        else:
-          self._set_list_prop('values', None)
-
-class SelectTextResponse(Response):
-
-    def __init__(self,
-                 values = None,
-                 **kwargs):
-        Response.__init__(self,**kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['SELECTTEXT'])
-        self._set_str_prop('@type', ENTITY_TYPES['SELECTTEXT'])
-
-        if values and isinstance(values, collections.MutableSequence):
-          if all( isinstance(item, str) for item in values):
-            self._set_list_prop('values', values)
-          else:
-            raise TypeError('values must be alist of strings')
-        else:
-          self._set_list_prop('values', None)
-
-class TrueFalseResponse(Response):
-
-    def __init__(self,
-                 values = None,
-                 **kwargs):
-        Response.__init__(self,**kwargs)
-        self._set_str_prop('@context', ENTITY_CONTEXTS['TRUEFALSE'])
-        self._set_str_prop('@type', ENTITY_TYPES['TRUEFALSE'])
-
 
 ## Session entities
 class Session(Entity, Generatable, Targetable):
@@ -1042,8 +1021,8 @@ class Session(Entity, Generatable, Targetable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('actor', actor, Agent)
-        self._set_str_prop('duration', duration) ## should we armour this with a regex?
+        self._set_obj_prop('actor', actor, Agent, req=True)
+        self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
 
@@ -1056,7 +1035,7 @@ class Session(Entity, Generatable, Targetable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', new_duration) ## should we armour this with a regex?
+        self._set_str_prop('duration', new_duration)
 
     @property
     def endedAtTime(self):

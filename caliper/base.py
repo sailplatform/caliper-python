@@ -128,67 +128,72 @@ class CaliperSerializable(object):
         self._objects = {}
         self._props = {}
 
-    def _set_object(self,k,v):
-        self._objects.update({k:v})
+    def _set_object(self,k,v,req=False):
+        if req and (v == None):
+            pass
+        else:
+            self._objects.update({k:v})
 
-    def _set_prop(self,k,v):
+    def _set_prop(self,k,v,req=False):
+        if req and (v == None):
+            raise ValueError('{0} must have a non-null value'.format(str(k)))
         self._props.update({k:v})
 
-    def _set_float_prop(self,k,v):
+    def _set_float_prop(self,k,v,req=False):
         if v == None:
-            self._set_prop(k,None)
+            self._set_prop(k,None,req=req)
         else:
-            self._set_prop(k,float(v))
+            self._set_prop(k,float(v),req=req)
 
-    def _set_bool_prop(self,k,v):
+    def _set_bool_prop(self,k,v,req=False):
         if v == None:
-            self._set_prop(k,None)
+            self._set_prop(k,None,req=req)
         else:
-            self._set_prop(k,bool(v))
+            self._set_prop(k,bool(v),req=req)
 
-    def _set_id_prop(self,k,v,t):
+    def _set_id_prop(self,k,v,t,req=False):
         val = None
         if is_valid_URI(v):
             val = v
         elif (isinstance(v, BaseEntity) 
               and is_subtype(v.type,t) ):
             val = v.id
-            self._set_object(k,v)
+            self._set_object(k,v,req=req)
         elif (isinstance(v, collections.MutableMapping)
               and is_subtype(v.get('@type'),t)
               and is_valid_URI(v.get('@id')) ):
             val = v.get('@id')
-            self._set_object(k,v)
-        self._set_str_prop(k,val)
+            self._set_object(k,v,req=req)
+        self._set_str_prop(k,val,req=req)
             
-    def _set_int_prop(self,k,v):
+    def _set_int_prop(self,k,v,req=False):
         if v == None:
-            self._set_prop(k,None)
+            self._set_prop(k,None,req=req)
         else:
-            self._set_prop(k,int(v))
+            self._set_prop(k,int(v),req=req)
 
-    def _set_list_prop(self,k,v):
-        self._set_prop(k,v or [])
+    def _set_list_prop(self,k,v,req=False):
+        self._set_prop(k,v or [],req=req)
 
     def _append_list_prop(self,k,v):
         if (not k in self._props) or (self._props[k] is None):
-            self._set_list_prop(k,[v])
+            self._set_list_prop(k,[v],req=req)
         elif isinstance(self._props[k], collections.MutableSequence):
             self._props[k].append(v)
         else:
             raise ValueError('attempt to append to a non-list property')
 
-    def _set_obj_prop(self,k,v,t=None):
+    def _set_obj_prop(self,k,v,t=None,req=False):
         val = v
         if isinstance(v, BaseEntity) and not(is_subtype(v.type,t)):
             val = None
-        self._set_prop(k,val)
+        self._set_prop(k,val,req=req)
 
-    def _set_str_prop(self,k,v):
+    def _set_str_prop(self,k,v,req=False):
         if v == None:
-            self._set_prop(k,None)
+            self._set_prop(k,None,req=req)
         else:
-            self._set_prop(k,str(v))
+            self._set_prop(k,str(v),req=req)
 
     def _get_prop(self,k):
         return self._objects.get(k) or self._props.get(k)
