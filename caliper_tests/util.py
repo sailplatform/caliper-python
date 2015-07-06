@@ -117,7 +117,6 @@ def build_federated_session(actor=None):
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
         )
-
     
 def build_student_554433():
     return caliper.entities.Person(
@@ -327,6 +326,7 @@ def build_tag_annotation(annotated = None):
         dateModified = _MODTIME
         )
 
+
 ## build general annotation event
 def build_annotation_event(learning_context = None,
                            actor = None,
@@ -353,6 +353,7 @@ def build_annotation_event(learning_context = None,
         startedAtTime = _STARTTIME
         )
 
+
 ### Assignable Profile ###
 ## build assignable event
 def build_assessment_assignable_event(learning_context = None,
@@ -375,6 +376,7 @@ def build_assessment_assignable_event(learning_context = None,
             startedAtTime = _STARTTIME),
         startedAtTime = _STARTTIME
         )
+
 
 ### Assessment Profile and Outcome Profile ###
 ## build a test assessment
@@ -405,7 +407,7 @@ def build_assessment():
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         version = _VERNUM )
-    
+
 
 ## build a test assessment attempt
 def build_assessment_attempt(actor = None,
@@ -419,6 +421,7 @@ def build_assessment_attempt(actor = None,
         startedAtTime = _STARTTIME
         )
 
+
 ## build a test assessment item attempt
 def build_assessment_item_attempt(actor = None,
                                   assessment=None):
@@ -430,6 +433,7 @@ def build_assessment_item_attempt(actor = None,
         dateCreated = _CREATETIME,
         startedAtTime = _STARTTIME
         )
+
 
 ## build a test assessment item response
 def build_assessment_item_response(assessment=None,
@@ -444,6 +448,7 @@ def build_assessment_item_response(assessment=None,
         startedAtTime = _STARTTIME,
         values = values
         )
+
 
 ## build a test assessment result
 def build_assessment_result(learning_context=None,
@@ -463,6 +468,7 @@ def build_assessment_result(learning_context=None,
         totalScore = 3.0,
         dateCreated = _CREATETIME
         )
+
 
 ## Asessement event
 def build_assessment_event(learning_context = None,
@@ -513,6 +519,7 @@ def build_assessment_outcome_event(learning_context = None,
         startedAtTime = _STARTTIME
         )
 
+
 ### Media Profile ###
 ## Media event
 def build_video_media_event(learning_context = None,
@@ -530,6 +537,7 @@ def build_video_media_event(learning_context = None,
         target = location,
         startedAtTime = _STARTTIME
         )
+
 
 ### Reading Profile ###
 ## build a test video and location
@@ -554,6 +562,7 @@ def build_video_media_location():
         dateCreated = _CREATETIME,
         version = _VERNUM
         )
+
 
 ## Navigation event
 def build_epub_navigation_event(learning_context = None,
@@ -584,6 +593,7 @@ def build_epub_navigation_event(learning_context = None,
         startedAtTime = _STARTTIME
         )
 
+
 ## View event
 def build_epub_view_event(learning_context = None,
                           actor = None,
@@ -610,9 +620,7 @@ def build_epub_view_event(learning_context = None,
         )
 
 
-
 ### Session profile
-
 def build_readium_session(actor = None):
     return caliper.entities.Session(
         entity_id = 'https://example.com/viewer/session-123456789',
@@ -622,6 +630,7 @@ def build_readium_session(actor = None):
         startedAtTime = _STARTTIME,
         actor = actor
         )
+
 
 ## Session event
 def build_session_login_event(learning_context = None,
