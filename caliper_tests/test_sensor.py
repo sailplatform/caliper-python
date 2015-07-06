@@ -34,7 +34,6 @@ import caliper_tests.util as util
 
 class TestEvent(unittest.TestCase):
     def setUp(self):
-        self.sensor = util.build_default_sensor()
         self.student = util.build_student_554433()
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub = util.build_epub_vol43()
@@ -43,6 +42,7 @@ class TestEvent(unittest.TestCase):
         self.iterations = 4
 
     def testPayload(self):
+        sensor = util.build_default_sensor()
         fixture = 'eventStorePayload'
         event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
@@ -53,13 +53,14 @@ class TestEvent(unittest.TestCase):
                 from_resource = self.from_resource,
                 target = self.target
             )
-        envelope = util.get_caliper_envelope(self.sensor, [event])
+        envelope = util.get_caliper_envelope(sensor, [event])
         util.put_fixture(fixture, envelope)
         self.assertEqual(envelope.as_json(),
                          util.get_fixture(fixture))
         
 
     def testEvent(self):
+        sensor = util.build_default_sensor()
         for i in range(self.iterations):
             event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
@@ -69,8 +70,8 @@ class TestEvent(unittest.TestCase):
                 from_resource = self.from_resource,
                 target = self.target
             )
-            self.sensor.send(event)
-        for stats in self.sensor.statistics:
+            sensor.send(event)
+        for stats in sensor.statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -80,6 +81,7 @@ class TestEvent(unittest.TestCase):
             self.assertEqual(failed,0)
 
     def testEventBatch(self):
+        sensor = util.build_default_sensor()
         batch = [
             util.build_epub_navigation_event(
                 learning_context = self.learning_context,
@@ -90,8 +92,8 @@ class TestEvent(unittest.TestCase):
                 target = self.target
                 )
             for x in range(self.iterations)]
-        self.sensor.send_batch(batch)
-        for stats in self.sensor.statistics:
+        sensor.send_batch(batch)
+        for stats in sensor.statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
             failed = stats.failed.count

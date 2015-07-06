@@ -39,14 +39,7 @@ class Envelope(CaliperSerializable):
             sensor_id = None,
             **kwargs):
         CaliperSerializable.__init__(self)
-        if data and isinstance(data, collections.MutableSequence):
-            if all( isinstance(item, CaliperSerializable) for item in data):
-                self._set_list_prop('data', data)
-            else:
-                raise TypeError('data must be a list of caliper entites or events')
-        else:
-            self._set_list_prop('data', data)
-
+        self._set_list_prop('data',data,t=CaliperSerializable)
         self._set_str_prop('sendTime', send_time)
         self._set_str_prop('sensor', sensor_id)
 
@@ -55,13 +48,7 @@ class Envelope(CaliperSerializable):
         return self._get_prop('data')
     @data.setter
     def data(self, new_data):
-        if new_data and isinstance(new_data, collections.MutableSequence):
-            if all( isinstance(item, CaliperSerializable) for item in new_data):
-                self._set_list_prop('data', new_data)
-            else:
-                raise TypeError('new_data must be a list of caliper entites or events')
-        else:
-            self._set_list_prop('data', new_data)
+        self._set_list_prop('data',data,t=CaliperSerializable)        
 
     @property
     def sendTime(self):
@@ -87,20 +74,20 @@ class EventStoreRequestor(object):
         return datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]+'Z'        
 
     def _generate_payload(self,
-            caliper_object = None,
+            caliper_object_list = None,
             send_time = None,
             sensor_id = None):
         st = send_time if send_time else self._get_time()
-        payload = self._get_payload_json(caliper_object, st, sensor_id)
+        payload = self._get_payload_json(caliper_object_list, st, sensor_id)
         return {'type':'application/json',
                 'data': payload}
 
     def _get_payload_json(self,
-            caliper_object = None,
+            caliper_object_list = None,
             send_time = None,
             sensor_id = None):
         envelope = Envelope(
-            data = caliper_object,
+            data = caliper_object_list,
             send_time = send_time,
             sensor_id = sensor_id)
                 
@@ -125,17 +112,16 @@ class HttpRequestor(EventStoreRequestor):
         results = []
 
         if isinstance(caliper_object_list, collections.MutableSequence):
-            if all( isinstance(item, CaliperSerializable) for item in caliper_object_list):
-                s = requests.Session()
-                for item in caliper_object_list:
-                    payload = self._generate_payload(caliper_object=item,sensor_id=sensor_id)
-                    r = s.post(self._options.HOST,
-                               data=payload['data'],
-                               headers={'Content-Type':payload['type']} )
-                    if (r.status_code is requests.codes.ok):
-                        results.append(True)
-                    else:
-                        results.append(False)
-                s.close()
+            s = requests.Session()
+            payload = self._generate_payload(caliper_object_list=caliper_object_list,sensor_id=sensor_id)
+            r = s.post(self._options.HOST,
+                       data=payload['data'],
+                       headers={'Content-Type':payload['type']} )
+            if (r.status_code is requests.codes.ok):
+                v = True
+            else:
+                v = False
+            results += len(caliper_object_list) * [v]
+            s.close()
 
         return results

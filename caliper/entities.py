@@ -27,7 +27,7 @@ import collections
 
 from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS
 from caliper.base import CaliperSerializable, BaseEntity, BaseRole, BaseStatus
-from caliper.base import is_valid_URI, ensure_type
+from caliper.base import is_valid_URI, ensure_type, ensure_list_type
 from caliper.extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
@@ -203,13 +203,14 @@ class Membership(Entity, w3c.Membership):
         self._set_id_prop('member', member, ENTITY_TYPES['PERSON'], req=True)
         self._set_id_prop('organization', organization, ENTITY_TYPES['ORGANIZATION'], req=True)
 
+        # not using the new list prop setter parms, because items must be values not types
         if roles and isinstance(roles, collections.MutableSequence):
             if set(roles).issubset(set(Role.Roles.values())):
                 self._set_list_prop('roles', roles)
             else:
-                raise TypeError('roles must be in the list of valid Role values')
+                raise ValueError('roles must be in the list of valid Role values')
         elif roles:
-            raise TypeError('roles must be a list of valid Roles values')
+            raise ValueError('roles must be a list of valid Roles values')
         else:
             self._set_list_prop('roles', None)
 
@@ -382,36 +383,12 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         Entity.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['DIGITAL_RESOURCE'])
         self._set_str_prop('@type', ENTITY_TYPES['DIGITAL_RESOURCE'])
-        
-        if alignedLearningObjective and isinstance(alignedLearningObjective, collections.MutableSequence):
-            if all( isinstance(item, LearningObjective) for item in alignedLearningObjective ):
-                self._set_list_prop('alignedLearningObjective', alignedLearningObjective)
-            else:
-                raise TypeError('alignedLearningObjective must be a list of LearningObjectives')                
-        elif alignedLearningObjective:
-                raise TypeError('alignedLearningObjective must be a list of LearningObjectives')
-        else:
-            self._set_list_prop('alignedLearningObjective', None)
-
+        self._set_list_prop('alignedLearningObjective', alignedLearningObjective,
+                            t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
         self._set_str_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, schemadotorg.CreativeWork)
-
-        if isinstance(keywords, collections.MutableSequence):
-            if all( isinstance(item, str) for item in keywords):
-                self._set_list_prop('keywords', keywords)
-            else:
-                raise TypeError('keywords must be a list of keyword strings')
-        else:
-            self._set_list_prop('keywords', None)
-
-        if isinstance(objectType, collections.MutableSequence):
-            if all( isinstance(item, str) for item in objectType ):
-                self._set_list_prop('objectType', objectType)
-            else:
-                raise TypeError('objectType must be a list of object type strings')
-        else:
-            self._set_list_prop('objectType', None)
-
+        self._set_list_prop('keywords', keywords, t=str)
+        self._set_list_prop('objectType', objectType, t=str)
         self._set_str_prop('version', version)
 
             
@@ -561,14 +538,7 @@ class SharedAnnotation(Annotation):
         Annotation.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['SHARED_ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['SHARED_ANNOTATION'])
-
-        if isinstance(withAgents, collections.MutableSequence):
-            if all( isinstance(item, Agent) for item in withAgents):
-                self._set_list_prop('withAgents', withAgents)
-            else:
-                raise TypeError('withAgents must be a list of objects that implement Agent')
-        else:
-            self._set_list_prop('withAgents', None)
+        self._set_list_prop('withAgents', withAgents, t=Agent)
 
     @property
     def withAgents(self):
@@ -582,14 +552,7 @@ class TagAnnotation(Annotation):
         Annotation.__init__(self, **kwargs)
         self._set_str_prop('@context', ENTITY_CONTEXTS['TAG_ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['TAG_ANNOTATION'])
-
-        if isinstance(tags, collections.MutableSequence):
-            if all( isinstance(item, str) for item in tags):
-                self._set_list_prop('tags', tags)
-            else:
-                raise TypeError('tags must be a list of strings')
-        else:
-            self._set_list_prop('tags', None)
+        self._set_list_prop('tags', tags, t=str)
         
 class TextPositionSelector(CaliperSerializable):
 
@@ -795,9 +758,7 @@ class FillinBlankResponse(Response):
 
     def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
-        if self.values and isinstance(self.values, collections.MutableSequence):
-          if not( all( isinstance(item, str) for item in self.values) ):
-            raise TypeError('values must be a list of strings')
+        ensure_list_type(self.values,str)
         self._set_str_prop('@context', ENTITY_CONTEXTS['FILLINBLANK'])
         self._set_str_prop('@type', ENTITY_TYPES['FILLINBLANK'])
 
@@ -814,9 +775,7 @@ class MultipleResponseResponse(Response):
 
     def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
-        if self.values and isinstance(self.values, collections.MutableSequence):
-          if not( all( isinstance(item, str) for item in self.values) ):
-            raise TypeError('values must be a list of strings')
+        ensure_list_type(self.values,str)
         self._set_str_prop('@context', ENTITY_CONTEXTS['MULTIPLERESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['MULTIPLERESPONSE'])
         
@@ -825,9 +784,7 @@ class SelectTextResponse(Response):
 
     def __init__(self, **kwargs):
         Response.__init__(self,**kwargs)
-        if self.values and isinstance(values, collections.MutableSequence):
-          if not( all( isinstance(item, str) for item in self.values) ):
-            self._set_list_prop('values', self.values)
+        ensure_list_type(self.values,str)
         self._set_str_prop('@context', ENTITY_CONTEXTS['SELECTTEXT'])
         self._set_str_prop('@type', ENTITY_TYPES['SELECTTEXT'])
 

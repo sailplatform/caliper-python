@@ -51,9 +51,18 @@ def is_subtype(type_1, type_2):
                        getattr(importlib.import_module(m2),c2))
 
 def ensure_type(p,t):
+    # exception or True
     if not( (isinstance(p, BaseEntity) and is_subtype(p.type,t)) or
-            (isinstance(p, collections.MutableMapping) and is_subtype(p['@type'],t)) ):
+            (isinstance(p, collections.MutableMapping) and is_subtype(p['@type'],t)) or
+            (isinstance(p,t)) ):
         raise TypeError("Property must be of type {0}".format(str(t)))
+    return True
+
+def ensure_list_type(l,t):
+    # exception or True
+    for i in l:
+        ensure_type(i,t)
+    return True
 
 ### Default configuration values ###
 class Options(object):
@@ -181,7 +190,15 @@ class CaliperSerializable(object):
         else:
             self._set_prop(k,int(v),req=req)
 
-    def _set_list_prop(self,k,v,req=False):
+    def _set_list_prop(self,k,v,t=None,req=False):
+        if req and (v==None):
+            raise ValueError('{0} must have a non-null value'.format(str(k)))
+        elif v:
+            if not( isinstance(v, collections.MutableSequence)):
+                raise ValueError('{0} must be a list'.format(str(k)))
+            elif t:
+                for item in v:
+                    ensure_type(item,t)
         self._set_prop(k,v or [],req=req)
 
     def _append_list_prop(self,k,v):

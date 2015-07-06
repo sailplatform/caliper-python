@@ -27,7 +27,7 @@ from builtins import *
 import collections
 import uuid
 
-from caliper.base import Options, HttpOptions
+from caliper.base import Options, HttpOptions, ensure_list_type
 from caliper.entities import Entity
 from caliper.events import Event
 from caliper.request import EventStoreRequestor, HttpRequestor
@@ -80,29 +80,19 @@ class Client(object):
         
     def describe(self, entity=None, sensor_id=None):
         self.describe_batch(entity_list=[entity], sensor_id=None)
-        
+
     def describe_batch(self, entity_list=None, sensor_id=None):
-        if isinstance(entity_list, collections.MutableSequence):
-            if all( isinstance(item, Entity) for item in entity_list):
-                results = self._requestor.send_batch(caliper_object_list=entity_list, sensor_id=sensor_id)
-                self._process_results(results,self.stats.update_describes)
-            else:
-                raise TypeError('entity_list must be a list of entities.Entity')
-        else:
-            raise TypeError('entity_list should be a list')
+        if ensure_list_type(entity_list, Entity):
+            results = self._requestor.send_batch(caliper_object_list=entity_list, sensor_id=sensor_id)
+            self._process_results(results,self.stats.update_describes)
 
     def send(self, event=None, sensor_id=None):
         self.send_batch(event_list=[event], sensor_id=sensor_id)
         
-    def send_batch(self, event_list=None, sensor_id=None): 
-        if isinstance(event_list, collections.MutableSequence):
-            if all( isinstance(item, Event) for item in event_list):
-                results = self._requestor.send_batch(caliper_object_list=event_list, sensor_id=sensor_id)
-                self._process_results(results,self.stats.update_measures)
-            else:
-                raise TypeError('event_list must be a list of entities.Event')
-        else:
-            raise TypeError('event_list should be a list')
+    def send_batch(self, event_list=None, sensor_id=None):
+        if ensure_list_type(event_list, Event):
+            results = self._requestor.send_batch(caliper_object_list=event_list, sensor_id=sensor_id)
+            self._process_results(results,self.stats.update_measures)
        
                     
 class Sensor(object):
