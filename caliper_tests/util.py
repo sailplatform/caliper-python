@@ -29,7 +29,7 @@ import json
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
-
+import caliper.condensor as condensor
 
 _DEBUG = False
 
@@ -697,3 +697,10 @@ def build_session_timeout_event(learning_context = None,
         endedAtTime = _ENDTIME,
         duration = _DURATION
         )
+
+
+## Condensor tests
+def rebuild_event(fixture,no_nulls=False):
+    f_dict = json.loads(get_fixture(fixture))
+    return condensor.from_json_dict(f_dict).as_json(no_nulls=no_nulls)
+    

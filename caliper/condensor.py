@@ -38,6 +38,10 @@ def from_json_dict(d):
         # transmogrify key or move to next item
         if k  in ['@type','@context']:
             continue
+        elif k == '@id':
+            key = 'entity_id'
+        elif k == 'object':
+            key = 'event_object'
         else:
             key = k
 
@@ -54,7 +58,7 @@ def from_json_dict(d):
     m,c = type_path.rsplit('.',1)
     TheClass = getattr(importlib.import_module(m),c)
 
-    return TheClass(entity_id=r.get('@id'), **r)
+    return TheClass(**r)
 
 
 def from_json_list(l):
