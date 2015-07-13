@@ -131,7 +131,8 @@ class HttpRequestor(EventStoreRequestor):
                     payload = self._generate_payload(caliper_object=item,sensor_id=sensor_id)
                     r = s.post(self._options.HOST,
                                data=payload['data'],
-                               headers={'Content-Type':payload['type']} )
+                               headers={'Authorization': self._options.API_KEY,
+                                        'Content-Type': payload['type']} )
                     if (r.status_code is requests.codes.ok):
                         results.append(True)
                     else:
