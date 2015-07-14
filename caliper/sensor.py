@@ -65,10 +65,10 @@ class Client(object):
 
     @property
     def apiKey(self):
-        return self._config['API_KEY']
+        return self._config.API_KEY
     @apiKey.setter
     def apiKey(self, new_key):
-        self._config['API_KEY']=new_key
+        self._config.API_KEY=new_key
 
     def _process_results(self,results,update_func):
         for r in results:
