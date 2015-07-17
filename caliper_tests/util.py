@@ -82,11 +82,11 @@ def get_fixture(fixture_name):
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
-def put_fixture(fixture_name, caliper_object, no_nulls=False, debug=_DEBUG):
+def put_fixture(fixture_name, caliper_object, thin_context=False, thin_props=False, debug=_DEBUG):
     if debug:
         loc = _FIXTURE_OUT_DIR+fixture_name
         with open(loc+'_out.json', 'w') as f:
-            f.write(caliper_object.as_json(no_nulls=no_nulls)
+            f.write(caliper_object.as_json(thin_context=thin_context, thin_props=thin_props)
                     .replace('{"','{\n"')
                     .replace(', "',',\n"')
                     )
@@ -700,7 +700,7 @@ def build_session_timeout_event(learning_context = None,
 
 
 ## Condensor tests
-def rebuild_event(fixture,no_nulls=False):
+def rebuild_event(fixture,thin_props=False):
     f_dict = json.loads(get_fixture(fixture))
-    return condensor.from_json_dict(f_dict).as_json(no_nulls=no_nulls)
+    return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props)
     

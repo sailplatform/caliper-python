@@ -53,18 +53,18 @@ class Event(BaseEvent):
             raise ValueError('action must be in the list of CaliperProfile actions')
         else:
             self._set_str_prop('action', action, req=True)
-        self._set_obj_prop('actor', actor, entities.Agent, req=True)
+        self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
 
         self._set_str_prop('duration', duration)
-        self._set_obj_prop('edApp', edApp, ENTITY_TYPES['SOFTWARE_APPLICATION'])                    
+        self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])                    
         self._set_str_prop('endedAtTime', endedAtTime)
-        self._set_obj_prop('object', event_object, BaseEntity)
-        self._set_id_prop('federatedSession', federatedSession, ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('generated', generated, entities.Generatable)
-        self._set_obj_prop('group', group, ENTITY_TYPES['ORGANIZATION'])
-        self._set_obj_prop('membership', membership, ENTITY_TYPES['MEMBERSHIP'])
+        self._set_obj_prop('object', event_object, t=BaseEntity)
+        self._set_id_prop('federatedSession', federatedSession, t=ENTITY_TYPES['SESSION'])
+        self._set_obj_prop('generated', generated, t=entities.Generatable)
+        self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
+        self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_str_prop('startedAtTime', startedAtTime, req=True)
-        self._set_obj_prop('target', target, entities.Targetable)            
+        self._set_obj_prop('target', target, t=entities.Targetable)            
 
     @property
     def context(self):
@@ -194,14 +194,14 @@ class NavigationEvent(Event):
     def __init__(self, navigatedFrom=None, **kwargs):
         Event.__init__(self, **kwargs)
         if self.action != profiles.CaliperProfile.Actions['NAVIGATED_TO']:
-            raise ValueError('action must be ' + profiles.CaliperProfile.Actions['NAVIGATED_TO']
+            raise ValueError('action must be ' + profiles.CaliperProfile.Actions['NAVIGATED_TO'])
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
         self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
         self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
-        self._set_obj_prop('navigatedFrom', navigatedFrom, ENTITY_TYPES['DIGITAL_RESOURCE'])
+        self._set_obj_prop('navigatedFrom', navigatedFrom, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
 
     @property
     def navigatedFrom(self):

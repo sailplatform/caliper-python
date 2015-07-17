@@ -212,7 +212,7 @@ class CaliperSerializable(object):
         else:
             raise ValueError('attempt to append to a non-list property')
 
-    def _set_obj_prop(self,k,v,id_only=False,t=None,req=False):
+    def _set_obj_prop(self,k,v,t=None,req=False,id_only=False):
         if req and (v==None):
             raise ValueError('{0} must have a non-null value'.format(str(k)))
         if isinstance(v, BaseEntity) and not(is_subtype(v.type,t)):

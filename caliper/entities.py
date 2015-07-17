@@ -53,7 +53,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
         self._set_str_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
-        self._set_obj_prop('extensions', extensions)
+        self._set_obj_prop('extensions', extensions, t=collections.MutableMapping)
 
     @property
     def context(self):
@@ -204,8 +204,8 @@ class Membership(Entity, w3c.Membership):
         self._set_base_context(ENTITY_CONTEXTS['MEMBERSHIP'])
         self._set_str_prop('@type', ENTITY_TYPES['MEMBERSHIP'])
 
-        self._set_id_prop('member', member, ENTITY_TYPES['PERSON'], req=True)
-        self._set_id_prop('organization', organization, ENTITY_TYPES['ORGANIZATION'], req=True)
+        self._set_id_prop('member', member, t=ENTITY_TYPES['PERSON'], req=True)
+        self._set_id_prop('organization', organization, t=ENTITY_TYPES['ORGANIZATION'], req=True)
 
         # not using the new list prop setter parms, because items must be values not types
         if roles and isinstance(roles, collections.MutableSequence):
@@ -272,7 +272,7 @@ class Organization(Entity, w3c.Organization):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ORGANIZATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ORGANIZATION'])
-        self._set_obj_prop('subOrganizationOf', subOrganizationOf, ENTITY_TYPES['ORGANIZATION'])
+        self._set_obj_prop('subOrganizationOf', subOrganizationOf, t=ENTITY_TYPES['ORGANIZATION'])
 
     @property
     def subOrganizationOf(self):
@@ -342,10 +342,10 @@ class LearningContext(CaliperSerializable):
                  membership = None,
                  session = None):
         CaliperSerializable.__init__(self)
-        self._set_obj_prop('edApp', edApp, ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        self._set_obj_prop('group', group, ENTITY_TYPES['ORGANIZATION'])
-        self._set_obj_prop('membership', membership, ENTITY_TYPES['MEMBERSHIP'])
-        self._set_obj_prop('session', session, ENTITY_TYPES['SESSION'])
+        self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
+        self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
+        self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
             
     @property
     def edApp(self):
@@ -390,7 +390,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         self._set_list_prop('alignedLearningObjective', alignedLearningObjective,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
         self._set_str_prop('datePublished', datePublished)
-        self._set_obj_prop('isPartOf', isPartOf, schemadotorg.CreativeWork)
+        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
         self._set_list_prop('keywords', keywords, t=str)
         self._set_list_prop('objectType', objectType, t=str)
         self._set_str_prop('version', version)
@@ -409,7 +409,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         return self._get_prop('isPartOf')
     @isPartOf.setter
     def isPartOf(self, new_object):
-        self._set_obj_prop('isPartOf', isPartOf, schemadotorg.CreativeWork)
+        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
 
     @property
     def keywords(self):
@@ -489,7 +489,7 @@ class Annotation(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
-        self._set_id_prop('annotated', annotated, ENTITY_TYPES['DIGITAL_RESOURCE'],req=True)
+        self._set_id_prop('annotated', annotated, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
 
     @property
     def annotated(self):
@@ -523,7 +523,7 @@ class HighlightAnnotation(Annotation):
         Annotation.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['HIGHLIGHT_ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['HIGHLIGHT_ANNOTATION'])
-        self._set_obj_prop('selection', selection, TextPositionSelector)
+        self._set_obj_prop('selection', selection, t=TextPositionSelector)
         self._set_str_prop('selectionText', selectionText)
                  
     @property
@@ -662,7 +662,7 @@ class Attempt(Entity, Generatable):
         self._set_base_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('@type', ENTITY_TYPES['ATTEMPT'])
         self._set_id_prop('actor', actor, Agent, req=True)
-        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
+        self._set_id_prop('assignable', assignable, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
         self._set_int_prop('count', count, req=True)
         self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
@@ -720,9 +720,9 @@ class Response(Entity, Generatable):
         Entity.__init__(self,**kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['RESPONSE'])
-        self._set_id_prop('actor', actor, Agent, req=True)
-        self._set_id_prop('assignable', assignable, ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
-        self._set_obj_prop('attempt', attempt, ENTITY_TYPES['ATTEMPT'], req=True)
+        self._set_id_prop('actor', actor, t=Agent, req=True)
+        self._set_id_prop('assignable', assignable, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
+        self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
         self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)
@@ -893,8 +893,8 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('@type', ENTITY_TYPES['RESULT'])
-        self._set_id_prop('actor', actor, Agent, req=True)
-        self._set_id_prop('assignable', assignable, Assignable, req=True)
+        self._set_id_prop('actor', actor, t=Agent, req=True)
+        self._set_id_prop('assignable', assignable, t=Assignable, req=True)
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
@@ -953,7 +953,7 @@ class Session(Entity, Generatable, Targetable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('actor', actor, Agent, req=True)
+        self._set_obj_prop('actor', actor, t=Agent, req=True)
         self._set_str_prop('duration', duration)
         self._set_str_prop('endedAtTime', endedAtTime)
         self._set_str_prop('startedAtTime', startedAtTime)

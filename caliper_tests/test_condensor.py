@@ -116,7 +116,7 @@ class SessionProfile(unittest.TestCase):
     
     def testSessionLoginThinEvent(self):
         fixture = 'caliperSessionLoginThinEvent'
-        self.assertEqual(util.rebuild_event(fixture,no_nulls=True), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture,thin_props=True), util.get_fixture(fixture))
 
     def testSessionLogoutEvent(self):
         fixture = 'caliperSessionLogoutEvent'
