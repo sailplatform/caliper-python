@@ -48,7 +48,7 @@ class Event(CaliperSerializable):
             target = None,
             **kwargs):
         CaliperSerializable.__init__(self)
-        self._set_str_prop('@context', EVENT_CONTEXTS['EVENT'])
+        self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
 
         if action and (action not in profiles.CaliperProfile.Actions.values()):
@@ -108,7 +108,7 @@ class Event(CaliperSerializable):
 
     @property
     def context(self):
-        return self._get_prop('@context')
+        return self._unpack_context()
 
     @property
     def type(self):
@@ -170,7 +170,7 @@ class AnnotationEvent(Event):
             **kwargs):
         Event.__init__(self,
                        **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['ANNOTATION'])
+        self._set_base_context(EVENT_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', EVENT_TYPES['ANNOTATION'])
 
         if action not in profiles.AnnotationProfile.Actions.values():
@@ -205,7 +205,7 @@ class AssessmentEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT'])
+        self._set_base_context(EVENT_CONTEXTS['ASSESSMENT'])
         self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT'])
 
         if action not in profiles.AssessmentProfile.Actions.values():
@@ -240,7 +240,7 @@ class AssessmentItemEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT_ITEM'])
+        self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
 
         if action not in profiles.AssessmentItemProfile.Actions.values():
@@ -272,7 +272,7 @@ class AssignableEvent(Event):
             generated = None,
             **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['ASSIGNABLE'])
+        self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
         self._set_str_prop('@type', EVENT_TYPES['ASSIGNABLE'])
 
         if action not in profiles.AssignableProfile.Actions.values():
@@ -300,7 +300,7 @@ class MediaEvent(Event):
             target = None,
             **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['MEDIA'])
+        self._set_base_context(EVENT_CONTEXTS['MEDIA'])
         self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
 
         if action not in profiles.MediaProfile.Actions.values():
@@ -333,7 +333,7 @@ class NavigationEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['NAVIGATION'])
+        self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
         self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
         self._set_str_prop('action', profiles.CaliperProfile.Actions['NAVIGATED_TO'])
 
@@ -372,7 +372,7 @@ class OutcomeEvent(Event):
         Event.__init__(self,
                        target = None,
                        **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['OUTCOME'])
+        self._set_base_context(EVENT_CONTEXTS['OUTCOME'])
         self._set_str_prop('@type', EVENT_TYPES['OUTCOME'])
 
         if  action not in profiles.OutcomeProfile.Actions.values():
@@ -400,7 +400,7 @@ class ReadingEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['READING'])
+        self._set_base_context(EVENT_CONTEXTS['READING'])
         self._set_str_prop('@type', EVENT_TYPES['READING'])
 
         if action not in profiles.ReadingProfile.Actions.values():
@@ -435,7 +435,7 @@ class SessionEvent(Event):
                  target = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['SESSION'])
+        self._set_base_context(EVENT_CONTEXTS['SESSION'])
         self._set_str_prop('@type', EVENT_TYPES['SESSION'])
 
         if action not in profiles.SessionProfile.Actions.values():
@@ -484,7 +484,7 @@ class ViewEvent(Event):
                  event_object = None,
                  **kwargs):
         Event.__init__(self, **kwargs)
-        self._set_str_prop('@context', EVENT_CONTEXTS['VIEW'])
+        self._set_base_context(EVENT_CONTEXTS['VIEW'])
         self._set_str_prop('@type', EVENT_TYPES['VIEW'])
 
         if action not in profiles.ReadingProfile.Actions.values():
