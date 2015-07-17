@@ -46,7 +46,7 @@ class Event(BaseEvent):
             startedAtTime = None,
             target = None):
         BaseEvent.__init__(self)
-        self._set_str_prop('@context', EVENT_CONTEXTS['EVENT'])
+        self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
 
         if action and (action not in profiles.CaliperProfile.Actions.values()):
@@ -68,7 +68,7 @@ class Event(BaseEvent):
 
     @property
     def context(self):
-        return self._get_prop('@context')
+        return self._unpack_context()
 
     @property
     def type(self):
@@ -130,7 +130,7 @@ class AnnotationEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['ANNOTATION'])
+        self._set_base_context(EVENT_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', EVENT_TYPES['ANNOTATION'])
 
 
@@ -144,7 +144,7 @@ class AssessmentEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT'])
+        self._set_base_context(EVENT_CONTEXTS['ASSESSMENT'])
         self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT'])
 
 
@@ -158,7 +158,7 @@ class AssessmentItemEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
         ensure_type(self.generated, entities.Generatable)
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['ASSESSMENT_ITEM'])
+        self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
 
 
@@ -171,7 +171,7 @@ class AssignableEvent(Event):
         ensure_type(self.object, entities.Assignable)
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['ASSIGNABLE'])
+        self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
         self._set_str_prop('@type', EVENT_TYPES['ASSIGNABLE'])
 
 
@@ -185,7 +185,7 @@ class MediaEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['MEDIA_OBJECT'])
         ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['MEDIA'])
+        self._set_base_context(EVENT_CONTEXTS['MEDIA'])
         self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
 
 
@@ -193,13 +193,14 @@ class NavigationEvent(Event):
 
     def __init__(self, navigatedFrom=None, **kwargs):
         Event.__init__(self, **kwargs)
+        if self.action != profiles.CaliperProfile.Actions['NAVIGATED_TO']:
+            raise ValueError('action must be ' + profiles.CaliperProfile.Actions['NAVIGATED_TO']
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['NAVIGATION'])
+        self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
         self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
-        self._set_str_prop('action', profiles.CaliperProfile.Actions['NAVIGATED_TO'])
         self._set_obj_prop('navigatedFrom', navigatedFrom, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
     @property
@@ -216,7 +217,7 @@ class OutcomeEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
         ensure_type(self.generated, ENTITY_TYPES['RESULT'])
                 
-        self._set_str_prop('@context', EVENT_CONTEXTS['OUTCOME'])
+        self._set_base_context(EVENT_CONTEXTS['OUTCOME'])
         self._set_str_prop('@type', EVENT_TYPES['OUTCOME'])
 
 
@@ -230,7 +231,7 @@ class ReadingEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['FRAME'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['READING'])
+        self._set_base_context(EVENT_CONTEXTS['READING'])
         self._set_str_prop('@type', EVENT_TYPES['READING'])
 
 
@@ -258,7 +259,7 @@ class SessionEvent(Event):
         if end_time_req and not self.endedAtTime:
             raise ValueError('endedAtTime is required')
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['SESSION'])
+        self._set_base_context(EVENT_CONTEXTS['SESSION'])
         self._set_str_prop('@type', EVENT_TYPES['SESSION'])
 
 
@@ -271,7 +272,7 @@ class ViewEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
-        self._set_str_prop('@context', EVENT_CONTEXTS['VIEW'])
+        self._set_base_context(EVENT_CONTEXTS['VIEW'])
         self._set_str_prop('@type', EVENT_TYPES['VIEW'])
 
 
