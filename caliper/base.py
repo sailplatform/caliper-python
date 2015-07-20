@@ -37,6 +37,8 @@ def is_valid_URI(uri):
         return False
 
 def is_subtype(type_1, type_2):
+    if (type_1 == None) or (type_2 == None):
+        return False
     if isinstance(type_1, type):
         m1 = type_1.__module__
         c1 = type_1.__name__
@@ -52,6 +54,8 @@ def is_subtype(type_1, type_2):
 
 def ensure_type(p,t):
     # exception or True
+    if t == None:
+        raise ValueError("type cannot be None type")
     if not( (isinstance(p, BaseEntity) and is_subtype(p.type,t)) or
             (isinstance(p, collections.MutableMapping) and is_subtype(p['@type'],t)) or
             (isinstance(p,t)) ):
