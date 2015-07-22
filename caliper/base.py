@@ -199,7 +199,7 @@ class CaliperSerializable(object):
         for k,v in self._props.items():
 
             # handle value based on its type: list, composite, or basic type
-            if no_nulls and v == None:
+            if no_nulls and (v == None or v == []):
                 continue
             elif no_deep_context and k == '@context':
                 continue
