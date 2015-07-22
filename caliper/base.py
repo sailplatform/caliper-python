@@ -293,7 +293,7 @@ class CaliperSerializable(object):
         for k,v in self._props.items():
 
             # handle value based on its type: list, composite, or basic type
-            if thin_props and v == None:
+            if thin_props and (v == None or v == []):
                 continue
             elif isinstance(v, collections.MutableSequence):
                 value = self._unpack_list(v,
