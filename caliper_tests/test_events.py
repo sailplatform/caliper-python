@@ -281,8 +281,8 @@ class SessionProfile(unittest.TestCase):
             target = util.build_epub_subchap431(),
             action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
             )
-        util.put_fixture(fixture, session_event, no_nulls=True)
-        self.assertEqual(session_event.as_json(no_nulls=True),
+        util.put_fixture(fixture, session_event, thin_props=True)
+        self.assertEqual(session_event.as_json(thin_props=True),
                          util.get_fixture(fixture))
         
 
