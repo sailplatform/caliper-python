@@ -71,14 +71,18 @@ another.
 you should run the unit tests. From the package's top-level directory, just use
 `tox` to run all the tests on both Python 2.7 and Python 3.4.
 
-**Fixtures**. Your copy of the `caliper-python` repository (or the package) may
-include a set of JSON fixtures in `caliper_tests/fixtures` -- these are
-the canonical event serializations used to test the sensor against. The
-canonical source for these fixtures you can find in the
-`Caliper common fixtures repository <https://github.com/IMSGlobal/caliper-common-fixtures>`_.
-If there's a local version of these fixtures that came with your
-`caliper-python` package or repository, then it's likely the code has been
-built to test aginst these fixtures.
+**Fixtures**. The test suites are principally designed to test against the
+canonical common JSON fixtures. To set up your tests, you should clone the
+`Caliper common fixtures repository
+<https://github.com/IMSGlobal/caliper-common-fixtures>`_ repository into the
+`caliper_tests/fixtures_common` directory, and pull changes there.
+
+Your copy of the `caliper-python` repository (or the package) may include a set
+of JSON fixtures in the `caliper_tests/fixtures_local` directory -- these are
+not the canonical event serializations used to test the sensor against; if
+there's a local version of these fixtures that came with your `caliper-python`
+package or repository, then it's likely the code has been built to test aginst
+these fixtures.
 
 Ideally, if you make changes to `caliper-python` you should ensure that your
 changes will test well against the fixtures from the main common fixtures
