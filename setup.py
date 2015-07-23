@@ -29,6 +29,9 @@ _requires = [ 'future >= 0.14.3',
               'oauthlib >= 0.7.2',
               'requests >= 2.7.0' ]
 
+_fixtures = [ 'fixtures_local/*.json',
+              'fixtures_common/src/test/resources/fixtures/*.json' ]
+
 with open('README.rst', 'r', 'utf-8') as f:
           readme = f.read()
 with open('HISTORY.rst', 'r', 'utf-8') as f:
@@ -43,7 +46,7 @@ setup(
     maintainer_email = 'info@imsglobal.org',
     url = 'https://github.com/IMSGlobal/caliper-python',
     packages = _packages,
-    package_data = {'caliper_tests' : ['fixtures/*.json'] },
+    package_data = {'caliper_tests' : _fixtures },
     install_requires = _requires,
     license = caliper.__license__,
     zip_safe = False,

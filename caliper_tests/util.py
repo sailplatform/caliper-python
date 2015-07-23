@@ -58,8 +58,12 @@ _VERED = '2nd ed.'
 ### into the caliper_tests module's directory in a 'fixtures' subdirectory so
 ### that the tests can find all the json fixture files in that sub-directory
 ###
-_FIXTURE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures' + os.path.sep
-_FIXTURE_OUT_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep + 'fixtures_out' + os.path.sep
+_FIXTURE_BASE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep
+_FIXTURE_PREFIX = 'fixtures'
+_FIXTURE_COMMON_DIR = 'src' + os.path.sep + 'test' + os.path.sep + 'resources' + os.path.sep + _FIXTURE_PREFIX + os.path.sep
+_FIXTURE_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_local' + os.path.sep
+_FIXTURE_COMMON_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_common' + os.path.sep + _FIXTURE_COMMON_DIR
+_FIXTURE_OUT_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_out' + os.path.sep
 
 ## general state and utility functions used by many tests
 def get_testing_options():
@@ -72,13 +76,20 @@ def build_default_sensor():
         config_options=get_testing_options(),
         sensor_id=_SENSOR_ID) 
 
-def get_fixture(fixture_name):
-    loc = _FIXTURE_DIR+fixture_name+'.json'
+def _get_fixture(loc):
     r = ''
     if os.path.exists(loc):
         with open(loc,'r') as f:
             r = f.read().replace('\n','')
     return json.dumps(json.loads(r), sort_keys=True)
+
+def get_common_fixture(fixture_name):
+    loc = _FIXTURE_COMMON_DIR+fixture_name+'.json'
+    return _get_fixture(loc)
+
+def get_fixture(fixture_name):
+    loc = _FIXTURE_DIR+fixture_name+'.json'
+    return _get_fixture(loc)
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events

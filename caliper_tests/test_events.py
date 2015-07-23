@@ -51,6 +51,8 @@ class AnnotationProfile(unittest.TestCase):
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(annotation_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testHighlightAnnotationEvent(self):
         fixture = 'caliperHighlightAnnotationEvent'
@@ -66,6 +68,8 @@ class AnnotationProfile(unittest.TestCase):
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(annotation_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testSharedAnnotationEvent(self):
         fixture = 'caliperSharedAnnotationEvent'
@@ -81,6 +85,8 @@ class AnnotationProfile(unittest.TestCase):
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(annotation_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testTagAnnotationEvent(self):
         fixture = 'caliperTagAnnotationEvent'
@@ -96,6 +102,8 @@ class AnnotationProfile(unittest.TestCase):
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(annotation_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
         
 
 class AssessmentProfile(unittest.TestCase):
@@ -121,6 +129,8 @@ class AssessmentProfile(unittest.TestCase):
         util.put_fixture(fixture, assessment_event)
         self.assertEqual(assessment_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(assessment_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testAssessmentItemStartedEvent(self):
         fixture = 'caliperAssessmentItemStartedEvent'
@@ -134,6 +144,8 @@ class AssessmentProfile(unittest.TestCase):
         util.put_fixture(fixture, assessment_item_event)
         self.assertEqual(assessment_item_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(assessment_item_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 
     def testAssessmentItemCompletedEvent(self):
@@ -150,6 +162,8 @@ class AssessmentProfile(unittest.TestCase):
         util.put_fixture(fixture, assessment_item_event)
         self.assertEqual(assessment_item_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(assessment_item_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 
 class AssignableProfile(unittest.TestCase):
@@ -169,6 +183,9 @@ class AssignableProfile(unittest.TestCase):
         util.put_fixture(fixture, assignable_event)
         self.assertEqual(assignable_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(assignable_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
+
 
 class MediaProfile(unittest.TestCase):
     def setUp(self):
@@ -189,6 +206,9 @@ class MediaProfile(unittest.TestCase):
         util.put_fixture(fixture, video_media_event)
         self.assertEqual(video_media_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(video_media_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
+
 
 class OutcomeProfile(unittest.TestCase):
     def setUp(self):
@@ -213,6 +233,8 @@ class OutcomeProfile(unittest.TestCase):
         util.put_fixture(fixture, assessment_outcome_event)
         self.assertEqual(assessment_outcome_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(assessment_outcome_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
         
         
 class ReadingProfile(unittest.TestCase):
@@ -235,6 +257,8 @@ class ReadingProfile(unittest.TestCase):
         util.put_fixture(fixture, navigation_event)
         self.assertEqual(navigation_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(navigation_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
         
     def testViewEvent(self):
         fixture = 'caliperViewEvent'
@@ -248,6 +272,8 @@ class ReadingProfile(unittest.TestCase):
         util.put_fixture(fixture, reading_event)
         self.assertEqual(reading_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(reading_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 
 class SessionProfile(unittest.TestCase):
@@ -255,7 +281,6 @@ class SessionProfile(unittest.TestCase):
         self.student = util.build_student_554433()
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub = util.build_epub_vol43()
-
 
     def testSessionLoginEvent(self):
         fixture = 'caliperSessionLoginEvent'
@@ -270,34 +295,8 @@ class SessionProfile(unittest.TestCase):
         util.put_fixture(fixture, session_event)
         self.assertEqual(session_event.as_json(),
                          util.get_fixture(fixture))
-
-    def testSessionLoginThinEvent(self):
-        fixture = 'caliperSessionLoginThinEvent'
-        session_event = util.build_session_login_event(
-            learning_context = self.learning_context,
-            actor = self.student,
-            event_object = self.learning_context.edApp,
-            session = util.build_readium_session(actor=self.student),
-            target = util.build_epub_subchap431(),
-            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
-            )
-        util.put_fixture(fixture, session_event, thin_props=True)
-        self.assertEqual(session_event.as_json(thin_props=True),
-                         util.get_fixture(fixture))
-        
-    def testSessionLoginThinContextEvent(self):
-        fixture = 'caliperSessionLoginThinContextEvent'
-        session_event = util.build_session_login_event(
-            learning_context = self.learning_context,
-            actor = self.student,
-            event_object = self.learning_context.edApp,
-            session = util.build_readium_session(actor=self.student),
-            target = util.build_epub_subchap431(),
-            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
-            )
-        util.put_fixture(fixture, session_event, thin_props=True, thin_context=True)
-        self.assertEqual(session_event.as_json(thin_props=True,thin_context=True),
-                         util.get_fixture(fixture))
+        self.assertEqual(session_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testSessionLogoutEvent(self):
         fixture = 'caliperSessionLogoutEvent'
@@ -311,6 +310,8 @@ class SessionProfile(unittest.TestCase):
         util.put_fixture(fixture, session_event)
         self.assertEqual(session_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(session_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testSessionTimeoutEvent(self):
         fixture = 'caliperSessionTimeoutEvent'
@@ -323,6 +324,8 @@ class SessionProfile(unittest.TestCase):
         util.put_fixture(fixture, session_event)
         self.assertEqual(session_event.as_json(),
                          util.get_fixture(fixture))
+        self.assertEqual(session_event.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
         
 if __name__ == '__main__':
