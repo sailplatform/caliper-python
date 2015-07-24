@@ -38,7 +38,7 @@ class AnnotationProfile(unittest.TestCase):
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
 
     def testBookmarkAnnotationEvent(self):
-        fixture = 'caliperBookmarkAnnotationEvent'
+        fixture = 'caliperEventAnnotationBookmarked'
         event_object = util.build_epub_subchap432()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
@@ -55,7 +55,7 @@ class AnnotationProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
 
     def testHighlightAnnotationEvent(self):
-        fixture = 'caliperHighlightAnnotationEvent'
+        fixture = 'caliperEventAnnotationHighlighted'
         event_object = util.build_epub_subchap431()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
@@ -72,7 +72,7 @@ class AnnotationProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
 
     def testSharedAnnotationEvent(self):
-        fixture = 'caliperSharedAnnotationEvent'
+        fixture = 'caliperEventAnnotationShared'
         event_object = util.build_epub_subchap433()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
@@ -89,7 +89,7 @@ class AnnotationProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
 
     def testTagAnnotationEvent(self):
-        fixture = 'caliperTagAnnotationEvent'
+        fixture = 'caliperEventAnnotationTagged'
         event_object = util.build_epub_subchap434()
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
@@ -118,7 +118,7 @@ class AssessmentProfile(unittest.TestCase):
                                                                assessment=self.assessment)
         
     def testAssessmentEvent(self):
-        fixture = 'caliperAssessmentEvent'
+        fixture = 'caliperEventAssessmentStarted'
         assessment_event = util.build_assessment_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -133,7 +133,7 @@ class AssessmentProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
 
     def testAssessmentItemStartedEvent(self):
-        fixture = 'caliperAssessmentItemStartedEvent'
+        fixture = 'caliperEventAssessmentItemStarted'
         assessment_item_event = util.build_assessment_item_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -149,7 +149,7 @@ class AssessmentProfile(unittest.TestCase):
 
 
     def testAssessmentItemCompletedEvent(self):
-        fixture = 'caliperAssessmentItemCompletedEvent'
+        fixture = 'caliperEventAssessmentItemCompleted'
         assessment_item_event = util.build_assessment_item_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -173,7 +173,7 @@ class AssignableProfile(unittest.TestCase):
         self.assessment = util.build_assessment()
 
     def testAssignableEvent(self):
-        fixture = 'caliperAssignableEvent'
+        fixture = 'caliperEventAssignableActivated'
         assignable_event = util.build_assessment_assignable_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -195,7 +195,7 @@ class MediaProfile(unittest.TestCase):
         self.location = util.build_video_media_location()
 
     def testVideoMediaEvent(self):
-        fixture = 'caliperMediaEvent'
+        fixture = 'caliperEventMediaPausedVideo'
         video_media_event = util.build_video_media_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -222,7 +222,7 @@ class OutcomeProfile(unittest.TestCase):
                                                    attempt=self.attempt)
 
     def testAssessmentOutcomeEvent(self):
-        fixture = 'caliperAssessmentOutcomeEvent'
+        fixture = 'caliperEventOutcomeGraded'
         assessment_outcome_event = util.build_assessment_outcome_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -245,7 +245,7 @@ class ReadingProfile(unittest.TestCase):
         self.target = util.build_epub_subchap431()
 
     def testNavigationEvent(self):
-        fixture = 'caliperNavigationEvent'
+        fixture = 'caliperEventNavigationNavigatedTo'
         navigation_event = util.build_epub_navigation_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -261,7 +261,7 @@ class ReadingProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
         
     def testViewEvent(self):
-        fixture = 'caliperViewEvent'
+        fixture = 'caliperEventViewViewed'
         reading_event = util.build_epub_view_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -283,7 +283,7 @@ class SessionProfile(unittest.TestCase):
         self.epub = util.build_epub_vol43()
 
     def testSessionLoginEvent(self):
-        fixture = 'caliperSessionLoginEvent'
+        fixture = 'caliperEventSessionLoggedIn'
         session_event = util.build_session_login_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -299,7 +299,7 @@ class SessionProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
 
     def testSessionLogoutEvent(self):
-        fixture = 'caliperSessionLogoutEvent'
+        fixture = 'caliperEventSessionLoggedOut'
         session_event = util.build_session_logout_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -314,7 +314,7 @@ class SessionProfile(unittest.TestCase):
                          util.get_common_fixture(fixture))
 
     def testSessionTimeoutEvent(self):
-        fixture = 'caliperSessionTimeoutEvent'
+        fixture = 'caliperEventSessionTimedOut'
         session_event = util.build_session_timeout_event(
             learning_context = self.learning_context,
             actor = self.learning_context.edApp,

@@ -711,7 +711,8 @@ def build_session_timeout_event(learning_context = None,
 
 
 ## Condensor tests
-def rebuild_event(fixture,thin_props=False):
+def rebuild_event(fixture,thin_props=False, thin_context=False):
     f_dict = json.loads(get_fixture(fixture))
-    return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props)
+    return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props,
+                                                    thin_context=thin_context)
     

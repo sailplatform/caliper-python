@@ -43,7 +43,7 @@ class TestEvent(unittest.TestCase):
 
     def testPayload(self):
         sensor = util.build_default_sensor()
-        fixture = 'eventStorePayload'
+        fixture = 'caliperEnvelopeEventSingle'
         event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
