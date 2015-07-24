@@ -37,20 +37,28 @@ class AnnotationProfile(unittest.TestCase):
         pass
     
     def testBookmarkAnnotationEvent(self):
-        fixture = 'caliperBookmarkAnnotationEvent'
+        fixture = 'caliperEventAnnotationBookmarked'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
     
     def testHighlightAnnotationEvent(self):
-        fixture = 'caliperHighlightAnnotationEvent'
+        fixture = 'caliperEventAnnotationHighlighted'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testSharedAnnotationEvent(self):
-        fixture = 'caliperSharedAnnotationEvent'
+        fixture = 'caliperEventAnnotationShared'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testTagAnnotationEvent(self):
-        fixture = 'caliperTagAnnotationEvent'
+        fixture = 'caliperEventAnnotationTagged'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 
 class AssessmentProfile(unittest.TestCase):
@@ -58,16 +66,22 @@ class AssessmentProfile(unittest.TestCase):
         pass
 
     def testAssessmentEvent(self):
-        fixture = 'caliperAssessmentEvent'
+        fixture = 'caliperEventAssessmentStarted'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testAssessmentItemStartedEvent(self):
-        fixture = 'caliperAssessmentItemStartedEvent'
+        fixture = 'caliperEventAssessmentItemStarted'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testAssessmentItemCompletedEvent(self):
-        fixture = 'caliperAssessmentItemCompletedEvent'
+        fixture = 'caliperEventAssessmentItemCompleted'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 
 class AssignableProfile(unittest.TestCase):
@@ -75,56 +89,68 @@ class AssignableProfile(unittest.TestCase):
         pass
 
     def testAssignableEvent(self):
-        fixture = 'caliperAssignableEvent'
+        fixture = 'caliperEventAssignableActivated'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 class MediaProfile(unittest.TestCase):
     def setUp(self):
         pass
 
     def testVideoMediaEvent(self):
-        fixture = 'caliperMediaEvent'
+        fixture = 'caliperEventMediaPausedVideo'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 class OutcomeProfile(unittest.TestCase):
     def setUp(self):
         pass
 
     def testAssessmentOutcomeEvent(self):
-        fixture = 'caliperAssessmentOutcomeEvent'
+        fixture = 'caliperEventOutcomeGraded'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
         
 class ReadingProfile(unittest.TestCase):
     def setUp(self):
         pass
 
     def testNavigationEvent(self):
-        fixture = 'caliperNavigationEvent'
+        fixture = 'caliperEventNavigationNavigatedTo'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
     
     def testViewEvent(self):
-        fixture = 'caliperViewEvent'
+        fixture = 'caliperEventViewViewed'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
 
 class SessionProfile(unittest.TestCase):
     def setUp(self):
         pass
 
     def testSessionLoginEvent(self):
-        fixture = 'caliperSessionLoginEvent'
+        fixture = 'caliperEventSessionLoggedIn'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
     
-    def testSessionLoginThinEvent(self):
-        fixture = 'caliperSessionLoginThinEvent'
-        self.assertEqual(util.rebuild_event(fixture,thin_props=True), util.get_fixture(fixture))
-
     def testSessionLogoutEvent(self):
-        fixture = 'caliperSessionLogoutEvent'
+        fixture = 'caliperEventSessionLoggedOut'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
     
     def testSessionTimeoutEvent(self):
-        fixture = 'caliperSessionTimeoutEvent'
+        fixture = 'caliperEventSessionTimedOut'
         self.assertEqual(util.rebuild_event(fixture), util.get_fixture(fixture))
+        self.assertEqual(util.rebuild_event(fixture, thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
         
 if __name__ == '__main__':
     unittest.main()
