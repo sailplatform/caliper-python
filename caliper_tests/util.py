@@ -65,6 +65,7 @@ _FIXTURE_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_local' + os.path.sep
 _FIXTURE_COMMON_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_common' + os.path.sep + _FIXTURE_COMMON_DIR
 _FIXTURE_OUT_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_out' + os.path.sep
 
+
 ## general state and utility functions used by many tests
 def get_testing_options():
     return caliper.base.HttpOptions(
@@ -87,9 +88,12 @@ def get_common_fixture(fixture_name):
     loc = _FIXTURE_COMMON_DIR+fixture_name+'.json'
     return _get_fixture(loc)
 
-def get_fixture(fixture_name):
+def get_local_fixture(fixture_name):
     loc = _FIXTURE_DIR+fixture_name+'.json'
     return _get_fixture(loc)
+
+def get_fixture(f):
+    return get_local_fixture(f)
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
@@ -618,18 +622,21 @@ def build_epub_view_event(learning_context = None,
         actor = actor,
         action = action,
         event_object = event_object,
-        target = caliper.entities.Frame(
-            entity_id = target.id,
-            name = target.name,
-            isPartOf = event_object,
-            dateCreated = _CREATETIME,
-            dateModified = _MODTIME,
-            version = _VERED,
-            index = 1,
-            ),
+        target = build_frame_of_epub(entity_id=target.id,
+                                     name=target.name,
+                                     isPartOf=event_object),
         startedAtTime = _STARTTIME
         )
 
+def build_frame_of_epub(entity_id=None,name=None,isPartOf=None):
+    return caliper.entities.Frame(
+            entity_id = entity_id,
+            name = name,
+            isPartOf = isPartOf,
+            dateCreated = _CREATETIME,
+            dateModified = _MODTIME,
+            version = _VERED,
+            index = 1 )
 
 ### Session profile
 def build_readium_session(actor = None):
@@ -711,8 +718,18 @@ def build_session_timeout_event(learning_context = None,
 
 
 ## Condensor tests
-def rebuild_event(fixture,thin_props=False, thin_context=False):
-    f_dict = json.loads(get_fixture(fixture))
+def rebuild_event(fixture,local=True,thin_props=False,thin_context=False):
+    if not local:
+        f_dict = json.loads(get_common_fixture(fixture))
+    else:
+        f_dict = json.loads(get_local_fixture(fixture))        
     return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props,
                                                     thin_context=thin_context)
-    
+
+def rebuild_entity(fixture,local=False,thin_props=True,thin_context=True):
+    if not local:
+        f_dict = json.loads(get_common_fixture(fixture))
+    else:
+        f_dict = json.loads(get_local_fixture(fixture))
+    return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props,
+                                                    thin_context=thin_context)

@@ -116,7 +116,7 @@ class AssessmentProfile(unittest.TestCase):
                                                      assessment=self.assessment)
         self.item_attempt = util.build_assessment_item_attempt(actor = self.student,
                                                                assessment=self.assessment)
-        
+
     def testAssessmentEvent(self):
         fixture = 'caliperEventAssessmentStarted'
         assessment_event = util.build_assessment_event(
@@ -330,4 +330,3 @@ class SessionProfile(unittest.TestCase):
         
 if __name__ == '__main__':
     unittest.main()
-
