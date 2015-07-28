@@ -131,6 +131,7 @@ class TestEntity(unittest.TestCase):
         self.student = util.build_student_554433()
         self.epub_volume = util.build_epub_vol43()
         self.epub_subchapter = util.build_epub_subchap431()
+        self.iterations = 4
 
     def testEntityPayloadSingle(self):
         sensor = util.build_default_sensor()
@@ -153,6 +154,32 @@ class TestEntity(unittest.TestCase):
         self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
+    def testEntity(self):
+        sensor = util.build_default_sensor()
+        for i in range(self.iterations):
+            entity = self.student
+            sensor.describe(entity)
+        for stats in sensor.statistics:
+            counted = stats.describes.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted,self.iterations)
+            self.assertEqual(succeeded,self.iterations)
+            self.assertEqual(failed,0)
+
+    def testEntityBatch(self):
+        sensor = util.build_default_sensor()
+        entities = [self.student, self.epub_volume, self.epub_subchapter]
+        sensor.describe_batch(entities)
+        for stats in sensor.statistics:
+            counted = stats.describes.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted,len(entities))
+            self.assertEqual(succeeded,len(entities))
+            self.assertEqual(failed,0)
 
 if __name__ == '__main__':
     unittest.main()

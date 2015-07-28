@@ -64,30 +64,36 @@ class Envelope(CaliperSerializable):
 
 class EventStoreRequestor(object):
 
-    def send(self, caliper_object=None, sensor_id=None):
+    def describe(self, caliper_entity=None, sensor_id=None):
+        raise NotImplementedError('Instance must implement EventStoreRequester.describe()')
+
+    def describe(self, caliper_entity_list=None, sensor_id=None):
+        raise NotImplementedError('Instance must implement EventStoreRequester.describe_batch()')
+    
+    def send(self, caliper_event=None, sensor_id=None):
         raise NotImplementedError('Instance must implement EventStoreRequester.send()')
 
-    def send_batch(self, caliper_object_list=None, sensor_id=None):
+    def send_batch(self, caliper_event_list=None, sensor_id=None):
         raise NotImplementedError('Instance must implement EventStoreRequester.send_batch()')
 
     def _get_time(self):
         return datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]+'Z'        
 
     def _generate_payload(self,
-            caliper_object_list = None,
+            caliper_objects = None,
             send_time = None,
             sensor_id = None):
         st = send_time if send_time else self._get_time()
-        payload = self._get_payload_json(caliper_object_list, st, sensor_id)
+        payload = self._get_payload_json(caliper_objects, st, sensor_id)
         return {'type':'application/json',
                 'data': payload}
 
     def _get_payload_json(self,
-            caliper_object_list = None,
+            caliper_objects = None,
             send_time = None,
             sensor_id = None):
         envelope = Envelope(
-            data = caliper_object_list,
+            data = caliper_objects,
             send_time = send_time,
             sensor_id = sensor_id)
                 
@@ -105,15 +111,12 @@ class HttpRequestor(EventStoreRequestor):
         else:
             self._options = options
 
-    def send(self, caliper_object=None, sensor_id=None):
-        return self.send_batch(caliper_object_list=[caliper_object],sensor_id=sensor_id)[0]
-
-    def send_batch(self, caliper_object_list=None, sensor_id=None):
+    def _dispatch(self, caliper_objects=None, sensor_id=None):
         results = []
 
-        if isinstance(caliper_object_list, collections.MutableSequence):
+        if isinstance(caliper_objects, collections.MutableSequence):
             s = requests.Session()
-            payload = self._generate_payload(caliper_object_list=caliper_object_list,sensor_id=sensor_id)
+            payload = self._generate_payload(caliper_objects=caliper_objects,sensor_id=sensor_id)
             r = s.post(self._options.HOST,
                        data=payload['data'],
                        headers={'Authorization': self._options.API_KEY,
@@ -122,7 +125,19 @@ class HttpRequestor(EventStoreRequestor):
                 v = True
             else:
                 v = False
-            results += len(caliper_object_list) * [v]
+            results += len(caliper_objects) * [v]
             s.close()
 
         return results
+
+    def describe(self, caliper_entity=None, sensor_id=None):
+        return self.describe_batch(caliper_entity_list=[caliper_entity],sensor_id=sensor_id)[0]
+
+    def describe_batch(self, caliper_entity_list=None, sensor_id=None):
+        return self._dispatch(caliper_objects=caliper_entity_list, sensor_id=sensor_id)
+
+    def send(self, caliper_event=None, sensor_id=None):
+        return self.send_batch(caliper_event_list=[caliper_event],sensor_id=sensor_id)[0]
+
+    def send_batch(self, caliper_event_list=None, sensor_id=None):
+        return self._dispatch(caliper_objects=caliper_event_list, sensor_id=sensor_id)
