@@ -31,7 +31,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 import caliper.condensor as condensor
 
-_DEBUG = True
+_DEBUG = False
 
 _SENSOR_ID = 'https://example.edu/sensor/001'
 
