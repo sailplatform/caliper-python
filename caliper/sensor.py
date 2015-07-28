@@ -83,7 +83,7 @@ class Client(object):
 
     def describe_batch(self, entity_list=None, sensor_id=None):
         if ensure_list_type(entity_list, Entity):
-            results = self._requestor.send_batch(caliper_object_list=entity_list, sensor_id=sensor_id)
+            results = self._requestor.describe_batch(caliper_entity_list=entity_list, sensor_id=sensor_id)
             self._process_results(results,self.stats.update_describes)
 
     def send(self, event=None, sensor_id=None):
@@ -91,7 +91,7 @@ class Client(object):
         
     def send_batch(self, event_list=None, sensor_id=None):
         if ensure_list_type(event_list, Event):
-            results = self._requestor.send_batch(caliper_object_list=event_list, sensor_id=sensor_id)
+            results = self._requestor.send_batch(caliper_event_list=event_list, sensor_id=sensor_id)
             self._process_results(results,self.stats.update_measures)
        
                     
@@ -119,7 +119,7 @@ class Sensor(object):
 
     def describe(self, entity=None):
         for client in self._clients.values():
-            client.describe(event=event, sensor_id=self.id)
+            client.describe(entity=entity, sensor_id=self.id)
 
     def describe_batch(self, entity_list=None):
         for client in self._clients.values():
