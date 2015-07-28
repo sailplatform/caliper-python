@@ -36,28 +36,50 @@ class TestEvent(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
-        self.epub = util.build_epub_vol43()
+        self.epub_volume = util.build_epub_vol43()
         self.from_resource = util.build_AmRev101_landing_page()
-        self.target = util.build_epub_subchap431()
+        self.epub_subchapter = util.build_epub_subchap431()
         self.iterations = 4
 
-    def testPayload(self):
+    def testEventPayloadSingle(self):
         sensor = util.build_default_sensor()
         fixture = 'caliperEnvelopeEventSingle'
         event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
-                event_object = self.epub,
+                event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
-                target = self.target
+                target = self.epub_subchapter
             )
         envelope = util.get_caliper_envelope(sensor, [event])
         util.put_fixture(fixture, envelope)
         self.assertEqual(envelope.as_json(),
-                         util.get_fixture(fixture))
-        
+                         util.get_local_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True,thin_context=True),
+                         util.get_common_fixture(fixture))
+
+    def testEventPayloadBatch(self):
+        sensor = util.build_default_sensor()
+        fixture = 'caliperEnvelopeEventBatch'
+        batch = [
+            util.build_epub_navigation_event(
+                learning_context = self.learning_context,
+                actor = self.student,
+                event_object = self.epub_volume,
+                federated_session = util.build_federated_session(actor=self.student),
+                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                from_resource = self.from_resource,
+                target = self.epub_subchapter
+                )
+            for x in range(self.iterations)]
+        envelope = util.get_caliper_envelope(sensor, batch)
+        util.put_fixture(fixture, envelope)
+        self.assertEqual(envelope.as_json(),
+                         util.get_local_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True,thin_context=True),
+                         util.get_common_fixture(fixture))
 
     def testEvent(self):
         sensor = util.build_default_sensor()
@@ -65,10 +87,11 @@ class TestEvent(unittest.TestCase):
             event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
-                event_object = self.epub,
+                event_object = self.epub_volume,
+                federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
-                target = self.target
+                target = self.epub_subchapter
             )
             sensor.send(event)
         for stats in sensor.statistics:
@@ -86,10 +109,11 @@ class TestEvent(unittest.TestCase):
             util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
-                event_object = self.epub,
+                event_object = self.epub_volume,
+                federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
-                target = self.target
+                target = self.epub_subchapter
                 )
             for x in range(self.iterations)]
         sensor.send_batch(batch)
@@ -101,6 +125,34 @@ class TestEvent(unittest.TestCase):
             self.assertEqual(counted,self.iterations)
             self.assertEqual(succeeded,self.iterations)
             self.assertEqual(failed,0)
+
+class TestEntity(unittest.TestCase):
+    def setUp(self):
+        self.student = util.build_student_554433()
+        self.epub_volume = util.build_epub_vol43()
+        self.epub_subchapter = util.build_epub_subchap431()
+
+    def testEntityPayloadSingle(self):
+        sensor = util.build_default_sensor()
+        fixture = 'caliperEnvelopeEntitySingle'
+        envelope = util.get_caliper_envelope(sensor, [self.student])
+        util.put_fixture(fixture,envelope)
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_local_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
+
+    def testEntityPayloadBatch(self):
+        sensor = util.build_default_sensor()
+        fixture = 'caliperEnvelopeEntityBatch'
+        envelope = util.get_caliper_envelope(sensor,
+            [self.student, self.epub_volume, self.epub_subchapter])
+        util.put_fixture(fixture,envelope)
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_local_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_common_fixture(fixture))
+
 
 if __name__ == '__main__':
     unittest.main()
