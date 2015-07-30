@@ -120,6 +120,8 @@ might send a basic navigation event to a caliper endpoint::
         host='http://caliper-endpoint.your-school.edu/events/',
         api_key='your-caliper-API-key' )
 
+  # Here you build your sensor; it will have one client in its registry,
+  # with the key 'default'.
   the_sensor = caliper.build_sensor_from_config(
           sensor_id = 'http://learning-app.your-school.edu/sensor',
           config_options = the_config )
@@ -141,7 +143,22 @@ might send a basic navigation event to a caliper endpoint::
           target = the_caliper_DigitalResource_the_actor_is_going_to,
           endedAtTime = the_time_when_the_actor_did_the_action )
 
-  # Once built, you use your sensor to send your event
+  # Once built, you can use your sensor to describe one or more often used
+  # entities; suppose for example, you'll be sending a number of events that
+  # all have the same actor
+  ret = the_sensor.describe(the_event.actor)
+
+  # The return structure from the sensor will be a dictionary of lists: each
+  # item in the dictionary has a key corresponding to a client key,
+  # so ret['default'] fetches back the list of URIs of all the @ids of
+  # the fully described Caliper entities you have sent.
+  #
+  # Now you can use this list with event sendings to send only the identifiers
+  # of already-described entities, and not their full forms:
+  the_sensor.send(the_event, described_entites=ret['default'])
+
+  # You can also just send the event in its full form, with all fleshed out
+  # entities:
   the_sensor.send(the_event)
 
 Your actual use of the caliper code will certainly be more complex than

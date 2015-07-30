@@ -70,6 +70,7 @@ _FIXTURE_OUT_DIR = _FIXTURE_BASE_DIR + _FIXTURE_PREFIX + '_out' + os.path.sep
 def get_testing_options():
     return caliper.base.HttpOptions(
         host='http://httpbin.org/post',
+        optimize_serialization=True,
         api_key='6xp7jKrOSOWOgy3acxHFWA')
 
 def build_default_sensor():
@@ -97,11 +98,15 @@ def get_fixture(f):
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
-def put_fixture(fixture_name, caliper_object, thin_context=False, thin_props=False, debug=_DEBUG):
+def put_fixture(fixture_name, caliper_object,
+                thin_context=False, thin_props=False, described_entities=None,
+                debug=_DEBUG):
     if debug:
         loc = _FIXTURE_OUT_DIR+fixture_name
         with open(loc+'_out.json', 'w') as f:
-            f.write(caliper_object.as_json(thin_context=thin_context, thin_props=thin_props)
+            f.write(caliper_object.as_json(thin_context=thin_context,
+                                           thin_props=thin_props,
+                                           described_entities=described_entities)
                     .replace('{"','{\n"')
                     .replace(', "',',\n"')
                     )
@@ -122,7 +127,7 @@ def get_caliper_envelope(sensor=None, caliper_object_list=None):
         send_time = _EVENT_SEND_TIME,
         sensor_id = sensor.id
         )
-    
+
 
 ### Shared entity resources ###
 def build_federated_session(actor=None):
@@ -718,18 +723,20 @@ def build_session_timeout_event(learning_context = None,
 
 
 ## Condensor tests
-def rebuild_event(fixture,local=True,thin_props=False,thin_context=False):
+def rebuild_event(fixture,local=True,thin_props=False,thin_context=False,described_entities=None):
     if not local:
         f_dict = json.loads(get_common_fixture(fixture))
     else:
         f_dict = json.loads(get_local_fixture(fixture))        
     return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props,
-                                                    thin_context=thin_context)
+                                                    thin_context=thin_context,
+                                                    described_entities=described_entities)
 
-def rebuild_entity(fixture,local=False,thin_props=True,thin_context=True):
+def rebuild_entity(fixture,local=False,thin_props=True,thin_context=True,described_entities=None):
     if not local:
         f_dict = json.loads(get_common_fixture(fixture))
     else:
         f_dict = json.loads(get_local_fixture(fixture))
     return condensor.from_json_dict(f_dict).as_json(thin_props=thin_props,
-                                                    thin_context=thin_context)
+                                                    thin_context=thin_context,
+                                                    described_entities=described_entities)

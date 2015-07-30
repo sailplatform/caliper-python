@@ -25,12 +25,31 @@ from builtins import *
 
 import collections, importlib
 
+from caliper.base import is_valid_URI
 from caliper.constants import CALIPER_CLASSES
+
+
+def _parse_context(ctxt):
+    r = {}
+    if not isinstance(ctxt, collections.MutableSequence):
+            return r
+    for entry in ctxt:
+            if not isinstance(entry, collections.MutableMapping):
+                    continue
+            for k,v in entry.items():
+                    if (isinstance(v, collections.MutableMapping) and
+                        v.get('@id') and
+                        v.get('@type') == '@id'):
+                            r.update({k:v['@id']})
+    return r
+
 
 def from_json_dict(d):
     type_path = CALIPER_CLASSES.get(d.get('@type'))
     if not type_path:
         raise ValueError('Unknown @type')
+
+    local_ids = _parse_context(d.get('@context'))
 
     r = {}
     for k,v in d.items():
@@ -50,6 +69,8 @@ def from_json_dict(d):
             value = from_json_list(v)
         elif isinstance(v, collections.MutableMapping) and v.get('@type'):
             value = from_json_dict(v)
+        elif is_valid_URI(v) and k in local_ids:
+            value = from_json_dict({'@id': v, '@type': local_ids[k]})
         else:
             value = v
 
