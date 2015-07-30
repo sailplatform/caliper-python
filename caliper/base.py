@@ -24,7 +24,7 @@ install_aliases()
 from future.utils import with_metaclass
 from builtins import *
 
-import collections, copy, importlib, json
+import collections, copy, importlib, json, re
 from oauthlib import uri_validate as oauthlib_uri_validate
 
 from caliper.constants import CALIPER_CLASSES
@@ -78,6 +78,7 @@ class Options(object):
         'CONNECTION_REQUEST_TIMEOUT': None,
         'CONNECTION_TIMEOUT': None,
         'HOST' : None,
+        'OPTIMIZE_SERIALIZATION': False,
         'SOCKET_TIMEOUT': None,
         }
 
@@ -123,6 +124,16 @@ class Options(object):
             self._config['HOST'] = str(new_host)
 
     @property
+    def OPTIMIZE_SERIALIZATION(self):
+        return self._config['OPTIMIZE_SERIALIZATION']
+    @OPTIMIZE_SERIALIZATION.setter
+    def OPTIMIZE_SERIALIZATION(self, optimize):
+        if optimize:
+            self._config['OPTIMIZE_SERIALIZATION'] = True
+        else:
+            self._config['OPTIMIZE_SERIALIZATION'] = False
+
+    @property
     def SOCKET_TIMEOUT(self):
         return self._config['SOCKET_TIMEOUT']
     @SOCKET_TIMEOUT.setter
@@ -139,6 +150,7 @@ class HttpOptions(Options):
             connection_request_timeout=10000,
             connection_timeout=10000,
             host='http://httpbin.org/post',
+            optimize_serialization=False,
             socket_timeout=10000,
             ):
         Options.__init__(self)
@@ -146,6 +158,7 @@ class HttpOptions(Options):
         self.CONNECTION_REQUEST_TIMEOUT=connection_request_timeout
         self.CONNECTION_TIMEOUT=connection_timeout
         self.HOST=host
+        self.OPTIMIZE_SERIALIZATION=optimize_serialization
         self.SOCKET_TIMEOUT=socket_timeout
 
 
@@ -281,7 +294,7 @@ class CaliperSerializable(object):
 
     def _unpack_list(self,l,
                      ctxt_bases=[],
-                     described_objects=[],
+                     described_entities=[],
                      thin_context=False,
                      thin_props=False):
         r = []
@@ -289,10 +302,12 @@ class CaliperSerializable(object):
             if isinstance(item, collections.MutableSequence):
                 r.append(self._unpack_list(item,
                                            ctxt_bases=ctxt_bases,
+                                           described_entities=described_entities,
                                            thin_context=thin_context,
                                            thin_props=thin_props))
             elif isinstance(item, CaliperSerializable):
                 r.append(item._unpack_object(ctxt_bases=ctxt_bases,
+                                             described_entities=described_entities,
                                              thin_context=thin_context,
                                              thin_props=thin_props))
             else:
@@ -307,13 +322,13 @@ class CaliperSerializable(object):
             elif isinstance(context,str):
                 return [context,lc]
             elif isinstance(context, collections.MutableSequence):
-                return context.append(lc)
+                return context + [lc]
             else:
                 return None
 
     def _unpack_object(self,
                        ctxt_bases = [],
-                       described_objects=[],
+                       described_entities=[],
                        thin_context=False,
                        thin_props=False):
         r = {}
@@ -334,33 +349,33 @@ class CaliperSerializable(object):
             elif isinstance(v, collections.MutableSequence):
                 value = self._unpack_list(v,
                                           ctxt_bases=cb,
-                                          described_objects=described_objects,
+                                          described_entities=described_entities,
                                           thin_context=thin_context,
                                           thin_props=thin_props)
             elif isinstance(v, BaseEntity):
-                if v.id in described_objects:
+                if v.id in described_entities:
                     r.update({'@context': self._update_context(r.get('@context'), k, v.type)})
                     value = v.id
                 else:
                     value = v._unpack_object(ctxt_bases=cb,
-                                             described_objects=described_objects,
+                                             described_entities=described_entities,
                                              thin_context=thin_context,
                                              thin_props=thin_props)
             elif isinstance(v, CaliperSerializable):
                 the_id = v._get_prop('@id')
                 the_type = v._get_prop('@type')
-                if (the_id and the_type) and (the_id in described_objects):
+                if (the_id and the_type) and (the_id in described_entities):
                     r.update({'@context': self._update_context(r.get('@context'), k, the_type)})
                     value = the_id
                 else:
                     value = v._unpack_object(ctxt_bases=cb,
-                                             described_objects=described_objects,
+                                             described_entities=described_entities,
                                              thin_context=thin_context,
                                              thin_props=thin_props)
             elif isinstance(v, collections.MutableMapping):
                 the_id = v.get('@id')
                 the_type = v.get('@type')
-                if (the_id and the_type) and (the_id in described_objects):
+                if (the_id and the_type) and (the_id in described_entities):
                     r.update({'@context': self._update_context(r.get('@context'), k, the_type)})
                     value = the_id
                 else:
@@ -374,21 +389,33 @@ class CaliperSerializable(object):
 
     # public methods, to repr this event or entity as a dict or as a json-string
     def as_dict(self,
-                described_objects=[],
+                described_entities=None,
                 thin_context=False,
                 thin_props=False):
-        return self._unpack_object(described_objects=described_objects,
+        return self._unpack_object(described_entities=described_entities or [],
                                    thin_context=thin_context,
                                    thin_props=thin_props)
 
     def as_json(self,
-                described_objects=[],
+                described_entities=None,
                 thin_context=False,
                 thin_props=False):
-        r = self.as_dict(described_objects=described_objects,
+        r = self.as_dict(described_entities=described_entities,
                          thin_context=thin_context,
                          thin_props=thin_props)
         return json.dumps(r,sort_keys=True)
+
+    def as_json_with_ids(self,
+                described_entities=None,
+                thin_context=False,
+                thin_props=False):
+        ret = self.as_json(described_entities=described_entities,
+                           thin_context=thin_context,
+                           thin_props=thin_props)
+        return ret, re.findall(r'"@id": "(.+?(?="))"',
+                               re.sub(r'"@context": \[.+?\],','', ret))
+
+        
 
 
 ### Entities and Events ###

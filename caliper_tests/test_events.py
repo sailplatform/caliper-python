@@ -275,6 +275,25 @@ class ReadingProfile(unittest.TestCase):
         self.assertEqual(reading_event.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
+    def testViewEventCoerced(self):
+        fixture = 'caliperEventViewViewedCoerced'
+        reading_event = util.build_epub_view_event(
+            learning_context = self.learning_context,
+            actor = self.student,
+            event_object = self.epub,
+            target = self.target,
+            action = caliper.profiles.CaliperProfile.Actions['VIEWED']
+            )
+        util.put_fixture(fixture, reading_event)
+        self.assertEqual(reading_event.as_json(thin_props=True,
+                                               thin_context=True,
+                                               described_entities=[
+                                                   self.student.id,
+                                                   self.learning_context.edApp.id,
+                                                   self.learning_context.group.subOrganizationOf.id
+                                                   ]),
+                        util.get_local_fixture(fixture))
+
 
 class SessionProfile(unittest.TestCase):
     def setUp(self):

@@ -130,6 +130,18 @@ class ReadingProfile(unittest.TestCase):
         self.assertEqual(util.rebuild_event(fixture, local=False, thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
+    def testViewEventCoerced(self):
+        fixture = 'caliperEventViewViewedCoerced'
+        student = util.build_student_554433()
+        edApp = util.build_readium_app()
+        section = util.build_AmRev101_course_section()
+        described = [student.id, edApp.id, section.id]
+        self.assertEqual(util.rebuild_event(fixture,
+                                            thin_props=True,
+                                            thin_context=True,
+                                            described_entities=described),
+                         util.get_local_fixture(fixture))
+
 class SessionProfile(unittest.TestCase):
     def setUp(self):
         pass

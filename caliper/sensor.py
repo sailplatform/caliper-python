@@ -79,20 +79,29 @@ class Client(object):
             update_func(1)
         
     def describe(self, entity=None, sensor_id=None):
-        self.describe_batch(entity_list=[entity], sensor_id=None)
+        return self.describe_batch(entity_list=[entity], sensor_id=None)
 
     def describe_batch(self, entity_list=None, sensor_id=None):
+        identifiers = None
         if ensure_list_type(entity_list, Entity):
-            results = self._requestor.describe_batch(caliper_entity_list=entity_list, sensor_id=sensor_id)
+            results, identifiers = self._requestor.describe_batch(caliper_entity_list=entity_list,
+                                                                  sensor_id=sensor_id)
             self._process_results(results,self.stats.update_describes)
+        return identifiers
 
-    def send(self, event=None, sensor_id=None):
-        self.send_batch(event_list=[event], sensor_id=sensor_id)
+    def send(self, event=None, described_entities=None, sensor_id=None):
+        return self.send_batch(event_list=[event],
+                               described_entities=described_entities,
+                               sensor_id=sensor_id)
         
-    def send_batch(self, event_list=None, sensor_id=None):
+    def send_batch(self, event_list=None, described_entities=None, sensor_id=None):
+        identifiers = None
         if ensure_list_type(event_list, Event):
-            results = self._requestor.send_batch(caliper_event_list=event_list, sensor_id=sensor_id)
+            results, identifiers = self._requestor.send_batch(caliper_event_list=event_list,
+                                                              described_entities=described_entities,
+                                                              sensor_id=sensor_id)
             self._process_results(results,self.stats.update_measures)
+        return identifiers
        
                     
 class Sensor(object):
@@ -118,20 +127,33 @@ class Sensor(object):
         return s
 
     def describe(self, entity=None):
-        for client in self._clients.values():
-            client.describe(entity=entity, sensor_id=self.id)
+        identifiers = {}
+        for k,client in self.client_registry.items():
+            identifiers.update( {k: client.describe(entity=entity, sensor_id=self.id)} )
+        return identifiers
 
     def describe_batch(self, entity_list=None):
-        for client in self._clients.values():
-            client.describe_batch(entity_list=entity_list, sensor_id=self.id)
+        identifiers = {}
+        for k,client in self.client_registry.items():
+            identifiers.update( {k: client.describe_batch(entity_list=entity_list, sensor_id=self.id)} )
+        return identifiers
+    
+    def send(self, event=None, described_entities=None):
+        identifiers = {}
+        for k,client in self.client_registry.items():
+            identifiers.update( {k: client.send(event=event,
+                                                described_entities=described_entities,
+                                                sensor_id=self.id)} )
+        return identifiers
 
-    def send(self, event=None):
-        for client in self._clients.values():
-            client.send(event=event, sensor_id=self.id)
+    def send_batch(self, event_list=None, described_entities=None):
+        identifiers = {}
+        for k,client in self.client_registry.items():
+            identifiers.update( {k: client.send_batch(event_list=event_list,
+                                                      described_entities=described_entities,
+                                                      sensor_id=self.id)} )
+        return identifiers
 
-    def send_batch(self, event_list=None):
-        for client in self._clients.values():
-            client.send_batch(event_list=event_list, sensor_id=self.id)
 
     @property
     def id(self):

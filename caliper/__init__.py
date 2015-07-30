@@ -47,7 +47,7 @@ __all__ = ['Sensor', 'HttpOptions']
 
 
 def build_default_sensor(sensor_id=None):
-    return Sensor.fashion_sensor_with_config(config_options=HttpOptions(),
+    return Sensor.fashion_sensor_with_config(config_options=HttpOptions(optimize_serialization=True),
                                              sensor_id=sensor_id)
 
 def build_default_sensor_for_client(client=None, sensor_id=None):
@@ -55,8 +55,9 @@ def build_default_sensor_for_client(client=None, sensor_id=None):
                                                      sensor_id=sensor_id)
 
 def build_sensor_from_config(config_options=None, sensor_id=None):
-    return Sensor.fashion_sensor_with_config(config_options=config_options or HttpOptions(),
-                                                     sensor_id=sensor_id)
+    return Sensor.fashion_sensor_with_config(config_options=config_options or
+                                               HttpOptions(optimize_serialization=True),
+                                             sensor_id=sensor_id)
 
 
 ## set default logging handler to avoid "No handler found" warnings.
