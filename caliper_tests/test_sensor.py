@@ -94,9 +94,8 @@ class TestEvent(unittest.TestCase):
             target = self.epub_subchapter,
             action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
         envelope = util.get_caliper_envelope(sensor, [event])
-        # util.put_fixture(fixture,envelope,
-        #                  thin_props=True, thin_context=True,
-        #                  described_entities=ret['default'])
+        util.put_fixture(fixture,envelope,thin_props=True,
+                         thin_context=True,described_entities=ret['default'])
         self.assertEqual(envelope.as_json(thin_props=True,thin_context=True,
                                           described_entities=ret['default']),
                          util.get_local_fixture(fixture))
