@@ -337,7 +337,7 @@ class CaliperSerializable(object):
         if ctxt_prop:
             r.update({'@context':ctxt_prop})
 
-        for k,v in self._props.items():
+        for k,v in sorted(self._props.items()):
             if thin_context and self._context['base']:
                 cb.append(self._context['base'])
             else:
