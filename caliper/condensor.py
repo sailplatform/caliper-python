@@ -45,9 +45,11 @@ def _parse_context(ctxt):
 
 
 def from_json_dict(d):
-    type_path = CALIPER_CLASSES.get(d.get('@type'))
-    if not type_path:
-        raise ValueError('Unknown @type')
+    t = d.get('@type')
+    if t and not CALIPER_CLASSES.get(t):
+        raise ValueError('Unknown @type: {0}'.format(t))
+    type_path = CALIPER_CLASSES.get(t) or d.__class__.__name__
+
 
     local_ids = _parse_context(d.get('@context'))
 
@@ -76,7 +78,12 @@ def from_json_dict(d):
 
         r.update({key:value})
 
-    m,c = type_path.rsplit('.',1)
+    if '.' not in type_path:
+        m = 'builtins'
+        c = type_path
+    else:
+        m,c = type_path.rsplit('.',1)
+
     TheClass = getattr(importlib.import_module(m),c)
 
     return TheClass(**r)
