@@ -61,9 +61,7 @@
       "shared-with-project-team"
     ]
   },
-  "startedAtTime": "2015-09-15T10:15:00.000Z",
-  "endedAtTime": null,
-  "duration": null,
+  "eventTime": "2015-09-15T10:15:00.000Z",
   "edApp": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.com/viewer",
