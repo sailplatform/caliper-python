@@ -298,16 +298,17 @@ class ReadingProfile(unittest.TestCase):
 class SessionProfile(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_readium_app_learning_context(actor=self.student)
+        self.session_end = util.build_readium_session_end(actor=self.student)
         self.epub = util.build_epub_vol43()
 
     def testSessionLoginEvent(self):
         fixture = 'caliperEventSessionLoggedIn'
+        ctxt = util.build_readium_app_learning_context(actor=self.student)
         session_event = util.build_session_login_event(
-            learning_context = self.learning_context,
+            learning_context = ctxt,
             actor = self.student,
-            event_object = self.learning_context.edApp,
-            session = self.learning_context.session,
+            event_object = ctxt.edApp,
+            session = ctxt.session,
             target = util.build_epub_subchap431(),
             action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
             )
@@ -319,11 +320,13 @@ class SessionProfile(unittest.TestCase):
 
     def testSessionLogoutEvent(self):
         fixture = 'caliperEventSessionLoggedOut'
+        ctxt = util.build_readium_app_learning_context(actor=self.student,
+                                                       session=self.session_end)
         session_event = util.build_session_logout_event(
-            learning_context = self.learning_context,
+            learning_context = ctxt,
             actor = self.student,
-            event_object = self.learning_context.edApp,
-            target = self.learning_context.session,
+            event_object = ctxt.edApp,
+            session = ctxt.session,
             action = caliper.profiles.SessionProfile.Actions['LOGGED_OUT']            
             )
         util.put_fixture(fixture, session_event)
@@ -334,10 +337,12 @@ class SessionProfile(unittest.TestCase):
 
     def testSessionTimeoutEvent(self):
         fixture = 'caliperEventSessionTimedOut'
+        ctxt = util.build_readium_app_learning_context(actor=self.student,
+                                                       session=self.session_end)
         session_event = util.build_session_timeout_event(
-            learning_context = self.learning_context,
-            actor = self.learning_context.edApp,
-            event_object = self.learning_context.session,
+            learning_context = ctxt,
+            actor = ctxt.edApp,
+            session = ctxt.session,
             action = caliper.profiles.SessionProfile.Actions['TIMED_OUT']            
             )
         util.put_fixture(fixture, session_event)
