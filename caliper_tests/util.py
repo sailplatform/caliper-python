@@ -31,10 +31,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 
 
-_DEBUG = False
+_DEBUG = True
 
 _SENSOR_ID = 'https://example.edu/sensor/001'
 
+_EVENTTIME = '2015-09-15T10:15:00.000Z'
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
 _EVENT_SEND_TIME = '2015-09-15T11:05:01.000Z'
@@ -115,7 +116,9 @@ def build_federated_session(actor=None):
         entity_id = 'https://example.edu/lms/federatedSession/123456789',
         actor = actor,
         dateCreated = _CREATETIME,
-        startedAtTime = _STARTTIME
+        duration = _DURATION,
+        endedAtTime = _ENDTIME,
+        startedAtTime = _STARTTIME,
         )
 
     
@@ -205,13 +208,14 @@ def build_readium_app():
         dateModified = _MODTIME
         )
 
-def build_readium_app_learning_context(actor=None):
+def build_readium_app_learning_context(actor=None, session=None):
     a = actor or build_student_554433()
+    s = session or build_readium_session_start(actor=a)
     return caliper.entities.LearningContext(
         edApp = build_readium_app(),
         group = build_AmRev101_group_001(),
         membership = build_AmRev101_membership(),
-        session = build_readium_session(actor=a)
+        session = s
         )
 
 ## build a test EPUB volume
@@ -350,7 +354,7 @@ def build_annotation_event(learning_context = None,
             index = index
             ),
         generated = annotation,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 ### Assignable Profile ###
@@ -373,7 +377,7 @@ def build_assessment_assignable_event(learning_context = None,
             count = 1,
             dateCreated = _CREATETIME,
             startedAtTime = _STARTTIME),
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 ### Assessment Profile and Outcome Profile ###
@@ -478,7 +482,7 @@ def build_assessment_event(learning_context = None,
         action = action,
         event_object = assessment,
         generated = attempt,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 def build_assessment_item_event(learning_context = None,
@@ -495,7 +499,7 @@ def build_assessment_item_event(learning_context = None,
         isTimeDependent = False,
         event_object = assessment_item,
         generated = generated,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 def build_assessment_outcome_event(learning_context = None,
@@ -511,7 +515,7 @@ def build_assessment_outcome_event(learning_context = None,
         action = action,
         event_object = attempt,
         generated = result,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 ### Media Profile ###
@@ -529,7 +533,7 @@ def build_video_media_event(learning_context = None,
         action = action,
         event_object = event_object,
         target = location,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 ### Reading Profile ###
@@ -582,7 +586,7 @@ def build_epub_navigation_event(learning_context = None,
             index = 1
             ),
         navigatedFrom = from_resource,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 ## View event
@@ -607,14 +611,26 @@ def build_epub_view_event(learning_context = None,
             version = _VERED,
             index = 1,
             ),
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 
 
 ### Session profile
 
-def build_readium_session(actor = None):
+def build_readium_session_end(actor = None):
+    return caliper.entities.Session(
+        entity_id = 'https://example.com/viewer/session-123456789',
+        name = 'session-123456789',
+        dateCreated = _CREATETIME,
+        dateModified = _MODTIME,
+        duration = _DURATION,
+        endedAtTime = _ENDTIME,
+        startedAtTime = _STARTTIME,
+        actor = actor
+        )
+
+def build_readium_session_start(actor = None):
     return caliper.entities.Session(
         entity_id = 'https://example.com/viewer/session-123456789',
         name = 'session-123456789',
@@ -623,6 +639,7 @@ def build_readium_session(actor = None):
         startedAtTime = _STARTTIME,
         actor = actor
         )
+
 
 ## Session event
 def build_session_login_event(learning_context = None,
@@ -648,44 +665,34 @@ def build_session_login_event(learning_context = None,
         target = the_target,
         event_object = event_object,
         generated = session,
-        startedAtTime = _STARTTIME
+        eventTime = _EVENTTIME
         )
 
 def build_session_logout_event(learning_context = None,
                                actor = None,
                                event_object = None,
                                session = None,
-                               target = None,
                                action = None):
-    target.endedAtTime = _ENDTIME
-    target.duration = _DURATION
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
         membership = learning_context.membership,
         actor = actor,
         action = action,
-        target = target,
+        target = session,
         event_object = event_object,
-        generated = session,
-        startedAtTime = _STARTTIME,
-        endedAtTime = _ENDTIME,
-        duration = _DURATION
+        eventTime = _EVENTTIME
         )
 
 def build_session_timeout_event(learning_context = None,
                                 actor = None,
-                                event_object = None,
+                                session = None,
                                 action = None):
-    event_object.endedAtTime = _ENDTIME
-    event_object.duration = _DURATION
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
         group = learning_context.group,
         actor = learning_context.edApp,
         action = action,
-        event_object = event_object,
-        startedAtTime = event_object.startedAtTime,
-        endedAtTime = _ENDTIME,
-        duration = _DURATION
+        event_object = session,
+        eventTime = _EVENTTIME
         )

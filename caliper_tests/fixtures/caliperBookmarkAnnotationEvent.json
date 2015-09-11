@@ -57,9 +57,7 @@
     "annotated": "https://example.com/viewer/book/34843#epubcfi(/4/3/2)",
     "bookmarkNotes": "The Intolerable Acts (1774)--bad idea Lord North"
   },
-  "startedAtTime": "2015-09-15T10:15:00.000Z",
-  "endedAtTime": null,
-  "duration": null,
+  "eventTime": "2015-09-15T10:15:00.000Z",
   "edApp": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.com/viewer",

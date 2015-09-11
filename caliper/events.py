@@ -36,15 +36,13 @@ class Event(CaliperSerializable):
     def __init__(self,
             action = None,
             actor = None,
-            duration = None,
             edApp = None,
-            endedAtTime = None,
             event_object = None,
+            eventTime = None,
             federatedSession = None,
             generated = None,
             group = None,
             membership = None,
-            startedAtTime = None,
             target = None,
             **kwargs):
         CaliperSerializable.__init__(self)
@@ -61,20 +59,21 @@ class Event(CaliperSerializable):
         else:
             self._set_obj_prop('actor', actor)
 
-        self._set_str_prop('duration', duration)
-                    
         if edApp and (not isinstance(edApp, entities.SoftwareApplication)):
             raise TypeError('edApp must implement entities.SoftwareApplication')
         else:
             self._set_obj_prop('edApp', edApp)
-
-        self._set_str_prop('endedAtTime', endedAtTime)
 
         if event_object and (not isinstance(event_object, CaliperSerializable)):
             raise TypeError('event_object must implement CaliperSerializable')
         else:
             self._set_obj_prop('object', event_object)
 
+        if not eventTime:
+            raise ValueError('eventTime must have a time value')
+        else:
+            self._set_str_prop('eventTime', eventTime)
+            
         if federatedSession and (not isinstance(federatedSession, entities.Session)):
             raise TypeError('federatedSession must implement Session')
         else:
@@ -95,11 +94,6 @@ class Event(CaliperSerializable):
         else:
             self._set_obj_prop('membership', membership)
 
-        if not startedAtTime:
-            raise ValueError('startedAtTime must have a time value')
-        else:
-            self._set_str_prop('startedAtTime', startedAtTime)
-            
         if target and (not isinstance(target, entities.Targetable)):
             raise TypeError('target must implement entities.Targetable')
         else:
@@ -123,16 +117,12 @@ class Event(CaliperSerializable):
         return self._get_prop('actor')
 
     @property
-    def duration(self):
-        return self._get_prop('duration')
-
-    @property
     def edApp(self):
         return self._get_prop('edApp')
 
     @property
-    def endedAtTime(self):
-        return self._get_prop('endedAtTime')
+    def eventTime(self):
+        return self._get_prop('eventTime')
 
     @property
     def federatedSession(self):
@@ -149,10 +139,6 @@ class Event(CaliperSerializable):
     @property
     def object(self):
         return self._get_prop('object')
-
-    @property
-    def startedAtTime(self):
-        return self._get_prop('startedAtTime')
 
     @property
     def target(self):
@@ -429,7 +415,6 @@ class SessionEvent(Event):
     def __init__(self,
                  action = None,
                  actor = None,
-                 endedAtTime = None,
                  event_object = None,
                  generated = None,
                  target = None,
@@ -455,8 +440,6 @@ class SessionEvent(Event):
         elif action == profiles.SessionProfile.Actions['LOGGED_OUT']:
             if not isinstance(actor, entities.Person):
                 raise TypeError('for LOGGED_OUT, actor must implement entities.Person')
-            if not endedAtTime:
-                raise ValueError('for LOGGED_OUT, endedAtTime must have a time value')
             if not isinstance(event_object, entities.SoftwareApplication):
                 raise TypeError('for LOGGED_OUT, event_object must implement entities.SoftwareApplication')
             if not isinstance(target, entities.Session):
@@ -464,13 +447,10 @@ class SessionEvent(Event):
         elif action == profiles.SessionProfile.Actions['TIMED_OUT']:
             if not isinstance(actor, entities.SoftwareApplication):
                 raise TypeError('for TIMED_OUT, actor must implement entities.SoftwareApplication')
-            if not endedAtTime:
-                raise ValueError('for TIMED_OUT, endedAtTime must have a time value')
             if not isinstance(event_object, entities.Session):
                 raise TypeError('for TIMED_OUT, event_object must implement entities.Session')
             
         self._set_obj_prop('actor', actor)
-        self._set_str_prop('endedAtTime', endedAtTime)
         self._set_obj_prop('generated', generated)
         self._set_obj_prop('object', event_object)
         self._set_obj_prop('target', target)
