@@ -31,7 +31,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper, caliper_tests
 import caliper.condensor as condensor
 
-_DEBUG = True
+_DEBUG = False
 
 _SENSOR_ID = 'https://example.edu/sensor/001'
 
@@ -94,12 +94,15 @@ def get_local_fixture(fixture_name):
     loc = _FIXTURE_DIR+fixture_name+'.json'
     return _get_fixture(loc)
 
-def get_fixture(f):
-    return get_local_fixture(f)
+def get_fixture(f,local=True):
+    if local:
+        return get_local_fixture(f)
+    else:
+        return get_common_fixture(f)
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
-def put_fixture(fixture_name, caliper_object,
+def put_fixture(fixture_name, caliper_object, local=True,
                 thin_context=False, thin_props=False, described_entities=None,
                 debug=_DEBUG):
     if debug:
@@ -112,7 +115,7 @@ def put_fixture(fixture_name, caliper_object,
                     .replace(', "',',\n"')
                     )
         with open(loc+'.json', 'w') as f:
-            f.write(get_fixture(fixture_name)
+            f.write(get_fixture(fixture_name,local=local)
                     .replace('{"','{\n"')
                     .replace(', "',',\n"')
                     )
@@ -626,6 +629,7 @@ def build_epub_view_event(learning_context = None,
                           action = None):
     return caliper.events.ViewEvent(
         edApp = learning_context.edApp,
+        eventTime = _EVENTTIME,
         group = learning_context.group,
         membership = learning_context.membership,
         actor = actor,
@@ -633,8 +637,7 @@ def build_epub_view_event(learning_context = None,
         event_object = event_object,
         target = build_frame_of_epub(entity_id=target.id,
                                      name=target.name,
-                                     isPartOf=event_object),
-        startedAtTime = _STARTTIME
+                                     isPartOf=event_object)
         )
 
 def build_frame_of_epub(entity_id=None,name=None,isPartOf=None):

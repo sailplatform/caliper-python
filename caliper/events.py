@@ -227,6 +227,7 @@ class SessionEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
+        end_time_req = False
         if self.action == profiles.SessionProfile.Actions['LOGGED_IN']:
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
@@ -245,37 +246,6 @@ class SessionEvent(Event):
         self._set_base_context(EVENT_CONTEXTS['SESSION'])
         self._set_str_prop('@type', EVENT_TYPES['SESSION'])
 
-        if action not in profiles.SessionProfile.Actions.values():
-            raise TypeError('action must be in the list of SessionProfile actions')
-        else:
-            self._set_str_prop('action', action)
-
-        if action == profiles.SessionProfile.Actions['LOGGED_IN']:
-            if not isinstance(generated, entities.Session):
-                raise TypeError('for LOGGED_IN, generated must implement entities.Session')
-            if not isinstance(target, entities.DigitalResource):
-                raise TypeError('for LOGGED_IN, target must impelement entities.DigitalResource')
-            if not isinstance(actor, entities.Person):
-                raise TypeError('for LOGGED_IN, actor must implement entities.Person')
-            if not isinstance(event_object, entities.SoftwareApplication):
-                raise TypeError('for LOGGED_IN, event_object must implement entities.SoftwareApplication')
-        elif action == profiles.SessionProfile.Actions['LOGGED_OUT']:
-            if not isinstance(actor, entities.Person):
-                raise TypeError('for LOGGED_OUT, actor must implement entities.Person')
-            if not isinstance(event_object, entities.SoftwareApplication):
-                raise TypeError('for LOGGED_OUT, event_object must implement entities.SoftwareApplication')
-            if not isinstance(target, entities.Session):
-                raise TypeError('for LOGGED_OUT, target must impelement entities.Session')
-        elif action == profiles.SessionProfile.Actions['TIMED_OUT']:
-            if not isinstance(actor, entities.SoftwareApplication):
-                raise TypeError('for TIMED_OUT, actor must implement entities.SoftwareApplication')
-            if not isinstance(event_object, entities.Session):
-                raise TypeError('for TIMED_OUT, event_object must implement entities.Session')
-            
-        self._set_obj_prop('actor', actor)
-        self._set_obj_prop('generated', generated)
-        self._set_obj_prop('object', event_object)
-        self._set_obj_prop('target', target)
 
 class ViewEvent(Event):
 

@@ -54,7 +54,7 @@
        "roles": ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"],
        "status": "http://purl.imsglobal.org/vocab/lis/v2/status#Active"},
      "object": "https://example.com/viewer/book/34843#epubcfi(/4/3)",
-     "startedAtTime": "2015-09-15T10:15:00.000Z",
+     "eventTime": "2015-09-15T10:15:00.000Z",
      "target": "https://example.com/viewer/book/34843#epubcfi(/4/3/1)"}
   ]
 }
