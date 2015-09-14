@@ -114,6 +114,8 @@ class TestEvent(unittest.TestCase):
         util.put_fixture(fixture, envelope)
         self.assertEqual(envelope.as_json(),
                          util.get_local_fixture(fixture))
+        self.assertEqual(envelope.as_json(),
+                         util.get_common_fixture(fixture))
 
     def testEvent(self):
         sensor = util.build_default_sensor()
