@@ -37,8 +37,8 @@ class TestEvent(unittest.TestCase):
         self.student = util.build_student_554433()
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub_volume = util.build_epub_vol43()
-        self.from_resource = util.build_AmRev101_landing_page()
         self.epub_subchapter = util.build_epub_subchap431()
+        self.from_resource = util.build_AmRev101_landing_page()
         self.iterations = 4
 
     def testEventPayloadSingle(self):
@@ -101,6 +101,19 @@ class TestEvent(unittest.TestCase):
                                           described_entities=ret['default']),
                          util.get_common_fixture(fixture))
 
+    def testEventPayloadMinimal(self):
+        sensor = util.build_default_sensor()
+        fixture = 'caliperEnvelopeEventViewViewedMinimal'
+        event = util.build_epub_view_event(
+            learning_context = self.learning_context,
+            actor = self.student,
+            event_object = self.epub_volume,
+            target = self.epub_subchapter,
+            action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
+        envelope = util.get_caliper_envelope(sensor, [event.as_minimal_event()])
+        util.put_fixture(fixture, envelope)
+        self.assertEqual(envelope.as_json(),
+                         util.get_local_fixture(fixture))
 
     def testEvent(self):
         sensor = util.build_default_sensor()
