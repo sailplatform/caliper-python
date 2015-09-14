@@ -62,6 +62,12 @@ class Event(BaseEvent):
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_obj_prop('target', target, t=entities.Targetable)            
 
+    def as_minimal_event(self):
+        return MinimalEvent(action=self.action,
+                            actor=self.actor,
+                            event_object=self.object,
+                            eventTime=self.eventTime)
+
     @property
     def context(self):
         return self._unpack_context()
@@ -105,6 +111,53 @@ class Event(BaseEvent):
     @property
     def target(self):
         return self._get_prop('target')
+
+
+class MinimalEvent(CaliperSerializable):
+    def __init__(self,
+                 action=None,
+                 actor=None,
+                 event_object=None,
+                 eventTime=None):
+        CaliperSerializable.__init__(self)
+        self._set_str_prop('@context', EVENT_CONTEXTS['EVENT'])
+        self._set_str_prop('@type', EVENT_TYPES['EVENT'])
+        self._set_str_prop('action', action)
+
+        if action and (action not in profiles.CaliperProfile.Actions.values()):
+            raise ValueError('action must be in the list of CaliperProfile actions')
+        else:
+            self._set_str_prop('action', action)
+
+        if not isinstance(actor, entities.Agent):
+            raise ValueError('actor must implement entities.Agent')
+        else:
+            d = actor.as_dict()            
+            self._set_obj_prop('actor', { '@id': d.get('@id'), '@type': d.get('@type') } )
+
+        self._set_str_prop('eventTime', eventTime)
+
+        if event_object and not isinstance(event_object, CaliperSerializable):
+            raise ValueError('event_object must implement CaliperSerializable')
+        else:
+            d = event_object.as_dict()
+            self._set_obj_prop('object', { '@id': d.get('@id'), '@type': d.get('@type') } )
+
+    @property
+    def action(self):
+        return self._get_prop('action')
+
+    @property
+    def actor(self):
+        return self._get_prop('actor')
+
+    @property
+    def eventTime(self):
+        return self._get_prop('eventTime')
+
+    @property
+    def object(self):
+        return self._get_prop('object')
 
 
 ## Derived Events
