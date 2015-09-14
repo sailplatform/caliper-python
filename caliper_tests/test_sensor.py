@@ -37,7 +37,8 @@ class TestEvent(unittest.TestCase):
         self.sensor = util.build_default_sensor()
         self.student = util.build_student_554433()
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
-        self.epub = util.build_epub_vol43()
+        self.epub_volume = util.build_epub_vol43()
+        self.epub_subchapter = util.build_epub_subchap431()
         self.from_resource = util.build_AmRev101_landing_page()
         self.target = util.build_epub_subchap431()
         self.iterations = 4
@@ -47,7 +48,7 @@ class TestEvent(unittest.TestCase):
         event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
-                event_object = self.epub,
+                event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
@@ -58,13 +59,26 @@ class TestEvent(unittest.TestCase):
         self.assertEqual(envelope.as_json(),
                          util.get_fixture(fixture))
         
+    def testEventPayloadMinimal(self):
+        sensor = util.build_default_sensor()
+        fixture = 'caliperEnvelopeEventViewViewedMinimal'
+        event = util.build_epub_view_event(
+            learning_context = self.learning_context,
+            actor = self.student,
+            event_object = self.epub_volume,
+            target = self.epub_subchapter,
+            action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
+        envelope = util.get_caliper_envelope(sensor, [event.as_minimal_event()])
+        util.put_fixture(fixture, envelope)
+        self.assertEqual(envelope.as_json(),
+                         util.get_fixture(fixture))
 
     def testEvent(self):
         for i in range(self.iterations):
             event = util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
-                event_object = self.epub,
+                event_object = self.epub_volume,
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.target
@@ -84,7 +98,7 @@ class TestEvent(unittest.TestCase):
             util.build_epub_navigation_event(
                 learning_context = self.learning_context,
                 actor = self.student,
-                event_object = self.epub,
+                event_object = self.epub_volume,
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.target
