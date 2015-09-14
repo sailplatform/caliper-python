@@ -60,7 +60,13 @@ class Event(BaseEvent):
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
-        self._set_obj_prop('target', target, t=entities.Targetable)            
+        self._set_obj_prop('target', target, t=entities.Targetable)
+
+    def as_minimal_event(self):
+        return MinimalEvent(action=self.action,
+                            actor=self.actor,
+                            event_object=self.object,
+                            eventTime=self.eventTime)
 
     def as_minimal_event(self):
         return MinimalEvent(action=self.action,
@@ -113,21 +119,21 @@ class Event(BaseEvent):
         return self._get_prop('target')
 
 
-class MinimalEvent(CaliperSerializable):
+class MinimalEvent(BaseEvent):
     def __init__(self,
                  action=None,
                  actor=None,
                  event_object=None,
                  eventTime=None):
-        CaliperSerializable.__init__(self)
-        self._set_str_prop('@context', EVENT_CONTEXTS['EVENT'])
+        BaseEvent.__init__(self)
+        self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
-        self._set_str_prop('action', action)
+        self._set_str_prop('action', action, req=True)
 
         if action and (action not in profiles.CaliperProfile.Actions.values()):
             raise ValueError('action must be in the list of CaliperProfile actions')
         else:
-            self._set_str_prop('action', action)
+            self._set_str_prop('action', action, req=True)
 
         if not isinstance(actor, entities.Agent):
             raise ValueError('actor must implement entities.Agent')
@@ -135,10 +141,10 @@ class MinimalEvent(CaliperSerializable):
             d = actor.as_dict()            
             self._set_obj_prop('actor', { '@id': d.get('@id'), '@type': d.get('@type') } )
 
-        self._set_str_prop('eventTime', eventTime)
+        self._set_str_prop('eventTime', eventTime, req=True)
 
-        if event_object and not isinstance(event_object, CaliperSerializable):
-            raise ValueError('event_object must implement CaliperSerializable')
+        if event_object and not isinstance(event_object, BaseEntity):
+            raise ValueError('event_object must implement BaseEntity')
         else:
             d = event_object.as_dict()
             self._set_obj_prop('object', { '@id': d.get('@id'), '@type': d.get('@type') } )

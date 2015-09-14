@@ -56,7 +56,6 @@ class TestEvent(unittest.TestCase):
         envelope = util.get_caliper_envelope(sensor, [event])
         util.put_fixture(fixture, envelope)
         self.assertEqual(envelope.as_json(),
-<<<<<<< HEAD
                          util.get_local_fixture(fixture))
         self.assertEqual(envelope.as_json(thin_props=True,thin_context=True),
                          util.get_common_fixture(fixture))
@@ -86,20 +85,12 @@ class TestEvent(unittest.TestCase):
         sensor = util.build_default_sensor()
         fixture = 'caliperEnvelopeEventViewViewedCoerced'
         ret = sensor.describe_batch([self.student, self.epub_volume, self.epub_subchapter])
-=======
-                         util.get_fixture(fixture))
-        
-    def testEventPayloadMinimal(self):
-        sensor = util.build_default_sensor()
-        fixture = 'caliperEnvelopeEventViewViewedMinimal'
->>>>>>> master
         event = util.build_epub_view_event(
             learning_context = self.learning_context,
             actor = self.student,
             event_object = self.epub_volume,
             target = self.epub_subchapter,
             action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
-<<<<<<< HEAD
         envelope = util.get_caliper_envelope(sensor, [event])
         util.put_fixture(fixture,envelope,thin_props=True,
                          thin_context=True,described_entities=ret['default'])
@@ -110,12 +101,19 @@ class TestEvent(unittest.TestCase):
                                           described_entities=ret['default']),
                          util.get_common_fixture(fixture))
 
-=======
+    def testEventPayloadMinimal(self):
+        sensor = util.build_default_sensor()
+        fixture = 'caliperEnvelopeEventViewViewedMinimal'
+        event = util.build_epub_view_event(
+            learning_context = self.learning_context,
+            actor = self.student,
+            event_object = self.epub_volume,
+            target = self.epub_subchapter,
+            action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
         envelope = util.get_caliper_envelope(sensor, [event.as_minimal_event()])
         util.put_fixture(fixture, envelope)
         self.assertEqual(envelope.as_json(),
-                         util.get_fixture(fixture))
->>>>>>> master
+                         util.get_local_fixture(fixture))
 
     def testEvent(self):
         sensor = util.build_default_sensor()
@@ -124,10 +122,7 @@ class TestEvent(unittest.TestCase):
                 learning_context = self.learning_context,
                 actor = self.student,
                 event_object = self.epub_volume,
-<<<<<<< HEAD
                 federated_session = util.build_federated_session(actor=self.student),
-=======
->>>>>>> master
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.epub_subchapter
@@ -149,10 +144,7 @@ class TestEvent(unittest.TestCase):
                 learning_context = self.learning_context,
                 actor = self.student,
                 event_object = self.epub_volume,
-<<<<<<< HEAD
                 federated_session = util.build_federated_session(actor=self.student),
-=======
->>>>>>> master
                 action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.epub_subchapter

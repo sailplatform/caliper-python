@@ -403,7 +403,7 @@ class CaliperSerializable(object):
         r = self.as_dict(described_entities=described_entities,
                          thin_context=thin_context,
                          thin_props=thin_props)
-        return json.dumps(r,sort_keys=True)
+        return json.dumps(r, sort_keys=True)
 
     def as_json_with_ids(self,
                 described_entities=None,
