@@ -71,15 +71,12 @@ def get_testing_options():
 def build_default_sensor():
     return caliper.build_sensor_from_config(
         config_options=get_testing_options(),
-        sensor_id=_SENSOR_ID) 
+        sensor_id=_SENSOR_ID)
 
 def get_fixture(fixture_name):
     loc = _FIXTURE_DIR+fixture_name+'.json'
-    r = ''
-    if os.path.exists(loc):
-        with open(loc,'r') as f:
-            r = f.read().replace('\n','')
-    return json.dumps(json.loads(r), sort_keys=True)
+    with open(loc,'r') as f:
+        return json.dumps(json.load(f), sort_keys=True)
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
@@ -108,7 +105,7 @@ def get_caliper_envelope(sensor=None, caliper_object_list=None):
         send_time = _EVENT_SEND_TIME,
         sensor_id = sensor.id
         )
-    
+
 
 ### Shared entity resources ###
 def build_federated_session(actor=None):
@@ -121,7 +118,7 @@ def build_federated_session(actor=None):
         startedAtTime = _STARTTIME,
         )
 
-    
+
 def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://example.edu/user/554433',
@@ -409,7 +406,7 @@ def build_assessment():
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         version = _VERNUM )
-    
+
 
 ## build a test assessment attempt
 def build_assessment_attempt(actor = None,
