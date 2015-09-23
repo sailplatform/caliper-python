@@ -77,14 +77,11 @@ def get_testing_options():
 def build_default_sensor():
     return caliper.build_sensor_from_config(
         config_options=get_testing_options(),
-        sensor_id=_SENSOR_ID) 
+        sensor_id=_SENSOR_ID)
 
 def _get_fixture(loc):
-    r = ''
-    if os.path.exists(loc):
-        with open(loc,'r') as f:
-            r = f.read().replace('\n','')
-    return json.dumps(json.loads(r), sort_keys=True)
+    with open(loc,'r') as f:
+        return json.dumps(json.load(f), sort_keys=True)
 
 def get_common_fixture(fixture_name):
     loc = _FIXTURE_COMMON_DIR+fixture_name+'.json'
@@ -143,7 +140,7 @@ def build_federated_session(actor=None):
         endedAtTime = _ENDTIME,
         startedAtTime = _STARTTIME,
         )
-    
+
 def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://example.edu/user/554433',
