@@ -33,7 +33,7 @@ from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
 
-__title__ = 'caliper_python'
+__title__ = 'IMS-caliper-python'
 __version__ = '1.0.0'
 __build__ = 0x010000
 __author__ = 'IMS Global Learning Consortium, Inc.'
