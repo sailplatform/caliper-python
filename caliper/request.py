@@ -91,11 +91,13 @@ class EventStoreRequestor(object):
     def _generate_payload(self,
             caliper_objects = None,
             described_entities = None,
+            optimize = False,
             send_time = None,
             sensor_id = None):
         st = send_time if send_time else self._get_time()
         payload,ids = self._get_payload_json(caliper_objects,
                                              described_entities,
+                                             optimize,
                                              st,
                                              sensor_id)
         return {'type':'application/json', 'data': payload}, ids
@@ -103,6 +105,7 @@ class EventStoreRequestor(object):
     def _get_payload_json(self,
             caliper_objects = None,
             described_entities = None,
+            optimize = False,
             send_time = None,
             sensor_id = None):
         envelope = Envelope(
@@ -110,7 +113,9 @@ class EventStoreRequestor(object):
             send_time = send_time,
             sensor_id = sensor_id)
                 
-        return envelope.as_json_with_ids(described_entities=described_entities)
+        return envelope.as_json_with_ids(described_entities=described_entities,
+                                         thin_context=optimize,
+                                         thin_props=optimize)
 
 class HttpRequestor(EventStoreRequestor):
 
@@ -132,6 +137,7 @@ class HttpRequestor(EventStoreRequestor):
             s = requests.Session()
             payload,ids = self._generate_payload(caliper_objects=caliper_objects,
                                                  described_entities=described_entities,
+                                                 optimize=self._options.OPTIMIZE_SERIALIZATION,
                                                  sensor_id=sensor_id)
             r = s.post(self._options.HOST,
                        data=payload['data'],
