@@ -161,6 +161,8 @@ class HttpOptions(Options):
         self.OPTIMIZE_SERIALIZATION=optimize_serialization
         self.SOCKET_TIMEOUT=socket_timeout
 
+    def get_auth_header_value():
+        return 'Bearer {0}'.format(self.API_KEY)
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
