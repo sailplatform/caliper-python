@@ -112,6 +112,9 @@ class HttpOptions(Options):
         self.HOST=host
         self.SOCKET_TIMEOUT=socket_timeout
 
+    def get_auth_header_value(self):
+        return 'Bearer {0}'.format(self.API_KEY)
+
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
     def __init__(self):
