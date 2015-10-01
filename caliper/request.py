@@ -133,10 +133,11 @@ class HttpRequestor(EventStoreRequestor):
                                data=payload['data'],
                                headers={'Authorization': self._options.get_auth_header_value(),
                                         'Content-Type': payload['type']} )
-                    if (r.status_code is requests.codes.ok):
-                        results.append(True)
+                    if ((r.status_code is requests.codes.ok) or
+                        (r.status_code is requests.codes.created)):
+                          results.append(True)
                     else:
-                        results.append(False)
+                          results.append(False)
                 s.close()
 
         return results
