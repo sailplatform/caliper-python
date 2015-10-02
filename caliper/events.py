@@ -286,7 +286,6 @@ class SessionEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        end_time_req = False
         if self.action == profiles.SessionProfile.Actions['LOGGED_IN']:
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
