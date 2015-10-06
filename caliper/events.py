@@ -68,12 +68,6 @@ class Event(BaseEvent):
                             event_object=self.object,
                             eventTime=self.eventTime)
 
-    def as_minimal_event(self):
-        return MinimalEvent(action=self.action,
-                            actor=self.actor,
-                            event_object=self.object,
-                            eventTime=self.eventTime)
-
     @property
     def context(self):
         return self._unpack_context()
