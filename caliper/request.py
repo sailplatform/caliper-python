@@ -144,7 +144,7 @@ class HttpRequestor(EventStoreRequestor):
                        headers={'Authorization': self._options.get_auth_header_value(),
                                 'Content-Type': payload['type']} )
             if ((r.status_code is requests.codes.ok) or
-                (r.status.code is requests.codes.created)):
+                (r.status_code is requests.codes.created)):
                   v = True
                   identifiers += ids
             else:
