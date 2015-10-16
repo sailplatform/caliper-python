@@ -26,7 +26,7 @@ Caliper library
 Caliper is a library, written in python, to help you implement an IMS
 Caliper-compliant sensor or endpoint for you learning services.
 
-:license: GPLv3 or LPGLv3. See LICENSE for more details.
+:license: See NOTICE for license details.
 """
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
