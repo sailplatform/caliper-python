@@ -72,7 +72,8 @@ def get_testing_options():
     return caliper.base.HttpOptions(
         host='http://httpbin.org/post',
         optimize_serialization=True,
-        api_key='6xp7jKrOSOWOgy3acxHFWA')
+        api_key='6xp7jKrOSOWOgy3acxHFWA',
+        auth_scheme='Bearer')
 
 def build_default_sensor():
     return caliper.build_sensor_from_config(

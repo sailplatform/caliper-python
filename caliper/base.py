@@ -74,12 +74,13 @@ def ensure_list_type(l,t):
 ### Default configuration values ###
 class Options(object):
     _config = {
-        'API_KEY': None,
-        'CONNECTION_REQUEST_TIMEOUT': None,
-        'CONNECTION_TIMEOUT': None,
+        'API_KEY': '',
+        'AUTH_SCHEME': '',
+        'CONNECTION_REQUEST_TIMEOUT': 1000,
+        'CONNECTION_TIMEOUT': 1000,
         'HOST' : None,
         'OPTIMIZE_SERIALIZATION': False,
-        'SOCKET_TIMEOUT': None,
+        'SOCKET_TIMEOUT': 1000,
         }
 
     def __init__(self):
@@ -92,6 +93,16 @@ class Options(object):
     def API_KEY(self, new_key):
         if isinstance(new_key, str):
             self._config['API_KEY'] = new_key
+        else:
+            raise ValueError('new key value must be a string')
+
+    @property
+    def AUTH_SCHEME(self):
+        return self._config['AUTH_SCHEME']
+    @AUTH_SCHEME.setter
+    def AUTH_SCHEME(self, new_scheme):
+        if isinstance(new_scheme, str):
+            self._config['AUTH_SCHEME'] = new_scheme
         else:
             raise ValueError('new key value must be a string')
 
@@ -147,6 +158,7 @@ class Options(object):
 class HttpOptions(Options):
     def __init__(self,
             api_key='CaliperKey',
+            auth_scheme='',
             connection_request_timeout=10000,
             connection_timeout=10000,
             host='http://httpbin.org/post',
@@ -155,17 +167,15 @@ class HttpOptions(Options):
             ):
         Options.__init__(self)
         self.API_KEY=api_key
+        self.AUTH_SCHEME=auth_scheme
         self.CONNECTION_REQUEST_TIMEOUT=connection_request_timeout
         self.CONNECTION_TIMEOUT=connection_timeout
         self.HOST=host
         self.OPTIMIZE_SERIALIZATION=optimize_serialization
         self.SOCKET_TIMEOUT=socket_timeout
 
-    def get_auth_header_value(self, include_scheme=False):
-        prefix = ''
-        if include_scheme:
-            prefix = 'Bearer '
-        return '{0}{1}'.format(prefix,self.API_KEY)
+    def get_auth_header_value(self):
+        return '{0} {1}'.format(self.AUTH_SCHEME,self.API_KEY)
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
