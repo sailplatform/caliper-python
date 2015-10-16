@@ -3,13 +3,7 @@ Caliper-python
 ==============
 
 `Caliper-python` is a Python client package for `Caliper <http://imsglobal.org/>`_
-that provides an implementation of the Caliper Sensor API.
-
-**NOTE**: Access to this draft code is reserved for IMS Contributing Members
-who are active participants of the IMS Learning Analytics Task
-Force. Dissemination of this code to outside participants is strictly
-prohibited. By accessing these materials you agree to abide by these
-rules. This code is in draft form and will change substantially.
+that provides an implementation of the Caliper SensorAPI(tm).
 
 
 Dependencies
@@ -118,6 +112,7 @@ might send a basic navigation event to a caliper endpoint::
 
   the_config = caliper.HttpOptions(
         host='http://caliper-endpoint.your-school.edu/events/',
+        auth_scheme='Bearer',
         api_key='your-caliper-API-key' )
 
   # Here you build your sensor; it will have one client in its registry,

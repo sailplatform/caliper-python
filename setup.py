@@ -44,14 +44,12 @@ _version = _get_val_from_mod('version')
 
 with open('README.rst', 'r', 'utf-8') as f:
           _readme = f.read()
-with open('HISTORY.rst', 'r', 'utf-8') as f:
-          _history = f.read()
 
 setup(
     name = _title,
     version = _version,
     description = 'Caliper API for Python. Provides implementation for the IMS Caliper Sensor API.',
-    long_description = _readme + '\n\n' + _history,
+    long_description = _readme + '\n\n',
     maintainer = _author,
     maintainer_email = 'info@imsglobal.org',
     url = 'https://github.com/IMSGlobal/caliper-python',
