@@ -46,7 +46,7 @@ class AnnotationProfile(unittest.TestCase):
             annotation = util.build_bookmark_annotation(annotated=event_object),
             index = 2,
             event_object = event_object,
-            action = caliper.profiles.AnnotationProfile.Actions['BOOKMARKED']
+            action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['BOOKMARKED']
             )
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
@@ -63,7 +63,7 @@ class AnnotationProfile(unittest.TestCase):
             annotation = util.build_highlight_annotation(annotated=event_object),
             event_object = event_object,
             index = 1,
-            action = caliper.profiles.AnnotationProfile.Actions['HIGHLIGHTED']
+            action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['HIGHLIGHTED']
             )
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
@@ -80,7 +80,7 @@ class AnnotationProfile(unittest.TestCase):
             annotation = util.build_shared_annotation(annotated=event_object),
             event_object = event_object,
             index = 3,
-            action = caliper.profiles.AnnotationProfile.Actions['SHARED']
+            action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['SHARED']
             )
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
@@ -97,7 +97,7 @@ class AnnotationProfile(unittest.TestCase):
             annotation = util.build_tag_annotation(annotated=event_object),
             event_object = event_object,
             index = 4,
-            action = caliper.profiles.AnnotationProfile.Actions['TAGGED']
+            action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['TAGGED']
             )
         util.put_fixture(fixture, annotation_event)
         self.assertEqual(annotation_event.as_json(),
@@ -124,7 +124,7 @@ class AssessmentProfile(unittest.TestCase):
             actor = self.student,
             assessment = self.assessment,
             attempt = self.attempt,
-            action = caliper.profiles.AssessmentProfile.Actions['STARTED']
+            action = caliper.constants.ASSESSMENT_PROFILE_ACTIONS['STARTED']
             )
         util.put_fixture(fixture, assessment_event)
         self.assertEqual(assessment_event.as_json(),
@@ -139,7 +139,7 @@ class AssessmentProfile(unittest.TestCase):
             actor = self.student,
             assessment_item = self.assessment_item,
             generated = self.item_attempt,
-            action = caliper.profiles.AssessmentItemProfile.Actions['STARTED']
+            action = caliper.constants.ASSESSMENT_ITEM_PROFILE_ACTIONS['STARTED']
             )
         util.put_fixture(fixture, assessment_item_event)
         self.assertEqual(assessment_item_event.as_json(),
@@ -157,7 +157,7 @@ class AssessmentProfile(unittest.TestCase):
             generated = util.build_assessment_item_response(assessment=self.assessment,
                                                             attempt=self.item_attempt,
                                                             values=['2 July 1776']),
-            action = caliper.profiles.AssessmentItemProfile.Actions['COMPLETED']
+            action = caliper.constants.ASSESSMENT_ITEM_PROFILE_ACTIONS['COMPLETED']
             )
         util.put_fixture(fixture, assessment_item_event)
         self.assertEqual(assessment_item_event.as_json(),
@@ -178,7 +178,7 @@ class AssignableProfile(unittest.TestCase):
             learning_context = self.learning_context,
             actor = self.student,
             assessment = self.assessment,
-            action = caliper.profiles.AssignableProfile.Actions['ACTIVATED']
+            action = caliper.constants.ASSIGNABLE_PROFILE_ACTIONS['ACTIVATED']
             )
         util.put_fixture(fixture, assignable_event)
         self.assertEqual(assignable_event.as_json(),
@@ -201,7 +201,7 @@ class MediaProfile(unittest.TestCase):
             actor = self.student,
             event_object = self.video,
             location = self.location,
-            action = caliper.profiles.MediaProfile.Actions['PAUSED']
+            action = caliper.constants.MEDIA_PROFILE_ACTIONS['PAUSED']
             )
         util.put_fixture(fixture, video_media_event)
         self.assertEqual(video_media_event.as_json(),
@@ -228,7 +228,7 @@ class OutcomeProfile(unittest.TestCase):
             actor = self.student,
             attempt = self.attempt,
             result = self.result,
-            action = caliper.profiles.OutcomeProfile.Actions['GRADED']
+            action = caliper.constants.OUTCOME_PROFILE_ACTIONS['GRADED']
             )
         util.put_fixture(fixture, assessment_outcome_event)
         self.assertEqual(assessment_outcome_event.as_json(),
@@ -252,7 +252,7 @@ class ReadingProfile(unittest.TestCase):
             event_object = self.epub,
             from_resource = util.build_AmRev101_landing_page(),
             target = self.target,
-            action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO']
+            action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO']
             )
         util.put_fixture(fixture, navigation_event)
         self.assertEqual(navigation_event.as_json(),
@@ -267,7 +267,7 @@ class ReadingProfile(unittest.TestCase):
             actor = self.student,
             event_object = self.epub,
             target = self.target,
-            action = caliper.profiles.CaliperProfile.Actions['VIEWED']
+            action = caliper.constants.READING_PROFILE_ACTIONS['VIEWED']
             )
         util.put_fixture(fixture, reading_event)
         self.assertEqual(reading_event.as_json(),
@@ -282,7 +282,7 @@ class ReadingProfile(unittest.TestCase):
             actor = self.student,
             event_object = self.epub,
             target = self.target,
-            action = caliper.profiles.CaliperProfile.Actions['VIEWED']
+            action = caliper.constants.READING_PROFILE_ACTIONS['VIEWED']
             )
         util.put_fixture(fixture, reading_event)
         self.assertEqual(reading_event.as_json(thin_props=True,
@@ -310,7 +310,7 @@ class SessionProfile(unittest.TestCase):
             event_object = ctxt.edApp,
             session = ctxt.session,
             target = util.build_epub_subchap431(),
-            action = caliper.profiles.SessionProfile.Actions['LOGGED_IN']
+            action = caliper.constants.SESSION_PROFILE_ACTIONS['LOGGED_IN']
             )
         util.put_fixture(fixture, session_event)
         self.assertEqual(session_event.as_json(),
@@ -327,7 +327,7 @@ class SessionProfile(unittest.TestCase):
             actor = self.student,
             event_object = ctxt.edApp,
             session = ctxt.session,
-            action = caliper.profiles.SessionProfile.Actions['LOGGED_OUT']            
+            action = caliper.constants.SESSION_PROFILE_ACTIONS['LOGGED_OUT']            
             )
         util.put_fixture(fixture, session_event)
         self.assertEqual(session_event.as_json(),
@@ -343,7 +343,7 @@ class SessionProfile(unittest.TestCase):
             learning_context = ctxt,
             actor = ctxt.edApp,
             session = ctxt.session,
-            action = caliper.profiles.SessionProfile.Actions['TIMED_OUT']            
+            action = caliper.constants.SESSION_PROFILE_ACTIONS['TIMED_OUT']            
             )
         util.put_fixture(fixture, session_event)
         self.assertEqual(session_event.as_json(),

@@ -25,8 +25,20 @@ from builtins import *
 
 from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
 from caliper.constants import ENTITY_TYPES
+from caliper.constants import CALIPER_ACTIONS
+from caliper.constants import (
+    BASE_PROFILE_ACTIONS,
+    ANNOTATION_PROFILE_ACTIONS,
+    ASSESSMENT_PROFILE_ACTIONS,
+    ASSESSMENT_ITEM_PROFILE_ACTIONS,
+    ASSIGNABLE_PROFILE_ACTIONS,
+    MEDIA_PROFILE_ACTIONS,
+    OUTCOME_PROFILE_ACTIONS,
+    READING_PROFILE_ACTIONS,
+    SESSION_PROFILE_ACTIONS
+    )
 from caliper.base import BaseEntity, BaseEvent, ensure_type
-from caliper import entities, profiles
+from caliper import entities
 from caliper.extern import foaf, schemadotorg
 
 ## Base event class
@@ -47,8 +59,8 @@ class Event(BaseEvent):
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
 
-        if action and (action not in profiles.CaliperProfile.Actions.values()):
-            raise ValueError('action must be in the list of CaliperProfile actions')
+        if action and (action not in CALIPER_ACTIONS.values()):
+            raise ValueError('action must be in the list of Caliper actions')
         else:
             self._set_str_prop('action', action, req=True)
         self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
@@ -124,8 +136,8 @@ class MinimalEvent(BaseEvent):
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
         self._set_str_prop('action', action, req=True)
 
-        if action and (action not in profiles.CaliperProfile.Actions.values()):
-            raise ValueError('action must be in the list of CaliperProfile actions')
+        if action and (action not in CALIPER_ACTIONS.values()):
+            raise ValueError('action must be in the list of Caliper actions')
         else:
             self._set_str_prop('action', action, req=True)
 
@@ -165,8 +177,8 @@ class AnnotationEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action not in profiles.AnnotationProfile.Actions.values():
-            raise ValueError('action must be in the list of AnnotationProfile actions')
+        if self.action not in ANNOTATION_PROFILE_ACTIONS.values():
+            raise ValueError('action must be in the list of Annotation profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'])
@@ -179,8 +191,8 @@ class AssessmentEvent(Event):
     
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action not in profiles.AssessmentProfile.Actions.values():
-            raise ValueError('action must be in the list of AssessmentProfile actions')
+        if self.action not in ASSESSMENT_PROFILE_ACTIONS.values():        
+            raise ValueError('action must be in the list of Assessment profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
@@ -193,8 +205,8 @@ class AssessmentItemEvent(Event):
     
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action not in profiles.AssessmentItemProfile.Actions.values():
-            raise ValueError('action must be in the list of AssessmentItemProfile actions')
+        if self.action not in ASSESSMENT_ITEM_PROFILE_ACTIONS.values():
+            raise ValueError('action must be in the list of Assessment Item profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
         ensure_type(self.generated, entities.Generatable)
@@ -207,8 +219,8 @@ class AssignableEvent(Event):
     
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action not in profiles.AssignableProfile.Actions.values():
-            raise TypeError('action must be in the list of AssignableProfile actions')
+        if self.action not in ASSIGNABLE_PROFILE_ACTIONS.values():
+            raise TypeError('action must be in the list of Assignable profile actions')
         ensure_type(self.object, entities.Assignable)
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
@@ -220,8 +232,8 @@ class MediaEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action not in profiles.MediaProfile.Actions.values():
-            raise TypeError('action must be in the list of MediaProfile actions')
+        if self.action not in MEDIA_PROFILE_ACTIONS.values():
+            raise TypeError('action must be in the list of Media profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['MEDIA_OBJECT'])
         ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'])
@@ -234,8 +246,8 @@ class NavigationEvent(Event):
 
     def __init__(self, navigatedFrom=None, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action != profiles.CaliperProfile.Actions['NAVIGATED_TO']:
-            raise ValueError('action must be ' + profiles.CaliperProfile.Actions['NAVIGATED_TO'])
+        if self.action != BASE_PROFILE_ACTIONS['NAVIGATED_TO']:
+            raise ValueError('action must be ' + BASE_PROFILE_ACTIONS['NAVIGATED_TO'])
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'])
@@ -253,8 +265,8 @@ class OutcomeEvent(Event):
 
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action not in profiles.OutcomeProfile.Actions.values():
-            raise TypeError('action must be in the list of OutcomeProfile actions')
+        if self.action not in OUTCOME_PROFILE_ACTIONS.values():
+            raise TypeError('action must be in the list of Outcome profile actions')
         ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
         ensure_type(self.generated, ENTITY_TYPES['RESULT'])
                 
@@ -266,8 +278,8 @@ class ReadingEvent(Event):
 
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action not in profiles.ReadingProfile.Actions.values():
-            raise TypeError('action must be in the list of ReadingProfile actions')
+        if self.action not in READING_PROFILE_ACTIONS.values():
+            raise TypeError('action must be in the list of Reading profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['FRAME'])
@@ -280,20 +292,20 @@ class SessionEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action == profiles.SessionProfile.Actions['LOGGED_IN']:
+        if self.action == SESSION_PROFILE_ACTIONS['LOGGED_IN']:        
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.generated, ENTITY_TYPES['SESSION'])
             ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        elif self.action == profiles.SessionProfile.Actions['LOGGED_OUT']:
+        elif self.action == SESSION_PROFILE_ACTIONS['LOGGED_OUT']:        
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.target, ENTITY_TYPES['SESSION'])
-        elif self.action == profiles.SessionProfile.Actions['TIMED_OUT']:
+        elif self.action == SESSION_PROFILE_ACTIONS['TIMED_OUT']:
             ensure_type(self.actor, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.object, ENTITY_TYPES['SESSION'])
         else:
-            raise ValueError('action must be in the list of SessionProfile actions')
+            raise ValueError('action must be in the list of Session profile actions')
 
         self._set_base_context(EVENT_CONTEXTS['SESSION'])
         self._set_str_prop('@type', EVENT_TYPES['SESSION'])
@@ -303,7 +315,7 @@ class ViewEvent(Event):
 
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action not in profiles.ReadingProfile.Actions.values():
+        if self.action not in READING_PROFILE_ACTIONS.values():        
             raise TypeError('action must be in the list of ReadingProfile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])

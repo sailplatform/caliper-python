@@ -185,8 +185,8 @@ def build_AmRev101_membership():
         organization = build_AmRev101_course_section(),
         description = 'Roster entry',
         name = 'American Revolution 101',
-        roles = [caliper.entities.Role.Roles['LEARNER']],
-        status = caliper.entities.Status.Statuses['ACTIVE'],
+        roles = [caliper.constants.CALIPER_ROLES['LEARNER']],
+        status = caliper.constants.CALIPER_STATUS['ACTIVE'],
         dateCreated = _CREATETIME
         )
 

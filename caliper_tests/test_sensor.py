@@ -49,7 +49,7 @@ class TestEvent(unittest.TestCase):
                 actor = self.student,
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
-                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.epub_subchapter
             )
@@ -69,7 +69,7 @@ class TestEvent(unittest.TestCase):
                 actor = self.student,
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
-                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.epub_subchapter
                 )
@@ -90,7 +90,7 @@ class TestEvent(unittest.TestCase):
             actor = self.student,
             event_object = self.epub_volume,
             target = self.epub_subchapter,
-            action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
+            action = caliper.constants.READING_PROFILE_ACTIONS['VIEWED'])
         envelope = util.get_caliper_envelope(sensor, [event])
         util.put_fixture(fixture,envelope,thin_props=True,
                          thin_context=True,described_entities=ret['default'])
@@ -109,7 +109,7 @@ class TestEvent(unittest.TestCase):
             actor = self.student,
             event_object = self.epub_volume,
             target = self.epub_subchapter,
-            action = caliper.profiles.CaliperProfile.Actions['VIEWED'])
+            action = caliper.constants.READING_PROFILE_ACTIONS['VIEWED'])
         envelope = util.get_caliper_envelope(sensor, [event.as_minimal_event()])
         util.put_fixture(fixture, envelope)
         self.assertEqual(envelope.as_json(),
@@ -125,7 +125,7 @@ class TestEvent(unittest.TestCase):
                 actor = self.student,
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
-                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.epub_subchapter
             )
@@ -147,7 +147,7 @@ class TestEvent(unittest.TestCase):
                 actor = self.student,
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
-                action = caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO'],
+                action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
                 from_resource = self.from_resource,
                 target = self.epub_subchapter
                 )
