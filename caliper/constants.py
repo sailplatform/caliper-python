@@ -205,3 +205,166 @@ CALIPER_CONTEXTS.update(EVENT_CONTEXTS)
 CALIPER_TYPES = {}
 CALIPER_TYPES.update(ENTITY_TYPES)
 CALIPER_TYPES.update(EVENT_TYPES)
+
+CALIPER_ROLES = {
+        'LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner',
+        'EXTERNAL_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#ExternalLearner',
+        'GUEST_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#GuestLearner',
+        'LEARNER_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Instructor',
+        'LEARNER_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Learner',
+        'NONCREDIT_LEARNER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#NonCreditLearner',
+        'INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor',
+        'EXTERNAL_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#ExternalInstructor',
+        'GUEST_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#GuestInstructor',
+        'LECTURER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#Lecturer',
+        'PRIMARY_INSTRUCTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#PrimaryInstructor',
+        'ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Administrator',
+        'ADMINISTRATOR_ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Administrator',
+        'ADMINISTRATOR_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Developer',
+        'ADMINISTRATOR_SUPPORT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Support',
+        'ADMINISTRATOR_SYSTEM_ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#SystemAdministrator',
+        'ADMINISTRATOR_EXTERNAL_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSupport',
+        'ADMINISTRATOR_EXTERNAL_SUPPORT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalDeveloper',
+        'ADMINISTRATOR_EXTERNAL_SYSTEM_ADMINISTRATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSystemAdministrator',
+        'CONTENT_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#ContentDeveloper',
+        'CONTENT_DEVELOPER_CONTENT_DEVELOPER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentDeveloper',
+        'CONTENT_DEVELOPER_LIBRARIAN': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#Librarian',
+        'CONTENT_DEVELOPER_CONTENT_EXPERT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentExpert',
+        'CONTENT_DEVELOPER_EXTERNAL_CONTENT_EXPERT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ExternalContentExpert',
+        'MANAGER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Manager',
+        'MANAGER_AREA_MANAGER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#AreaManager',
+        'MANAGER_COURSE_COORDINATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#CourseCoordinator',
+        'MANAGER_OBSERVER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#Observer',
+        'MANAGER_EXTERNAL_OBSERVER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#ExternalObserver',
+        'MEMBER': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Member',
+        'MEMBER_MEMBER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Member#Member',
+        'MENTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor',
+        'MENTOR_MENTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Mentor',
+        'MENTOR_ADVISOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Advisor',
+        'MENTOR_AUDITOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Auditor',
+        'MENTOR_REVIEWER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Reviewer',
+        'MENTOR_TUTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Tutor',
+        'MENTOR_LEARNING_FACILITATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#LearningFacilitator',
+        'MENTOR_EXTERNAL_MENTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalMentor',
+        'MENTOR_EXTERNAL_ADVISOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAdvisor',
+        'MENTOR_EXTERNAL_AUDITOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAuditor',
+        'MENTOR_EXTERNAL_REVIEWER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalReviewer',
+        'MENTOR_EXTERNAL_TUTOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalTutor',
+        'MENTOR_EXTERNAL_LEARNING_FACILITATOR': 'http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor/ExternalLearningFacilitator',
+        'TEACHING_ASSISTANT': 'http://purl.imsglobal.org/vocab/lis/v2/membership#TeachingAssistant',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistant',
+        'TEACHING_ASSISTANT_GRADER': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#Grader',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_SECTION': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSection',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_SECTION_ASSOCIATION': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSectionAssociation',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_OFFERING': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantOffering',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_TEMPLATE': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantTemplate',
+        'TEACHING_ASSISTANT_TEACHING_ASSISTANT_GROUP': 'http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantGroup',
+    }
+
+CALIPER_STATUS = {
+        'ACTIVE': 'http://purl.imsglobal.org/vocab/lis/v2/status#Active',
+        'DELETED': 'http://purl.imsglobal.org/vocab/lis/v2/status#Deleted',
+        'INACTIVE': 'http://purl.imsglobal.org/vocab/lis/v2/status#Inactive',
+    }
+
+
+## Profiles
+BASE_PROFILE_ACTIONS = {
+        'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
+        'RANKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ranked',
+    }
+    
+ANNOTATION_PROFILE_ACTIONS = {
+        'ATTACHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Attached',
+        'BOOKMARKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked',
+        'CLASSIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Classified',
+        'COMMENTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Commented',
+        'DESCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Described',
+        'DISLIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Disliked',
+        'HIGHLIGHTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Highlighted',
+        'IDENTIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Identified',
+        'LIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Liked',
+        'LINKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Linked',
+        'QUESTIONED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Questioned',
+        'RECOMMENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Recommended',
+        'REPLIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Replied',
+        'SHARED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Shared',
+        'SUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Subscribed',
+        'TAGGED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged',
+        }
+        
+ASSESSMENT_PROFILE_ACTIONS = {
+        'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
+        'RESTARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
+        }
+
+ASSESSMENT_ITEM_PROFILE_ACTIONS = {
+        'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
+        'REVIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed',
+        'SKIPPED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
+        }
+
+ASSIGNABLE_PROFILE_ACTIONS = {
+        'ABANDONED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Abandoned',
+        'ACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Activated',
+        'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
+        'DEACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated',
+        'HID': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Hid',
+        'REVIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed',
+        'SHOWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Showed',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        }
+
+MEDIA_PROFILE_ACTIONS = {
+        'CHANGED_RESOLUTION': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedResolution',
+        'CHANGED_SIZE': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSize',
+        'CHANGED_SPEED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSpeed',
+        'CHANGED_VOLUME': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedVolume',
+        'CLOSED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ClosedPopout',
+        'DISABLED_CLOSED_CAPTIONING': 'http://purl.imsglobal.org/vocab/caliper/v1/action#DisabledClosedCaptioning',
+        'ENABLED_CLOSED_CAPTIONING': 'http://purl.imsglobal.org/vocab/caliper/v1/action#EnabledClosedCaptioning',
+        'ENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ended',
+        'ENTERED_FULLSCREEN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#EnteredFullscreen',
+        'EXITED_FULLSCREEN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ExitedFullscreen',
+        'FORWARDED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ForwardedTo',
+        'JUMPED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#JumpedTo',
+        'MUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Muted',
+        'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
+        'OPENED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#OpenedPopout',
+        'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
+        'RESUMED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Resumed',
+        'REWOUND': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Rewound',
+        'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+        }
+
+OUTCOME_PROFILE_ACTIONS = {
+        'GRADED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Graded',
+        }
+
+READING_PROFILE_ACTIONS = {
+        'SEARCHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Searched',
+        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',        
+        }
+
+SESSION_PROFILE_ACTIONS = {
+        'LOGGED_IN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn',
+        'LOGGED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut',
+        'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
+        }
+
+
+CALIPER_ACTIONS = {
+    }
+CALIPER_ACTIONS.update(BASE_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(ANNOTATION_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(ASSESSMENT_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(ASSESSMENT_ITEM_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(ASSIGNABLE_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(OUTCOME_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(READING_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(SESSION_PROFILE_ACTIONS)

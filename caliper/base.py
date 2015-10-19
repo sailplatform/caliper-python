@@ -442,35 +442,4 @@ class BaseEvent(CaliperSerializable):
     def __init__(self):
         CaliperSerializable.__init__(self)
 
-### Profiles ###
-class MetaProfile(type):
-    @property
-    def Actions(cls):
-        return cls._actions
-
-
-class BaseProfile(with_metaclass(MetaProfile, object)):
-    pass
-
-
-### Roles ###
-class MetaRole(type):
-    @property
-    def Roles(cls):
-        return cls._roles
-
-
-class BaseRole(with_metaclass(MetaRole, object)):
-    pass
-
-
-### Statuses ###
-class MetaStatus(type):
-    @property
-    def Statuses(cls):
-        return cls._statuses
-
-
-class BaseStatus(with_metaclass(MetaStatus, object)):
-    pass
 
