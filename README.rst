@@ -144,3 +144,6 @@ the package, and the common fixtures they test against.
 Copyright and License
 =====================
 For details about the copyright and license information, see the NOTICE file.
+
+©2015 IMS Global Learning Consortium, Inc. All Rights Reserved.  
+Trademark Information - http://www.imsglobal.org/copyright.html
