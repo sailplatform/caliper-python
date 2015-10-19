@@ -143,5 +143,4 @@ the package, and the common fixtures they test against.
 
 Copyright and License
 =====================
-For details about the copyright and license information,
-see [the NOTICE file](NOTICE).
+For details about the copyright and license information, see the NOTICE file.
