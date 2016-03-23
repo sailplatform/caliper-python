@@ -274,6 +274,12 @@ class CaliperSerializable(object):
         else:
             self._update_props(k,str(v),req=req)
 
+    def _set_untyped_prop(self,k,v,req=False):
+        if not v:
+            self._update_props(k,None,req=req)
+        else:
+            self._update_props(k,v,req=req)
+
     # protected complex-type setters
     def _set_base_context(self,v):
         if v and not is_valid_URI(v):
@@ -284,13 +290,13 @@ class CaliperSerializable(object):
         val = None
         if is_valid_date(v):
             val = v
-        self._update_props(k,val,req=req)
+        self._set_untyped_prop(k,val,req=req)
 
     def _set_duration_prop(self,k,v,req=False):
         val = None
         if is_valid_duration(v):
             val = v
-        self._update_props(k,v,req=req)
+        self._set_untyped_prop(k,v,req=req)
 
     def _set_id_prop(self,k,v,t,req=False):
         val = None
@@ -337,7 +343,7 @@ class CaliperSerializable(object):
         val = None
         if is_valid_time(v):
             val = v
-        self._update_props(k,v,req=req)
+        self._set_untyped_prop(k,v,req=req)
 
     # protected unpacker methods, used by dict and json-string representation
     # public functions
