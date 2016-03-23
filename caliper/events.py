@@ -66,7 +66,7 @@ class Event(BaseEvent):
         self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
 
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])                    
-        self._set_str_prop('eventTime', eventTime, req=True)
+        self._set_date_prop('eventTime', eventTime, req=True)
         self._set_obj_prop('object', event_object, t=BaseEntity)
         self._set_id_prop('federatedSession', federatedSession, t=ENTITY_TYPES['SESSION'])
         self._set_obj_prop('generated', generated, t=entities.Generatable)
@@ -147,7 +147,7 @@ class MinimalEvent(BaseEvent):
             d = actor.as_dict()            
             self._set_obj_prop('actor', { '@id': d.get('@id'), '@type': d.get('@type') } )
 
-        self._set_str_prop('eventTime', eventTime, req=True)
+        self._set_date_prop('eventTime', eventTime, req=True)
 
         if event_object and not isinstance(event_object, BaseEntity):
             raise ValueError('event_object must implement BaseEntity')
