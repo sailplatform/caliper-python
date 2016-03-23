@@ -24,7 +24,8 @@ _packages = [ 'caliper',
               'caliper.util',
               'caliper_tests' ]
 
-_requires = [ 'future >= 0.14.3',
+_requires = [ 'aniso8601 >= 1.1.0',
+              'future >= 0.14.3',
               'oauthlib >= 0.7.2',
               'requests >= 2.7.0' ]
 

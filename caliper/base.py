@@ -25,11 +25,40 @@ from future.utils import with_metaclass
 from builtins import *
 
 import collections, copy, importlib, json, re
+from aniso8601 import (parse_datetime as aniso_parse_datetime,
+                       parse_date as aniso_parse_date,
+                       parse_time as aniso_parse_time,
+                       parse_duration as aniso_parse_duration)
 from oauthlib import uri_validate as oauthlib_uri_validate
 
 from caliper.constants import CALIPER_CLASSES
 
 ## Convenience functions
+def is_valid_date(date):
+    try:
+        aniso_parse_datetime(date)
+        return True
+    except Exception:
+        try:
+            aniso_parse_date(date)
+            return True
+        except Exception:
+            return False
+
+def is_valid_duration(dur):
+    try:
+        aniso_parse_duration(dur)
+        return True
+    except Exception:
+        return False
+
+def is_valid_time(time):
+    try:
+        aniso_parse_time(time)
+        return True
+    except Exception:
+        return False
+
 def is_valid_URI(uri):
     if not uri:
         return False
@@ -250,7 +279,19 @@ class CaliperSerializable(object):
         if v and not is_valid_URI(v):
             raise ValueError('Base context must be a valid URI')
         self._update_base_context(v)
-        
+
+    def _set_date_prop(self,k,v,req=False):
+        val = None
+        if is_valid_date(v):
+            val = v
+        self._update_props(k,val,req=req)
+
+    def _set_duration_prop(self,k,v,req=False):
+        val = None
+        if is_valid_duration(v):
+            val = v
+        self._update_props(k,v,req=req)
+
     def _set_id_prop(self,k,v,t,req=False):
         val = None
         if is_valid_URI(v):
@@ -292,6 +333,11 @@ class CaliperSerializable(object):
                 self._update_local_context( {k:{'@id':the_type, '@type':'@id'}} )
                 self._set_id_prop(k,v)
 
+    def _set_time_prop(self,k,v,req=False):
+        val = None
+        if is_valid_time(v):
+            val = v
+        self._update_props(k,v,req=req)
 
     # protected unpacker methods, used by dict and json-string representation
     # public functions

@@ -12,6 +12,8 @@ To effectively use this `caliper-python` package, you will need to have Python,
 pip, and setuptools installed. This package also depends on several third-party
 packages:
 
+* aniso8601 -- (3-clause BSD licensed)
+
 * future -- (MIT licensed)
 
 * oauthlib -- (3-clause BSD licensed)
