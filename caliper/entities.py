@@ -27,7 +27,8 @@ import collections
 
 from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, CALIPER_ROLES, CALIPER_STATUS
 from caliper.base import CaliperSerializable, BaseEntity
-from caliper.base import is_valid_URI, ensure_type, ensure_list_type
+from caliper.base import is_valid_date, is_valid_duration, is_valid_URI
+from caliper.base import ensure_type, ensure_list_type
 from caliper.extern import foaf, schemadotorg, w3c
 
 ### Fundamental entities ###
@@ -49,8 +50,8 @@ class Entity(BaseEntity, schemadotorg.Thing):
         self._set_id_prop('@id', entity_id, str, req=True)
         self._set_base_context(ENTITY_CONTEXTS['ENTITY'])
         self._set_str_prop('@type', ENTITY_TYPES['ENTITY'])
-        self._set_str_prop('dateCreated', dateCreated)
-        self._set_str_prop('dateModified', dateModified)
+        self._set_date_prop('dateCreated', dateCreated)
+        self._set_date_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
         self._set_obj_prop('extensions', extensions, t=collections.MutableMapping)
@@ -325,7 +326,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         self._set_str_prop('@type', ENTITY_TYPES['DIGITAL_RESOURCE'])
         self._set_list_prop('alignedLearningObjective', alignedLearningObjective,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
-        self._set_str_prop('datePublished', datePublished)
+        self._set_date_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
         self._set_list_prop('keywords', keywords, t=str)
         self._set_list_prop('objectType', objectType, t=str)
@@ -534,10 +535,10 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ASSIGNABLE_DIGITAL_RESOURCE'])        
         self._set_str_prop('@type', ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
-        self._set_str_prop('dateToActivate', dateToActivate)
-        self._set_str_prop('dateToShow', dateToShow)
-        self._set_str_prop('dateToStartOn', dateToStartOn)
-        self._set_str_prop('dateToSubmit', dateToSubmit)
+        self._set_date_prop('dateToActivate', dateToActivate)
+        self._set_date_prop('dateToShow', dateToShow)
+        self._set_date_prop('dateToStartOn', dateToStartOn)
+        self._set_date_prop('dateToSubmit', dateToSubmit)
         self._set_int_prop('maxAttempts', maxAttempts)
         self._set_int_prop('maxSubmits', maxSubmits)
         self._set_float_prop('maxScore', maxScore)
@@ -600,9 +601,9 @@ assignable = None,
         self._set_id_prop('actor', actor, Agent, req=True)
         self._set_id_prop('assignable', assignable, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
         self._set_int_prop('count', count, req=True)
-        self._set_str_prop('duration', duration)
-        self._set_str_prop('endedAtTime', endedAtTime)
-        self._set_str_prop('startedAtTime', startedAtTime, req=True)
+        self._set_duration_prop('duration', duration)
+        self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_date_prop('startedAtTime', startedAtTime, req=True)
             
     @property
     def assignable(self):
@@ -629,14 +630,14 @@ assignable = None,
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', new_duration)
+        self._set_duration_prop('duration', new_duration)
 
     @property
     def endedAtTime(self):
         return self._get_prop('endedAtTime')
     @endedAtTime.setter
     def endedAtTime(self,new_time):
-        self._set_str_prop('endedAtTime', new_time)
+        self._set_date_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):
@@ -659,9 +660,9 @@ class Response(Entity, Generatable):
         self._set_id_prop('actor', actor, t=Agent, req=True)
         self._set_id_prop('assignable', assignable, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
         self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
-        self._set_str_prop('duration', duration)
-        self._set_str_prop('endedAtTime', endedAtTime)
-        self._set_str_prop('startedAtTime', startedAtTime)
+        self._set_duration_prop('duration', duration)
+        self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_date_prop('startedAtTime', startedAtTime)
         self._set_list_prop('values', values)
 
     @property
@@ -677,14 +678,14 @@ class Response(Entity, Generatable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', new_duration)
+        self._set_duration_prop('duration', new_duration)
 
     @property
     def endedAtTime(self):
         return self._get_prop('endedAtTime')
     @endedAtTime.setter
     def endedAtTime(self,new_time):
-        self._set_str_prop('endedAtTime', new_time)
+        self._set_date_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):
@@ -743,7 +744,7 @@ class MediaObject(DigitalResource, schemadotorg.MediaObject):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEDIA_OBJECT'])
         self._set_str_prop('@type', ENTITY_TYPES['MEDIA_OBJECT'])
-        self._set_int_prop('duration', duration)
+        self._set_duration_prop('duration', duration)
 
     @property
     def duration(self):
@@ -757,7 +758,7 @@ class MediaLocation(DigitalResource, Targetable):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEDIA_LOCATION'])
         self._set_str_prop('@type', ENTITY_TYPES['MEDIA_LOCATION'])
-        self._set_int_prop('currentTime', currentTime)
+        self._set_time_prop('currentTime', currentTime)
 
     @property
     def currentTime(self):
@@ -890,9 +891,9 @@ class Session(Entity, Generatable, Targetable):
         self._set_base_context(ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['SESSION'])
         self._set_obj_prop('actor', actor, t=Agent, req=True)
-        self._set_str_prop('duration', duration)
-        self._set_str_prop('endedAtTime', endedAtTime)
-        self._set_str_prop('startedAtTime', startedAtTime)
+        self._set_duration_prop('duration', duration)
+        self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_date_prop('startedAtTime', startedAtTime)
 
     @property
     def actor(self):
@@ -903,14 +904,14 @@ class Session(Entity, Generatable, Targetable):
         return self._get_prop('duration')
     @duration.setter
     def duration(self, new_duration):
-        self._set_str_prop('duration', new_duration)
+        self._set_duration_prop('duration', new_duration)
 
     @property
     def endedAtTime(self):
         return self._get_prop('endedAtTime')
     @endedAtTime.setter
     def endedAtTime(self,new_time):
-        self._set_str_prop('endedAtTime', new_time)
+        self._set_date_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):

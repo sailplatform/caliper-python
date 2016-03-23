@@ -36,7 +36,7 @@ class Envelope(CaliperSerializable):
             **kwargs):
         CaliperSerializable.__init__(self)
         self._set_list_prop('data',data,t=CaliperSerializable)
-        self._set_str_prop('sendTime', send_time)
+        self._set_date_prop('sendTime', send_time)
         self._set_str_prop('sensor', sensor_id)
 
     @property
@@ -51,7 +51,7 @@ class Envelope(CaliperSerializable):
         return self._get_prop('sendTime')
     @sendTime.setter
     def sendTime(self, v):
-        self._set_str_prop('sendTime', v)
+        self._set_date_prop('sendTime', v)
 
     @property
     def sensor(self):
