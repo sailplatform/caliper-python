@@ -108,7 +108,7 @@ class Options(object):
         'CONNECTION_REQUEST_TIMEOUT': 1000,
         'CONNECTION_TIMEOUT': 1000,
         'HOST' : None,
-        'OPTIMIZE_SERIALIZATION': False,
+        'OPTIMIZE_SERIALIZATION': True,
         'SOCKET_TIMEOUT': 1000,
         }
 
@@ -191,7 +191,7 @@ class HttpOptions(Options):
             connection_request_timeout=10000,
             connection_timeout=10000,
             host='http://httpbin.org/post',
-            optimize_serialization=False,
+            optimize_serialization=True,
             socket_timeout=10000,
             ):
         Options.__init__(self)

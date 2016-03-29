@@ -730,7 +730,7 @@ def build_session_timeout_event(learning_context = None,
 
 
 ## Condensor tests
-def rebuild_event(fixture,local=True,thin_props=False,thin_context=False,described_entities=None):
+def rebuild_event(fixture,local=True,thin_props=True,thin_context=True,described_entities=None):
     if not local:
         f_dict = json.loads(get_common_fixture(fixture))
     else:
