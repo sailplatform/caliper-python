@@ -916,3 +916,93 @@ class Session(Entity, Generatable, Targetable):
     @property
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
+
+class LTISession(Session):
+
+    def __init__(self,
+                 context_id = None,
+                 context_Type = None,
+                 custom_caliper_session_id = None,
+                 lis_course_offering_sourcedid = None,
+                 lis_course_section_sourcedid = None,
+                 lis_person_sourcedid = None,
+                 lis_result_sourcedid = None,
+                 lti_version = None,
+                 resource_link_id = None,
+                 roles = None,
+                 role_scope_mentor = None,
+                 tool_consumer_instance_guid = None,
+                 user_id = None,
+                 custom_properties = {},
+                 extended_properties = {},
+                 **kwargs):
+        Session.__init__(self,**kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['LTI_SESSION'])
+        self._set_str_prop('@type', ENTITY_TYPES['LTI_SESSION'])
+        self._set_str_prop('context_id', context_id)
+        self._str_str_prop('context_type', context_type)
+        self._set_str_prop('custom_caliper_session_id', custom_caliper_session_id, req=True)
+        self._set_str_prop('lis_course_offering_sourcedid', lis_course_offering_sourcedid)
+        self._set_str_prop('lis_course_section_sourcedid', lis_course_section_sourcedid)
+        self._set_str_prop('lis_person_sourcedid', lis_person_sourcedid)
+        self._set_str_prop('lis_result_sourcedid', lis_result_sourcedid)
+        self._set_str_prop('lti_version', lti_version, req=True)
+        self._set_str_prop('resource_link_id', resource_link_id, req=True)
+        self._set_str_prop('roles', roles)
+        self._set_str_prop('role_scope_mentor', role_scope_mentor)
+        self._set_str_prop('tool_consumer_instance_guid', tool_consumer_instance_guid)
+        self._set_str_prop('user_id', user_id)
+        self._set_obj_prop('custom_properties', custom_properties, t=collections.MutableMapping)
+        self._set_obj_prop('extended_properties', extended_properties, t=collections.MutableMapping)
+
+    @property
+    def context_id(self):
+        return self._get_prop('context_id')
+
+    @property
+    def context_type(self):
+        return self._get_prop('context_type')
+
+    @property
+    def custom_caliper_session_id(self):
+        return self._get_prop('custom_caliper_session_id')
+
+    @property
+    def lis_course_offering_sourcedid(self):
+        return self._get_prop('lis_course_offering_sourcedid')
+
+    @property
+    def lis_course_section_sourcedid(self):
+        return self._get_prop('lis_course_section_sourcedid')
+
+    @property
+    def lis_person_sourcedid(self):
+        return self._get_prop('lis_person_sourcedid')
+
+    @property
+    def lis_result_sourcedid(self):
+        return self._get_prop('lis_result_sourcedid')
+
+    @property
+    def lti_version(self):
+        return self._get_prop('lti_version')
+
+    @property
+    def resource_link_id(self):
+        return self._get_prop('resource_link_id')
+
+    @property
+    def roles(self):
+        return self._get_prop('roles')
+
+    @property
+    def role_scope_mentor(self):
+        return self._get_prop('role_scope_mentor')
+
+    @property
+    def tool_consumer_instance_guid(self):
+        return self._get_prop('tool_consumer_instance_guid')
+
+    @property
+    def user_id(self):
+        return self._get_prop('user_id')
