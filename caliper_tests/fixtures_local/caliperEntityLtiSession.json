@@ -1,0 +1,20 @@
+{
+  "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
+  "@id": "https://example.edu/lms/federatedSession/123456789",
+  "@type": "http://purl.imsglobal.org/caliper/v1/LtiSession",
+  "actor": {
+    "@id": "https://example.edu/user/554433",
+    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+    "dateCreated": "2015-08-01T06:00:00.000Z",
+    "dateModified": "2015-09-02T11:30:00.000Z"
+  },
+  "custom_properties": {
+    "custom_caliper_session_id": "https://example.edu/lms/federatedSession/123456789"
+  },
+  "dateCreated": "2015-08-01T06:00:00.000Z",
+  "duration": "PT3000S",
+  "endedAtTime": "2015-09-15T11:05:00.000Z",
+  "lti_version": "1p1",
+  "resource_link_id": "example.edu:resource:link:identifier:667788",
+  "startedAtTime": "2015-09-15T10:15:00.000Z"
+}

@@ -917,11 +917,11 @@ class Session(Entity, Generatable, Targetable):
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
 
-class LTISession(Session):
+class LtiSession(Session):
 
     def __init__(self,
                  context_id = None,
-                 context_Type = None,
+                 context_type = None,
                  custom_caliper_session_id = None,
                  lis_course_offering_sourcedid = None,
                  lis_course_section_sourcedid = None,
@@ -937,11 +937,12 @@ class LTISession(Session):
                  extended_properties = {},
                  **kwargs):
         Session.__init__(self,**kwargs)
+        self._set_obj_prop('custom_properties', custom_properties, t=collections.MutableMapping)
+        self._set_obj_prop('extended_properties', extended_properties, t=collections.MutableMapping)
         self._set_base_context(ENTITY_CONTEXTS['LTI_SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['LTI_SESSION'])
         self._set_str_prop('context_id', context_id)
-        self._str_str_prop('context_type', context_type)
-        self._set_str_prop('custom_caliper_session_id', custom_caliper_session_id, req=True)
+        self._set_str_prop('context_type', context_type)
         self._set_str_prop('lis_course_offering_sourcedid', lis_course_offering_sourcedid)
         self._set_str_prop('lis_course_section_sourcedid', lis_course_section_sourcedid)
         self._set_str_prop('lis_person_sourcedid', lis_person_sourcedid)
@@ -952,8 +953,12 @@ class LTISession(Session):
         self._set_str_prop('role_scope_mentor', role_scope_mentor)
         self._set_str_prop('tool_consumer_instance_guid', tool_consumer_instance_guid)
         self._set_str_prop('user_id', user_id)
-        self._set_obj_prop('custom_properties', custom_properties, t=collections.MutableMapping)
-        self._set_obj_prop('extended_properties', extended_properties, t=collections.MutableMapping)
+
+        if not custom_caliper_session_id:
+            raise ValueError('custom_caliper_session_id must have a non-null value')
+        else:
+            self._props['custom_properties'].update(
+                {'custom_caliper_session_id':custom_caliper_session_id})
 
     @property
     def context_id(self):
@@ -965,7 +970,15 @@ class LTISession(Session):
 
     @property
     def custom_caliper_session_id(self):
-        return self._get_prop('custom_caliper_session_id')
+        return self._get_prop('custom_properties')['custom_caliper_session_id']
+
+    @property
+    def custom_properties(self):
+        return self._get_props('custom_properties')
+
+    @property
+    def extended_properties(self):
+        return self._get_prop('extended_properties')
 
     @property
     def lis_course_offering_sourcedid(self):
@@ -1006,3 +1019,4 @@ class LTISession(Session):
     @property
     def user_id(self):
         return self._get_prop('user_id')
+
