@@ -24,7 +24,7 @@ install_aliases()
 from future.utils import with_metaclass
 from builtins import *
 
-import collections, copy, importlib, json, re
+import collections, copy, importlib, json, re, warnings
 from aniso8601 import (parse_datetime as aniso_parse_datetime,
                        parse_date as aniso_parse_date,
                        parse_time as aniso_parse_time,
@@ -34,6 +34,9 @@ from oauthlib import uri_validate as oauthlib_uri_validate
 from caliper.constants import CALIPER_CLASSES
 
 ## Convenience functions
+def deprecation(m):
+    warnings.warn(m, DeprecationWarning, stacklevel=2)
+
 def is_valid_date(date):
     try:
         aniso_parse_datetime(date)
