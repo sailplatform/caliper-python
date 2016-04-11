@@ -84,7 +84,7 @@ class TestEvent(unittest.TestCase):
     def testEventPayloadSingleCoerced(self):
         sensor = util.build_default_sensor()
         fixture = 'caliperEnvelopeEventViewViewedCoerced'
-        ret = sensor.describe_batch([self.student, self.epub_volume, self.epub_subchapter])
+        ret = sensor.describe([self.student, self.epub_volume, self.epub_subchapter])
         event = util.build_epub_view_event(
             learning_context = self.learning_context,
             actor = self.student,
@@ -152,7 +152,7 @@ class TestEvent(unittest.TestCase):
                 target = self.epub_subchapter
                 )
             for x in range(self.iterations)]
-        sensor.send_batch(batch)
+        sensor.send(batch)
         for stats in sensor.statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
@@ -207,7 +207,7 @@ class TestEntity(unittest.TestCase):
     def testEntityBatch(self):
         sensor = util.build_default_sensor()
         entities = [self.student, self.epub_volume, self.epub_subchapter]
-        sensor.describe_batch(entities)
+        sensor.describe(entities)
         for stats in sensor.statistics:
             counted = stats.describes.count
             succeeded = stats.successful.count
