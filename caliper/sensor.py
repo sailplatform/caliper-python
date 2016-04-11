@@ -77,32 +77,24 @@ class Client(object):
             else:
                 self._stats.update_failed(1)
             update_func(1)
-        
-    def describe(self, entity=None, sensor_id=None):
-        return self.describe_batch(entity_list=[entity], sensor_id=None)
 
-    def describe_batch(self, entity_list=None, sensor_id=None):
+    def describe(self, entities=None, sensor_id=None):
         identifiers = None
-        if ensure_list_type(entity_list, Entity):
-            results, identifiers = self._requestor.describe_batch(caliper_entity_list=entity_list,
-                                                                  sensor_id=sensor_id)
-            self._process_results(results,self.stats.update_describes)
+        if ensure_list_type(entities, Entity):
+            results, identifiers = self._requestor.describe(caliper_entity_list=entities,
+                                                            sensor_id=sensor_id)
+            self._process_results(results, self.stats.update_describes)
+        return identifiers
+        
+    def send(self, events=None, described_entities=None, sensor_id=None):
+        identifiers = None
+        if ensure_list_type(events, Event):
+            results, identifiers = self._requestor.send(caliper_event_list=events,
+                                                        described_entities=described_entities,
+                                                        sensor_id=sensor_id)
+            self._process_results(results, self.stats.update_measures)
         return identifiers
 
-    def send(self, event=None, described_entities=None, sensor_id=None):
-        return self.send_batch(event_list=[event],
-                               described_entities=described_entities,
-                               sensor_id=sensor_id)
-        
-    def send_batch(self, event_list=None, described_entities=None, sensor_id=None):
-        identifiers = None
-        if ensure_list_type(event_list, Event):
-            results, identifiers = self._requestor.send_batch(caliper_event_list=event_list,
-                                                              described_entities=described_entities,
-                                                              sensor_id=sensor_id)
-            self._process_results(results,self.stats.update_measures)
-        return identifiers
-       
                     
 class Sensor(object):
 
@@ -126,34 +118,26 @@ class Sensor(object):
         s.register_client('default',Client(config_options=config_options))
         return s
 
-    def describe(self, entity=None):
-        identifiers = {}
-        for k,client in self.client_registry.items():
-            identifiers.update( {k: client.describe(entity=entity, sensor_id=self.id)} )
+    def describe(self, entities=None):
+        identifiers={}
+        v = entities
+        if not isinstance(v, collections.MutableSequence):
+            v = [v]
+        for k, client in self.client_registry.items():
+            identifiers.update( {k: client.describe(entities=v,
+                                                    sensor_id=self.id)} )
         return identifiers
 
-    def describe_batch(self, entity_list=None):
+    def send(self, events=None, described_entities=None):
         identifiers = {}
-        for k,client in self.client_registry.items():
-            identifiers.update( {k: client.describe_batch(entity_list=entity_list, sensor_id=self.id)} )
-        return identifiers
-    
-    def send(self, event=None, described_entities=None):
-        identifiers = {}
-        for k,client in self.client_registry.items():
-            identifiers.update( {k: client.send(event=event,
+        v = events
+        if not isinstance(v, collections.MutableSequence):
+            v = [v]
+        for k, client in self.client_registry.items():
+            identifiers.update( {k: client.send(events=v,
                                                 described_entities=described_entities,
                                                 sensor_id=self.id)} )
         return identifiers
-
-    def send_batch(self, event_list=None, described_entities=None):
-        identifiers = {}
-        for k,client in self.client_registry.items():
-            identifiers.update( {k: client.send_batch(event_list=event_list,
-                                                      described_entities=described_entities,
-                                                      sensor_id=self.id)} )
-        return identifiers
-
 
     @property
     def id(self):
