@@ -27,7 +27,7 @@ from builtins import *
 import collections
 import uuid
 
-from caliper.base import Options, HttpOptions, ensure_list_type
+from caliper.base import Options, HttpOptions, deprecation, ensure_list_type
 from caliper.entities import Entity
 from caliper.events import Event
 from caliper.request import EventStoreRequestor, HttpRequestor
@@ -118,9 +118,12 @@ class Sensor(object):
         s.register_client('default',Client(config_options=config_options))
         return s
 
-    def describe(self, entities=None):
+    def describe(self, entities=None, entity=None):
         identifiers={}
         v = entities
+        if entity and not entities:
+            deprecation('Sensor.describe(e) deprecated; use Sensor.describe(entities=e).')
+            v = entity
         if not isinstance(v, collections.MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
@@ -128,9 +131,12 @@ class Sensor(object):
                                                     sensor_id=self.id)} )
         return identifiers
 
-    def send(self, events=None, described_entities=None):
+    def send(self, events=None, event=None, described_entities=None):
         identifiers = {}
         v = events
+        if event and not events:
+            deprecation('Sensor.send(event=e) deprecated; use Sensor.send(events=e).')
+            v = event
         if not isinstance(v, collections.MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
@@ -138,6 +144,14 @@ class Sensor(object):
                                                 described_entities=described_entities,
                                                 sensor_id=self.id)} )
         return identifiers
+
+    def describe_batch(self, entity_list=None):
+        deprecation('Sensor.describe_batch(entity_list=e) deprecated; use Sensor.describe(entities=e).')
+        self.describe(entities=entity_list)
+
+    def send_batch(self, event_list=None, described_entities=None):
+        deprecation('Sensor.send_batch(event_list=e) deprecated; use Sensor.send(events=e).')
+        self.send(events=event_list, described_entities=described_entities)
 
     @property
     def id(self):
