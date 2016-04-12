@@ -21,10 +21,10 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from future.utils import with_metaclass
+from future.utils import raise_with_traceback, with_metaclass
 from builtins import *
 
-import collections, copy, importlib, json, re, warnings
+import collections, copy, importlib, json, re
 from aniso8601 import (parse_datetime as aniso_parse_datetime,
                        parse_date as aniso_parse_date,
                        parse_time as aniso_parse_time,
@@ -34,9 +34,6 @@ from oauthlib import uri_validate as oauthlib_uri_validate
 from caliper.constants import CALIPER_CLASSES
 
 ## Convenience functions
-def deprecation(m):
-    warnings.warn(m, DeprecationWarning, stacklevel=2)
-
 def is_valid_date(date):
     try:
         aniso_parse_datetime(date)
@@ -70,21 +67,19 @@ def is_valid_URI(uri):
     else:
         return False
 
-def is_subtype(type_1, type_2):
-    if (type_1 == None) or (type_2 == None):
-        return False
-    if isinstance(type_1, type):
-        m1 = type_1.__module__
-        c1 = type_1.__name__
-    else:
-        m1,c1 = CALIPER_CLASSES.get(type_1).rsplit('.',1)
-    if isinstance(type_2, type):
-        m2 = type_2.__module__
-        c2 = type_2.__name__
-    else:
-        m2,c2 = CALIPER_CLASSES.get(type_2).rsplit('.',1)
-    return issubclass( getattr(importlib.import_module(m1),c1),
-                       getattr(importlib.import_module(m2),c2))
+def _get_type(t):
+    m = c = ''
+    if t and isinstance(t, type):
+        m, c = t.__module__, t.__name__
+    elif t:
+        m, c = CALIPER_CLASSES.get(t,'.').rsplit('.',1)
+    try:
+        return getattr(importlib.import_module(m),c)
+    except (ImportError, ValueError) as e:
+        raise_with_traceback( ValueError('Unknown Caliper type: {0}'.format(str(t))) )
+
+def is_subtype(t1, t2):
+    return issubclass(_get_type(t1), _get_type(t2))
 
 def ensure_type(p,t):
     # exception or True
