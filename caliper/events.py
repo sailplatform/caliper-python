@@ -224,7 +224,8 @@ class AssignableEvent(Event):
         Event.__init__(self, **kwargs)
         if self.action not in ASSIGNABLE_PROFILE_ACTIONS.values():
             raise TypeError('action must be in the list of Assignable profile actions')
-        ensure_type(self.object, entities.Assignable)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
