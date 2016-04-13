@@ -240,7 +240,7 @@ class MediaEvent(Event):
             raise TypeError('action must be in the list of Media profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['MEDIA_OBJECT'])
-        ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'])
+        ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['MEDIA'])
         self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
