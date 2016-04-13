@@ -85,13 +85,13 @@ def _get_type(t):
 def is_subtype(t1, t2):
     return issubclass(_get_type(t1), _get_type(t2))
 
-def ensure_type(p,t):
+def ensure_type(p,t,optional=False):
     # exception or True
-    if t == None:
+    if t == None and not optional:
         raise ValueError("type cannot be None type")
-    if not( (isinstance(p, BaseEntity) and is_subtype(p.type,t)) or
-            (isinstance(p, collections.MutableMapping) and is_subtype(p['@type'],t)) or
-            (isinstance(p,t)) ):
+    elif t and not( (isinstance(p, BaseEntity) and is_subtype(p.type,t)) or
+                    (isinstance(p, collections.MutableMapping) and is_subtype(p['@type'],t)) or
+                    (isinstance(p,t)) ):
         raise TypeError("Property must be of type {0}".format(str(t)))
     return True
 

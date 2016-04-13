@@ -209,7 +209,10 @@ class AssessmentItemEvent(Event):
             raise ValueError('action must be in the list of Assessment Item profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
-        ensure_type(self.generated, entities.Generatable)
+        if self.action == ASSESSMENT_ITEM_PROFILE_ACTIONS['COMPLETED']:
+            ensure_type(self.generated, ENTITY_TYPES['RESPONSE'])            
+        else:
+            ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
@@ -221,7 +224,8 @@ class AssignableEvent(Event):
         Event.__init__(self, **kwargs)
         if self.action not in ASSIGNABLE_PROFILE_ACTIONS.values():
             raise TypeError('action must be in the list of Assignable profile actions')
-        ensure_type(self.object, entities.Assignable)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
@@ -236,7 +240,7 @@ class MediaEvent(Event):
             raise TypeError('action must be in the list of Media profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['MEDIA_OBJECT'])
-        ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'])
+        ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['MEDIA'])
         self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
@@ -294,13 +298,14 @@ class SessionEvent(Event):
         Event.__init__(self, **kwargs)
         if self.action == SESSION_PROFILE_ACTIONS['LOGGED_IN']:        
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+            ensure_type(self.edApp, ENTITY_TYPES['SOFTWARE_APPLICATION'], optional=True)
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
-            ensure_type(self.generated, ENTITY_TYPES['SESSION'])
-            ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'])
+            ensure_type(self.generated, ENTITY_TYPES['SESSION'], optional=True)
+            ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
         elif self.action == SESSION_PROFILE_ACTIONS['LOGGED_OUT']:        
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
-            ensure_type(self.target, ENTITY_TYPES['SESSION'])
+            ensure_type(self.target, ENTITY_TYPES['SESSION'], optional=True)
         elif self.action == SESSION_PROFILE_ACTIONS['TIMED_OUT']:
             ensure_type(self.actor, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.object, ENTITY_TYPES['SESSION'])
