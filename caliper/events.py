@@ -209,7 +209,10 @@ class AssessmentItemEvent(Event):
             raise ValueError('action must be in the list of Assessment Item profile actions')
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
-        ensure_type(self.generated, entities.Generatable)
+        if self.action == ASSESSMENT_ITEM_PROFILE_ACTIONS['COMPLETED']:
+            ensure_type(self.generated, ENTITY_TYPES['RESPONSE'])            
+        else:
+            ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
