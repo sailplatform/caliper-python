@@ -146,13 +146,20 @@ def build_federated_lti_session(actor=None):
     return caliper.entities.LtiSession(
         entity_id = 'https://example.edu/lms/federatedSession/123456789',
         actor = actor,
+        context_id = '8213060-006f-27b2066ac545',
+        context_label = 'SI182',
+        context_type = 'urn:lti:context-type:ims/lis/CourseOffering',
         dateCreated = _CREATETIME,
         duration = _DURATION,
         endedAtTime = _ENDTIME,
         startedAtTime = _STARTTIME,
-        lti_version='1p1',
-        resource_link_id='example.edu:resource:link:identifier:667788',
+        launch_presentation_locale = 'en-US',
+        lti_version = 'LTI-1p0',
+        resource_link_id = '88391-e1919-bb3456',
+        resource_link_title = 'My Weekly Wiki',
+        roles = "urn:lti:role:ims/lis/Learner, urn:lti:instrole:ims/lis/Student",
         custom_caliper_session_id='https://example.edu/lms/federatedSession/123456789',
+        user_id = '0ae836b9-7fc9-4060-006f-27b2066ac545',
         )
 
 def build_student_554433():

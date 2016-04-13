@@ -180,7 +180,7 @@ class EntityTests(unittest.TestCase):
         fixture = 'caliperEntityLtiSession'
         the_entity = util.build_lti_tool_provider_learning_context().session
         self.assertEqual(the_entity.as_json(thin_props=True, thin_context=True),
-                         util.get_local_fixture(fixture))
+                         util.get_common_fixture(fixture))
 
 
     def testSharedAnnotation(self):
