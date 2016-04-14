@@ -916,3 +916,137 @@ class Session(Entity, Generatable, Targetable):
     @property
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
+
+class LtiSession(Session):
+
+    def __init__(self,
+                 context_id = None,
+                 context_label = None,
+                 context_type = None,
+                 custom_caliper_session_id = None,
+                 launch_presentation_locale = None,
+                 lis_course_offering_sourcedid = None,
+                 lis_course_section_sourcedid = None,
+                 lis_person_sourcedid = None,
+                 lis_result_sourcedid = None,
+                 lti_version = None,
+                 resource_link_id = None,
+                 resource_link_title = None,
+                 roles = None,
+                 role_scope_mentor = None,
+                 tool_consumer_info_product_family_code = None,
+                 tool_consumer_info_product_version = None,
+                 tool_consumer_instance_guid = None,
+                 user_id = None,
+                 custom_properties = {},
+                 extended_properties = {},
+                 **kwargs):
+        Session.__init__(self,**kwargs)
+        self._set_obj_prop('custom_properties', custom_properties, t=collections.MutableMapping)
+        self._set_obj_prop('extended_properties', extended_properties, t=collections.MutableMapping)
+        self._set_base_context(ENTITY_CONTEXTS['LTI_SESSION'])
+        self._set_str_prop('@type', ENTITY_TYPES['LTI_SESSION'])
+        self._set_str_prop('context_id', context_id)
+        self._set_str_prop('context_label', context_label)
+        self._set_str_prop('context_type', context_type)
+        self._set_str_prop('launch_presentation_locale', launch_presentation_locale)
+        self._set_str_prop('lis_course_offering_sourcedid', lis_course_offering_sourcedid)
+        self._set_str_prop('lis_course_section_sourcedid', lis_course_section_sourcedid)
+        self._set_str_prop('lis_person_sourcedid', lis_person_sourcedid)
+        self._set_str_prop('lis_result_sourcedid', lis_result_sourcedid)
+        self._set_str_prop('lti_version', lti_version, req=True)
+        self._set_str_prop('resource_link_id', resource_link_id, req=True)
+        self._set_str_prop('resource_link_title', resource_link_title)
+        self._set_str_prop('roles', roles)
+        self._set_str_prop('role_scope_mentor', role_scope_mentor)
+        self._set_str_prop('tool_consumer_info_product_family_code', tool_consumer_info_product_family_code)
+        self._set_str_prop('tool_consumer_info_product_version', tool_consumer_info_product_version)
+        self._set_str_prop('tool_consumer_instance_guid', tool_consumer_instance_guid)
+        self._set_str_prop('user_id', user_id)
+
+        if not custom_caliper_session_id:
+            raise ValueError('custom_caliper_session_id must have a non-null value')
+        else:
+            self._props['custom_properties'].update(
+                {'custom_caliper_session_id':custom_caliper_session_id})
+
+    @property
+    def context_id(self):
+        return self._get_prop('context_id')
+
+    @property
+    def context_label(self):
+        return self._get_prop('context_label')
+
+    @property
+    def context_type(self):
+        return self._get_prop('context_type')
+
+    @property
+    def custom_caliper_session_id(self):
+        return self._get_prop('custom_properties')['custom_caliper_session_id']
+
+    @property
+    def custom_properties(self):
+        return self._get_props('custom_properties')
+
+    @property
+    def extended_properties(self):
+        return self._get_prop('extended_properties')
+
+    @property
+    def launch_presentation_locale(self):
+        return self._get_prop('launch_presentation_locale')
+
+    @property
+    def lis_course_offering_sourcedid(self):
+        return self._get_prop('lis_course_offering_sourcedid')
+
+    @property
+    def lis_course_section_sourcedid(self):
+        return self._get_prop('lis_course_section_sourcedid')
+
+    @property
+    def lis_person_sourcedid(self):
+        return self._get_prop('lis_person_sourcedid')
+
+    @property
+    def lis_result_sourcedid(self):
+        return self._get_prop('lis_result_sourcedid')
+
+    @property
+    def lti_version(self):
+        return self._get_prop('lti_version')
+
+    @property
+    def resource_link_id(self):
+        return self._get_prop('resource_link_id')
+
+    @property
+    def resource_link_title(self):
+        return self._get_prop('resource_link_title')
+
+    @property
+    def roles(self):
+        return self._get_prop('roles')
+
+    @property
+    def role_scope_mentor(self):
+        return self._get_prop('role_scope_mentor')
+
+    @property
+    def tool_consumer_info_product_family_code(self):
+        return self._get_prop('tool_consumer_info_product_family_code')
+
+    @property
+    def tool_consumer_info_product_version(self):
+        return self._get_prop('tool_consumer_info_product_version')
+
+    @property
+    def tool_consumer_instance_guid(self):
+        return self._get_prop('tool_consumer_instance_guid')
+
+    @property
+    def user_id(self):
+        return self._get_prop('user_id')
+

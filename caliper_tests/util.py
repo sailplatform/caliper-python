@@ -142,6 +142,26 @@ def build_federated_session(actor=None):
         startedAtTime = _STARTTIME,
         )
 
+def build_federated_lti_session(actor=None):
+    return caliper.entities.LtiSession(
+        entity_id = 'https://example.edu/lms/federatedSession/123456789',
+        actor = actor,
+        context_id = '8213060-006f-27b2066ac545',
+        context_label = 'SI182',
+        context_type = 'urn:lti:context-type:ims/lis/CourseOffering',
+        dateCreated = _CREATETIME,
+        duration = _DURATION,
+        endedAtTime = _ENDTIME,
+        startedAtTime = _STARTTIME,
+        launch_presentation_locale = 'en-US',
+        lti_version = 'LTI-1p0',
+        resource_link_id = '88391-e1919-bb3456',
+        resource_link_title = 'My Weekly Wiki',
+        roles = "urn:lti:role:ims/lis/Learner, urn:lti:instrole:ims/lis/Student",
+        custom_caliper_session_id='https://example.edu/lms/federatedSession/123456789',
+        user_id = '0ae836b9-7fc9-4060-006f-27b2066ac545',
+        )
+
 def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://example.edu/user/554433',
@@ -231,6 +251,16 @@ def build_readium_app():
 def build_readium_app_learning_context(actor=None, session=None):
     a = actor or build_student_554433()
     s = session or build_readium_session_start(actor=a)
+    return caliper.entities.LearningContext(
+        edApp = build_readium_app(),
+        group = build_AmRev101_group_001(),
+        membership = build_AmRev101_membership(),
+        session = s
+        )
+
+def build_lti_tool_provider_learning_context(actor=None, session=None):
+    a = actor or build_student_554433()
+    s = session or build_federated_lti_session(actor=a)
     return caliper.entities.LearningContext(
         edApp = build_readium_app(),
         group = build_AmRev101_group_001(),
