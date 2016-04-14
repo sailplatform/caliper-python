@@ -23,5 +23,19 @@
   "resource_link_title": "My Weekly Wiki",
   "roles": "urn:lti:role:ims/lis/Learner, urn:lti:instrole:ims/lis/Student",
   "startedAtTime": "2015-09-15T10:15:00.000Z",
-  "user_id": "0ae836b9-7fc9-4060-006f-27b2066ac545"
+  "user_id": "0ae836b9-7fc9-4060-006f-27b2066ac545",
+  "extensions": {
+    "ext_vnd_instructor": {
+      "@context": {
+        "@vocab": "http://schema.org/",
+        "csev": "http://dr-chuck.com/"
+      },
+      "@type": "Person",
+      "csev:debug": "42",
+      "jobTitle": "Professor",
+      "name": "Jane Doe",
+      "telephone": "(425) 123-4567",
+      "url": "http://www.JaneDoe.com"
+    }
+  }
 }

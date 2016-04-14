@@ -102,9 +102,9 @@ def get_fixture(f,local=True):
 ## side-by-side comparisons of the stock fixtures with the generated events
 def put_fixture(fixture_name, caliper_object, local=True,
                 thin_context=False, thin_props=False, described_entities=None,
-                debug=_DEBUG):
+                debug=_DEBUG, out_dir=_FIXTURE_OUT_DIR):
     if debug:
-        loc = _FIXTURE_OUT_DIR+fixture_name
+        loc = out_dir+fixture_name
         with open(loc+'_out.json', 'w') as f:
             f.write(caliper_object.as_json(thin_context=thin_context,
                                            thin_props=thin_props,
@@ -157,9 +157,10 @@ def build_federated_lti_session(actor=None):
         lti_version = 'LTI-1p0',
         resource_link_id = '88391-e1919-bb3456',
         resource_link_title = 'My Weekly Wiki',
-        roles = "urn:lti:role:ims/lis/Learner, urn:lti:instrole:ims/lis/Student",
+        roles = 'urn:lti:role:ims/lis/Learner, urn:lti:instrole:ims/lis/Student',
         custom_caliper_session_id='https://example.edu/lms/federatedSession/123456789',
         user_id = '0ae836b9-7fc9-4060-006f-27b2066ac545',
+        extensions = {'ext_vnd_instructor': build_person_for_extension()}
         )
 
 def build_student_554433():
@@ -168,6 +169,20 @@ def build_student_554433():
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
+
+def build_person_for_extension():
+    return {
+        '@context': {
+            '@vocab': 'http://schema.org/',
+            'csev': 'http://dr-chuck.com/',
+            },
+        '@type': 'Person',
+        'url': 'http://www.JaneDoe.com',
+        'jobTitle': 'Professor',
+        'name': 'Jane Doe',
+        'telephone': '(425) 123-4567',
+        'csev:debug': '42'
+        }
 
 def build_AmRev101_course():
     return caliper.entities.CourseOffering(
