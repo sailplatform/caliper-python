@@ -142,6 +142,7 @@
         "dateCreated": "2015-08-01T06:00:00.000Z",
         "dateModified": null
       },
+      "extensions": {},
       "federatedSession": "https://example.edu/lms/federatedSession/123456789"
     }
   ]

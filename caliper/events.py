@@ -23,6 +23,8 @@ from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
 
+import collections
+
 from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
 from caliper.constants import ENTITY_TYPES
 from caliper.constants import CALIPER_ACTIONS
@@ -54,7 +56,8 @@ class Event(BaseEvent):
             generated = None,
             group = None,
             membership = None,
-            target = None):
+            target = None,
+            extensions = {}):
         BaseEvent.__init__(self)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
@@ -73,6 +76,7 @@ class Event(BaseEvent):
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_obj_prop('target', target, t=entities.Targetable)
+        self._set_obj_prop('extensions', extensions, t=collections.MutableMapping)
 
     def as_minimal_event(self):
         return MinimalEvent(action=self.action,
@@ -123,6 +127,10 @@ class Event(BaseEvent):
     @property
     def target(self):
         return self._get_prop('target')
+
+    @property
+    def extensions(self):
+        return self._get_prop('extensions')
 
 
 class MinimalEvent(BaseEvent):

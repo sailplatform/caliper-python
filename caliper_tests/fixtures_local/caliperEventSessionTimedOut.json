@@ -85,5 +85,6 @@
     "dateModified": null
   },
   "membership": null,
+  "extensions": {},
   "federatedSession": null
 }
