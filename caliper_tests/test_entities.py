@@ -87,7 +87,7 @@ class EntityTests(unittest.TestCase):
 
     def testEpubVolume(self):
         fixture = 'caliperEntityEpubVolume'
-        the_entity = util.build_epub_vol43()
+        the_entity = util.build_epub_vol43(with_author=True)
         self.assertEqual(the_entity.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
