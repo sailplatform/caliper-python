@@ -315,6 +315,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
 
     def __init__(self,
             alignedLearningObjective = None,
+            creators = None,
             datePublished = None,
             isPartOf = None,
             keywords = None,
@@ -327,6 +328,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         self._set_str_prop('@type', ENTITY_TYPES['DIGITAL_RESOURCE'])
         self._set_list_prop('alignedLearningObjective', alignedLearningObjective,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
+        self._set_list_prop('creators', creators, t=Agent)
         self._set_date_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
         self._set_list_prop('keywords', keywords, t=str)
@@ -337,6 +339,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
     @property
     def alignedLearningObjective(self):
         return self._get_prop('alignedLearningObjective')
+
+    @property
+    def creators(self):
+        return self._get_prop('creators')
 
     @property
     def datePublished(self):
