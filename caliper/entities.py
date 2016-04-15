@@ -318,6 +318,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
             datePublished = None,
             isPartOf = None,
             keywords = None,
+            mediaType = None,
             objectType = None,
             version = None,
             **kwargs):
@@ -329,10 +330,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
         self._set_date_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
         self._set_list_prop('keywords', keywords, t=str)
+        self._set_str_prop('mediaType', mediaType)
         self._set_list_prop('objectType', objectType, t=str)
         self._set_str_prop('version', version)
 
-            
     @property
     def alignedLearningObjective(self):
         return self._get_prop('alignedLearningObjective')
@@ -351,6 +352,10 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
     @property
     def keywords(self):
         return self._get_prop('keywords')
+
+    @property
+    def mediaType(self):
+        return self._get_prop('mediaType')
 
     @property
     def objectType(self):
