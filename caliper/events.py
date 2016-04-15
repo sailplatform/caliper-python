@@ -56,6 +56,7 @@ class Event(BaseEvent):
             generated = None,
             group = None,
             membership = None,
+            sourcedId = None,
             target = None,
             extensions = {}):
         BaseEvent.__init__(self)
@@ -75,6 +76,7 @@ class Event(BaseEvent):
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
+        self._set_str_prop('sourcedId', sourcedId)
         self._set_obj_prop('target', target, t=entities.Targetable)
         self._set_obj_prop('extensions', extensions, t=collections.MutableMapping)
 
@@ -123,6 +125,10 @@ class Event(BaseEvent):
     @property
     def object(self):
         return self._get_prop('object')
+
+    @property
+    def sourcedId(self):
+        return self._get_prop('sourcedId')
 
     @property
     def target(self):
