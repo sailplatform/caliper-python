@@ -170,6 +170,12 @@ def build_student_554433():
         dateModified = _MODTIME
         )
 
+def build_author_middlekauff():
+    return caliper.entities.Person(
+        entity_id = 'http://history.berkeley.edu/people/robert-l-middlekauff',
+        name = "Robert Middlekauff"
+        )
+
 def build_person_for_extension():
     return {
         '@context': {
@@ -284,10 +290,14 @@ def build_lti_tool_provider_learning_context(actor=None, session=None):
         )
 
 ## build a test EPUB volume
-def build_epub_vol43():
+def build_epub_vol43(with_author=False):
+    a = []
+    if with_author:
+        a = [build_author_middlekauff()]
     return caliper.entities.EpubVolume(
         entity_id = 'https://example.com/viewer/book/34843#epubcfi(/4/3)',
         name = 'The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)',
+        creators = a,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         version = _VERED
