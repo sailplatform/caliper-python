@@ -273,8 +273,12 @@ CALIPER_STATUS = {
 
 ## Profiles
 BASE_PROFILE_ACTIONS = {
+        'CREATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Created',
+        'DELETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deleted',
         'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
         'RANKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ranked',
+        'RETRIEVED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Retrieved',
+        'UPDATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Updated',
     }
     
 ANNOTATION_PROFILE_ACTIONS = {

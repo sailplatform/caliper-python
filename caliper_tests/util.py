@@ -345,6 +345,17 @@ def build_AmRev101_landing_page():
         )
 
 
+### Minimal Events ###
+def build_minimal_event(actor = None,
+                        event_object = None,
+                        action = None):
+    return caliper.events.MinimalEvent(
+        actor = actor,
+        event_object = event_object,
+        action = action,
+        eventTime = _EVENTTIME
+        )
+
 ### Annotation Profile ###
 ## build test annotations
 def build_bookmark_annotation(annotated = None):
@@ -610,7 +621,19 @@ def build_video_media_event(learning_context = None,
 
 
 ### Reading Profile ###
-## build a test video and location
+## build test videos and locations
+def build_video_assignment(
+        modtime = _MODTIME):
+    return caliper.entities.VideoObject(
+        entity_id = 'https://example.com/super-media-tool/video/6779',
+        name = 'AmRev101 video assignment -- Elizabeth Freeman: The Demand For Freedom',
+        duration = _MEDIA_DURTIME,
+        dateCreated = _CREATETIME,
+        dateModified = modtime,
+        mediaType = 'video/ogg',
+        version = _VERNUM
+        )
+
 def build_video_with_learning_objective():
     return caliper.entities.VideoObject(
         entity_id = 'https://example.com/super-media-tool/video/1225',

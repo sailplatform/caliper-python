@@ -31,6 +31,34 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper
 import caliper_tests.util as util
 
+class MinimalEventProfile(unittest.TestCase):
+    def setUp(self):
+        self.student = util.build_student_554433()
+
+    def testCreatedMinimalEvent(self):
+        fixture = 'caliperEventMinimalCreated'
+        event_object = util.build_video_assignment(modtime=None)
+        minimal_event = util.build_minimal_event(
+            actor = self.student,
+            event_object = event_object,
+            action = caliper.constants.BASE_PROFILE_ACTIONS['CREATED']
+            )
+        util.put_fixture(fixture, minimal_event)
+        self.assertEqual(minimal_event.as_json(),
+                         util.get_fixture(fixture))
+
+    def testModifiedMinimalEvent(self):
+        fixture = 'caliperEventMinimalUpdated'
+        event_object = util.build_video_assignment()
+        minimal_event = util.build_minimal_event(
+            actor = self.student,
+            event_object = event_object,
+            action = caliper.constants.BASE_PROFILE_ACTIONS['UPDATED']
+            )
+        util.put_fixture(fixture, minimal_event)
+        self.assertEqual(minimal_event.as_json(),
+                         util.get_fixture(fixture))
+
 
 class AnnotationProfile(unittest.TestCase):
     def setUp(self):

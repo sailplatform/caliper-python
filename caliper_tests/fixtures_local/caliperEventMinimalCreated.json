@@ -1,0 +1,14 @@
+{
+  "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
+  "@type": "http://purl.imsglobal.org/caliper/v1/Event",
+  "action": "http://purl.imsglobal.org/vocab/caliper/v1/action#Created",
+  "actor": {
+    "@id": "https://example.edu/user/554433",
+    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person"
+  },
+  "eventTime": "2015-09-15T10:15:00.000Z",
+  "object": {
+    "@id": "https://example.com/super-media-tool/video/6779",
+    "@type": "http://purl.imsglobal.org/caliper/v1/VideoObject"
+  }
+}
