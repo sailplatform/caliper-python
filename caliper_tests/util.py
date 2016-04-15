@@ -34,7 +34,7 @@ import caliper.condensor as condensor
 _DEBUG = False
 
 _SENSOR_ID = 'https://example.edu/sensor/001'
-
+_EVENT_SOURCEDID = '15128c13-ca75-4952-8cce-72a513ec337d'
 _EVENTTIME = '2015-09-15T10:15:00.000Z'
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
@@ -756,6 +756,7 @@ def build_session_login_event(learning_context = None,
                               actor = None,
                               event_object = None,
                               session = None,
+                              sourcedId = None,
                               target = None,
                               action = None):
     the_target = caliper.entities.Frame(
@@ -775,13 +776,15 @@ def build_session_login_event(learning_context = None,
         target = the_target,
         event_object = event_object,
         generated = session,
-        eventTime = _EVENTTIME
+        eventTime = _EVENTTIME,
+        sourcedId = _EVENT_SOURCEDID
         )
 
 def build_session_logout_event(learning_context = None,
                                actor = None,
                                event_object = None,
                                session = None,
+                               sourcedId = None,
                                action = None):
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
@@ -791,12 +794,14 @@ def build_session_logout_event(learning_context = None,
         action = action,
         target = session,
         event_object = event_object,
-        eventTime = _EVENTTIME
+        eventTime = _EVENTTIME,
+        sourcedId = _EVENT_SOURCEDID
         )
 
 def build_session_timeout_event(learning_context = None,
                                 actor = None,
                                 session = None,
+                                sourcedId = None,
                                 action = None):
     return caliper.events.SessionEvent(
         edApp = learning_context.edApp,
@@ -804,7 +809,8 @@ def build_session_timeout_event(learning_context = None,
         actor = learning_context.edApp,
         action = action,
         event_object = session,
-        eventTime = _EVENTTIME
+        eventTime = _EVENTTIME,
+        sourcedId = _EVENT_SOURCEDID
         )
 
 
