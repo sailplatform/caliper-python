@@ -622,6 +622,7 @@ def build_video_with_learning_objective():
         duration = _MEDIA_DURTIME,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
+        mediaType = 'video/ogg',
         version = _VERNUM
         )
 
