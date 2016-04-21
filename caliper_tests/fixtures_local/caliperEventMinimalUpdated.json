@@ -4,7 +4,7 @@
   "action": "http://purl.imsglobal.org/vocab/caliper/v1/action#Updated",
   "actor": {
     "@id": "https://example.edu/user/554433",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person"
+    "@type": "http://purl.imsglobal.org/caliper/v1/Person"
   },
   "eventTime": "2015-09-15T10:15:00.000Z",
   "object": {

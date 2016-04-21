@@ -24,7 +24,7 @@
     "actor": {
       "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@id": "https://example.edu/user/554433",
-      "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+      "@type": "http://purl.imsglobal.org/caliper/v1/Person",
       "name": null,
       "description": null,
       "extensions": {},
@@ -51,13 +51,13 @@
   "group": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001/group/001",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Group",
+    "@type": "http://purl.imsglobal.org/caliper/v1/Group",
     "name": "Discussion Group 001",
     "description": null,
     "subOrganizationOf": {
       "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001",
-      "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection",
+      "@type": "http://purl.imsglobal.org/caliper/v1/CourseSection",
       "courseNumber": "POL101",
       "name": "American Revolution 101",
       "description": null,
@@ -66,7 +66,7 @@
       "subOrganizationOf": {
         "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
         "@id": "https://example.edu/politicalScience/2015/american-revolution-101",
-        "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering",
+        "@type": "http://purl.imsglobal.org/caliper/v1/CourseOffering",
         "courseNumber": "POL101",
         "name": "Political Science 101: The American Revolution",
         "description": null,
