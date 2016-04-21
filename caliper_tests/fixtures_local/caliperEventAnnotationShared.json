@@ -4,7 +4,7 @@
   "actor": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.edu/user/554433",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+    "@type": "http://purl.imsglobal.org/caliper/v1/Person",
     "name": null,
     "description": null,
     "extensions": {},
@@ -24,7 +24,7 @@
     "isPartOf": {
       "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@id": "https://example.com/viewer/book/34843#epubcfi(/4/3)",
-      "@type": "http://www.idpf.org/epub/vocab/structure/#volume",
+      "@type": "http://purl.imsglobal.org/caliper/v1/EpubVolume",
       "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
       "description": null,
       "objectType": [],
@@ -63,7 +63,7 @@
       {
         "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
         "@id": "https://example.edu/user/657585",
-        "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+        "@type": "http://purl.imsglobal.org/caliper/v1/Person",
         "name": null,
         "description": null,
         "extensions": {},
@@ -73,7 +73,7 @@
       {
         "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
         "@id": "https://example.edu/user/667788",
-        "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+        "@type": "http://purl.imsglobal.org/caliper/v1/Person",
         "name": null,
         "description": null,
         "extensions": {},
@@ -96,13 +96,13 @@
   "group": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001/group/001",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Group",
+    "@type": "http://purl.imsglobal.org/caliper/v1/Group",
     "name": "Discussion Group 001",
     "description": null,
     "subOrganizationOf": {
       "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001",
-      "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection",
+      "@type": "http://purl.imsglobal.org/caliper/v1/CourseSection",
       "courseNumber": "POL101",
       "name": "American Revolution 101",
       "description": null,
@@ -111,7 +111,7 @@
       "subOrganizationOf": {
         "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
         "@id": "https://example.edu/politicalScience/2015/american-revolution-101",
-        "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering",
+        "@type": "http://purl.imsglobal.org/caliper/v1/CourseOffering",
         "courseNumber": "POL101",
         "name": "Political Science 101: The American Revolution",
         "description": null,
@@ -132,7 +132,7 @@
   "membership": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.edu/politicalScience/2015/american-revolution-101/roster/554433",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Membership",
+    "@type": "http://purl.imsglobal.org/caliper/v1/Membership",
     "name": "American Revolution 101",
     "description": "Roster entry",
     "member": "https://example.edu/user/554433",

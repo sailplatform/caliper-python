@@ -1,7 +1,7 @@
 {
   "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
   "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001",
-  "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection",
+  "@type": "http://purl.imsglobal.org/caliper/v1/CourseSection",
   "academicSession": "Fall-2015",
   "courseNumber": "POL101",
   "dateCreated": "2015-08-01T06:00:00.000Z",
@@ -9,7 +9,7 @@
   "name": "American Revolution 101",
   "subOrganizationOf": {
     "@id": "https://example.edu/politicalScience/2015/american-revolution-101",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering",
+    "@type": "http://purl.imsglobal.org/caliper/v1/CourseOffering",
     "academicSession": "Fall-2015",
     "courseNumber": "POL101",
     "dateCreated": "2015-08-01T06:00:00.000Z",

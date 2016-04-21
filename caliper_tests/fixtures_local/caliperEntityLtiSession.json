@@ -4,7 +4,7 @@
   "@type": "http://purl.imsglobal.org/caliper/v1/LtiSession",
   "actor": {
     "@id": "https://example.edu/user/554433",
-    "@type": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+    "@type": "http://purl.imsglobal.org/caliper/v1/Person",
     "dateCreated": "2015-08-01T06:00:00.000Z",
     "dateModified": "2015-09-02T11:30:00.000Z"
   },

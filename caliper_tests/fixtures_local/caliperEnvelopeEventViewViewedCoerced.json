@@ -5,10 +5,10 @@
     {"@context": [
       "http://purl.imsglobal.org/ctx/caliper/v1/Context",
       { "actor": {
-        "@id": "http://purl.imsglobal.org/caliper/v1/lis/Person",
+        "@id": "http://purl.imsglobal.org/caliper/v1/Person",
         "@type": "@id"}},
       { "object": {
-        "@id": "http://www.idpf.org/epub/vocab/structure/#volume",
+        "@id": "http://purl.imsglobal.org/caliper/v1/EpubVolume",
         "@type": "@id"}},
       { "target": {
         "@id": "http://purl.imsglobal.org/caliper/v1/Frame",
@@ -24,12 +24,12 @@
        "name": "ePub"},
      "group": {
        "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001/group/001",
-       "@type": "http://purl.imsglobal.org/caliper/v1/lis/Group",
+       "@type": "http://purl.imsglobal.org/caliper/v1/Group",
        "dateCreated": "2015-08-01T06:00:00.000Z",
        "name": "Discussion Group 001",
        "subOrganizationOf": {
          "@id": "https://example.edu/politicalScience/2015/american-revolution-101/section/001",
-         "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection",
+         "@type": "http://purl.imsglobal.org/caliper/v1/CourseSection",
          "academicSession": "Fall-2015",
          "courseNumber": "POL101",
          "dateCreated": "2015-08-01T06:00:00.000Z",
@@ -37,7 +37,7 @@
          "name": "American Revolution 101",
          "subOrganizationOf": {
            "@id": "https://example.edu/politicalScience/2015/american-revolution-101",
-           "@type": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering",
+           "@type": "http://purl.imsglobal.org/caliper/v1/CourseOffering",
            "academicSession": "Fall-2015",
            "courseNumber": "POL101",
            "dateCreated": "2015-08-01T06:00:00.000Z",
@@ -45,7 +45,7 @@
            "name": "Political Science 101: The American Revolution"}}},
      "membership": {
        "@id": "https://example.edu/politicalScience/2015/american-revolution-101/roster/554433",
-       "@type": "http://purl.imsglobal.org/caliper/v1/lis/Membership",
+       "@type": "http://purl.imsglobal.org/caliper/v1/Membership",
        "dateCreated": "2015-08-01T06:00:00.000Z",
        "description": "Roster entry",
        "member": "https://example.edu/user/554433",
