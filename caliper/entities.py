@@ -45,7 +45,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
             dateModified = None,
             description = None,
             name = None,
-            extensions = {}):
+            extensions = None):
         BaseEntity.__init__(self)
         self._set_id_prop('@id', entity_id, str, req=True)
         self._set_base_context(ENTITY_CONTEXTS['ENTITY'])
@@ -54,7 +54,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
         self._set_date_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
-        self._set_obj_prop('extensions', extensions, t=collections.MutableMapping)
+        self._set_dict_prop('extensions', extensions)
 
     @property
     def context(self):
@@ -600,7 +600,7 @@ class Attempt(Entity, Generatable):
     '''
     def __init__(self,
             actor = None,
-assignable = None,
+            assignable = None,
             count = None,
             duration = None,
             endedAtTime =None,
@@ -949,12 +949,12 @@ class LtiSession(Session):
                  tool_consumer_info_product_version = None,
                  tool_consumer_instance_guid = None,
                  user_id = None,
-                 custom_properties = {},
-                 extended_properties = {},
+                 custom_properties = None,
+                 extended_properties = None,
                  **kwargs):
         Session.__init__(self,**kwargs)
-        self._set_obj_prop('custom_properties', custom_properties, t=collections.MutableMapping)
-        self._set_obj_prop('extended_properties', extended_properties, t=collections.MutableMapping)
+        self._set_dict_prop('custom_properties', custom_properties)
+        self._set_dict_prop('extended_properties', extended_properties)
         self._set_base_context(ENTITY_CONTEXTS['LTI_SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['LTI_SESSION'])
         self._set_str_prop('context_id', context_id)

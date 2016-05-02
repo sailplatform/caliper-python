@@ -294,6 +294,13 @@ class CaliperSerializable(object):
             val = v
         self._set_untyped_prop(k,val,req=req)
 
+    def _set_dict_prop(self,k,v,req=False):
+        if req and (v==None):
+            raise ValueError('{0} must have a non-null value'.format(str(k)))
+        elif v and not( isinstance(v, collections.MutableMapping)):
+            raise ValueError('{0} must be a dictionary'.format(str(k)))
+        self._update_props(k,v or {}, req=req)
+
     def _set_duration_prop(self,k,v,req=False):
         val = None
         if is_valid_duration(v):
