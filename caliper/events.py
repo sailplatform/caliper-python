@@ -58,7 +58,7 @@ class Event(BaseEvent):
             membership = None,
             sourcedId = None,
             target = None,
-            extensions = {}):
+            extensions = None):
         BaseEvent.__init__(self)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
@@ -78,7 +78,7 @@ class Event(BaseEvent):
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_str_prop('sourcedId', sourcedId)
         self._set_obj_prop('target', target, t=entities.Targetable)
-        self._set_obj_prop('extensions', extensions, t=collections.MutableMapping)
+        self._set_dict_prop('extensions', extensions)
 
     def as_minimal_event(self):
         return MinimalEvent(action=self.action,
