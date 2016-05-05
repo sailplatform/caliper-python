@@ -703,7 +703,8 @@ def build_epub_view_event(learning_context = None,
                           actor = None,
                           event_object = None,
                           target = None,
-                          action = None):
+                          action = None,
+                          extensions = None):
     return caliper.events.ViewEvent(
         edApp = learning_context.edApp,
         eventTime = _EVENTTIME,
@@ -714,8 +715,21 @@ def build_epub_view_event(learning_context = None,
         event_object = event_object,
         target = build_frame_of_epub(entity_id=target.id,
                                      name=target.name,
-                                     isPartOf=event_object)
+                                     isPartOf=event_object),
+        extensions = extensions
         )
+
+def build_epub_view_event_extensions():
+    return {
+        'ext_com_example_job': {
+            '@context': {
+                '@vocab': 'http://purl.example.com/caliper/extensions/vocab/'
+                },
+            '@type': 'Job',
+            '@id': '_:1',
+            'tag': 'async job'
+            }
+        }
 
 def build_frame_of_epub(entity_id=None,name=None,isPartOf=None):
     return caliper.entities.Frame(
