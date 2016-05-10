@@ -71,7 +71,8 @@
     "description": null,
     "extensions": {},
     "dateCreated": "2015-08-01T06:00:00.000Z",
-    "dateModified": "2015-09-02T11:30:00.000Z"
+    "dateModified": "2015-09-02T11:30:00.000Z",
+    "version": "1.0.0"
   },
   "group": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
