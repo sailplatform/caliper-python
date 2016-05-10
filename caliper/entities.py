@@ -45,6 +45,7 @@ class Entity(BaseEntity, schemadotorg.Thing):
             dateModified = None,
             description = None,
             name = None,
+            version = None,
             extensions = None):
         BaseEntity.__init__(self)
         self._set_id_prop('@id', entity_id, str, req=True)
@@ -185,10 +186,18 @@ class Agent(Entity, foaf.Agent):
 
 class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
 
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 version = None,
+                 **kwargs):
         Agent.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SOFTWARE_APPLICATION'])
         self._set_str_prop('@type', ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        self._set_str_prop('version', version)
+
+    @property
+    def version(self):
+        return self._get_prop('version')
+
 
 class Person(Agent):
 

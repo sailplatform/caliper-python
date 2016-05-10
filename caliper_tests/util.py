@@ -163,6 +163,32 @@ def build_federated_lti_session(actor=None):
         extensions = {'ext_vnd_instructor': build_person_for_extension()}
         )
 
+def build_assessment_app():
+    return caliper.entities.SoftwareApplication(
+            entity_id = 'https://example.com/super-assessment-tool',
+            name = 'Super Assessment Tool',
+            dateCreated = _CREATETIME,
+            version = "v2"
+        )
+
+def build_media_app():
+    return caliper.entities.SoftwareApplication(
+        entity_id = 'https://example.com/super-media-tool',
+        name = 'Super Media Tool',
+        dateCreated = _CREATETIME,
+        dateModified = _MODTIME,
+        version = '1.0.0'
+        )
+
+def build_readium_app():
+    return caliper.entities.SoftwareApplication(
+        entity_id = 'https://example.com/viewer',
+        name = 'ePub',
+        dateCreated = _CREATETIME,
+        dateModified = _MODTIME,
+        version = 'Version 2'
+        )
+
 def build_student_554433():
     return caliper.entities.Person(
         entity_id = 'https://example.edu/user/554433',
@@ -234,22 +260,10 @@ def build_AmRev101_membership():
 def build_assessment_tool_learning_context(actor=None):
     a = actor or build_student_554433()
     return caliper.entities.LearningContext(
-        edApp = caliper.entities.SoftwareApplication(
-            entity_id = 'https://example.com/super-assessment-tool',
-            name = 'Super Assessment Tool',
-            dateCreated = _CREATETIME
-            ),
+        edApp = build_assessment_app(),
         group = build_AmRev101_group_001(),
         membership = build_AmRev101_membership(),
         session = build_federated_session(actor=a)
-        )
-
-def build_media_app():
-    return caliper.entities.SoftwareApplication(
-        entity_id = 'https://example.com/super-media-tool',
-        name = 'Super Media Tool',
-        dateCreated = _CREATETIME,
-        dateModified = _MODTIME
         )
 
 def build_video_media_tool_learning_context(actor=None):
@@ -259,14 +273,6 @@ def build_video_media_tool_learning_context(actor=None):
         group = build_AmRev101_group_001(),
         membership = build_AmRev101_membership(),
         session = build_federated_session(actor=a)
-        )
-
-def build_readium_app():
-    return caliper.entities.SoftwareApplication(
-        entity_id = 'https://example.com/viewer',
-        name = 'ePub',
-        dateCreated = _CREATETIME,
-        dateModified = _MODTIME
         )
 
 def build_readium_app_learning_context(actor=None, session=None):
