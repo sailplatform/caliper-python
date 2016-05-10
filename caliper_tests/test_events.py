@@ -71,7 +71,9 @@ class AnnotationProfile(unittest.TestCase):
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
             actor = self.student,
-            annotation = util.build_bookmark_annotation(annotated=event_object),
+            annotation = util.build_bookmark_annotation(
+                actor = self.student,
+                annotated=event_object),
             index = 2,
             event_object = event_object,
             action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['BOOKMARKED']
@@ -88,7 +90,9 @@ class AnnotationProfile(unittest.TestCase):
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
             actor = self.student,
-            annotation = util.build_highlight_annotation(annotated=event_object),
+            annotation = util.build_highlight_annotation(
+                actor = self.student,
+                annotated=event_object),
             event_object = event_object,
             index = 1,
             action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['HIGHLIGHTED']
@@ -105,7 +109,9 @@ class AnnotationProfile(unittest.TestCase):
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
             actor = self.student,
-            annotation = util.build_shared_annotation(annotated=event_object),
+            annotation = util.build_shared_annotation(
+                actor = self.student,
+                annotated=event_object),
             event_object = event_object,
             index = 3,
             action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['SHARED']
@@ -122,7 +128,9 @@ class AnnotationProfile(unittest.TestCase):
         annotation_event = util.build_annotation_event(
             learning_context = self.learning_context,
             actor = self.student,
-            annotation = util.build_tag_annotation(annotated=event_object),
+            annotation = util.build_tag_annotation(
+                actor = self.student,
+                annotated=event_object),
             event_object = event_object,
             index = 4,
             action = caliper.constants.ANNOTATION_PROFILE_ACTIONS['TAGGED']

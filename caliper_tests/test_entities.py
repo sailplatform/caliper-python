@@ -59,7 +59,9 @@ class EntityTests(unittest.TestCase):
 
     def testBookmarkAnnotation(self):
         fixture = 'caliperEntityBookmarkAnnotation'
-        the_entity = util.build_bookmark_annotation(annotated = util.build_epub_subchap432())
+        the_entity = util.build_bookmark_annotation(
+            actor = util.build_student_554433(),
+            annotated = util.build_epub_subchap432())
         self.assertEqual(the_entity.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
@@ -124,7 +126,9 @@ class EntityTests(unittest.TestCase):
 
     def testHighlightAnnotation(self):
         fixture = 'caliperEntityHighlightAnnotation'
-        the_entity = util.build_highlight_annotation(annotated = util.build_epub_subchap431())
+        the_entity = util.build_highlight_annotation(
+            actor = util.build_student_554433(),
+            annotated = util.build_epub_subchap431())
         self.assertEqual(the_entity.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
@@ -185,7 +189,9 @@ class EntityTests(unittest.TestCase):
 
     def testSharedAnnotation(self):
         fixture = 'caliperEntitySharedAnnotation'
-        the_entity = util.build_shared_annotation(annotated=util.build_epub_subchap433())
+        the_entity = util.build_shared_annotation(
+            actor = util.build_student_554433(),
+            annotated=util.build_epub_subchap433())
         self.assertEqual(the_entity.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
@@ -199,7 +205,9 @@ class EntityTests(unittest.TestCase):
 
     def testTagAnnotation(self):
         fixture = 'caliperEntityTagAnnotation'
-        the_entity = util.build_tag_annotation(annotated=util.build_epub_subchap434())
+        the_entity = util.build_tag_annotation(
+            actor = util.build_student_554433(),
+            annotated=util.build_epub_subchap434())
         self.assertEqual(the_entity.as_json(thin_props=True, thin_context=True),
                          util.get_common_fixture(fixture))
 
