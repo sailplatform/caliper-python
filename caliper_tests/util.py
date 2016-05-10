@@ -368,27 +368,29 @@ def build_minimal_event(actor = None,
 
 ### Annotation Profile ###
 ## build test annotations
-def build_bookmark_annotation(annotated = None):
+def build_bookmark_annotation(actor = None, annotated = None):
     return caliper.entities.BookmarkAnnotation(
         entity_id = 'https://example.edu/bookmarks/00001',
         bookmarkNotes = 'The Intolerable Acts (1774)--bad idea Lord North',
+        actor = actor,
         annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
-def build_highlight_annotation(annotated = None):
+def build_highlight_annotation(actor = None, annotated = None):
     selection = caliper.entities.TextPositionSelector(start='455', end='489')
     return caliper.entities.HighlightAnnotation(
         entity_id = 'https://example.edu/highlights/12345',
         selection = selection,
         selectionText = 'Life, Liberty and the pursuit of Happiness',
+        actor = actor,
         annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
         )
 
-def build_shared_annotation(annotated = None):
+def build_shared_annotation(actor = None, annotated = None):
     return caliper.entities.SharedAnnotation(
         entity_id = 'https://example.edu/shared/9999',
         withAgents = [
@@ -403,15 +405,17 @@ def build_shared_annotation(annotated = None):
                 dateModified = _MODTIME
                 )
             ],
+        actor = actor,
         annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
         )
 
-def build_tag_annotation(annotated = None):
+def build_tag_annotation(actor = None, annotated = None):
     return caliper.entities.TagAnnotation(
         entity_id = 'https://example.edu/tags/7654',
         tags = ['to-read', '1765', 'shared-with-project-team'],
+        actor = actor,
         annotated = annotated,
         dateCreated = _CREATETIME,
         dateModified = _MODTIME
