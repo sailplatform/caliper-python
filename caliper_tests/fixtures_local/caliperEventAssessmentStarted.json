@@ -37,6 +37,7 @@
     "maxSubmits": 2,
     "maxScore": 3.0
   },
+  "referrer": null,
   "target": null,
   "generated": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",

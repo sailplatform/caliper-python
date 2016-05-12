@@ -124,6 +124,9 @@ class Assignable(BaseEntity):
 class Generatable(BaseEntity):
     pass
 
+class Referrable(BaseEntity):
+    pass
+
 class Targetable(BaseEntity):
     pass
 
@@ -320,7 +323,7 @@ class LearningObjective(Entity):
 
     
 ## Creative works
-class DigitalResource(Entity, schemadotorg.CreativeWork, Targetable):
+class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable, Targetable):
 
     def __init__(self,
             alignedLearningObjective = None,

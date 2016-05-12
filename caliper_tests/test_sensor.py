@@ -38,7 +38,7 @@ class TestEvent(unittest.TestCase):
         self.learning_context = util.build_readium_app_learning_context(actor=self.student)
         self.epub_volume = util.build_epub_vol43()
         self.epub_subchapter = util.build_epub_subchap431()
-        self.from_resource = util.build_AmRev101_landing_page()
+        self.referrer = util.build_AmRev101_landing_page()
         self.iterations = 4
 
     def testEventPayloadSingle(self):
@@ -50,7 +50,7 @@ class TestEvent(unittest.TestCase):
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
-                from_resource = self.from_resource,
+                referrer = self.referrer,
                 target = self.epub_subchapter
             )
         envelope = util.get_caliper_envelope(sensor, [event])
@@ -70,7 +70,7 @@ class TestEvent(unittest.TestCase):
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
-                from_resource = self.from_resource,
+                referrer = self.referrer,
                 target = self.epub_subchapter
                 )
             for x in range(self.iterations)]
@@ -126,7 +126,7 @@ class TestEvent(unittest.TestCase):
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
-                from_resource = self.from_resource,
+                referrer = self.referrer,
                 target = self.epub_subchapter
             )
             sensor.send(event)
@@ -148,7 +148,7 @@ class TestEvent(unittest.TestCase):
                 event_object = self.epub_volume,
                 federated_session = util.build_federated_session(actor=self.student),
                 action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO'],
-                from_resource = self.from_resource,
+                referrer = self.referrer,
                 target = self.epub_subchapter
                 )
             for x in range(self.iterations)]
