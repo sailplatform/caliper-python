@@ -56,6 +56,7 @@ class Event(BaseEvent):
             generated = None,
             group = None,
             membership = None,
+            referrer = None,
             sourcedId = None,
             target = None,
             extensions = None):
@@ -76,6 +77,7 @@ class Event(BaseEvent):
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
+        self._set_obj_prop('referrer', referrer, t=entities.Referrable)
         self._set_str_prop('sourcedId', sourcedId)
         self._set_obj_prop('target', target, t=entities.Targetable)
         self._set_dict_prop('extensions', extensions)
@@ -125,6 +127,10 @@ class Event(BaseEvent):
     @property
     def object(self):
         return self._get_prop('object')
+
+    @property
+    def referrer(self):
+        return self._get_prop('referrer')
 
     @property
     def sourcedId(self):
@@ -262,7 +268,7 @@ class MediaEvent(Event):
 
 class NavigationEvent(Event):
 
-    def __init__(self, navigatedFrom=None, **kwargs):
+    def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
         if self.action != BASE_PROFILE_ACTIONS['NAVIGATED_TO']:
             raise ValueError('action must be ' + BASE_PROFILE_ACTIONS['NAVIGATED_TO'])
@@ -272,11 +278,6 @@ class NavigationEvent(Event):
 
         self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
         self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
-        self._set_obj_prop('navigatedFrom', navigatedFrom, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
-
-    @property
-    def navigatedFrom(self):
-        return self._get_prop('navigatedFrom')
 
 
 class OutcomeEvent(Event):
