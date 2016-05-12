@@ -683,7 +683,7 @@ def build_epub_navigation_event(learning_context = None,
                                 actor = None,
                                 event_object = None,
                                 federated_session = None,
-                                from_resource = None,
+                                referrer = None,
                                 target = None,
                                 action = None):
     return caliper.events.NavigationEvent(
@@ -703,7 +703,7 @@ def build_epub_navigation_event(learning_context = None,
             version = _VERED,
             index = 1
             ),
-        navigatedFrom = from_resource,
+        referrer = referrer,
         eventTime = _EVENTTIME
         )
 

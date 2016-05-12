@@ -286,7 +286,7 @@ class ReadingProfile(unittest.TestCase):
             learning_context = self.learning_context,
             actor = self.student,
             event_object = self.epub,
-            from_resource = util.build_AmRev101_landing_page(),
+            referrer = util.build_AmRev101_landing_page(),
             target = self.target,
             action = caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO']
             )
