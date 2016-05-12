@@ -136,7 +136,7 @@ might send a basic navigation event to a caliper endpoint::
           edApp = your_application_as_caliper_SoftwareApplication_entity,
           group = the_course_offering_in_play_as_caliper_Organization_entity,
           event_object = the_caliper_DigitalResource_the_actor_is_using,
-          navigatedFrom = the_caliper_DigitalResource_the_actor_came_from,
+          referrer = the_caliper_DigitalResource_the_actor_came_from,
           target = the_caliper_DigitalResource_the_actor_is_going_to,
           endedAtTime = the_time_when_the_actor_did_the_action )
 
