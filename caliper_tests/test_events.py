@@ -261,7 +261,6 @@ class OutcomeProfile(unittest.TestCase):
         fixture = 'caliperEventOutcomeGraded'
         assessment_outcome_event = util.build_assessment_outcome_event(
             learning_context = self.learning_context,
-            actor = self.student,
             attempt = self.attempt,
             result = self.result,
             action = caliper.constants.OUTCOME_PROFILE_ACTIONS['GRADED']

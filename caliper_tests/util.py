@@ -605,15 +605,12 @@ def build_assessment_item_event(learning_context = None,
         )
 
 def build_assessment_outcome_event(learning_context = None,
-                                   actor = None,
                                    attempt = None,
                                    result = None,
                                    action = None):
     return caliper.events.OutcomeEvent(
-        edApp = learning_context.edApp,
         group = learning_context.group,
-        membership = learning_context.membership,
-        actor = actor,
+        actor = learning_context.edApp,
         action = action,
         event_object = attempt,
         generated = result,
