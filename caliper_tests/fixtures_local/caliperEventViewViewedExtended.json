@@ -30,6 +30,7 @@
     "mediaType": null,
     "version": "2nd ed."
   },
+  "referrer": null,
   "target": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
     "@id": "https://example.com/viewer/book/34843#epubcfi(/4/3/1)",

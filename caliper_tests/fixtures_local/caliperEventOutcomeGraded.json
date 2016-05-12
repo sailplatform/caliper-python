@@ -28,6 +28,7 @@
     "endedAtTime": null,
     "duration": null
   },
+  "referrer": null,
   "target": null,
   "generated": {
     "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
