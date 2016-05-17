@@ -18,7 +18,6 @@
     "@type": "http://purl.imsglobal.org/caliper/v1/AssessmentItem",
     "name": "Assessment Item 1",
     "description": null,
-    "objectType": [],
     "alignedLearningObjective": [],
     "keywords": [],
     "isPartOf": {
@@ -27,7 +26,6 @@
       "@type": "http://purl.imsglobal.org/caliper/v1/Assessment",
       "name": "American Revolution - Key Figures Assessment",
       "description": null,
-      "objectType": [],
       "alignedLearningObjective": [],
       "keywords": [],
       "isPartOf": null,
