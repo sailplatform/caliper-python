@@ -30,7 +30,6 @@
     "@type": "http://purl.imsglobal.org/caliper/v1/Frame",
     "name": "Key Figures: George Washington",
     "description": null,
-    "objectType": [],
     "alignedLearningObjective": [],
     "keywords": [],
     "isPartOf": {
@@ -39,7 +38,6 @@
       "@type": "http://purl.imsglobal.org/caliper/v1/EpubVolume",
       "name": "The Glorious Cause: The American Revolution, 1763-1789 (Oxford History of the United States)",
       "description": null,
-      "objectType": [],
       "alignedLearningObjective": [],
       "keywords": [],
       "isPartOf": null,

@@ -18,7 +18,6 @@
     "@type": "http://purl.imsglobal.org/caliper/v1/VideoObject",
     "name": "American Revolution - Key Figures Video",
     "description": null,
-    "objectType": [],
     "alignedLearningObjective": [
       {
         "@context": "http://purl.imsglobal.org/ctx/caliper/v1/Context",
@@ -49,7 +48,6 @@
     "@type": "http://purl.imsglobal.org/caliper/v1/MediaLocation",
     "name": null,
     "description": null,
-    "objectType": [],
     "alignedLearningObjective": [],
     "keywords": [],
     "isPartOf": null,
