@@ -100,23 +100,22 @@ def get_fixture(f,local=True):
 
 ## without DEBUG, a no-op: useful to generate more readable/diffable
 ## side-by-side comparisons of the stock fixtures with the generated events
+
+def _shape_fixture(s):
+    return s.replace('{"','{\n"').replace(', "',',\n"')
+
 def put_fixture(fixture_name, caliper_object, local=True,
                 thin_context=False, thin_props=False, described_entities=None,
                 debug=_DEBUG, out_dir=_FIXTURE_OUT_DIR):
     if debug:
         loc = out_dir+fixture_name
         with open(loc+'_out.json', 'w') as f:
-            f.write(caliper_object.as_json(thin_context=thin_context,
-                                           thin_props=thin_props,
-                                           described_entities=described_entities)
-                    .replace('{"','{\n"')
-                    .replace(', "',',\n"')
-                    )
+            f.write(_shape_fixture(
+                caliper_object.as_json(thin_context=thin_context,
+                                       thin_props=thin_props,
+                                       described_entities=described_entities)))
         with open(loc+'.json', 'w') as f:
-            f.write(get_fixture(fixture_name,local=local)
-                    .replace('{"','{\n"')
-                    .replace(', "',',\n"')
-                    )
+            f.write(_shape_fixture(get_fixture(fixture_name,local=local)))
     else:
         pass
 
@@ -177,7 +176,7 @@ def build_media_app():
         name = 'Super Media Tool',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
-        version = '1.0.0'
+        version = 'Version 2'
         )
 
 def build_readium_app():
@@ -186,7 +185,7 @@ def build_readium_app():
         name = 'ePub',
         dateCreated = _CREATETIME,
         dateModified = _MODTIME,
-        version = 'Version 2'
+        version = '1.2.3'
         )
 
 def build_student_554433():
