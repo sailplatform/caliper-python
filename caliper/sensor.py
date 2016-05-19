@@ -21,6 +21,7 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
+from future.utils import raise_with_traceback
 from builtins import *
 
 
@@ -42,16 +43,16 @@ class Client(object):
             **kwargs):
 
         if config_options and not( isinstance(config_options, Options)):
-            raise TypeError ('config_options must implement base.Options')
+            raise_with_traceback( TypeError ('config_options must implement base.Options') )
         self._config = config_options
 
         if requestor and not( isinstance(requestor, EventStoreRequestor)):
-            raise TypeError('requestor must implement request.EventStoreRequestor')
+            raise_with_traceback( TypeError('requestor must implement request.EventStoreRequestor') )
         else:
             self._requestor = HttpRequestor(options=self._config)
 
         if stats and not( isinstance(stats, Stats)):
-            raise TypeError('stats must implement stats.Stats')
+            raise_with_traceback( TypeError('stats must implement stats.Stats') )
         else:
             self._stats = Statistics()
 
@@ -105,7 +106,7 @@ class Sensor(object):
     @staticmethod
     def fashion_default_sensor_with_client(client=None, sensor_id=None):
         if not( isinstance(client, Client)):
-            raise TypeError('client must implement Client')
+            raise_with_traceback( TypeError('client must implement Client') )
         s = Sensor(sensor_id=sensor_id)
         s.register_client('default',client)
         return s
@@ -113,7 +114,7 @@ class Sensor(object):
     @staticmethod
     def fashion_sensor_with_config(config_options=None, sensor_id=None):
         if not( isinstance(config_options, HttpOptions)):
-            raise TypeError('config_options must implement HttpOptions')
+            raise_with_traceback( TypeError('config_options must implement HttpOptions') )
         s = Sensor(sensor_id=sensor_id)
         s.register_client('default',Client(config_options=config_options))
         return s
@@ -167,10 +168,10 @@ class Sensor(object):
 
     def register_client(self, key, client):
         if not( isinstance(client, Client)):
-            raise TypeError('client must implement Client')
+            raise_with_traceback( TypeError('client must implement Client') )
 
         if not( isinstance(key, str)):
-            raise ValueError('key must be a string to use as a client registration key')
+            raise_with_traceback( ValueError('key must be a string to use as a client registration key') )
 
         self._clients.update({key:client})
 
