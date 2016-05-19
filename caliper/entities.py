@@ -21,6 +21,7 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
+from future.utils import raise_with_traceback
 from builtins import *
 
 import collections
@@ -154,14 +155,14 @@ class Membership(Entity, w3c.Membership):
             if set(roles).issubset(set(CALIPER_ROLES.values())):
                 self._set_list_prop('roles', roles)
             else:
-                raise ValueError('roles must be in the list of valid Role values')
+                raise_with_traceback( ValueError('roles must be in the list of valid Role values') )
         elif roles:
-            raise ValueError('roles must be a list of valid Roles values')
+            raise_with_traceback( ValueError('roles must be a list of valid Roles values') )
         else:
             self._set_list_prop('roles', None)
 
         if status not in CALIPER_STATUS.values():
-            raise ValueError('status must be in the list of valid Status values')
+            raise_with_traceback( ValueError('status must be in the list of valid Status values') )
         else:
             self._set_str_prop('status', status, req=True)
 
@@ -988,7 +989,7 @@ class LtiSession(Session):
         self._set_str_prop('user_id', user_id)
 
         if not custom_caliper_session_id:
-            raise ValueError('custom_caliper_session_id must have a non-null value')
+            raise_with_traceback( ValueError('custom_caliper_session_id must have a non-null value') )
         else:
             self._props['custom_properties'].update(
                 {'custom_caliper_session_id':custom_caliper_session_id})

@@ -88,11 +88,11 @@ def is_subtype(t1, t2):
 def ensure_type(p,t,optional=False):
     # exception or True
     if t == None and not optional:
-        raise ValueError("type cannot be None type")
+        raise_with_traceback( ValueError("type cannot be None type") )
     elif t and not( (isinstance(p, BaseEntity) and is_subtype(p.type,t)) or
                     (isinstance(p, collections.MutableMapping) and is_subtype(p.get('@type',''),t)) or
                     (isinstance(p,t)) ):
-        raise TypeError("Property must be of type {0}".format(str(t)))
+        raise_with_traceback( TypeError("Property must be of type {0}".format(str(t))) )
     return True
 
 def ensure_list_type(l,t):
@@ -125,7 +125,7 @@ class Options(object):
         if isinstance(new_key, str):
             self._config['API_KEY'] = new_key
         else:
-            raise ValueError('new key value must be a string')
+            raise_with_traceback( ValueError('new key value must be a string') )
 
     @property
     def AUTH_SCHEME(self):
@@ -135,7 +135,7 @@ class Options(object):
         if isinstance(new_scheme, str):
             self._config['AUTH_SCHEME'] = new_scheme
         else:
-            raise ValueError('new key value must be a string')
+            raise_with_traceback( ValueError('new key value must be a string') )
 
     @property
     def CONNECTION_REQUEST_TIMEOUT(self):
@@ -145,7 +145,7 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['CONNECTION_REQUEST_TIMEOUT'] = int(new_timeout)
         else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
+            raise_with_traceback( ValueError('new timeout value must be at least 1000 milliseconds') )
         
     @property
     def CONNECTION_TIMEOUT(self):
@@ -155,7 +155,7 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['CONNECTION_TIMEOUT'] = int(new_timeout)
         else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
+            raise_with_traceback( ValueError('new timeout value must be at least 1000 milliseconds') )
 
     @property
     def HOST(self):
@@ -183,7 +183,7 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['SOCKET_TIMEOUT'] = int(new_timeout)
         else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
+            raise_with_traceback( ValueError('new timeout value must be at least 1000 milliseconds') )
 
 
 class HttpOptions(Options):
@@ -228,7 +228,7 @@ class CaliperSerializable(object):
 
     def _update_props(self,k,v,req=False):
         if req and (v == None):
-            raise ValueError('{0} must have a non-null value'.format(str(k)))
+            raise_with_traceback( ValueError('{0} must have a non-null value'.format(str(k))) )
         if k:
             self._props.update({k:v})
 
@@ -285,7 +285,7 @@ class CaliperSerializable(object):
     # protected complex-type setters
     def _set_base_context(self,v):
         if v and not is_valid_URI(v):
-            raise ValueError('Base context must be a valid URI')
+            raise_with_traceback( ValueError('Base context must be a valid URI') )
         self._update_base_context(v)
 
     def _set_date_prop(self,k,v,req=False):
@@ -296,9 +296,9 @@ class CaliperSerializable(object):
 
     def _set_dict_prop(self,k,v,req=False):
         if req and (v==None):
-            raise ValueError('{0} must have a non-null value'.format(str(k)))
+            raise_with_traceback( ValueError('{0} must have a non-null value'.format(str(k))) )
         elif v and not( isinstance(v, collections.MutableMapping)):
-            raise ValueError('{0} must be a dictionary'.format(str(k)))
+            raise_with_traceback( ValueError('{0} must be a dictionary'.format(str(k))) )
         self._update_props(k,v or {}, req=req)
 
     def _set_duration_prop(self,k,v,req=False):
@@ -324,10 +324,10 @@ class CaliperSerializable(object):
             
     def _set_list_prop(self,k,v,t=None,req=False):
         if req and (v==None):
-            raise ValueError('{0} must have a non-null value'.format(str(k)))
+            raise_with_traceback( ValueError('{0} must have a non-null value'.format(str(k))) )
         elif v:
             if not( isinstance(v, collections.MutableSequence)):
-                raise ValueError('{0} must be a list'.format(str(k)))
+                raise_with_traceback( ValueError('{0} must be a list'.format(str(k))) )
             elif t:
                 for item in v:
                     ensure_type(item,t)
@@ -335,7 +335,7 @@ class CaliperSerializable(object):
 
     def _set_obj_prop(self,k,v,t=None,req=False,id_only=False):
         if req and (v==None):
-            raise ValueError('{0} must have a non-null value'.format(str(k)))
+            raise_with_traceback( ValueError('{0} must have a non-null value'.format(str(k))) )
         if isinstance(v, BaseEntity) and not(is_subtype(v.type,t)):
             self._update_props(k,None)
         else:
@@ -344,7 +344,7 @@ class CaliperSerializable(object):
             else:
                 the_type = getattr(v,'type', None)
                 if the_type and not is_valid_URI(the_type):
-                    raise ValueError("Value's type must be a valid URI")
+                    raise_with_traceback( ValueError("Value's type must be a valid URI") )
                 self._update_local_context( {k:{'@id':the_type, '@type':'@id'}} )
                 self._set_id_prop(k,v)
 

@@ -21,6 +21,7 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
+from future.utils import raise_with_traceback
 from builtins import *
 
 import collections, copy, datetime, json, requests, uuid
@@ -74,10 +75,10 @@ class Envelope(CaliperSerializable):
 class EventStoreRequestor(object):
 
     def describe(self, caliper_entity_list=None, sensor_id=None):
-        raise NotImplementedError('Instance must implement EventStoreRequester.describe()')
+        raise_with_traceback( NotImplementedError('Instance must implement EventStoreRequester.describe()') )
 
     def send(self, caliper_event_list=None, described_entities=None, sensor_id=None):
-        raise NotImplementedError('Instance must implement EventStoreRequester.send()')
+        raise_with_traceback( NotImplementedError('Instance must implement EventStoreRequester.send()') )
 
     def _get_time(self):
         return datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]+'Z'        
@@ -119,7 +120,7 @@ class HttpRequestor(EventStoreRequestor):
         if not options:
             self._options = HttpOptions()
         elif not( isinstance(options, HttpOptions)):
-            raise TypeError('options must implement base.HttpOptions')
+            raise_with_traceback( TypeError('options must implement base.HttpOptions') )
         else:
             self._options = options
 

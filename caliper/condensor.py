@@ -21,6 +21,7 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
+from future.utils import raise_with_traceback
 from builtins import *
 
 import collections, importlib
@@ -47,7 +48,7 @@ def _parse_context(ctxt):
 def from_json_dict(d):
     t = d.get('@type')
     if t and not CALIPER_CLASSES.get(t):
-        raise ValueError('Unknown @type: {0}'.format(t))
+        raise_with_traceback( ValueError('Unknown @type: {0}'.format(t)) )
     type_path = CALIPER_CLASSES.get(t) or d.__class__.__name__
 
 
