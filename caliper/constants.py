@@ -18,11 +18,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
 
+# The line lengths in this file are long, but it's more legible as is
+# yapf: disable
 
 ## Caliper constants
 ENTITY_CONTEXTS = {
@@ -280,7 +283,7 @@ BASE_PROFILE_ACTIONS = {
         'RETRIEVED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Retrieved',
         'UPDATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Updated',
     }
-    
+
 ANNOTATION_PROFILE_ACTIONS = {
         'ATTACHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Attached',
         'BOOKMARKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked',
@@ -299,7 +302,7 @@ ANNOTATION_PROFILE_ACTIONS = {
         'SUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Subscribed',
         'TAGGED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged',
         }
-        
+
 ASSESSMENT_PROFILE_ACTIONS = {
         'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
         'RESTARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted',
@@ -354,7 +357,7 @@ OUTCOME_PROFILE_ACTIONS = {
 
 READING_PROFILE_ACTIONS = {
         'SEARCHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Searched',
-        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',        
+        'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
         }
 
 SESSION_PROFILE_ACTIONS = {
@@ -364,8 +367,7 @@ SESSION_PROFILE_ACTIONS = {
         }
 
 
-CALIPER_ACTIONS = {
-    }
+CALIPER_ACTIONS = { }
 CALIPER_ACTIONS.update(BASE_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ANNOTATION_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ASSESSMENT_PROFILE_ACTIONS)
