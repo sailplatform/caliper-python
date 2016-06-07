@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-
 """
 Caliper library
 ~~~~~~~~~~~~~~~
@@ -28,7 +27,8 @@ Caliper-compliant sensor or endpoint for you learning services.
 
 :license: See NOTICE for license details.
 """
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
@@ -47,21 +47,22 @@ __all__ = ['Sensor', 'HttpOptions']
 
 
 def build_default_sensor(sensor_id=None):
-    return Sensor.fashion_sensor_with_config(config_options=HttpOptions(optimize_serialization=True),
-                                             sensor_id=sensor_id)
+    return Sensor.fashion_sensor_with_config(
+        config_options=HttpOptions(optimize_serialization=True),
+        sensor_id=sensor_id)
+
 
 def build_default_sensor_for_client(client=None, sensor_id=None):
     return Sensor.fashion_default_sensor_with_client(client=client,
                                                      sensor_id=sensor_id)
 
-def build_sensor_from_config(config_options=None, sensor_id=None):
-    return Sensor.fashion_sensor_with_config(config_options=config_options or
-                                               HttpOptions(optimize_serialization=True),
-                                             sensor_id=sensor_id)
 
+def build_sensor_from_config(config_options=None, sensor_id=None):
+    return Sensor.fashion_sensor_with_config(
+        config_options=config_options or
+        HttpOptions(optimize_serialization=True),
+        sensor_id=sensor_id)
 
 ## set default logging handler to avoid "No handler found" warnings.
 ## Thanks to Kenneth Reitz' requests library for this pattern
 logger = logging.getLogger(__name__).addHandler(logging.NullHandler())
-
-

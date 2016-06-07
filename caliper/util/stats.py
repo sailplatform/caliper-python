@@ -18,15 +18,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
 
 from math import sqrt
 
+
 class Statistic(object):
-    
     def __init__(self):
         self._sum = 0.0
         self._count = 0
@@ -47,12 +48,8 @@ class Statistic(object):
             return '[Count: {0}]'.format(self._count)
         else:
             return '[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]'.format(
-                self._count,
-                self._min,
-                self._max,
-                self.average,
-                self.standard_deviation
-                )
+                self._count, self._min, self._max, self.average,
+                self.standard_deviation)
 
     def clear(self):
         self._sum = 0.0
@@ -65,7 +62,7 @@ class Statistic(object):
         self._min = 0.0
         self._max = 0.0
 
-    def update(self,val):
+    def update(self, val):
         if not self._count:
             self._count += 1
             self._min = self._max = self._oldM = self._newM = val
@@ -81,7 +78,7 @@ class Statistic(object):
         self._max = max(val, self._max)
         self._sum += val
         self._last = val
-        
+
     @property
     def sum(self):
         return self._sum
@@ -123,27 +120,25 @@ class Statistic(object):
 
 class Statistics(object):
     _keys = {
-        'MEASURE' : 'Measure',
-        'DESCRIBE' : 'Describe',
-        'SUCCESSFUL' : 'Successful',
+        'MEASURE': 'Measure',
+        'DESCRIBE': 'Describe',
+        'SUCCESSFUL': 'Successful',
         'FAILED': 'Failed'
-        }
+    }
 
     def __init__(self):
         self._map = {}
         for k in self._keys:
-            self._map.update({self._keys[k]:Statistic()})
+            self._map.update({self._keys[k]: Statistic()})
 
     def __str__(self):
         r_top = '\n-------- Caliper Python Statistics --------\n'
         r_bod = ''
-        r_bot =   '-------------------------------------------\n'
+        r_bot = '-------------------------------------------\n'
         for k in self._keys:
-            r_bod += '{0} : {1}\n'.format(
-                self._keys[k],
-                self._map[self._keys[k]].__str__()
-                )
-        return '{0}{1}{2}'.format(r_top,r_bod,r_bot)
+            r_bod += '{0} : {1}\n'.format(self._keys[k],
+                                          self._map[self._keys[k]].__str__())
+        return '{0}{1}{2}'.format(r_top, r_bod, r_bot)
 
     def clear(self):
         for k in self._keys:
@@ -153,26 +148,26 @@ class Statistics(object):
     def describes(self):
         return self._map[self._keys['DESCRIBE']]
 
-    def update_describes(self,val):
+    def update_describes(self, val):
         self._map[self._keys['DESCRIBE']].update(val)
 
     @property
     def measures(self):
         return self._map[self._keys['MEASURE']]
 
-    def update_measures(self,val):
+    def update_measures(self, val):
         self._map[self._keys['MEASURE']].update(val)
 
     @property
     def successful(self):
         return self._map[self._keys['SUCCESSFUL']]
 
-    def update_successful(self,val):
+    def update_successful(self, val):
         self._map[self._keys['SUCCESSFUL']].update(val)
-            
+
     @property
     def failed(self):
         return self._map[self._keys['FAILED']]
 
-    def update_failed(self,val):
+    def update_failed(self, val):
         self._map[self._keys['FAILED']].update(val)
