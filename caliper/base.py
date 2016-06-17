@@ -115,7 +115,8 @@ def ensure_list_type(l, t):
 
 ### Default configuration values ###
 class Options(object):
-    _config = {
+
+    default_options = {
         'API_KEY': '',
         'AUTH_SCHEME': '',
         'CONNECTION_REQUEST_TIMEOUT': 1000,
@@ -125,8 +126,11 @@ class Options(object):
         'SOCKET_TIMEOUT': 1000,
     }
 
-    def __init__(self):
-        pass
+    def __init__(self, opts={}):
+        self._config = self.default_options.copy()
+        self._config.update(
+            (k, opts[k])
+            for k in (set(opts.keys()) & set(self._config.keys())))
 
     @property
     def API_KEY(self):
