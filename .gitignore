@@ -3,5 +3,5 @@
 build
 dist
 *.egg-info*
-caliper_tests/fixtures_common
-caliper_tests/fixtures_out
+tests/fixtures_common
+tests/fixtures_out
