@@ -28,9 +28,7 @@ from builtins import *
 import sys, os
 import unittest
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import caliper
-import caliper_tests.util as util
+from tests.context import caliper, util
 
 
 class AnnotationProfile(unittest.TestCase):
