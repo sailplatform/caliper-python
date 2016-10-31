@@ -28,9 +28,9 @@ from builtins import *
 import sys, os
 import json
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import caliper, caliper_tests
+from tests.context import caliper
 import caliper.condensor as condensor
+import tests as caliper_tests
 
 _DEBUG = False
 
