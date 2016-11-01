@@ -2,7 +2,7 @@
 Caliper-python
 ==============
 
-`Caliper-python` is a Python client package for `Caliper <http://imsglobal.org/>`_
+`Caliper-python` is a Python client package for `Caliper <http://imsglobal.org/caliper/>`_
 that provides an implementation of the Caliper SensorAPI(tm).
 
 
@@ -46,7 +46,7 @@ Building and installing from a source bundle
 --------------------------------------------
 If you want to install it from a source bundle, then use these steps:
 
-#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python.git>`_
+#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python-public.git>`_
    onto your local machine.
 
 #. Use pip to install the package as a writable source bundle; there's no need
@@ -168,5 +168,5 @@ Copyright and License
 =====================
 For details about the copyright and license information, see the NOTICE file.
 
-©2015 IMS Global Learning Consortium, Inc. All Rights Reserved.  
+©2015-2016 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information - http://www.imsglobal.org/copyright.html
