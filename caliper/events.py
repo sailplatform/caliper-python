@@ -51,6 +51,7 @@ class Event(BaseEvent):
                  federatedSession=None,
                  generated=None,
                  group=None,
+                 id=None,
                  membership=None,
                  referrer=None,
                  sourcedId=None,
@@ -65,8 +66,8 @@ class Event(BaseEvent):
                 'action must be in the list of Caliper actions'))
         else:
             self._set_str_prop('action', action, req=True)
-        self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
 
+        self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
         self._set_obj_prop('edApp',
                            edApp,
                            t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
@@ -77,11 +78,11 @@ class Event(BaseEvent):
                           t=ENTITY_TYPES['SESSION'])
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
+        self._set_str_prop('id', id),
         self._set_obj_prop('membership',
                            membership,
                            t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_obj_prop('referrer', referrer, t=entities.Referrable)
-        self._set_str_prop('sourcedId', sourcedId)
         self._set_obj_prop('target', target, t=entities.Targetable)
         self._set_dict_prop('extensions', extensions)
 
@@ -89,6 +90,7 @@ class Event(BaseEvent):
         return MinimalEvent(action=self.action,
                             actor=self.actor,
                             event_object=self.object,
+                            id=self.id,
                             eventTime=self.eventTime)
 
     @property
@@ -128,16 +130,16 @@ class Event(BaseEvent):
         return self._get_prop('group')
 
     @property
+    def id(self):
+        return self._get_prop('id')
+
+    @property
     def object(self):
         return self._get_prop('object')
 
     @property
     def referrer(self):
         return self._get_prop('referrer')
-
-    @property
-    def sourcedId(self):
-        return self._get_prop('sourcedId')
 
     @property
     def target(self):
@@ -153,7 +155,8 @@ class MinimalEvent(BaseEvent):
                  action=None,
                  actor=None,
                  event_object=None,
-                 eventTime=None):
+                 eventTime=None,
+                 id=None):
         BaseEvent.__init__(self)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
@@ -183,6 +186,8 @@ class MinimalEvent(BaseEvent):
             self._set_obj_prop('object', {'@id': d.get('@id'),
                                           '@type': d.get('@type')})
 
+        self._set_str_prop('id', id)
+
     @property
     def action(self):
         return self._get_prop('action')
@@ -194,6 +199,10 @@ class MinimalEvent(BaseEvent):
     @property
     def eventTime(self):
         return self._get_prop('eventTime')
+
+    @property
+    def id(self):
+        return self._get_prop('id')
 
     @property
     def object(self):
