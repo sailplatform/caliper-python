@@ -664,8 +664,6 @@ class Attempt(Entity, Generatable):
 
 class Response(Entity, Generatable):
     def __init__(self,
-                 assignable=None,
-                 actor=None,
                  attempt=None,
                  duration=None,
                  endedAtTime=None,
@@ -675,11 +673,6 @@ class Response(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESPONSE'])
         self._set_str_prop('@type', ENTITY_TYPES['RESPONSE'])
-        self._set_id_prop('actor', actor, t=Agent, req=True)
-        self._set_id_prop('assignable',
-                          assignable,
-                          t=ENTITY_TYPES['DIGITAL_RESOURCE'],
-                          req=True)
         self._set_obj_prop('attempt',
                            attempt,
                            t=ENTITY_TYPES['ATTEMPT'],
@@ -690,12 +683,8 @@ class Response(Entity, Generatable):
         self._set_list_prop('values', values)
 
     @property
-    def assignable(self):
-        return self._get_prop('assignable')
-
-    @property
-    def actor(self):
-        return self._get_prop('actor')
+    def attempt(self):
+        return self._get_prop('attempt')
 
     @property
     def duration(self):
