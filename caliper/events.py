@@ -57,8 +57,7 @@ class Event(BaseEvent):
                  referrer=None,
                  session=None,
                  sourcedId=None,
-                 target=None,
-                 extensions=None):
+                 target=None):,
         BaseEvent.__init__(self)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('@type', EVENT_TYPES['EVENT'])
