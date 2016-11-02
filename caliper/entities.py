@@ -336,8 +336,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE'])
         self._set_str_prop('@type', ENTITY_TYPES['DIGITAL_RESOURCE'])
-        self._set_list_prop('alignedLearningObjective',
-                            alignedLearningObjective,
+        self._set_list_prop('learningObjectives',
+                            learningObjectives,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
         self._set_list_prop('creators', creators, t=Agent)
         self._set_date_prop('datePublished', datePublished)
@@ -347,8 +347,8 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
         self._set_str_prop('version', version)
 
     @property
-    def alignedLearningObjective(self):
-        return self._get_prop('alignedLearningObjective')
+    def learningObjectives(self):
+        return self._get_prop('learningObjectives')
 
     @property
     def creators(self):
