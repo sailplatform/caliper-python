@@ -439,11 +439,8 @@ class Annotation(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
-        self._set_id_prop('actor', actor, Agent, req=False)
-        self._set_id_prop('annotated',
-                          annotated,
-                          t=ENTITY_TYPES['DIGITAL_RESOURCE'],
-                          req=True)
+        self._set_obj_prop('actor', actor, t=Agent, req=True)
+        self._set_obj_prop('annotated', annotated, t=DigitalResource, req=True)
 
     @property
     def actor(self):
