@@ -602,6 +602,7 @@ class Attempt(Entity, Generatable):
                  count=None,
                  duration=None,
                  endedAtTime=None,
+                 isPartOf=None,
                  startedAtTime=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
@@ -612,6 +613,7 @@ class Attempt(Entity, Generatable):
         self._set_int_prop('count', count, req=True)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
         self._set_date_prop('startedAtTime', startedAtTime, req=True)
 
     @property
@@ -649,6 +651,14 @@ class Attempt(Entity, Generatable):
     @endedAtTime.setter
     def endedAtTime(self, new_time):
         self._set_date_prop('endedAtTime', new_time)
+
+    @property
+    def isPartOf(self):
+        return self._get_prop('isPartOf')
+
+    @isPartOf.setter
+    def isPartOf(self, new_object):
+        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
 
     @property
     def startedAtTime(self):
