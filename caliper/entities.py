@@ -511,8 +511,8 @@ class TextPositionSelector(CaliperSerializable):
     def __init__(self, start=None, end=None):
         CaliperSerializable.__init__(self)
 
-        self._set_str_prop('end', end, req=True)
-        self._set_str_prop('start', start, req=True)
+        self._set_int_prop('end', end, req=True)
+        self._set_int_prop('start', start, req=True)
 
     @property
     def end(self):
@@ -520,7 +520,7 @@ class TextPositionSelector(CaliperSerializable):
 
     @end.setter
     def end(self, new_end):
-        self._set_str_prop('end', new_end, req=True)
+        self._set_int_prop('end', new_end, req=True)
 
     @property
     def start(self):
@@ -528,7 +528,7 @@ class TextPositionSelector(CaliperSerializable):
 
     @start.setter
     def start(self, new_start):
-        self._set_str_prop('start', new_start, req=True)
+        self._set_int_prop('start', new_start, req=True)
 
 
 ## Assessment entities
