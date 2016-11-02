@@ -484,7 +484,7 @@ class HighlightAnnotation(Annotation):
 
     @property
     def selectionText(self):
-        return self.get_prop('selectionText')
+        return self._get_prop('selectionText')
 
 
 class SharedAnnotation(Annotation):
