@@ -48,12 +48,14 @@ class Event(BaseEvent):
                  edApp=None,
                  event_object=None,
                  eventTime=None,
+                 extensions=None,
                  federatedSession=None,
                  generated=None,
                  group=None,
                  id=None,
                  membership=None,
                  referrer=None,
+                 session=None,
                  sourcedId=None,
                  target=None,
                  extensions=None):
@@ -72,10 +74,9 @@ class Event(BaseEvent):
                            edApp,
                            t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_date_prop('eventTime', eventTime, req=True)
+        self._set_dict_prop('extensions', extensions)
         self._set_obj_prop('object', event_object, t=BaseEntity)
-        self._set_id_prop('federatedSession',
-                          federatedSession,
-                          t=ENTITY_TYPES['SESSION'])
+        self._set_obj_prop('federatedSession', federatedSession, t=Session)
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_str_prop('id', id),
@@ -83,8 +84,8 @@ class Event(BaseEvent):
                            membership,
                            t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_obj_prop('referrer', referrer, t=entities.Referrable)
+        self._set_obj_prop('session', session, t=Session)
         self._set_obj_prop('target', target, t=entities.Targetable)
-        self._set_dict_prop('extensions', extensions)
 
     def as_minimal_event(self):
         return MinimalEvent(action=self.action,
@@ -118,6 +119,10 @@ class Event(BaseEvent):
         return self._get_prop('eventTime')
 
     @property
+    def extensions(self):
+        return self._get_prop('extensions')
+
+    @property
     def federatedSession(self):
         return self._get_prop('federatedSession')
 
@@ -142,12 +147,12 @@ class Event(BaseEvent):
         return self._get_prop('referrer')
 
     @property
-    def target(self):
-        return self._get_prop('target')
+    def session(self):
+        return self._get_prop('session')
 
     @property
-    def extensions(self):
-        return self._get_prop('extensions')
+    def target(self):
+        return self._get_prop('target')
 
 
 class MinimalEvent(BaseEvent):
