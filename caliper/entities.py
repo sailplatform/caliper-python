@@ -440,7 +440,10 @@ class Annotation(Entity, Generatable):
         self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
         self._set_obj_prop('actor', actor, t=Agent, req=True)
-        self._set_obj_prop('annotated', annotated, t=DigitalResource, req=True)
+        self._set_obj_prop('annotated',
+                           annotated,
+                           t=ENTITY_TYPES['DIGITAL_RESOURCE'],
+                           req=True)
 
     @property
     def actor(self):
@@ -836,7 +839,7 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('@type', ENTITY_TYPES['RESULT'])
-        self._set_obj_prop('attempt', attempt, t=Attempt, req=True)
+        self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
