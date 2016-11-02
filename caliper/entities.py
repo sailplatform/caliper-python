@@ -823,8 +823,7 @@ class VideoObject(MediaObject, schemadotorg.VideoObject):
 ## Outcome entities
 class Result(Entity, Generatable):
     def __init__(self,
-                 actor=None,
-                 assignable=None,
+                 attempt=None,
                  comment=None,
                  curvedTotalScore=0.0,
                  curveFactor=0.0,
@@ -837,8 +836,7 @@ class Result(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('@type', ENTITY_TYPES['RESULT'])
-        self._set_id_prop('actor', actor, t=Agent, req=True)
-        self._set_id_prop('assignable', assignable, t=Assignable, req=True)
+        self._set_obj_prop('attempt', attempt, t=Attempt, req=True)
         self._set_str_prop('comment', comment)
         self._set_float_prop('curvedTotalScore', curvedTotalScore)
         self._set_float_prop('curveFactor', curveFactor)
@@ -849,12 +847,8 @@ class Result(Entity, Generatable):
         self._set_float_prop('totalScore', totalScore)
 
     @property
-    def actor(self):
-        return self._get_prop('actor')
-
-    @property
-    def assignable(self):
-        return self._get_prop('assignable')
+    def attempt(self):
+        return self._get_prop('attempt')
 
     @property
     def comment(self):
