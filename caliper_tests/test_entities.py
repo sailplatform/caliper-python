@@ -28,8 +28,9 @@ from builtins import *
 import sys, os
 import unittest
 
-from tests.context import caliper, util
-
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import caliper
+import caliper_tests.util as util
 
 class EntityTests(unittest.TestCase):
     def setUp(self):

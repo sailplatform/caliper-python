@@ -28,9 +28,10 @@ from builtins import *
 import sys, os
 import json
 
-from tests.context import caliper
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import caliper, caliper_tests
 import caliper.condensor as condensor
-import tests as caliper_tests
+
 
 _DEBUG = False
 
@@ -56,7 +57,7 @@ _VERED = '2nd ed.'
 ### NOTE
 ###
 ### FIXTURE_DIR assumes that the caliper fixtures repo contents are symlinked
-### into the caliper_tests module's directory in a 'fixtures' subdirectory so
+### into the tests module's directory in a 'fixtures' subdirectory so
 ### that the tests can find all the json fixture files in that sub-directory
 ###
 _FIXTURE_BASE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep
