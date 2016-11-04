@@ -325,7 +325,7 @@ class LearningObjective(Entity):
 class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
                       Targetable):
     def __init__(self,
-                 alignedLearningObjective=None,
+                 learningObjective=None,
                  creators=None,
                  datePublished=None,
                  isPartOf=None,
