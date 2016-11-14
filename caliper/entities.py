@@ -91,6 +91,26 @@ class Entity(BaseEntity, schemadotorg.Thing):
     def extensions(self):
         return self._get_prop('extensions')
 
+## Base collection class
+class Collection(Entity):
+    def __init__(self,
+                 isPartOf=None,
+                 items=None,
+                 **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['COLLECTION'])
+        self._set_str_prop('@type', ENTITY_TYPES['COLLECTION'])
+
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
+        self._set_list_prop('items', items, t=ENTITY_TYPES['ENTITY'])
+
+    @property
+    def isPartOf(self):
+        return self._get_prop('isPartOf')
+
+    @property
+    def items(self):
+        return self._get_prop('items')
 
 ## Behavioural interfaces for entities ##
 class Assignable(BaseEntity):
@@ -134,10 +154,9 @@ class Referrable(BaseEntity):
 class Targetable(BaseEntity):
     pass
 
-    ### Derived entities ###
 
-    ## Membership entities
-
+### Derived entities ###
+## Membership entities
 
 class Membership(Entity, w3c.Membership):
     def __init__(self,
@@ -321,7 +340,7 @@ class LearningObjective(Entity):
         self._set_str_prop('@type', ENTITY_TYPES['LEARNING_OBJECTIVE'])
 
 
-    ## Creative works
+## Creative works
 class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
                       Targetable):
     def __init__(self,
@@ -339,7 +358,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
         self._set_list_prop('learningObjectives',
                             learningObjectives,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
-        self._set_list_prop('creators', creators, t=Agent)
+        self._set_list_prop('creators', creators, t=ENTITY_TYPES['AGENT'])
         self._set_date_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
         self._set_list_prop('keywords', keywords, t=str)
@@ -379,6 +398,18 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
         return self._get_prop('version')
 
 
+class DigitalResourceCollection(DigitalResource, Collection):
+    def __init__(self,
+                 isPartOf=None,
+                 items=None,
+                 **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE_COLLECTION'])
+        self._set_str_prop('@type', ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION'])
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
+        self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
+        
+
 class Frame(DigitalResource, Targetable):
     def __init__(self, index=0, **kwargs):
         DigitalResource.__init__(self, **kwargs)
@@ -404,6 +435,23 @@ class WebPage(DigitalResource, schemadotorg.WebPage):
         self._set_base_context(ENTITY_CONTEXTS['WEB_PAGE'])
         self._set_str_prop('@type', ENTITY_TYPES['WEB_PAGE'])
 
+class Document(DigitalResource):
+    def __init__(self, **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['DOCUMENT'])
+        self._set_str_prop('@type', ENTITY_TYPES['DOCUMENT'])
+
+class Chapter(DigitalResource):
+    def __init__(self, **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['CHAPTER'])
+        self._set_str_prop('@type', ENTITY_TYPES['CHAPTER'])
+
+class Page(DigitalResource):
+    def __init__(self, **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['PAGE'])
+        self._set_str_prop('@type', ENTITY_TYPES['PAGE'])
 
 class EpubChapter(DigitalResource):
     def __init__(self, **kwargs):
@@ -439,7 +487,7 @@ class Annotation(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['ANNOTATION'])
-        self._set_obj_prop('actor', actor, t=Agent, req=True)
+        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('annotated',
                            annotated,
                            t=ENTITY_TYPES['DIGITAL_RESOURCE'],
@@ -492,7 +540,7 @@ class SharedAnnotation(Annotation):
         Annotation.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SHARED_ANNOTATION'])
         self._set_str_prop('@type', ENTITY_TYPES['SHARED_ANNOTATION'])
-        self._set_list_prop('withAgents', withAgents, t=Agent)
+        self._set_list_prop('withAgents', withAgents, t=ENTITY_TYPES['AGENT'])
 
     @property
     def withAgents(self):
@@ -507,10 +555,11 @@ class TagAnnotation(Annotation):
         self._set_list_prop('tags', tags, t=str)
 
 
-class TextPositionSelector(CaliperSerializable):
+class TextPositionSelector(Entity):
     def __init__(self, start=None, end=None):
-        CaliperSerializable.__init__(self)
-
+        Entity.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['TEXT_POSITION_SELECTOR'])
+        self._set_str_prop('@type', ENTITY_TYPES['TEXT_POSITION_SELECTOR'])
         self._set_int_prop('end', end, req=True)
         self._set_int_prop('start', start, req=True)
 
@@ -560,11 +609,13 @@ class AssignableDigitalResource(DigitalResource, Assignable):
 
 
 class Assessment(AssignableDigitalResource):
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 items=None,
+                 **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ASSESSMENT'])
         self._set_str_prop('@type', ENTITY_TYPES['ASSESSMENT'])
-
+        self._set_list_prop('items', items, t=ENTITY_TYPES['ASSESSMENT_ITEM'])
 
 class AssessmentItem(AssignableDigitalResource):
     def __init__(self, isTimeDependent=False, **kwargs):
@@ -608,12 +659,12 @@ class Attempt(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('@type', ENTITY_TYPES['ATTEMPT'])
-        self._set_id_prop('actor', actor, t=Agent, req=True)
+        self._set_id_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_id_prop('assignable', assignable, t=Assignable, req=True)
         self._set_int_prop('count', count, req=True)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
-        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ATTEMPT'])
         self._set_date_prop('startedAtTime', startedAtTime, req=True)
 
     @property
@@ -752,6 +803,38 @@ class TrueFalseResponse(Response):
         self._set_str_prop('@type', ENTITY_TYPES['TRUEFALSE'])
 
 
+## Discussion forum entities
+class Forum(DigitalResourceCollection):
+    def __init__(self,
+                 items=None,
+                 **kwargs):
+        DigitalResourceCollection.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['FORUM'])
+        self._set_str_prop('@type', ENTITY_TYPES['FORUM'])
+        self._set_list_prop('items', items, t=ENTITY_TYPES['THREAD'])
+
+class Thread(DigitalResourceCollection):
+    def __init__(self,
+                 items=None,
+                 **kwargs):
+        DigitalResourceCollection.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['THREAD'])
+        self._set_str_prop('@type', ENTITY_TYPES['THREAD'])
+        self._set_list_prop('items', items, t=ENTITY_TYPES['MESSAGE'])
+
+class Message(DigitalResource):
+    def __init__(self,
+                 body=None,
+                 replyTo=None,
+                 attachments=None,
+                 **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['MESSAGE'])
+        self._set_str_prop('@type', ENTITY_TYPES['MESSAGE'])
+        self._set_str_prop('body', body)
+        self._set_obj_prop('replyTo', replyTo, t=ENTITY_TYPES['MESSAGE'])
+        self._set_list_prop('attachments', attachments, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
+        
 ## Media entities
 class MediaObject(DigitalResource, schemadotorg.MediaObject):
     def __init__(self, duration=None, **kwargs):
@@ -770,7 +853,7 @@ class MediaLocation(DigitalResource, Targetable):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEDIA_LOCATION'])
         self._set_str_prop('@type', ENTITY_TYPES['MEDIA_LOCATION'])
-        self._set_time_prop('currentTime', currentTime)
+        self._set_duration_prop('currentTime', currentTime)
 
     @property
     def currentTime(self):
@@ -846,7 +929,7 @@ class Result(Entity, Generatable):
         self._set_float_prop('extraCreditScore', extraCreditScore)
         self._set_float_prop('normalScore', normalScore)
         self._set_float_prop('penaltyScore', penaltyScore)
-        self._set_obj_prop('scoredBy', scoredBy, Agent)
+        self._set_obj_prop('scoredBy', scoredBy, t=ENTITY_TYPES['AGENT'])
         self._set_float_prop('totalScore', totalScore)
 
     @property
@@ -893,7 +976,7 @@ class Session(Entity, Generatable, Targetable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('actor', actor, t=Agent, req=True)
+        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
