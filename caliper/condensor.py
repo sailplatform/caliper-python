@@ -44,6 +44,13 @@ def _parse_context(ctxt):
                 r.update({k: v['@id']})
     return r
 
+def from_caliper_envelope(d):
+    r = None
+    if (is_valid_URI(d.get('sensor')) and
+        is_valid_date(d.get('sendTime')) and
+        isinstance(d.get('data'), collections.MutableSequence)):
+        ret = from_json_list(d.get('data'))
+    return r
 
 def from_json_dict(d):
     t = d.get('@type')
