@@ -279,8 +279,6 @@ BASE_PROFILE_ACTIONS = {
         'ATTACHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Attached',
         'CLASSIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Classified',
         'COMMENTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Commented',
-        'CREATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Created',
-        'DELETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deleted',
         'DESCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Described',
         'DISLIKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Disliked',
         'IDENTIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Identified',
@@ -291,6 +289,15 @@ BASE_PROFILE_ACTIONS = {
         'RANKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ranked',
         'RECOMMENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Recommended',
         'REPLIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Replied',
+    }
+
+CRUD_ACTIONS = {
+        'CHANGED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Changed',
+        'CREATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Created',
+        'DELETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deleted',
+        'MODIFIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Modified',
+        'REMOVED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Removed',
+        'RESET': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reset',
         'RETRIEVED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Retrieved',
         'UPDATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Updated',
     }
@@ -391,6 +398,7 @@ VIEW_PROFILE_ACTIONS = {
 
 CALIPER_ACTIONS = { }
 CALIPER_ACTIONS.update(BASE_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(CRUD_ACTIONS)
 CALIPER_ACTIONS.update(ANNOTATION_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ASSESSMENT_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ASSESSMENT_ITEM_PROFILE_ACTIONS)
