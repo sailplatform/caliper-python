@@ -29,7 +29,7 @@ import collections, copy, importlib, json, re, warnings
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as
                        aniso_parse_date, parse_time as aniso_parse_time,
                        parse_duration as aniso_parse_duration)
-from oauthlib import uri_validate as oauthlib_uri_validate
+from urllib.parse import urlparse as urllib_urlparse
 
 from caliper.constants import CALIPER_CLASSES
 
@@ -71,7 +71,7 @@ def is_valid_time(time):
 def is_valid_URI(uri):
     if not uri:
         return False
-    elif isinstance(uri, str) and oauthlib_uri_validate.is_uri(uri):
+    elif isinstance(uri, str) and (urllib_urlparse(uri).geturl() == uri):
         return True
     else:
         return False
