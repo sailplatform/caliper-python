@@ -35,8 +35,7 @@ import caliper_tests.util as util
 class TestEvent(unittest.TestCase):
     def setUp(self):
         self.student = util.build_student_554433()
-        self.learning_context = util.build_readium_app_learning_context(
-            actor=self.student)
+        self.learning_context = util.build_readium_app_learning_context()
         self.epub_volume = util.build_epub_vol43()
         self.epub_subchapter = util.build_epub_subchap431()
         self.referrer = util.build_AmRev101_landing_page()
