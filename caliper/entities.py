@@ -169,8 +169,8 @@ class Membership(Entity, w3c.Membership):
         self._set_base_context(ENTITY_CONTEXTS['MEMBERSHIP'])
         self._set_str_prop('@type', ENTITY_TYPES['MEMBERSHIP'])
 
-        self._set_obj_prop('member', member, t=ENTITY_TYPES['PERSON'], req=True)
-        self._set_obj_prop('organization',
+        self._set_id_prop('member', member, t=ENTITY_TYPES['PERSON'], req=True)
+        self._set_id_prop('organization',
                           organization,
                           t=ENTITY_TYPES['ORGANIZATION'],
                           req=True)
@@ -618,13 +618,11 @@ class Assessment(AssignableDigitalResource):
         self._set_list_prop('items', items, t=ENTITY_TYPES['ASSESSMENT_ITEM'])
 
 class AssessmentItem(AssignableDigitalResource):
-    def __init__(self,
-                 isTimeDependent=None,
-                 **kwargs):
+    def __init__(self, isTimeDependent=False, **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('@type', ENTITY_TYPES['ASSESSMENT_ITEM'])
-        self._set_bool_prop('isTimeDependent', isTimeDependent, req=False)
+        self._set_bool_prop('isTimeDependent', isTimeDependent, req=True)
 
     @property
     def isTimeDependent(self):
@@ -661,8 +659,8 @@ class Attempt(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('@type', ENTITY_TYPES['ATTEMPT'])
-        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
-        self._set_obj_prop('assignable', assignable, t=Assignable, req=True)
+        self._set_id_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
+        self._set_id_prop('assignable', assignable, t=Assignable, req=True)
         self._set_int_prop('count', count, req=True)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
@@ -978,7 +976,7 @@ class Session(Entity, Generatable, Targetable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('@type', ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'])
+        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)

@@ -35,18 +35,16 @@ import caliper.condensor as condensor
 
 _DEBUG = False
 
-_SENSOR_ID = 'https://example.edu/sensor/1'
+_SENSOR_ID = 'https://example.edu/sensor/001'
 _EVENT_SOURCEDID = '15128c13-ca75-4952-8cce-72a513ec337d'
-_EVENTTIME = '2016-11-15T11:05:01.000Z'
+_EVENTTIME = '2015-09-15T10:15:00.000Z'
 _CREATETIME = '2015-08-01T06:00:00.000Z'
 _MODTIME = '2015-09-02T11:30:00.000Z'
-_ENDTIME = '2015-09-15T11:05:00.000Z'
 _EVENT_SEND_TIME = '2015-09-15T11:05:01.000Z'
 _STARTTIME = '2015-09-15T10:15:00.000Z'
+_ENDTIME = '2015-09-15T11:05:00.000Z'
 _PUBTIME = '2015-08-15T09:30:00.000Z'
 _ACTTIME = '2015-08-16T05:00:00.000Z'
-_SESSION_ENDTIME = '2015-09-15T11:05:00.000Z'
-_SESSION_STARTTIME = '2016-11-15T10:00:00.000Z'
 _SHOWTIME = _ACTTIME
 _STARTONTIME = _ACTTIME
 _SUBMITTIME = '2015-09-28T11:59:59.000Z'
@@ -55,8 +53,6 @@ _MEDIA_CURTIME = 'PT30M54S'
 _MEDIA_DURTIME = 'PT1H12M27S'
 _VERNUM = '1.0'
 _VERED = '2nd ed.'
-
-
 
 ### NOTE
 ###
@@ -178,7 +174,9 @@ def build_federated_lti_session(actor=None):
 
 def build_assessment_app():
     return caliper.entities.SoftwareApplication(
-        entity_id='https://example.edu',
+        entity_id='https://example.com/super-assessment-tool',
+        name='Super Assessment Tool',
+        dateCreated=_CREATETIME,
         version="v2")
 
 
@@ -201,7 +199,10 @@ def build_readium_app():
 
 
 def build_student_554433():
-    return caliper.entities.Person(entity_id='https://example.edu/user/554433')
+    return caliper.entities.Person(entity_id='https://example.edu/user/554433',
+                                   dateCreated=_CREATETIME,
+                                   dateModified=_MODTIME)
+
 
 def build_author_middlekauff():
     return caliper.entities.Person(
@@ -634,7 +635,7 @@ def build_video_with_learning_objective():
     return caliper.entities.VideoObject(
         entity_id='https://example.com/super-media-tool/video/1225',
         name='American Revolution - Key Figures Video',
-        learningObjectives=[caliper.entities.LearningObjective(
+        alignedLearningObjective=[caliper.entities.LearningObjective(
             entity_id='https://example.edu/american-revolution-101/personalities/learn',
             dateCreated=_CREATETIME)],
         duration=_MEDIA_DURTIME,
@@ -726,16 +727,25 @@ def build_frame_of_epub(entity_id=None, name=None, isPartOf=None):
 ### Session profile
 def build_readium_session_end(actor=None):
     return caliper.entities.Session(
-        entity_id='https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259',
-        actor=actor,
-        endedAtTime=_SESSION_ENDTIME)
+        entity_id='https://example.com/viewer/session-123456789',
+        name='session-123456789',
+        dateCreated=_CREATETIME,
+        dateModified=_MODTIME,
+        duration=_DURATION,
+        endedAtTime=_ENDTIME,
+        startedAtTime=_STARTTIME,
+        actor=actor)
 
 
 def build_readium_session_start(actor=None):
     return caliper.entities.Session(
-        entity_id='https://example.edu/sessions/1f6442a482de72ea6ad134943812bff564a76259',
-        actor=actor,
-        startedAtTime=_SESSION_STARTTIME)
+        entity_id='https://example.com/viewer/session-123456789',
+        name='session-123456789',
+        dateCreated=_CREATETIME,
+        dateModified=_MODTIME,
+        startedAtTime=_STARTTIME,
+        actor=actor)
+
 
 ## Session event
 def build_session_login_event(learning_context=None,

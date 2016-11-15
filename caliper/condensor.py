@@ -27,7 +27,7 @@ from builtins import *
 
 import collections, importlib
 
-from caliper.base import is_valid_URI, is_valid_date
+from caliper.base import is_valid_URI
 from caliper.constants import CALIPER_CLASSES
 
 
@@ -49,7 +49,7 @@ def from_caliper_envelope(d):
     if (is_valid_URI(d.get('sensor')) and
         is_valid_date(d.get('sendTime')) and
         isinstance(d.get('data'), collections.MutableSequence)):
-        r = from_json_list(d.get('data'))
+        ret = from_json_list(d.get('data'))
     return r
 
 def from_json_dict(d):
