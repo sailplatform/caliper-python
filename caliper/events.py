@@ -75,7 +75,7 @@ class Event(BaseEvent):
         self._set_date_prop('eventTime', eventTime, req=True)
         self._set_dict_prop('extensions', extensions)
         self._set_obj_prop('object', event_object, t=BaseEntity)
-        self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['SESSION'])
+        self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['LTI_SESSION'])
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_str_prop('id', id),
