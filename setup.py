@@ -21,7 +21,7 @@ _packages = ['caliper', 'caliper.extern', 'caliper.util', 'tests']
 
 _requires = ['aniso8601 >= 1.1.0', 'future >= 0.14.3', 'requests >= 2.7.0']
 
-_fixtures = ['fixtures_common/src/test/resources/fixtures/*.json']
+_fixtures = ['fixtures/src/test/resources/fixtures/*.json']
 
 
 def _get_val_from_mod(k):
