@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division,
-                        print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import with_metaclass
@@ -42,15 +41,8 @@ import tests
 # that the tests can find all the json fixture files in that sub-directory
 ###
 _FIXTURE_PREFIX = 'fixtures'
-_FIXTURE_BASE_DIR = os.path.join(
-    os.path.dirname(tests.__file__),
-    _FIXTURE_PREFIX)
-_FIXTURE_COMMON_DIR = os.path.join(
-    _FIXTURE_BASE_DIR,
-    'src',
-    'test',
-    'resources',
-    _FIXTURE_PREFIX)
+_FIXTURE_BASE_DIR = os.path.join(os.path.dirname(tests.__file__), _FIXTURE_PREFIX)
+_FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, 'src', 'test', 'resources', _FIXTURE_PREFIX)
 
 _SENSOR_ID = 'https://example.edu/sensors/1'
 
@@ -103,6 +95,5 @@ def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_enti
 def get_envelope(sensor, fixture):
     env_dict = json.loads(get_fixture(fixture))
     payload = condensor.from_json_list(env_dict.get('data'))
-    return caliper.request.Envelope(data=payload,
-                                    send_time=env_dict.get('sendTime'),
-                                    sensor_id=sensor.id)
+    return caliper.request.Envelope(
+        data=payload, send_time=env_dict.get('sendTime'), sensor_id=sensor.id)
