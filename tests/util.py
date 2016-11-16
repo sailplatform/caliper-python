@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import with_metaclass
@@ -30,26 +31,28 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper
-import caliper_tests
 import caliper.condensor as condensor
 
-# NOTE
+# needed to root the fixtures directory
+import tests
+
 ###
-# FIXTURE_DIR assumes that the caliper fixtures repo contents are hosted
+# NOTE: FIXTURE_DIR assumes that the caliper fixtures repo contents are hosted
 # in the tests module's directory in a 'fixtures_common' subdirectory so
 # that the tests can find all the json fixture files in that sub-directory
 ###
-_FIXTURE_BASE_DIR = os.path.dirname(caliper_tests.__file__) + os.path.sep
 _FIXTURE_PREFIX = 'fixtures'
-_FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, '{}{}'.format(_FIXTURE_PREFIX, '_common'),
-                                   'src', 'test', 'resources', _FIXTURE_PREFIX)
+_FIXTURE_BASE_DIR = os.path.join(
+    os.path.dirname(tests.__file__),
+    _FIXTURE_PREFIX)
+_FIXTURE_COMMON_DIR = os.path.join(
+    _FIXTURE_BASE_DIR,
+    'src',
+    'test',
+    'resources',
+    _FIXTURE_PREFIX)
 
-_FIXTURE_OUT_DIR = os.path.join(_FIXTURE_BASE_DIR, '{}{}'.format(_FIXTURE_PREFIX, '_out'))
-
-# constant values used by the utility code
-_SENSOR_ID = 'https://example.edu/sensor/1'
-
-# general state and utility functions used by many tests
+_SENSOR_ID = 'https://example.edu/sensors/1'
 
 
 def get_testing_options():
@@ -65,6 +68,7 @@ def build_default_sensor():
         config_options=get_testing_options(), sensor_id=_SENSOR_ID)
 
 
+# basic condensor functions to condense and extract json starting from fixtures
 def get_fixture(name):
     loc = os.path.join(_FIXTURE_COMMON_DIR, '{}.{}'.format(name, 'json'))
     with open(loc, 'r') as f:
@@ -93,3 +97,12 @@ def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_enti
         data=payload, send_time=env_dict.get('sendTime'),
         sensor_id=env_dict.get('sensor')).as_json(
             thin_props=thin_props, thin_context=thin_context, described_entities=None)
+
+
+# build an envelope from a sensor and the contents of a fixture
+def get_envelope(sensor, fixture):
+    env_dict = json.loads(get_fixture(fixture))
+    payload = condensor.from_json_list(env_dict.get('data'))
+    return caliper.request.Envelope(data=payload,
+                                    send_time=env_dict.get('sendTime'),
+                                    sensor_id=sensor.id)
