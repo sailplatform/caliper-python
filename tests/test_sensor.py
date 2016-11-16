@@ -38,4 +38,33 @@ class TestCaliperSensor(unittest.TestCase):
         self.sensor = util.build_default_sensor()
 
     def tearDown(self):
-        del(self.sensor)
+        del (self.sensor)
+
+    # test the simple ability to construct the same envelope as in the fixture
+    def testEventPayloadSingle(self):
+        fixture = 'caliperEnvelopeEventSingle'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(
+                thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    def testEventPayloadBatch(self):
+        fixture = 'caliperEnvelopeEventBatch'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(
+                thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    def testEntityPayloadSingle(self):
+        fixture = 'caliperEnvelopeEntitySingle'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(
+                thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    def testEntityPayloadSingle(self):
+        fixture = 'caliperEnvelopeEntitySingle'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(
+                thin_props=True, thin_context=True), util.get_fixture(fixture))
