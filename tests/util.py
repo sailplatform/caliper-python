@@ -61,6 +61,9 @@ def build_default_sensor():
 
 
 # basic condensor functions to condense and extract json starting from fixtures
+def _shape_fixture(s):
+    return s.replace('{"', '{\n"').replace(', "', ',\n"')
+
 def get_fixture(name):
     loc = os.path.join(_FIXTURE_COMMON_DIR, '{}.{}'.format(name, 'json'))
     with open(loc, 'r') as f:
