@@ -33,8 +33,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper
 import tests.util as util
 
-class CaliperSensorTests(unittest.TestCase):
 
+class TestCaliperSensor(unittest.TestCase):
     def setUp(self):
         self.sensor = util.build_default_sensor()
 

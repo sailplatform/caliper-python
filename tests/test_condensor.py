@@ -34,7 +34,7 @@ import caliper
 import tests.util as util
 
 
-class CaliperCondensorTests(unittest.TestCase):
+class TestCaliperCondensor(unittest.TestCase):
 
     def setUp(self):
         pass

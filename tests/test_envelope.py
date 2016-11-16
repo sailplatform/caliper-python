@@ -10,12 +10,12 @@ import caliper
 import caliper.condensor as condensor
 
 
-class CaliperEnvelopeTests(unittest.TestCase):
+class TestCaliperEnvelope(unittest.TestCase):
+
     def setUp(self):
         pass
+
     def tearDown(self):
         pass
 
-    def testNothing(self):
-        return False
 
