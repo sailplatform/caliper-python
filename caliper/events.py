@@ -295,7 +295,7 @@ class NavigationEvent(Event):
                 'action must be ' + BASE_PROFILE_ACTIONS['NAVIGATED_TO']))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'])
+        ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
         self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
