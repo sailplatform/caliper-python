@@ -406,7 +406,7 @@ class DigitalResourceCollection(DigitalResource, Collection):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE_COLLECTION'])
         self._set_str_prop('@type', ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION'])
-        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
         
 
