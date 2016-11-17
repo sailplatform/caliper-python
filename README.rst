@@ -56,9 +56,9 @@ Changing and testing
 --------------------
 All the `caliper-python` code you would use to build and use a caliper sensor in
 your application you can find in the `caliper` main module. The package also
-includes a set of test files in a `caliper_tests` main module; we did this not
-because we expect you'll use `caliper_tests` in production, but so that the
-various tests sub-modules in `caliper_test` can have portable visibility to one
+includes a set of test files in a `caliper-tests` main module; we did this not
+because we expect you'll use `caliper-tests` in production, but so that the
+various tests sub-modules in `caliper-tests` can have portable visibility to one
 another.
 
 **Testing**. In general, whenever you might make changes to code in `caliper`,
@@ -69,14 +69,7 @@ you should run the unit tests. From the package's top-level directory, just use
 canonical common JSON fixtures. To set up your tests, you should clone the
 `Caliper common fixtures repository
 <https://github.com/IMSGlobal/caliper-common-fixtures>`_ repository into the
-`caliper_tests/fixtures_common` directory, and pull changes there.
-
-Your copy of the `caliper-python` repository (or the package) may include a set
-of JSON fixtures in the `caliper_tests/fixtures_local` directory -- these are
-not the canonical event serializations used to test the sensor against; if
-there's a local version of these fixtures that came with your `caliper-python`
-package or repository, then it's likely the code has been built to test aginst
-these fixtures.
+`caliper-tests/fixtures` directory, and pull changes there.
 
 Ideally, if you make changes to `caliper-python` you should ensure that your
 changes will test well against the fixtures from the main common fixtures

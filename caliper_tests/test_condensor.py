@@ -30,7 +30,7 @@ import unittest
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import caliper
-import tests.util as util
+import caliper_tests.util as util
 
 
 class TestCaliperCondensor(unittest.TestCase):

@@ -17,7 +17,7 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-_packages = ['caliper', 'caliper.extern', 'caliper.util', 'tests']
+_packages = ['caliper', 'caliper.extern', 'caliper.util', 'caliper_tests']
 
 _requires = ['aniso8601 >= 1.1.0', 'future >= 0.14.3', 'requests >= 2.7.0']
 
@@ -47,7 +47,7 @@ setup(
     maintainer_email='info@imsglobal.org',
     url='https://github.com/IMSGlobal/caliper-python',
     packages=_packages,
-    package_data={'tests': _fixtures},
+    package_data={'caliper_tests': _fixtures},
     install_requires=_requires,
     license=_license,
     zip_safe=False,

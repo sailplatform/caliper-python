@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Caliper-python testing package (testing condensor cases)
+# Caliper-python testing package (testing util functions)
 #
 # This file is part of the IMS Caliper Analytics(tm) and is licensed to IMS
 # Global Learning Consortium, Inc. (http://www.imsglobal.org) under one or more
@@ -18,24 +18,3 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.standard_library import install_aliases
-install_aliases()
-from future.utils import with_metaclass
-from builtins import *
-
-import unittest
-
-import caliper
-import caliper.condensor as condensor
-
-
-class TestCaliperEnvelope(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-
