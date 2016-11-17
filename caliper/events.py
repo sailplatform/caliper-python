@@ -32,7 +32,7 @@ from caliper.constants import CALIPER_ACTIONS
 from caliper.constants import (
     BASE_PROFILE_ACTIONS, ANNOTATION_PROFILE_ACTIONS, ASSESSMENT_PROFILE_ACTIONS,
     ASSIGNABLE_PROFILE_ACTIONS, FORUM_PROFILE_ACTIONS, MEDIA_PROFILE_ACTIONS,
-    OUTCOME_PROFILE_ACTIONS, SESSION_PROFILE_ACTIONS, VIEW_PROFILE_ACTIONS)
+    OUTCOME_PROFILE_ACTIONS, SESSION_PROFILE_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
 from caliper import entities
 from caliper.extern import foaf, schemadotorg
@@ -364,7 +364,7 @@ class ThreadEvent(Event):
 class ViewEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action not in VIEW_PROFILE_ACTIONS.values():
+        if self.action not in BASE_PROFILE_ACTIONS.values():
             raise_with_traceback(TypeError('action must be in the list of ReadingProfile actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])

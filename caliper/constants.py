@@ -326,6 +326,7 @@ BASE_PROFILE_ACTIONS = {
     'RANKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Ranked',
     'RECOMMENDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Recommended',
     'REPLIED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Replied',
+    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
 CRUD_ACTIONS = {
@@ -348,11 +349,13 @@ ANNOTATION_PROFILE_ACTIONS = {
 
 ASSESSMENT_PROFILE_ACTIONS = {
     'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
+    'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
     'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
     'RESTARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted',
     'SKIPPED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped',
     'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
     'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
+    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
 ASSIGNABLE_PROFILE_ACTIONS = {
@@ -412,7 +415,6 @@ SESSION_PROFILE_ACTIONS = {
 }
 
 VIEW_PROFILE_ACTIONS = {
-    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
 
@@ -427,4 +429,3 @@ CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(OUTCOME_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(NAVIGATION_ACTIONS)
 CALIPER_ACTIONS.update(SESSION_PROFILE_ACTIONS)
-CALIPER_ACTIONS.update(VIEW_PROFILE_ACTIONS)
