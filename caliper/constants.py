@@ -364,10 +364,12 @@ ASSIGNABLE_PROFILE_ACTIONS = {
     'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
     'DEACTIVATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated',
     'HID': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Hid',
+    'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
     'REVIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed',
     'SHOWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Showed',
     'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
     'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
+    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
 FORUM_PROFILE_ACTIONS = {
