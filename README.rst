@@ -25,10 +25,10 @@ to have these third-party packages in your local Python environment.
 
 Which platform
 --------------
-We developed `caliper-python` primarily using the Python 3.4+ platform; however,
+We developed `caliper-python` primarily using the Python 3.5+ platform; however,
 we've taken steps to make it portably usbale with Python 2.7 as well (using
 the `future` package). Changes to the code base should ensure the tests run clean
-under Python 3.4 *and* 2.7.
+under Python 3.5 *and* 2.7.
 
 
 Build and install
@@ -63,7 +63,7 @@ another.
 
 **Testing**. In general, whenever you might make changes to code in `caliper`,
 you should run the unit tests. From the package's top-level directory, just use
-`tox` to run all the tests on both Python 2.7 and Python 3.4.
+`tox` to run all the tests on both Python 2.7 and Python 3.5.
 
 **Fixtures**. The test suites are principally designed to test against the
 canonical common JSON fixtures. To set up your tests, you should clone the
