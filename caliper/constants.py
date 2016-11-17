@@ -200,7 +200,6 @@ EVENT_CONTEXTS = {
     'MESSAGE': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
-    'READING': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'THREAD': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
@@ -217,7 +216,6 @@ EVENT_TYPES = {
     'MESSAGE': 'MessageEvent',
     'NAVIGATION': 'NavigationEvent',
     'OUTCOME': 'OutcomeEvent',
-    'READING': 'ReadingEvent',
     'SESSION': 'SessionEvent',
     'THREAD': 'ThreadEvent',
     'VIEW': 'ViewEvent',
@@ -234,7 +232,6 @@ EVENT_CLASSES = {
     EVENT_TYPES['MESSAGE']: 'caliper.events.MessageEvent',
     EVENT_TYPES['NAVIGATION']: 'caliper.events.NavigationEvent',
     EVENT_TYPES['OUTCOME']: 'caliper.events.OutcomeEvent',
-    EVENT_TYPES['READING']: 'caliper.events.ReadingEvent',
     EVENT_TYPES['SESSION']: 'caliper.events.SessionEvent',
     EVENT_TYPES['THREAD']: 'caliper.events.ThreadEvent',
     EVENT_TYPES['VIEW']: 'caliper.events.ViewEvent',
@@ -412,11 +409,6 @@ OUTCOME_PROFILE_ACTIONS = {
     'GRADED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Graded',
 }
 
-READING_PROFILE_ACTIONS = {
-    'SEARCHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Searched',
-    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
-}
-
 SESSION_PROFILE_ACTIONS = {
     'LOGGED_IN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn',
     'LOGGED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut',
@@ -439,6 +431,5 @@ CALIPER_ACTIONS.update(FORUM_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(OUTCOME_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(NAVIGATION_ACTIONS)
-CALIPER_ACTIONS.update(READING_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(SESSION_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(VIEW_PROFILE_ACTIONS)
