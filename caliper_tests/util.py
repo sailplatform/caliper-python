@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Caliper-python testing package (testing util functions)
+# Caliper-python testing package (utility functions for testing)
 #
 # This file is part of the IMS Caliper Analytics(tm) and is licensed to IMS
 # Global Learning Consortium, Inc. (http://www.imsglobal.org) under one or more
