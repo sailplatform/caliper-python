@@ -18,17 +18,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import raise_with_traceback, with_metaclass
 from builtins import *
 
 import collections, copy, importlib, json, re, warnings
-from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as
-                       aniso_parse_date, parse_time as aniso_parse_time,
-                       parse_duration as aniso_parse_duration)
+from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as aniso_parse_date,
+                       parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
 from urllib.parse import urlparse as urllib_urlparse
 
 from caliper.constants import CALIPER_CLASSES
@@ -86,8 +84,7 @@ def _get_type(t):
     try:
         return getattr(importlib.import_module(m), c)
     except (ImportError, ValueError) as e:
-        raise_with_traceback(ValueError('Unknown Caliper type: {0}'.format(str(
-            t))))
+        raise_with_traceback(ValueError('Unknown Caliper type: {0}'.format(str(t))))
 
 
 def is_subtype(t1, t2):
@@ -97,18 +94,19 @@ def is_subtype(t1, t2):
 def ensure_type(p, t, optional=False):
     # exception or True
     if optional:
-        if p==None:
+        if p == None:
             return True
-        elif t==None:
+        elif t == None:
             raise_with_traceback(ValueError('for present properties, type cannot be None type'))
     else:
-        if p==None:
+        if p == None:
             raise_with_traceback(ValueError('non-optional properties cannot be None'))
-        if t==None:
+        if t == None:
             raise_with_traceback(ValueError('for present properties, type cannot be None type'))
-        elif t and not ((isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-                        (isinstance(p, collections.MutableMapping) and is_subtype(
-                            p.get('type', ''), t)) or (isinstance(p, t))):
+        elif t and not (
+            (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+            (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', ''), t)) or
+            (isinstance(p, t))):
             raise_with_traceback(TypeError("Property must be of type {0}".format(str(t))))
     return True
 
@@ -135,9 +133,7 @@ class Options(object):
 
     def __init__(self, opts={}):
         self._config = self.default_options.copy()
-        self._config.update(
-            (k, opts[k])
-            for k in (set(opts.keys()) & set(self._config.keys())))
+        self._config.update((k, opts[k]) for k in (set(opts.keys()) & set(self._config.keys())))
 
     @property
     def API_KEY(self):
@@ -170,8 +166,8 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['CONNECTION_REQUEST_TIMEOUT'] = int(new_timeout)
         else:
-            raise_with_traceback(ValueError(
-                'new timeout value must be at least 1000 milliseconds'))
+            raise_with_traceback(
+                ValueError('new timeout value must be at least 1000 milliseconds'))
 
     @property
     def CONNECTION_TIMEOUT(self):
@@ -182,8 +178,8 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['CONNECTION_TIMEOUT'] = int(new_timeout)
         else:
-            raise_with_traceback(ValueError(
-                'new timeout value must be at least 1000 milliseconds'))
+            raise_with_traceback(
+                ValueError('new timeout value must be at least 1000 milliseconds'))
 
     @property
     def HOST(self):
@@ -214,19 +210,20 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['SOCKET_TIMEOUT'] = int(new_timeout)
         else:
-            raise_with_traceback(ValueError(
-                'new timeout value must be at least 1000 milliseconds'))
+            raise_with_traceback(
+                ValueError('new timeout value must be at least 1000 milliseconds'))
 
 
 class HttpOptions(Options):
-    def __init__(self,
-                 api_key='CaliperKey',
-                 auth_scheme='',
-                 connection_request_timeout=10000,
-                 connection_timeout=10000,
-                 host='http://httpbin.org/post',
-                 optimize_serialization=True,
-                 socket_timeout=10000, ):
+    def __init__(
+            self,
+            api_key='CaliperKey',
+            auth_scheme='',
+            connection_request_timeout=10000,
+            connection_timeout=10000,
+            host='http://httpbin.org/post',
+            optimize_serialization=True,
+            socket_timeout=10000, ):
         Options.__init__(self)
         self.API_KEY = api_key
         self.AUTH_SCHEME = auth_scheme
@@ -260,8 +257,7 @@ class CaliperSerializable(object):
 
     def _update_props(self, k, v, req=False):
         if req and (v == None):
-            raise_with_traceback(ValueError(
-                '{0} must have a non-null value'.format(str(k))))
+            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if k:
             self._props.update({k: v})
 
@@ -275,10 +271,9 @@ class CaliperSerializable(object):
 
     def _is_in_local_context(self, k):
         for item in self._context['local']:
-            if (self._context['local'][item] == k or
-                (isinstance(self._context['local'][item],
-                            collections.MutableMapping) and
-                 k in self._context['local'][item])):
+            if (self._context['local'][item] == k or (isinstance(self._context['local'][item],
+                                                                 collections.MutableMapping) and
+                                                      k in self._context['local'][item])):
                 return True
         else:
             return False
@@ -318,8 +313,7 @@ class CaliperSerializable(object):
     # protected complex-type setters
     def _set_base_context(self, v):
         if v and not is_valid_URI(v):
-            raise_with_traceback(ValueError(
-                'Base context must be a valid URI'))
+            raise_with_traceback(ValueError('Base context must be a valid URI'))
         self._update_base_context(v)
 
     def _set_date_prop(self, k, v, req=False):
@@ -330,11 +324,9 @@ class CaliperSerializable(object):
 
     def _set_dict_prop(self, k, v, req=False):
         if req and (v == None):
-            raise_with_traceback(ValueError(
-                '{0} must have a non-null value'.format(str(k))))
+            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         elif v and not (isinstance(v, collections.MutableMapping)):
-            raise_with_traceback(ValueError('{0} must be a dictionary'.format(
-                str(k))))
+            raise_with_traceback(ValueError('{0} must be a dictionary'.format(str(k))))
         self._update_props(k, v or {}, req=req)
 
     def _set_duration_prop(self, k, v, req=False):
@@ -350,20 +342,18 @@ class CaliperSerializable(object):
         elif (isinstance(v, BaseEntity) and is_subtype(v.type, t)):
             val = v.id
             self._update_objects(k, v, req=req)
-        elif (isinstance(v, collections.MutableMapping) and is_subtype(
-                v.get('type'), t) and is_valid_URI(v.get('id'))):
+        elif (isinstance(v, collections.MutableMapping) and is_subtype(v.get('type'), t) and
+              is_valid_URI(v.get('id'))):
             val = v.get('id')
             self._update_objects(k, v, req=req)
         self._set_str_prop(k, val, req=req)
 
     def _set_list_prop(self, k, v, t=None, req=False):
         if req and (v == None):
-            raise_with_traceback(ValueError(
-                '{0} must have a non-null value'.format(str(k))))
+            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         elif v:
             if not (isinstance(v, collections.MutableSequence)):
-                raise_with_traceback(ValueError('{0} must be a list'.format(
-                    str(k))))
+                raise_with_traceback(ValueError('{0} must be a list'.format(str(k))))
             elif t:
                 for item in v:
                     ensure_type(item, t)
@@ -371,8 +361,7 @@ class CaliperSerializable(object):
 
     def _set_obj_prop(self, k, v, t=None, req=False, id_only=False):
         if req and (v == None):
-            raise_with_traceback(ValueError(
-                '{0} must have a non-null value'.format(str(k))))
+            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if isinstance(v, BaseEntity) and not (is_subtype(v.type, t)):
             self._update_props(k, None)
         else:
@@ -381,10 +370,8 @@ class CaliperSerializable(object):
             else:
                 the_type = getattr(v, 'type', None)
                 if the_type and not is_valid_URI(the_type):
-                    raise_with_traceback(ValueError(
-                        "Value's type must be a valid URI"))
-                self._update_local_context({k: {'id': the_type,
-                                                'type': 'id'}})
+                    raise_with_traceback(ValueError("Value's type must be a valid URI"))
+                self._update_local_context({k: {'id': the_type, 'type': 'id'}})
                 self._set_id_prop(k, v)
 
     def _set_time_prop(self, k, v, req=False):
@@ -416,18 +403,20 @@ class CaliperSerializable(object):
         r = []
         for item in l:
             if isinstance(item, collections.MutableSequence):
-                r.append(self._unpack_list(
-                    item,
-                    ctxt_bases=ctxt_bases,
-                    described_entities=described_entities,
-                    thin_context=thin_context,
-                    thin_props=thin_props))
+                r.append(
+                    self._unpack_list(
+                        item,
+                        ctxt_bases=ctxt_bases,
+                        described_entities=described_entities,
+                        thin_context=thin_context,
+                        thin_props=thin_props))
             elif isinstance(item, CaliperSerializable):
-                r.append(item._unpack_object(
-                    ctxt_bases=ctxt_bases,
-                    described_entities=described_entities,
-                    thin_context=thin_context,
-                    thin_props=thin_props))
+                r.append(
+                    item._unpack_object(
+                        ctxt_bases=ctxt_bases,
+                        described_entities=described_entities,
+                        thin_context=thin_context,
+                        thin_props=thin_props))
             else:
                 r.append(copy.deepcopy(item))
         return r
@@ -473,8 +462,7 @@ class CaliperSerializable(object):
                     thin_props=thin_props)
             elif isinstance(v, BaseEntity):
                 if v.id in described_entities:
-                    r.update({'@context': self._update_context(
-                        r.get('@context'), k, v.type)})
+                    r.update({'@context': self._update_context(r.get('@context'), k, v.type)})
                     value = v.id
                 else:
                     value = v._unpack_object(
@@ -486,8 +474,7 @@ class CaliperSerializable(object):
                 the_id = v._get_prop('id')
                 the_type = v._get_prop('type')
                 if (the_id and the_type) and (the_id in described_entities):
-                    r.update({'@context': self._update_context(
-                        r.get('@context'), k, the_type)})
+                    r.update({'@context': self._update_context(r.get('@context'), k, the_type)})
                     value = the_id
                 else:
                     value = v._unpack_object(
@@ -499,8 +486,7 @@ class CaliperSerializable(object):
                 the_id = v.get('id')
                 the_type = v.get('type')
                 if (the_id and the_type) and (the_id in described_entities):
-                    r.update({'@context': self._update_context(
-                        r.get('@context'), k, the_type)})
+                    r.update({'@context': self._update_context(r.get('@context'), k, the_type)})
                     value = the_id
                 else:
                     value = v
@@ -511,32 +497,25 @@ class CaliperSerializable(object):
         return copy.deepcopy(r)
 
     # public methods, to repr this event or entity as a dict or as a json-string
-    def as_dict(self,
-                described_entities=None,
-                thin_context=False,
-                thin_props=False):
-        return self._unpack_object(described_entities=described_entities or [],
-                                   thin_context=thin_context,
-                                   thin_props=thin_props)
+    def as_dict(self, described_entities=None, thin_context=False, thin_props=False):
+        return self._unpack_object(
+            described_entities=described_entities or [],
+            thin_context=thin_context,
+            thin_props=thin_props)
 
-    def as_json(self,
-                described_entities=None,
-                thin_context=False,
-                thin_props=False):
-        r = self.as_dict(described_entities=described_entities,
-                         thin_context=thin_context,
-                         thin_props=thin_props)
+    def as_json(self, described_entities=None, thin_context=False, thin_props=False):
+        r = self.as_dict(
+            described_entities=described_entities,
+            thin_context=thin_context,
+            thin_props=thin_props)
         return json.dumps(r, sort_keys=True)
 
-    def as_json_with_ids(self,
-                         described_entities=None,
-                         thin_context=False,
-                         thin_props=False):
-        ret = self.as_json(described_entities=described_entities,
-                           thin_context=thin_context,
-                           thin_props=thin_props)
-        return ret, re.findall(r'"id": "(.+?(?="))"',
-                               re.sub(r'"@context": \[.+?\],', '', ret))
+    def as_json_with_ids(self, described_entities=None, thin_context=False, thin_props=False):
+        ret = self.as_json(
+            described_entities=described_entities,
+            thin_context=thin_context,
+            thin_props=thin_props)
+        return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 
         ### Entities and Events ###

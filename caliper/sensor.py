@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import raise_with_traceback
@@ -36,20 +35,14 @@ from caliper.util.stats import Statistics
 
 
 class Client(object):
-    def __init__(self,
-                 config_options=Options(),
-                 requestor=None,
-                 stats=None,
-                 **kwargs):
+    def __init__(self, config_options=Options(), requestor=None, stats=None, **kwargs):
 
         if config_options and not (isinstance(config_options, Options)):
-            raise_with_traceback(TypeError(
-                'config_options must implement base.Options'))
+            raise_with_traceback(TypeError('config_options must implement base.Options'))
         self._config = config_options
 
         if requestor and not (isinstance(requestor, EventStoreRequestor)):
-            raise_with_traceback(TypeError(
-                'requestor must implement request.EventStoreRequestor'))
+            raise_with_traceback(TypeError('requestor must implement request.EventStoreRequestor'))
         else:
             self._requestor = HttpRequestor(options=self._config)
 
@@ -86,8 +79,7 @@ class Client(object):
         identifiers = None
         if ensure_list_type(entities, Entity):
             results, identifiers = self._requestor.describe(
-                caliper_entity_list=entities,
-                sensor_id=sensor_id)
+                caliper_entity_list=entities, sensor_id=sensor_id)
             self._process_results(results, self.stats.update_describes)
         return identifiers
 
@@ -118,8 +110,7 @@ class Sensor(object):
     @staticmethod
     def fashion_sensor_with_config(config_options=None, sensor_id=None):
         if not (isinstance(config_options, HttpOptions)):
-            raise_with_traceback(TypeError(
-                'config_options must implement HttpOptions'))
+            raise_with_traceback(TypeError('config_options must implement HttpOptions'))
         s = Sensor(sensor_id=sensor_id)
         s.register_client('default', Client(config_options=config_options))
         return s
@@ -128,30 +119,27 @@ class Sensor(object):
         identifiers = {}
         v = entities
         if entity and not entities:
-            deprecation(
-                'Sensor.describe(e) deprecated; use Sensor.describe(entities=e).')
+            deprecation('Sensor.describe(e) deprecated; use Sensor.describe(entities=e).')
             v = entity
         if not isinstance(v, collections.MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
-            identifiers.update({k: client.describe(entities=v,
-                                                   sensor_id=self.id)})
+            identifiers.update({k: client.describe(entities=v, sensor_id=self.id)})
         return identifiers
 
     def send(self, events=None, event=None, described_entities=None):
         identifiers = {}
         v = events
         if event and not events:
-            deprecation(
-                'Sensor.send(event=e) deprecated; use Sensor.send(events=e).')
+            deprecation('Sensor.send(event=e) deprecated; use Sensor.send(events=e).')
             v = event
         if not isinstance(v, collections.MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
-            identifiers.update({k: client.send(
-                events=v,
-                described_entities=described_entities,
-                sensor_id=self.id)})
+            identifiers.update({
+                k: client.send(
+                    events=v, described_entities=described_entities, sensor_id=self.id)
+            })
         return identifiers
 
     def describe_batch(self, entity_list=None):
@@ -160,8 +148,7 @@ class Sensor(object):
         self.describe(entities=entity_list)
 
     def send_batch(self, event_list=None, described_entities=None):
-        deprecation(
-            'Sensor.send_batch(event_list=e) deprecated; use Sensor.send(events=e).')
+        deprecation('Sensor.send_batch(event_list=e) deprecated; use Sensor.send(events=e).')
         self.send(events=event_list, described_entities=described_entities)
 
     @property
@@ -181,8 +168,8 @@ class Sensor(object):
             raise_with_traceback(TypeError('client must implement Client'))
 
         if not (isinstance(key, str)):
-            raise_with_traceback(ValueError(
-                'key must be a string to use as a client registration key'))
+            raise_with_traceback(
+                ValueError('key must be a string to use as a client registration key'))
 
         self._clients.update({key: client})
 

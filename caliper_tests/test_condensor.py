@@ -34,7 +34,6 @@ import caliper_tests.util as util
 
 
 class TestCaliperCondensor(unittest.TestCase):
-
     def setUp(self):
         pass
 
@@ -44,21 +43,14 @@ class TestCaliperCondensor(unittest.TestCase):
     # test an event
     def testBookmarkAnnotationEvent(self):
         fixture = 'caliperEventAnnotationBookmarked'
-        self.assertEqual(
-            util.get_fixture(fixture),
-            util.rebuild_event(fixture))
+        self.assertEqual(util.get_fixture(fixture), util.rebuild_event(fixture))
 
     # test an entity
     def testAssessment(self):
         fixture = 'caliperEntityAssessment'
-        self.assertEqual(
-            util.get_fixture(fixture),
-            util.rebuild_entity(fixture))
+        self.assertEqual(util.get_fixture(fixture), util.rebuild_entity(fixture))
 
     # test an envelope
     def testEnvelopeEventSingle(self):
         fixture = 'caliperEnvelopeEventSingle'
-        self.assertEqual(
-            util.get_fixture(fixture),
-            util.rebuild_envelope(fixture))
-
+        self.assertEqual(util.get_fixture(fixture), util.rebuild_envelope(fixture))

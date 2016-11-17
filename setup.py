@@ -26,8 +26,8 @@ _fixtures = ['fixtures/src/test/resources/fixtures/*.json']
 
 def _get_val_from_mod(k):
     with open('caliper/__init__.py', 'r') as fd:
-        return re.search(r'^__{0}__\s*=\s*[\'"]([^\'"]*)[\'"]'.format(k),
-                         fd.read(), re.MULTILINE).group(1)
+        return re.search(r'^__{0}__\s*=\s*[\'"]([^\'"]*)[\'"]'.format(k), fd.read(),
+                         re.MULTILINE).group(1)
 
 
 _author = _get_val_from_mod('author')
@@ -51,12 +51,9 @@ setup(
     install_requires=_requires,
     license=_license,
     zip_safe=False,
-    classifiers=(
-        'Development Status :: 3 - Beta', 'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5'))
+    classifiers=('Development Status :: 3 - Beta', 'Intended Audience :: Developers',
+                 'Natural Language :: English',
+                 'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+                 'Programming Language :: Python', 'Programming Language :: Python :: 2',
+                 'Programming Language :: Python :: 2.7', 'Programming Language :: Python :: 3',
+                 'Programming Language :: Python :: 3.5'))

@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import raise_with_traceback
@@ -44,13 +43,14 @@ def _parse_context(ctxt):
                 r.update({k: v['id']})
     return r
 
+
 def from_caliper_envelope(d):
     r = None
-    if (is_valid_URI(d.get('sensor')) and
-        is_valid_date(d.get('sendTime')) and
-        isinstance(d.get('data'), collections.MutableSequence)):
+    if (is_valid_URI(d.get('sensor')) and is_valid_date(d.get('sendTime')) and
+            isinstance(d.get('data'), collections.MutableSequence)):
         r = from_json_list(d.get('data'))
     return r
+
 
 def from_json_dict(d):
     t = d.get('type')
@@ -99,9 +99,9 @@ def from_json_list(l):
     for item in l:
         if isinstance(item, collections.MutableSequence):
             r.append(from_json_list(item))
-        elif isinstance(item,
-                        collections.MutableMapping) and item.get('type'):
+        elif isinstance(item, collections.MutableMapping) and item.get('type'):
             r.append(from_json_dict(item))
         else:
             r.append(item)
     return r or None
+

@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 #
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
 from builtins import *
@@ -48,8 +47,7 @@ class Statistic(object):
             return '[Count: {0}]'.format(self._count)
         else:
             return '[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]'.format(
-                self._count, self._min, self._max, self.average,
-                self.standard_deviation)
+                self._count, self._min, self._max, self.average, self.standard_deviation)
 
     def clear(self):
         self._sum = 0.0
@@ -136,8 +134,7 @@ class Statistics(object):
         r_bod = ''
         r_bot = '-------------------------------------------\n'
         for k in self._keys:
-            r_bod += '{0} : {1}\n'.format(self._keys[k],
-                                          self._map[self._keys[k]].__str__())
+            r_bod += '{0} : {1}\n'.format(self._keys[k], self._map[self._keys[k]].__str__())
         return '{0}{1}{2}'.format(r_top, r_bod, r_bot)
 
     def clear(self):

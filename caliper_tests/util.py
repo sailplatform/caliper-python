@@ -64,15 +64,18 @@ def build_default_sensor():
 def _shape_fixture(s):
     return s.replace('{"', '{\n"').replace(', "', ',\n"')
 
+
 def get_fixture(name):
     loc = os.path.join(_FIXTURE_COMMON_DIR, '{}.{}'.format(name, 'json'))
     with open(loc, 'r') as f:
         return json.dumps(json.load(f), sort_keys=True)
 
+
 def get_fixtures_of_type(name):
-    return [os.path.splitext(file)[0]
-            for file in os.listdir(_FIXTURE_COMMON_DIR)
-            if file.startswith('caliper{}'.format(name.title()))]
+    return [
+        os.path.splitext(file)[0] for file in os.listdir(_FIXTURE_COMMON_DIR)
+        if file.startswith('caliper{}'.format(name.title()))
+    ]
 
 
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_entities):
