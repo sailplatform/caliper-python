@@ -52,15 +52,16 @@ class Event(BaseEvent):
                  federatedSession=None,
                  generated=None,
                  group=None,
-                 id=None,
                  membership=None,
                  referrer=None,
                  session=None,
                  sourcedId=None,
-                 target=None):
+                 target=None,
+                 uuid=None
+    ):
         BaseEvent.__init__(self)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
-        self._set_str_prop('@type', EVENT_TYPES['EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['EVENT'])
 
         if action and (action not in CALIPER_ACTIONS.values()):
             raise_with_traceback(ValueError(
@@ -78,20 +79,20 @@ class Event(BaseEvent):
         self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['LTI_SESSION'])
         self._set_obj_prop('generated', generated, t=entities.Generatable)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
-        self._set_str_prop('id', id),
         self._set_obj_prop('membership',
                            membership,
                            t=ENTITY_TYPES['MEMBERSHIP'])
         self._set_obj_prop('referrer', referrer, t=entities.Referrable)
         self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
         self._set_obj_prop('target', target, t=entities.Targetable)
+        self._set_str_prop('uuid', uuid)
 
     def as_minimal_event(self):
         return MinimalEvent(action=self.action,
                             actor=self.actor,
                             event_object=self.object,
-                            id=self.id,
-                            eventTime=self.eventTime)
+                            eventTime=self.eventTime,
+                            uuid=self.uuid)
 
     @property
     def context(self):
@@ -99,7 +100,7 @@ class Event(BaseEvent):
 
     @property
     def type(self):
-        return self._get_prop('@type')
+        return self._get_prop('type')
 
     @property
     def action(self):
@@ -134,10 +135,6 @@ class Event(BaseEvent):
         return self._get_prop('group')
 
     @property
-    def id(self):
-        return self._get_prop('id')
-
-    @property
     def object(self):
         return self._get_prop('object')
 
@@ -153,6 +150,10 @@ class Event(BaseEvent):
     def target(self):
         return self._get_prop('target')
 
+    @property
+    def uuid(self):
+        return self._get_prop('uuid')
+
 
 class MinimalEvent(BaseEvent):
     def __init__(self,
@@ -160,10 +161,10 @@ class MinimalEvent(BaseEvent):
                  actor=None,
                  event_object=None,
                  eventTime=None,
-                 id=None):
+                 uuid=None):
         BaseEvent.__init__(self)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
-        self._set_str_prop('@type', EVENT_TYPES['EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['EVENT'])
         self._set_str_prop('action', action, req=True)
 
         if action and (action not in CALIPER_ACTIONS.values()):
@@ -178,7 +179,7 @@ class MinimalEvent(BaseEvent):
         else:
             d = actor.as_dict()
             self._set_obj_prop('actor', {'@id': d.get('@id'),
-                                         '@type': d.get('@type')})
+                                         'type': d.get('type')})
 
         self._set_date_prop('eventTime', eventTime, req=True)
 
@@ -188,9 +189,9 @@ class MinimalEvent(BaseEvent):
         else:
             d = event_object.as_dict()
             self._set_obj_prop('object', {'@id': d.get('@id'),
-                                          '@type': d.get('@type')})
+                                          'type': d.get('type')})
 
-        self._set_str_prop('id', id)
+        self._set_str_prop('uuid', uuid)
 
     @property
     def action(self):
@@ -205,12 +206,12 @@ class MinimalEvent(BaseEvent):
         return self._get_prop('eventTime')
 
     @property
-    def id(self):
-        return self._get_prop('id')
-
-    @property
     def object(self):
         return self._get_prop('object')
+
+    @property
+    def uuid(self):
+        return self._get_prop('uuid')
 
 
 ## Derived Events
@@ -225,7 +226,7 @@ class AnnotationEvent(Event):
         ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'])
 
         self._set_base_context(EVENT_CONTEXTS['ANNOTATION'])
-        self._set_str_prop('@type', EVENT_TYPES['ANNOTATION'])
+        self._set_str_prop('type', EVENT_TYPES['ANNOTATION'])
 
 
 class AssessmentEvent(Event):
@@ -239,7 +240,7 @@ class AssessmentEvent(Event):
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSESSMENT'])
-        self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT'])
+        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT'])
 
 
 class AssessmentItemEvent(Event):
@@ -256,7 +257,7 @@ class AssessmentItemEvent(Event):
             ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
-        self._set_str_prop('@type', EVENT_TYPES['ASSESSMENT_ITEM'])
+        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_ITEM'])
 
 
 class AssignableEvent(Event):
@@ -270,7 +271,7 @@ class AssignableEvent(Event):
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
 
         self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
-        self._set_str_prop('@type', EVENT_TYPES['ASSIGNABLE'])
+        self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE'])
 
 
 class MediaEvent(Event):
@@ -284,7 +285,7 @@ class MediaEvent(Event):
         ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['MEDIA'])
-        self._set_str_prop('@type', EVENT_TYPES['MEDIA'])
+        self._set_str_prop('type', EVENT_TYPES['MEDIA'])
 
 
 class NavigationEvent(Event):
@@ -298,7 +299,7 @@ class NavigationEvent(Event):
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
-        self._set_str_prop('@type', EVENT_TYPES['NAVIGATION'])
+        self._set_str_prop('type', EVENT_TYPES['NAVIGATION'])
 
 
 class OutcomeEvent(Event):
@@ -311,7 +312,7 @@ class OutcomeEvent(Event):
         ensure_type(self.generated, ENTITY_TYPES['RESULT'])
 
         self._set_base_context(EVENT_CONTEXTS['OUTCOME'])
-        self._set_str_prop('@type', EVENT_TYPES['OUTCOME'])
+        self._set_str_prop('type', EVENT_TYPES['OUTCOME'])
 
 
 class ReadingEvent(Event):
@@ -325,7 +326,7 @@ class ReadingEvent(Event):
         ensure_type(self.target, ENTITY_TYPES['FRAME'])
 
         self._set_base_context(EVENT_CONTEXTS['READING'])
-        self._set_str_prop('@type', EVENT_TYPES['READING'])
+        self._set_str_prop('type', EVENT_TYPES['READING'])
 
 
 class SessionEvent(Event):
@@ -353,7 +354,7 @@ class SessionEvent(Event):
                 'action must be in the list of Session profile actions'))
 
         self._set_base_context(EVENT_CONTEXTS['SESSION'])
-        self._set_str_prop('@type', EVENT_TYPES['SESSION'])
+        self._set_str_prop('type', EVENT_TYPES['SESSION'])
 
 
 class ViewEvent(Event):
@@ -366,4 +367,4 @@ class ViewEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
         self._set_base_context(EVENT_CONTEXTS['VIEW'])
-        self._set_str_prop('@type', EVENT_TYPES['VIEW'])
+        self._set_str_prop('type', EVENT_TYPES['VIEW'])
