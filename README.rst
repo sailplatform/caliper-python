@@ -2,13 +2,13 @@
 Caliper-python
 ==============
 
-`Caliper-python` is a Python client package for `Caliper <http://imsglobal.org/caliper/>`_
-that provides an implementation of the Caliper SensorAPI(tm).
+`Caliper-python` is a Python client bundle for `Caliper <http://imsglobal.org/caliper/>`_
+that provides a reference implementation of the Caliper SensorAPI(tm).
 
 
 Dependencies
 ============
-To effectively use this `caliper-python` package, you will need to have Python,
+To effectively use this `caliper-python` bundle, you will need to have Python,
 pip, and setuptools installed. This package also depends on several third-party
 packages:
 
@@ -20,8 +20,8 @@ packages:
 
 * tox -- (soft-dependency used only for tests, MIT licensed)
 
-To work with this package (maintain, use, run tests) you'll need to have these
-third-party packages in your local Python environment.
+To work with the `caliper-python` bundle (maintain, use, run tests) you'll need
+to have these third-party packages in your local Python environment.
 
 Which platform
 --------------
@@ -55,10 +55,10 @@ If you want to install it from a source bundle, then use these steps:
 Changing and testing
 --------------------
 All the `caliper-python` code you would use to build and use a caliper sensor in
-your application you can find in the `caliper` main module. The package also
-includes a set of test files in a `caliper-tests` main module; we did this not
-because we expect you'll use `caliper-tests` in production, but so that the
-various tests sub-modules in `caliper-tests` can have portable visibility to one
+your application you can find in the `caliper` main package. The bundle also
+includes a set of test files in a `caliper_tests` package; we did this not
+because we expect you'll use `caliper_tests` in production, but so that the
+various tests modules in `caliper_tests` can have portable visibility to one
 another.
 
 **Testing**. In general, whenever you might make changes to code in `caliper`,
@@ -69,7 +69,7 @@ you should run the unit tests. From the package's top-level directory, just use
 canonical common JSON fixtures. To set up your tests, you should clone the
 `Caliper common fixtures repository
 <https://github.com/IMSGlobal/caliper-common-fixtures>`_ repository into the
-`caliper-tests/fixtures` directory, and pull changes there.
+`caliper_tests/fixtures` directory, and pull changes there.
 
 Ideally, if you make changes to `caliper-python` you should ensure that your
 changes will test well against the fixtures from the main common fixtures
