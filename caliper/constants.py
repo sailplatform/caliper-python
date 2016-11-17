@@ -410,6 +410,7 @@ NAVIGATION_ACTIONS = {
 
 OUTCOME_PROFILE_ACTIONS = {
     'GRADED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Graded',
+    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
 SESSION_PROFILE_ACTIONS = {
