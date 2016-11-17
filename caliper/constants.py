@@ -414,9 +414,6 @@ SESSION_PROFILE_ACTIONS = {
     'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
 }
 
-VIEW_PROFILE_ACTIONS = {
-}
-
 
 CALIPER_ACTIONS = { }
 CALIPER_ACTIONS.update(BASE_PROFILE_ACTIONS)
