@@ -194,11 +194,14 @@ EVENT_CONTEXTS = {
     'ASSESSMENT_ITEM': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'ASSIGNABLE': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'EVENT': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
+    'FORUM': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'MEDIA': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
+    'MESSAGE': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'NAVIGATION': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'READING': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
+    'THREAD': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     }
 
@@ -208,11 +211,14 @@ EVENT_TYPES = {
     'ASSESSMENT_ITEM': 'AssessmentItemEvent',
     'ASSIGNABLE': 'AssignableEvent',
     'EVENT': 'Event',
+    'FORUM': 'ForumEvent',
     'MEDIA': 'MediaEvent',
+    'MESSAGE': 'MessageEvent',
     'NAVIGATION': 'NavigationEvent',
     'OUTCOME': 'OutcomeEvent',
     'READING': 'ReadingEvent',
     'SESSION': 'SessionEvent',
+    'THREAD': 'ThreadEvent',
     'VIEW': 'ViewEvent',
     }
 
@@ -222,11 +228,14 @@ EVENT_CLASSES = {
     EVENT_TYPES['ASSESSMENT_ITEM']: 'caliper.events.AssessmentItemEvent',
     EVENT_TYPES['ASSIGNABLE']: 'caliper.events.AssignableEvent',
     EVENT_TYPES['EVENT']: 'caliper.events.Event',
+    EVENT_TYPES['FORUM']: 'caliper.events.ForumEvent',
     EVENT_TYPES['MEDIA']: 'caliper.events.MediaEvent',
+    EVENT_TYPES['MESSAGE']: 'caliper.events.MessageEvent',
     EVENT_TYPES['NAVIGATION']: 'caliper.events.NavigationEvent',
     EVENT_TYPES['OUTCOME']: 'caliper.events.OutcomeEvent',
     EVENT_TYPES['READING']: 'caliper.events.ReadingEvent',
     EVENT_TYPES['SESSION']: 'caliper.events.SessionEvent',
+    EVENT_TYPES['THREAD']: 'caliper.events.ThreadEvent',
     EVENT_TYPES['VIEW']: 'caliper.events.ViewEvent',
     }
 
@@ -365,6 +374,9 @@ ASSIGNABLE_PROFILE_ACTIONS = {
     }
 
 FORUM_PROFILE_ACTIONS = {
+        'MARKED_AS_READ': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsRead',
+        'MARKED_AS_UNREAD': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsUnread',
+        'POSTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Posted',
         'SUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Subscribed',
         'UNSUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unsubscribed',
     }
@@ -391,12 +403,6 @@ MEDIA_PROFILE_ACTIONS = {
         'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
     }
 
-MESSAGE_PROFILE_ACTIONS = {
-        'MARKED_AS_READ': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsRead',
-        'MARKED_AS_UNREAD': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsUnread',
-        'POSTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Posted',
-    }
-
 NAVIGATION_ACTIONS = {
         'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
     }
@@ -416,11 +422,6 @@ SESSION_PROFILE_ACTIONS = {
         'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
     }
 
-THREAD_PROFILE_ACTIONS = {
-        'MARKED_AS_READ': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsRead',
-        'MARKED_AS_UNREAD': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsUnread',
-    }
-
 VIEW_PROFILE_ACTIONS = {
         'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
     }
@@ -435,10 +436,8 @@ CALIPER_ACTIONS.update(ASSESSMENT_ITEM_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ASSIGNABLE_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(FORUM_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
-CALIPER_ACTIONS.update(MESSAGE_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(OUTCOME_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(NAVIGATION_ACTIONS)
 CALIPER_ACTIONS.update(READING_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(SESSION_PROFILE_ACTIONS)
-CALIPER_ACTIONS.update(THREAD_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(VIEW_PROFILE_ACTIONS)
