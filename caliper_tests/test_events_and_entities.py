@@ -43,12 +43,40 @@ class TestCaliperEntities(unittest.TestCase):
     def testAllCaliperEntities(self):
         passing = True
         for fixture in self.fixtures:
+            # coerced fixtures require extra care to rebuild exactly as received
+            # see tests in sensor and/or condensor testing
+            if 'Coerced' in fixture:
+                continue
             print('Testing entity fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_entity(fixture))
             except AssertionError as e:
                 passing = False
                 print('Unable to rebuild matching entity fixture: {}'.format(fixture))
+        if not passing:
+            raise AssertionError
+
+
+class TestCaliperEnvelopes(unittest.TestCase):
+    def setUp(self):
+        self.fixtures = util.get_fixtures_of_type('envelope')
+
+    def tearDown(self):
+        pass
+
+    def testAllCaliperEnvelopes(self):
+        passing = True
+        for fixture in self.fixtures:
+            # coerced fixtures require extra care to rebuild exactly as received
+            # see tests in sensor and/or condensor testing
+            if 'Coerced' in fixture:
+                continue
+            print('Testing envelope fixture: {}'.format(fixture))
+            try:
+                self.assertEqual(util.get_fixture(fixture), util.rebuild_envelope(fixture))
+            except AssertionError as e:
+                passing = False
+                print('Unable to rebuild matching envelope fixture: {}'.format(fixture))
         if not passing:
             raise AssertionError
 
@@ -63,6 +91,10 @@ class TestCaliperEvents(unittest.TestCase):
     def testAllCaliperEvents(self):
         passing = True
         for fixture in self.fixtures:
+            # coerced fixtures require extra care to rebuild exactly as received
+            # see tests in sensor and/or condensor testing
+            if 'Coerced' in fixture:
+                continue
             print('Testing event fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_event(fixture))
@@ -71,3 +103,4 @@ class TestCaliperEvents(unittest.TestCase):
                 print('Unable to rebuild matching event fixture: {}'.format(fixture))
         if not passing:
             raise AssertionError
+
