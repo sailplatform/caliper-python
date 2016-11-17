@@ -33,7 +33,8 @@ from caliper.constants import CALIPER_ACTIONS
 from caliper.constants import (
     BASE_PROFILE_ACTIONS, ANNOTATION_PROFILE_ACTIONS,
     ASSESSMENT_PROFILE_ACTIONS, ASSESSMENT_ITEM_PROFILE_ACTIONS,
-    ASSIGNABLE_PROFILE_ACTIONS, MEDIA_PROFILE_ACTIONS, OUTCOME_PROFILE_ACTIONS,
+    ASSIGNABLE_PROFILE_ACTIONS, FORUM_PROFILE_ACTIONS,
+    MEDIA_PROFILE_ACTIONS, OUTCOME_PROFILE_ACTIONS,
     READING_PROFILE_ACTIONS, SESSION_PROFILE_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
 from caliper import entities
@@ -236,8 +237,11 @@ class AssessmentEvent(Event):
             raise_with_traceback(ValueError(
                 'action must be in the list of Assessment profile actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
-        ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
+        if self.action == ASSESSMENT_PROFILE_ACTIONS['SUBMITTED']:
+            ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])            
+        else:
+            ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
+        ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['ASSESSMENT'])
         self._set_str_prop('type', EVENT_TYPES['ASSESSMENT'])
@@ -250,11 +254,12 @@ class AssessmentItemEvent(Event):
             raise_with_traceback(ValueError(
                 'action must be in the list of Assessment Item profile actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
         if self.action == ASSESSMENT_ITEM_PROFILE_ACTIONS['COMPLETED']:
-            ensure_type(self.generated, ENTITY_TYPES['RESPONSE'])
+            ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
+            ensure_type(self.generated, ENTITY_TYPES['RESPONSE'], optional=True)
         else:
-            ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
+            ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
+            ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_ITEM'])
@@ -268,10 +273,23 @@ class AssignableEvent(Event):
                 'action must be in the list of Assignable profile actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
-        ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'])
+        ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
         self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
         self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE'])
+
+
+class ForumEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        if self.action not in FORUM_PROFILE_ACTIONS.values():
+            raise_with_traceback(TypeError(
+                'action must be in the list of Forum profile actions'))
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['FORUM'])
+
+        self._set_base_context(EVENT_CONTEXTS['FORUM'])
+        self._set_str_prop('type', EVENT_TYPES['FORUM'])
 
 
 class MediaEvent(Event):
@@ -287,6 +305,19 @@ class MediaEvent(Event):
         self._set_base_context(EVENT_CONTEXTS['MEDIA'])
         self._set_str_prop('type', EVENT_TYPES['MEDIA'])
 
+
+class MessageEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        if self.action not in FORUM_PROFILE_ACTIONS.values():
+            raise_with_traceback(TypeError(
+                'action must be in the list of Forum profile actions'))
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['MESSAGE'])
+
+        self._set_base_context(EVENT_CONTEXTS['FORUM'])
+        self._set_str_prop('type', EVENT_TYPES['MESSAGE'])
+    
 
 class NavigationEvent(Event):
     def __init__(self, **kwargs):
@@ -355,6 +386,19 @@ class SessionEvent(Event):
 
         self._set_base_context(EVENT_CONTEXTS['SESSION'])
         self._set_str_prop('type', EVENT_TYPES['SESSION'])
+
+
+class ThreadEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        if self.action not in FORUM_PROFILE_ACTIONS.values():
+            raise_with_traceback(TypeError(
+                'action must be in the list of Forum profile actions'))
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['THREAD'])
+
+        self._set_base_context(EVENT_CONTEXTS['FORUM'])
+        self._set_str_prop('type', EVENT_TYPES['THREAD'])
 
 
 class ViewEvent(Event):

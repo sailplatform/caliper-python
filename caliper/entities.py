@@ -217,7 +217,9 @@ class Agent(Entity, foaf.Agent):
 
 
 class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
-    def __init__(self, version=None, **kwargs):
+    def __init__(self,
+                 version=None,
+                 **kwargs):
         Agent.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SOFTWARE_APPLICATION'])
         self._set_str_prop('type', ENTITY_TYPES['SOFTWARE_APPLICATION'])
@@ -258,7 +260,10 @@ class Course(Organization):
 
 
 class CourseOffering(Course):
-    def __init__(self, academicSession=None, courseNumber=None, **kwargs):
+    def __init__(self,
+                 academicSession=None,
+                 courseNumber=None,
+                 **kwargs):
         Organization.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['COURSE_OFFERING'])
         self._set_str_prop('type', ENTITY_TYPES['COURSE_OFFERING'])
@@ -283,7 +288,9 @@ class CourseOffering(Course):
 
 
 class CourseSection(CourseOffering):
-    def __init__(self, category=None, **kwargs):
+    def __init__(self,
+                 category=None,
+                 **kwargs):
         CourseOffering.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['COURSE_SECTION'])
         self._set_str_prop('type', ENTITY_TYPES['COURSE_SECTION'])
@@ -297,7 +304,7 @@ class CourseSection(CourseOffering):
 class Group(Organization):
     def __init__(self, **kwargs):
         Organization.__init__(self, **kwargs)
-        ensure_type(self.subOrganizationOf, Course)
+        ensure_type(self.subOrganizationOf, Course, optional=True)
         self._set_base_context(ENTITY_CONTEXTS['GROUP'])
         self._set_str_prop('type', ENTITY_TYPES['GROUP'])
 
@@ -360,7 +367,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
         self._set_list_prop('creators', creators, t=ENTITY_TYPES['AGENT'])
         self._set_date_prop('datePublished', datePublished)
-        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
         self._set_list_prop('keywords', keywords, t=str)
         self._set_str_prop('mediaType', mediaType)
         self._set_str_prop('version', version)
@@ -383,7 +390,7 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
 
     @isPartOf.setter
     def isPartOf(self, new_object):
-        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
 
     @property
     def keywords(self):
@@ -400,18 +407,18 @@ class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable,
 
 class DigitalResourceCollection(DigitalResource, Collection):
     def __init__(self,
-                 isPartOf=None,
                  items=None,
                  **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE_COLLECTION'])
         self._set_str_prop('type', ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION'])
-        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
         
 
 class Frame(DigitalResource, Targetable):
-    def __init__(self, index=0, **kwargs):
+    def __init__(self,
+                 index=None,
+                 **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['FRAME'])
         self._set_str_prop('type', ENTITY_TYPES['FRAME'])
@@ -483,7 +490,10 @@ class EpubVolume(DigitalResource):
 
 ## Annotation entities
 class Annotation(Entity, Generatable):
-    def __init__(self, actor=None, annotated=None, **kwargs):
+    def __init__(self,
+                 actor=None,
+                 annotated=None,
+                 **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['ANNOTATION'])
@@ -507,7 +517,9 @@ class Annotation(Entity, Generatable):
 
 
 class BookmarkAnnotation(Annotation):
-    def __init__(self, bookmarkNotes=None, **kwargs):
+    def __init__(self,
+                 bookmarkNotes=None,
+                 **kwargs):
         Annotation.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['BOOKMARK_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['BOOKMARK_ANNOTATION'])
@@ -519,7 +531,10 @@ class BookmarkAnnotation(Annotation):
 
 
 class HighlightAnnotation(Annotation):
-    def __init__(self, selection=None, selectionText=None, **kwargs):
+    def __init__(self,
+                 selection=None,
+                 selectionText=None,
+                 **kwargs):
         Annotation.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['HIGHLIGHT_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['HIGHLIGHT_ANNOTATION'])
@@ -536,7 +551,9 @@ class HighlightAnnotation(Annotation):
 
 
 class SharedAnnotation(Annotation):
-    def __init__(self, withAgents=None, **kwargs):
+    def __init__(self,
+                 withAgents=None,
+                 **kwargs):
         Annotation.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SHARED_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['SHARED_ANNOTATION'])
@@ -548,7 +565,9 @@ class SharedAnnotation(Annotation):
 
 
 class TagAnnotation(Annotation):
-    def __init__(self, tags=None, **kwargs):
+    def __init__(self,
+                 tags=None,
+                 **kwargs):
         Annotation.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['TAG_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['TAG_ANNOTATION'])
@@ -556,7 +575,10 @@ class TagAnnotation(Annotation):
 
 
 class TextPositionSelector(Entity):
-    def __init__(self, start=None, end=None):
+    def __init__(self,
+                 start=None,
+                 end=None,
+                 **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['TEXT_POSITION_SELECTOR'])
         self._set_str_prop('type', ENTITY_TYPES['TEXT_POSITION_SELECTOR'])
@@ -593,8 +615,7 @@ class AssignableDigitalResource(DigitalResource, Assignable):
                  **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ASSIGNABLE_DIGITAL_RESOURCE'])
-        self._set_str_prop('type',
-                           ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
+        self._set_str_prop('type', ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         self._set_date_prop('dateToActivate', dateToActivate)
         self._set_date_prop('dateToShow', dateToShow)
         self._set_date_prop('dateToStartOn', dateToStartOn)
@@ -661,13 +682,13 @@ class Attempt(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('type', ENTITY_TYPES['ATTEMPT'])
-        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
-        self._set_obj_prop('assignable', assignable, t=Assignable, req=True)
-        self._set_int_prop('count', count, req=True)
+        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'])
+        self._set_obj_prop('assignable', assignable, t=Assignable)
+        self._set_int_prop('count', count)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ATTEMPT'])
-        self._set_date_prop('startedAtTime', startedAtTime, req=True)
+        self._set_date_prop('startedAtTime', startedAtTime)
 
     @property
     def assignable(self):
@@ -724,7 +745,6 @@ class Response(Entity, Generatable):
                  duration=None,
                  endedAtTime=None,
                  startedAtTime=None,
-                 values=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESPONSE'])
@@ -736,7 +756,6 @@ class Response(Entity, Generatable):
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
-        self._set_list_prop('values', values)
 
     @property
     def attempt(self):
@@ -762,47 +781,75 @@ class Response(Entity, Generatable):
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
 
+
+class FillinBlankResponse(Response):
+    def __init__(self,
+                 values=None,
+                 **kwargs):
+        Response.__init__(self, **kwargs)
+        self._set_base_context(ENTITY_CONTEXTS['FILLINBLANK'])
+        self._set_str_prop('type', ENTITY_TYPES['FILLINBLANK'])
+        self._set_list_prop('values', values, t=str)
+
     @property
     def values(self):
         return self._get_prop('values')
 
 
-class FillinBlankResponse(Response):
-    def __init__(self, **kwargs):
-        Response.__init__(self, **kwargs)
-        ensure_list_type(self.values, str)
-        self._set_base_context(ENTITY_CONTEXTS['FILLINBLANK'])
-        self._set_str_prop('type', ENTITY_TYPES['FILLINBLANK'])
-
-
 class MultipleChoiceResponse(Response):
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 value=None,
+                 **kwargs):
         Response.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MULTIPLECHOICE'])
         self._set_str_prop('type', ENTITY_TYPES['MULTIPLECHOICE'])
+        self._set_str_prop('value', value)
+
+    @property
+    def value(self):
+        return self._get_prop('value')
 
 
 class MultipleResponseResponse(Response):
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 values=None,
+                 **kwargs):
         Response.__init__(self, **kwargs)
-        ensure_list_type(self.values, str)
         self._set_base_context(ENTITY_CONTEXTS['MULTIPLERESPONSE'])
         self._set_str_prop('type', ENTITY_TYPES['MULTIPLERESPONSE'])
+        self._set_list_prop('values', values, t=str)
+
+    @property
+    def values(self):
+        return self._get_prop('values')
 
 
 class SelectTextResponse(Response):
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 values=None,
+                 **kwargs):
         Response.__init__(self, **kwargs)
-        ensure_list_type(self.values, str)
         self._set_base_context(ENTITY_CONTEXTS['SELECTTEXT'])
         self._set_str_prop('type', ENTITY_TYPES['SELECTTEXT'])
+        self._set_list_prop('values', values, t=str)
+
+    @property
+    def values(self):
+        return self._get_prop('values')
 
 
 class TrueFalseResponse(Response):
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 value=None,
+                 **kwargs):
         Response.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['TRUEFALSE'])
         self._set_str_prop('type', ENTITY_TYPES['TRUEFALSE'])
+        self._set_str_prop('value', value)
+
+    @property
+    def value(self):
+        return self._get_prop('value')
 
 
 ## Discussion forum entities
@@ -839,7 +886,9 @@ class Message(DigitalResource):
         
 ## Media entities
 class MediaObject(DigitalResource, schemadotorg.MediaObject):
-    def __init__(self, duration=None, **kwargs):
+    def __init__(self,
+                 duration=None,
+                 **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEDIA_OBJECT'])
         self._set_str_prop('type', ENTITY_TYPES['MEDIA_OBJECT'])
@@ -851,7 +900,9 @@ class MediaObject(DigitalResource, schemadotorg.MediaObject):
 
 
 class MediaLocation(DigitalResource, Targetable):
-    def __init__(self, currentTime=None, **kwargs):
+    def __init__(self,
+                 currentTime=None,
+                 **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEDIA_LOCATION'])
         self._set_str_prop('type', ENTITY_TYPES['MEDIA_LOCATION'])
@@ -913,13 +964,13 @@ class Result(Entity, Generatable):
     def __init__(self,
                  attempt=None,
                  comment=None,
-                 curvedTotalScore=0.0,
-                 curveFactor=0.0,
-                 extraCreditScore=0.0,
-                 normalScore=0.0,
-                 penaltyScore=0.0,
+                 curvedTotalScore=None,
+                 curveFactor=None,
+                 extraCreditScore=None,
+                 normalScore=None,
+                 penaltyScore=None,
                  scoredBy=None,
-                 totalScore=0.0,
+                 totalScore=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['RESULT'])
@@ -1010,139 +1061,13 @@ class Session(Entity, Generatable, Targetable):
 
 class LtiSession(Session):
     def __init__(self,
-                 context_id=None,
-                 context_label=None,
-                 context_type=None,
-                 custom_caliper_session_id=None,
-                 launch_presentation_locale=None,
-                 lis_course_offering_sourcedid=None,
-                 lis_course_section_sourcedid=None,
-                 lis_person_sourcedid=None,
-                 lis_result_sourcedid=None,
-                 lti_version=None,
-                 resource_link_id=None,
-                 resource_link_title=None,
-                 roles=None,
-                 role_scope_mentor=None,
-                 tool_consumer_info_product_family_code=None,
-                 tool_consumer_info_product_version=None,
-                 tool_consumer_instance_guid=None,
-                 user_id=None,
-                 custom_properties=None,
-                 extended_properties=None,
+                 launchParameters=None,
                  **kwargs):
         Session.__init__(self, **kwargs)
-        self._set_dict_prop('custom_properties', custom_properties)
-        self._set_dict_prop('extended_properties', extended_properties)
         self._set_base_context(ENTITY_CONTEXTS['LTI_SESSION'])
         self._set_str_prop('type', ENTITY_TYPES['LTI_SESSION'])
-        self._set_str_prop('context_id', context_id)
-        self._set_str_prop('context_label', context_label)
-        self._set_str_prop('context_type', context_type)
-        self._set_str_prop('launch_presentation_locale',
-                           launch_presentation_locale)
-        self._set_str_prop('lis_course_offering_sourcedid',
-                           lis_course_offering_sourcedid)
-        self._set_str_prop('lis_course_section_sourcedid',
-                           lis_course_section_sourcedid)
-        self._set_str_prop('lis_person_sourcedid', lis_person_sourcedid)
-        self._set_str_prop('lis_result_sourcedid', lis_result_sourcedid)
-        self._set_str_prop('lti_version', lti_version, req=True)
-        self._set_str_prop('resource_link_id', resource_link_id, req=True)
-        self._set_str_prop('resource_link_title', resource_link_title)
-        self._set_str_prop('roles', roles)
-        self._set_str_prop('role_scope_mentor', role_scope_mentor)
-        self._set_str_prop('tool_consumer_info_product_family_code',
-                           tool_consumer_info_product_family_code)
-        self._set_str_prop('tool_consumer_info_product_version',
-                           tool_consumer_info_product_version)
-        self._set_str_prop('tool_consumer_instance_guid',
-                           tool_consumer_instance_guid)
-        self._set_str_prop('user_id', user_id)
-
-        if not custom_caliper_session_id:
-            raise_with_traceback(ValueError(
-                'custom_caliper_session_id must have a non-null value'))
-        else:
-            self._props['custom_properties'].update(
-                {'custom_caliper_session_id': custom_caliper_session_id})
+        self._set_dict_prop('launchParameters', launchParameters)
 
     @property
-    def context_id(self):
-        return self._get_prop('context_id')
-
-    @property
-    def context_label(self):
-        return self._get_prop('context_label')
-
-    @property
-    def context_type(self):
-        return self._get_prop('context_type')
-
-    @property
-    def custom_caliper_session_id(self):
-        return self._get_prop('custom_properties')['custom_caliper_session_id']
-
-    @property
-    def custom_properties(self):
-        return self._get_props('custom_properties')
-
-    @property
-    def extended_properties(self):
-        return self._get_prop('extended_properties')
-
-    @property
-    def launch_presentation_locale(self):
-        return self._get_prop('launch_presentation_locale')
-
-    @property
-    def lis_course_offering_sourcedid(self):
-        return self._get_prop('lis_course_offering_sourcedid')
-
-    @property
-    def lis_course_section_sourcedid(self):
-        return self._get_prop('lis_course_section_sourcedid')
-
-    @property
-    def lis_person_sourcedid(self):
-        return self._get_prop('lis_person_sourcedid')
-
-    @property
-    def lis_result_sourcedid(self):
-        return self._get_prop('lis_result_sourcedid')
-
-    @property
-    def lti_version(self):
-        return self._get_prop('lti_version')
-
-    @property
-    def resource_link_id(self):
-        return self._get_prop('resource_link_id')
-
-    @property
-    def resource_link_title(self):
-        return self._get_prop('resource_link_title')
-
-    @property
-    def roles(self):
-        return self._get_prop('roles')
-
-    @property
-    def role_scope_mentor(self):
-        return self._get_prop('role_scope_mentor')
-
-    @property
-    def tool_consumer_info_product_family_code(self):
-        return self._get_prop('tool_consumer_info_product_family_code')
-
-    @property
-    def tool_consumer_info_product_version(self):
-        return self._get_prop('tool_consumer_info_product_version')
-
-    @property
-    def tool_consumer_instance_guid(self):
-        return self._get_prop('tool_consumer_instance_guid')
-
-    @property
-    def user_id(self):
-        return self._get_prop('user_id')
+    def launchParameters(self):
+        return self._get_prop('launchParameters')
