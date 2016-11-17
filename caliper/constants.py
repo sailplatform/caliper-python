@@ -394,12 +394,14 @@ MEDIA_PROFILE_ACTIONS = {
     'FORWARDED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ForwardedTo',
     'JUMPED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#JumpedTo',
     'MUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Muted',
+    'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
     'OPENED_POPOUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#OpenedPopout',
     'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
     'RESUMED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Resumed',
     'REWOUND': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Rewound',
     'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
     'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
+    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
 NAVIGATION_ACTIONS = {
