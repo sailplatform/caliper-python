@@ -29,11 +29,10 @@ import collections
 from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
 from caliper.constants import ENTITY_TYPES
 from caliper.constants import CALIPER_ACTIONS
-from caliper.constants import (BASE_PROFILE_ACTIONS, ANNOTATION_PROFILE_ACTIONS,
-                               ASSESSMENT_PROFILE_ACTIONS, ASSESSMENT_ITEM_PROFILE_ACTIONS,
-                               ASSIGNABLE_PROFILE_ACTIONS, FORUM_PROFILE_ACTIONS,
-                               MEDIA_PROFILE_ACTIONS, OUTCOME_PROFILE_ACTIONS,
-                               SESSION_PROFILE_ACTIONS, VIEW_PROFILE_ACTIONS)
+from caliper.constants import (
+    BASE_PROFILE_ACTIONS, ANNOTATION_PROFILE_ACTIONS, ASSESSMENT_PROFILE_ACTIONS,
+    ASSIGNABLE_PROFILE_ACTIONS, FORUM_PROFILE_ACTIONS, MEDIA_PROFILE_ACTIONS,
+    OUTCOME_PROFILE_ACTIONS, SESSION_PROFILE_ACTIONS, VIEW_PROFILE_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
 from caliper import entities
 from caliper.extern import foaf, schemadotorg
@@ -233,11 +232,11 @@ class AssessmentEvent(Event):
 class AssessmentItemEvent(Event):
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action not in ASSESSMENT_ITEM_PROFILE_ACTIONS.values():
+        if self.action not in ASSESSMENT_PROFILE_ACTIONS.values():
             raise_with_traceback(
-                ValueError('action must be in the list of Assessment Item profile actions'))
+                ValueError('action must be in the list of Assessment profile actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        if self.action == ASSESSMENT_ITEM_PROFILE_ACTIONS['COMPLETED']:
+        if self.action == ASSESSMENT_PROFILE_ACTIONS['COMPLETED']:
             ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
             ensure_type(self.generated, ENTITY_TYPES['RESPONSE'], optional=True)
         else:

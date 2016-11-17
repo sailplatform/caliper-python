@@ -347,16 +347,12 @@ ANNOTATION_PROFILE_ACTIONS = {
 }
 
 ASSESSMENT_PROFILE_ACTIONS = {
+    'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
     'PAUSED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Paused',
     'RESTARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted',
-    'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
-    'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
-}
-
-ASSESSMENT_ITEM_PROFILE_ACTIONS = {
-    'COMPLETED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Completed',
     'SKIPPED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped',
     'STARTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Started',
+    'SUBMITTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted',
 }
 
 ASSIGNABLE_PROFILE_ACTIONS = {
@@ -425,7 +421,6 @@ CALIPER_ACTIONS.update(BASE_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(CRUD_ACTIONS)
 CALIPER_ACTIONS.update(ANNOTATION_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ASSESSMENT_PROFILE_ACTIONS)
-CALIPER_ACTIONS.update(ASSESSMENT_ITEM_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ASSIGNABLE_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(FORUM_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
