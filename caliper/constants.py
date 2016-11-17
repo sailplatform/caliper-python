@@ -413,6 +413,12 @@ OUTCOME_PROFILE_ACTIONS = {
     'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
 }
 
+# Formalism only: navigation and view events verify their action against the base profile
+READING_PROFILE_ACTIONS = {
+    'NAVIGATED_TO': 'http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo',
+    'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed',
+}
+
 SESSION_PROFILE_ACTIONS = {
     'LOGGED_IN': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn',
     'LOGGED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut',
@@ -429,5 +435,6 @@ CALIPER_ACTIONS.update(ASSIGNABLE_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(FORUM_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(OUTCOME_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(READING_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(NAVIGATION_ACTIONS)
 CALIPER_ACTIONS.update(SESSION_PROFILE_ACTIONS)
