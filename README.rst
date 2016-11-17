@@ -120,7 +120,7 @@ might send a basic navigation event to a caliper endpoint::
   #
   # Note that you don't have to pass an action into the constructor because
   # the NavigationEvent only supports one action, part of the
-  # Caliper base profile: caliper.profiles.CaliperProfile.Actions['NAVIGATED_TO']
+  # Caliper base profile: caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO']
   #
   the_event = caliper.events.NavigationEvent(
           actor = the_user_currently_acting_as_caliper_Actor_entity,
@@ -129,7 +129,7 @@ might send a basic navigation event to a caliper endpoint::
           event_object = the_caliper_DigitalResource_the_actor_is_using,
           referrer = the_caliper_DigitalResource_the_actor_came_from,
           target = the_caliper_DigitalResource_the_actor_is_going_to,
-          endedAtTime = the_time_when_the_actor_did_the_action )
+          eventTime = the_time_when_the_actor_did_the_action )
 
   # Once built, you can use your sensor to describe one or more often used
   # entities; suppose for example, you'll be sending a number of events that
@@ -139,7 +139,7 @@ might send a basic navigation event to a caliper endpoint::
   # The return structure from the sensor will be a dictionary of lists: each
   # item in the dictionary has a key corresponding to a client key,
   # so ret['default'] fetches back the list of URIs of all the @ids of
-  # the fully described Caliper entities you have sent.
+  # the fully described Caliper entities you have sent with that describe call.
   #
   # Now you can use this list with event sendings to send only the identifiers
   # of already-described entities, and not their full forms:
