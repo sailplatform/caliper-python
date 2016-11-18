@@ -318,7 +318,6 @@ BASIC_EVENT_ACTIONS = {
     'ADDED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Added',
     'ATTACHED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Attached',
     'BOOKMARKED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked',
-    'CHANGED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Changed', #
     'CHANGED_RESOLUTION': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedResolution',
     'CHANGED_SIZE': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSize',
     'CHANGED_SPEED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSpeed',
@@ -377,7 +376,6 @@ BASIC_EVENT_ACTIONS = {
     'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
     'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
     'UNSUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unsubscribed',
-    'UPDATED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Updated', #
     'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed'
 }
 
