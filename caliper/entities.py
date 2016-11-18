@@ -30,12 +30,11 @@ from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, CALIPER_ROLES, CALI
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import is_valid_date, is_valid_duration, is_valid_URI
 from caliper.base import ensure_type, ensure_list_type
-from caliper.extern import foaf, schemadotorg, w3c
 
 
 ### Fundamental entities ###
 ## Base entity class
-class Entity(BaseEntity, schemadotorg.Thing):
+class Entity(BaseEntity):
 
     ## Use the base context value here, but preserve the context labels
     ## in case, in the future, indivdual contexts start getting split out
@@ -157,7 +156,7 @@ class Targetable(BaseEntity):
 ## Membership entities
 
 
-class Membership(Entity, w3c.Membership):
+class Membership(Entity):
     def __init__(self, member=None, organization=None, roles=None, status=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEMBERSHIP'])
@@ -199,12 +198,12 @@ class Membership(Entity, w3c.Membership):
 
 
 ## Agent entities
-class Agent(Entity, foaf.Agent):
+class Agent(Entity, Referrable):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
 
 
-class SoftwareApplication(Agent, schemadotorg.SoftwareApplication):
+class SoftwareApplication(Agent):
     def __init__(self, version=None, **kwargs):
         Agent.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SOFTWARE_APPLICATION'])
@@ -224,7 +223,7 @@ class Person(Agent):
 
 
 ## Organization entities
-class Organization(Entity, w3c.Organization):
+class Organization(Agent):
     _types = {}
 
     def __init__(self, subOrganizationOf=None, **kwargs):
@@ -238,12 +237,7 @@ class Organization(Entity, w3c.Organization):
         return self._get_prop('subOrganizationOf')
 
 
-class Course(Organization):
-    def __init__(self, **kwargs):
-        Organization.__init__(self, **kwargs)
-
-
-class CourseOffering(Course):
+class CourseOffering(Organization):
     def __init__(self, academicSession=None, courseNumber=None, **kwargs):
         Organization.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['COURSE_OFFERING'])
@@ -283,7 +277,6 @@ class CourseSection(CourseOffering):
 class Group(Organization):
     def __init__(self, **kwargs):
         Organization.__init__(self, **kwargs)
-        ensure_type(self.subOrganizationOf, Course, optional=True)
         self._set_base_context(ENTITY_CONTEXTS['GROUP'])
         self._set_str_prop('type', ENTITY_TYPES['GROUP'])
 
@@ -323,7 +316,7 @@ class LearningObjective(Entity):
 
 
 ## Creative works
-class DigitalResource(Entity, schemadotorg.CreativeWork, Referrable, Targetable):
+class DigitalResource(Entity, Referrable, Targetable):
     def __init__(self,
                  learningObjectives=None,
                  creators=None,
@@ -405,7 +398,7 @@ class Reading(DigitalResource):
         self._set_str_prop('type', ENTITY_TYPES['READING'])
 
 
-class WebPage(DigitalResource, schemadotorg.WebPage):
+class WebPage(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['WEB_PAGE'])
@@ -606,22 +599,6 @@ class AssessmentItem(AssignableDigitalResource):
 
 ## Attempt and Response entities
 class Attempt(Entity, Generatable):
-    '''
-    Keyword arguments:
-    duration -- An xsd:duration (http://books.xmlschemata.org/relaxng/ch19-77073.html)
-
-                The format is expected to be PnYnMnDTnHnMnS
-                
-                Valid values include PT1004199059S, PT130S, PT2M10S,
-                P1DT2S, -P1Y, or P1Y2M3DT5H20M30.123S.
-                
-                The following values are invalid: 1Y (leading P is
-                missing), P1S (T separator is missing), P-1Y (all parts
-                must be positive), P1M2Y (parts order is significant and
-                Y must precede M), or P1Y-1M (all parts must be
-                positive).
-    '''
-
     def __init__(self,
                  actor=None,
                  assignable=None,
@@ -684,7 +661,7 @@ class Attempt(Entity, Generatable):
 
     @isPartOf.setter
     def isPartOf(self, new_object):
-        self._set_obj_prop('isPartOf', isPartOf, t=schemadotorg.CreativeWork)
+        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['Attempt'])
 
     @property
     def startedAtTime(self):
@@ -815,7 +792,7 @@ class Message(DigitalResource):
 
 
 ## Media entities
-class MediaObject(DigitalResource, schemadotorg.MediaObject):
+class MediaObject(DigitalResource):
     def __init__(self, duration=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['MEDIA_OBJECT'])
@@ -839,7 +816,7 @@ class MediaLocation(DigitalResource, Targetable):
         return self._get_prop('currentTime')
 
 
-class AudioObject(MediaObject, schemadotorg.AudioObject):
+class AudioObject(MediaObject):
     def __init__(self, muted=None, volumeLevel=None, volumeMax=None, volumeMin=None, **kwargs):
         MediaObject.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['AUDIO_OBJECT'])
@@ -866,14 +843,14 @@ class AudioObject(MediaObject, schemadotorg.AudioObject):
         return self._get_prop('volumeMin')
 
 
-class ImageObject(MediaObject, schemadotorg.ImageObject):
+class ImageObject(MediaObject):
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['IMAGE_OBJECT'])
         self._set_str_prop('type', ENTITY_TYPES['IMAGE_OBJECT'])
 
 
-class VideoObject(MediaObject, schemadotorg.VideoObject):
+class VideoObject(MediaObject):
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['VIDEO_OBJECT'])

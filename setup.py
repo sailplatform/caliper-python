@@ -17,7 +17,7 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-_packages = ['caliper', 'caliper.extern', 'caliper.util', 'caliper_tests']
+_packages = ['caliper', 'caliper.util', 'caliper_tests']
 
 _requires = ['aniso8601 >= 1.1.0', 'future >= 0.14.3', 'requests >= 2.7.0']
 

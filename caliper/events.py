@@ -36,7 +36,6 @@ from caliper.constants import (
     SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, VIEW_EVENT_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
 from caliper import entities
-from caliper.extern import foaf, schemadotorg
 
 
 ## Base event class
