@@ -68,7 +68,7 @@ class Event(BaseEvent):
         self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_date_prop('eventTime', eventTime, req=True)
-        self._set_dict_prop('extensions', extensions)
+        self._set_list_prop('extensions', extensions, t=collections.MutableMapping)
         self._set_obj_prop('object', event_object, t=BaseEntity)
         self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['LTI_SESSION'])
         self._set_obj_prop('generated', generated, t=entities.Generatable)

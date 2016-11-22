@@ -24,7 +24,7 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections, importlib
+import copy, collections, importlib
 
 from caliper.base import is_valid_URI, is_valid_date
 from caliper.constants import CALIPER_CLASSES
@@ -55,7 +55,7 @@ def from_caliper_envelope(d):
 def from_json_dict(d):
     t = d.get('type')
     if t and not CALIPER_CLASSES.get(t):
-        raise_with_traceback(ValueError('Unknown type: {0}'.format(t)))
+        return copy.deepcopy(d)
     type_path = CALIPER_CLASSES.get(t) or d.__class__.__name__
 
     local_ids = _parse_context(d.get('@context'))

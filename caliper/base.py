@@ -84,7 +84,7 @@ def _get_type(t):
     try:
         return getattr(importlib.import_module(m), c)
     except (ImportError, ValueError) as e:
-        raise_with_traceback(ValueError('Unknown Caliper type: {0}'.format(str(t))))
+        raise_with_traceback(ValueError('Unknown type: {0}'.format(str(t))))
 
 
 def is_subtype(t1, t2):
@@ -103,11 +103,16 @@ def ensure_type(p, t, optional=False):
             raise_with_traceback(ValueError('non-optional properties cannot be None'))
         if t == None:
             raise_with_traceback(ValueError('for present properties, type cannot be None type'))
+        elif t == collections.MutableMapping:
+            if not isinstance(p, t):
+                raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
+            else:
+                return True
         elif t and not (
-            (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-            (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', ''), t)) or
-            (isinstance(p, t))):
-            raise_with_traceback(TypeError("Property must be of type {0}".format(str(t))))
+                (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+                (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', dict), t)) or
+                (isinstance(p, t))):
+            raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
 
 
