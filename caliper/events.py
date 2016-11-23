@@ -355,7 +355,7 @@ class ThreadEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['THREAD'])
 
-        self._set_base_context(EVENT_CONTEXTS['FORUM'])
+        self._set_base_context(EVENT_CONTEXTS['THREAD'])
         self._set_str_prop('type', EVENT_TYPES['THREAD'])
 
 
