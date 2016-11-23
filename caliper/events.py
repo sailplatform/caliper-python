@@ -33,7 +33,7 @@ from caliper.constants import (
     BASIC_EVENT_ACTIONS, ANNOTATION_EVENT_ACTIONS, ASSESSMENT_EVENT_ACTIONS,
     ASSESSMENT_ITEM_EVENT_ACTIONS, ASSIGNABLE_EVENT_ACTIONS, FORUM_EVENT_ACTIONS,
     MEDIA_EVENT_ACTIONS, MESSAGE_EVENT_ACTIONS, NAVIGATION_EVENT_ACTIONS, OUTCOME_EVENT_ACTIONS,
-    SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, VIEW_EVENT_ACTIONS)
+    SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, TOOL_USE_EVENT_ACTIONS, VIEW_EVENT_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
 from caliper import entities
 
@@ -357,6 +357,18 @@ class ThreadEvent(Event):
 
         self._set_base_context(EVENT_CONTEXTS['THREAD'])
         self._set_str_prop('type', EVENT_TYPES['THREAD'])
+
+
+class ToolUseEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        if self.action not in TOOL_USE_EVENT_ACTIONS.values():
+            raise_with_traceback(ValueError('action must be in the list of Tool Use event actions'))
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
+
+        self._set_base_context(EVENT_CONTEXTS['TOOL_USE'])
+        self._set_str_prop('type', EVENT_TYPES['TOOL_USE'])
 
 
 class ViewEvent(Event):

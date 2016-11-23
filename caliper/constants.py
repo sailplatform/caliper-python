@@ -202,6 +202,7 @@ EVENT_CONTEXTS = {
     'OUTCOME': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'SESSION': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'THREAD': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
+    'TOOL_USE': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'VIEW': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
 }
 
@@ -218,6 +219,7 @@ EVENT_TYPES = {
     'OUTCOME': 'OutcomeEvent',
     'SESSION': 'SessionEvent',
     'THREAD': 'ThreadEvent',
+    'TOOL_USE': 'ToolUseEvent',
     'VIEW': 'ViewEvent',
 }
 
@@ -234,6 +236,7 @@ EVENT_CLASSES = {
     EVENT_TYPES['OUTCOME']: 'caliper.events.OutcomeEvent',
     EVENT_TYPES['SESSION']: 'caliper.events.SessionEvent',
     EVENT_TYPES['THREAD']: 'caliper.events.ThreadEvent',
+    EVENT_TYPES['TOOL_USE']: 'caliper.events.ToolUseEvent',
     EVENT_TYPES['VIEW']: 'caliper.events.ViewEvent',
 }
 
@@ -376,6 +379,7 @@ BASIC_EVENT_ACTIONS = {
     'TIMED_OUT': 'http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut',
     'UNMUTED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted',
     'UNSUBSCRIBED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Unsubscribed',
+    'USED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Used',
     'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed'
 }
 
@@ -465,6 +469,10 @@ THREAD_EVENT_ACTIONS = {
     'MARKED_AS_UNREAD': 'http://purl.imsglobal.org/vocab/caliper/v1/action#MarkedAsUnread',
 }
 
+TOOL_USE_EVENT_ACTIONS = {
+    'USED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Used',
+}
+
 VIEW_EVENT_ACTIONS = {
     'VIEWED': 'http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed'
 }
@@ -511,6 +519,9 @@ READING_PROFILE_ACTIONS.update(VIEW_EVENT_ACTIONS)
 SESSION_PROFILE_ACTIONS = {}
 SESSION_PROFILE_ACTIONS.update(SESSION_EVENT_ACTIONS)
 
+TOOL_USE_PROFILE_ACTIONS = {}
+TOOL_USE_PROFILE_ACTIONS.update(TOOL_USE_EVENT_ACTIONS)
+
 CALIPER_ACTIONS = {}
 CALIPER_ACTIONS.update(BASIC_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(ANNOTATION_PROFILE_ACTIONS)
@@ -521,3 +532,4 @@ CALIPER_ACTIONS.update(MEDIA_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(OUTCOME_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(READING_PROFILE_ACTIONS)
 CALIPER_ACTIONS.update(SESSION_PROFILE_ACTIONS)
+CALIPER_ACTIONS.update(TOOL_USE_PROFILE_ACTIONS)
