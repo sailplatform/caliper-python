@@ -201,6 +201,7 @@ class Membership(Entity):
 class Agent(Entity, Referrable):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_str_prop('type', ENTITY_TYPES['AGENT'])
 
 
 class SoftwareApplication(Agent):
