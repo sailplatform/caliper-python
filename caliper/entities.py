@@ -225,13 +225,16 @@ class Person(Agent):
 
 ## Organization entities
 class Organization(Agent):
-    _types = {}
-
-    def __init__(self, subOrganizationOf=None, **kwargs):
+    def __init__(self, members=None, subOrganizationOf=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ORGANIZATION'])
         self._set_str_prop('type', ENTITY_TYPES['ORGANIZATION'])
+        self._set_list_prop('members', members, t=ENTITY_TYPES['AGENT'])
         self._set_obj_prop('subOrganizationOf', subOrganizationOf, t=ENTITY_TYPES['ORGANIZATION'])
+
+    @property
+    def members(self):
+        return self._get_prop('members')
 
     @property
     def subOrganizationOf(self):
