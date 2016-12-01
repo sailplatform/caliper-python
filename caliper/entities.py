@@ -90,25 +90,6 @@ class Entity(BaseEntity):
         return self._get_prop('extensions')
 
 
-## Base collection class
-class Collection(Entity):
-    def __init__(self, isPartOf=None, items=None, **kwargs):
-        Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['COLLECTION'])
-        self._set_str_prop('type', ENTITY_TYPES['COLLECTION'])
-
-        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
-        self._set_list_prop('items', items, t=ENTITY_TYPES['ENTITY'])
-
-    @property
-    def isPartOf(self):
-        return self._get_prop('isPartOf')
-
-    @property
-    def items(self):
-        return self._get_prop('items')
-
-
 ## Behavioural interfaces for entities ##
 class Assignable(BaseEntity):
     @property
@@ -375,12 +356,16 @@ class DigitalResource(Entity, Referrable, Targetable):
         return self._get_prop('version')
 
 
-class DigitalResourceCollection(DigitalResource, Collection):
+class DigitalResourceCollection(DigitalResource):
     def __init__(self, items=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE_COLLECTION'])
         self._set_str_prop('type', ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
+
+    @property
+    def items(self):
+        return self._get_prop('items')
 
 
 class Frame(DigitalResource, Targetable):
