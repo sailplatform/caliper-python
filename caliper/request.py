@@ -33,7 +33,7 @@ from caliper.constants import CALIPER_VERSION
 class Envelope(CaliperSerializable):
     def __init__(self,
                  data=None,
-                 dataVersion=CALIPER_VERSION['CALIPER'],
+                 dataVersion=CALIPER_VERSION,
                  send_time=None,
                  sensor_id=None,
                  **kwargs):
