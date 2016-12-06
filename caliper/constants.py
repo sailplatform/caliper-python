@@ -27,6 +27,11 @@ from builtins import *
 # yapf: disable
 
 ## Caliper constants
+
+CALIPER_VERSION = {
+    'CALIPER': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
+}
+
 ENTITY_CONTEXTS = {
     'AGENT': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
     'ANNOTATION': 'http://purl.imsglobal.org/ctx/caliper/v1p1/Context',
@@ -242,6 +247,7 @@ CALIPER_CLASSES.update(ENTITY_CLASSES)
 CALIPER_CLASSES.update(EVENT_CLASSES)
 
 CALIPER_CONTEXTS = {}
+CALIPER_CONTEXTS.update(CALIPER_VERSION)
 CALIPER_CONTEXTS.update(ENTITY_CONTEXTS)
 CALIPER_CONTEXTS.update(EVENT_CONTEXTS)
 
