@@ -514,9 +514,9 @@ class TagAnnotation(Annotation):
         self._set_list_prop('tags', tags, t=str)
 
 
-class TextPositionSelector(Entity):
-    def __init__(self, start=None, end=None, **kwargs):
-        Entity.__init__(self, **kwargs)
+class TextPositionSelector(CaliperSerializable):
+    def __init__(self, id=None, start=None, end=None, **kwargs):
+        CaliperSerializable.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['TEXT_POSITION_SELECTOR'])
         self._set_str_prop('type', ENTITY_TYPES['TEXT_POSITION_SELECTOR'])
         self._set_int_prop('end', end, req=True)
