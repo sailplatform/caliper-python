@@ -27,12 +27,19 @@ from builtins import *
 import collections, copy, datetime, json, requests, uuid
 
 from caliper.base import CaliperSerializable, HttpOptions
+from caliper.constants import CALIPER_VERSION
 
 
 class Envelope(CaliperSerializable):
-    def __init__(self, data=None, send_time=None, sensor_id=None, **kwargs):
+    def __init__(self,
+                 data=None,
+                 dataVersion=CALIPER_VERSION,
+                 send_time=None,
+                 sensor_id=None,
+                 **kwargs):
         CaliperSerializable.__init__(self)
         self._set_list_prop('data', data, t=CaliperSerializable)
+        self._set_str_prop('dataVersion', dataVersion)
         self._set_date_prop('sendTime', send_time)
         self._set_str_prop('sensor', sensor_id)
 
@@ -43,6 +50,14 @@ class Envelope(CaliperSerializable):
     @data.setter
     def data(self, new_data):
         self._set_list_prop('data', data, t=CaliperSerializable)
+
+    @property
+    def dataVersion(self):
+        return self._get_prop('dataVersion')
+
+    @dataVersion.setter
+    def dataVersion(self, v):
+        self._set_str_prop('dataVersion', v)
 
     @property
     def sendTime(self):
@@ -62,6 +77,7 @@ class Envelope(CaliperSerializable):
         return copy.deepcopy({
             'sendTime': self.sendTime,
             'sensor': self.sensor,
+            'dataVersion': self.dataVersion,
             'data': self._unpack_list(
                 self.data,
                 described_entities=described_entities or [],
