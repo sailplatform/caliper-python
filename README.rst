@@ -25,10 +25,10 @@ to have these third-party packages in your local Python environment.
 
 Which platform
 --------------
-We developed `caliper-python` primarily using the Python 3.5+ platform; however,
+We developed `caliper-python` primarily using the Python 3.6+ platform; however,
 we've taken steps to make it portably usbale with Python 2.7 as well (using
 the `future` package). Changes to the code base should ensure the tests run clean
-under Python 3.5 *and* 2.7.
+under Python 3.6 *and* 2.7.
 
 
 Build and install
