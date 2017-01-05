@@ -567,7 +567,7 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         return self._get_prop('maxScore')
 
 
-class Assessment(AssignableDigitalResource):
+class Assessment(AssignableDigitalResource, DigitalResourceCollection):
     def __init__(self, items=None, **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ASSESSMENT'])
