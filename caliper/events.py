@@ -24,7 +24,7 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections
+import collections, uuid
 
 from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
 from caliper.constants import ENTITY_TYPES
@@ -77,7 +77,7 @@ class Event(BaseEvent):
         self._set_obj_prop('referrer', referrer, t=entities.Referrable)
         self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
         self._set_obj_prop('target', target, t=entities.Targetable)
-        self._set_str_prop('uuid', uuid)
+        self._set_str_prop('uuid', uuid or str(uuid.uuid4()), req=True)
 
     def as_minimal_event(self):
         return MinimalEvent(

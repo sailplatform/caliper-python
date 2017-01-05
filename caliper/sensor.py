@@ -25,7 +25,6 @@ from future.utils import raise_with_traceback
 from builtins import *
 
 import collections
-import uuid
 
 from caliper.base import Options, HttpOptions, deprecation, ensure_list_type
 from caliper.entities import Entity

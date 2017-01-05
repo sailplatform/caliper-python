@@ -24,7 +24,7 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections, copy, datetime, json, requests, uuid
+import collections, copy, datetime, json, requests
 
 from caliper.base import CaliperSerializable, HttpOptions
 from caliper.constants import CALIPER_VERSION
