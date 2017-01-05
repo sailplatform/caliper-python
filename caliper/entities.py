@@ -260,10 +260,11 @@ class CourseSection(CourseOffering):
 
 
 class Group(Organization):
-    def __init__(self, **kwargs):
+    def __init__(self, members=None, **kwargs):
         Organization.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['GROUP'])
         self._set_str_prop('type', ENTITY_TYPES['GROUP'])
+        self._set_list_prop('members', members, t=ENTITY_TYPES['PERSON'])
 
 
 ## Learning Context
