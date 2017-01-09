@@ -393,27 +393,20 @@ ANNOTATION_EVENT_ACTIONS = {
 ASSESSMENT_EVENT_ACTIONS = {
     'PAUSED': 'Paused',
     'RESTARTED': 'Restarted',
-    'SKIPPED': 'Skipped',
     'STARTED': 'Started',
     'SUBMITTED': 'Submitted',
 }
 
 ASSESSMENT_ITEM_EVENT_ACTIONS = {
     'COMPLETED': 'Completed',
-    'NAVIGATED_TO': 'NavigatedTo',
     'SKIPPED': 'Skipped',
     'STARTED': 'Started',
-    'VIEWED': 'Viewed',
 }
 
 ASSIGNABLE_EVENT_ACTIONS = {
-    'ABANDONED': 'Abandoned',
     'ACTIVATED': 'Activated',
     'COMPLETED': 'Completed',
     'DEACTIVATED': 'Deactivated',
-    'HID': 'Hid',
-    'REVIEWED': 'Reviewed',
-    'SHOWED': 'Showed',
     'STARTED': 'Started',
 }
 
