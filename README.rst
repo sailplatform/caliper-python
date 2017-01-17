@@ -18,7 +18,7 @@ packages:
 
 * requests -- (Apache 2 licensed)
 
-* tox -- (soft-dependency used only for tests, MIT licensed)
+* tox, discover -- (soft-dependency used only for tests, MIT licensed)
 
 To work with the `caliper-python` bundle (maintain, use, run tests) you'll need
 to have these third-party packages in your local Python environment.
