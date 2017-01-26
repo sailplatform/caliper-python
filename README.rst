@@ -68,7 +68,7 @@ you should run the unit tests. From the package's top-level directory, just use
 **Fixtures**. The test suites are principally designed to test against the
 canonical common JSON fixtures. To set up your tests, you should clone the
 `Caliper common fixtures repository
-<https://github.com/IMSGlobal/caliper-common-fixtures>`_ repository into the
+<https://github.com/IMSGlobal/caliper-common-fixtures-public>`_ repository into the
 `caliper_tests/fixtures` directory, and pull changes there.
 
 Ideally, if you make changes to `caliper-python` you should ensure that your
