@@ -5,3 +5,4 @@ dist
 *.egg-info*
 caliper_tests/fixtures
 caliper_tests/fixtures_out
+caliper_tests/contexts
