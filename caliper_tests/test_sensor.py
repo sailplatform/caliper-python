@@ -71,13 +71,6 @@ class TestCaliperSensor(unittest.TestCase):
             envelope.as_json(
                 thin_props=True, thin_context=True), util.get_fixture(fixture))
 
-    def testEventPayloadMinimal(self):
-        fixture = 'caliperEnvelopeEventViewViewedMinimal'
-        envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(
-                thin_props=True, thin_context=True), util.get_fixture(fixture))
-
     # test type-coerced payload
     def testEventPayloadSingleCoerced(self):
         fixture = 'caliperEnvelopeEventViewViewedCoerced'
