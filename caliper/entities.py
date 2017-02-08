@@ -446,24 +446,20 @@ class EpubVolume(DigitalResource):
 
 ## Annotation entities
 class Annotation(Entity, Generatable):
-    def __init__(self, actor=None, annotated=None, **kwargs):
+    def __init__(self, annotated=None, annotator=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['ANNOTATION'])
-        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('annotated', annotated, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
-
-    @property
-    def actor(self):
-        return self._get_prop('actor')
+        self._set_obj_prop('annotator', annotator, t=ENTITY_TYPES['AGENT'], req=True)
 
     @property
     def annotated(self):
         return self._get_prop('annotated')
 
     @property
-    def annotated_id(self):
-        return self._get_prop('annotated')
+    def annotator(self):
+        return self._get_prop('annotator')
 
 
 class BookmarkAnnotation(Annotation):
@@ -590,8 +586,8 @@ class AssessmentItem(AssignableDigitalResource):
 ## Attempt and Response entities
 class Attempt(Entity, Generatable):
     def __init__(self,
-                 actor=None,
                  assignable=None,
+                 assignee=None,
                  count=None,
                  duration=None,
                  endedAtTime=None,
@@ -601,8 +597,8 @@ class Attempt(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('type', ENTITY_TYPES['ATTEMPT'])
-        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'])
         self._set_obj_prop('assignable', assignable, t=Assignable)
+        self._set_obj_prop('assignee', assignee, t=ENTITY_TYPES['AGENT'])
         self._set_int_prop('count', count)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
@@ -614,16 +610,8 @@ class Attempt(Entity, Generatable):
         return self._get_prop('assignable')
 
     @property
-    def assignable_id(self):
-        return self._get_prop('assignable')
-
-    @property
-    def actor(self):
-        return self._get_prop('actor')
-
-    @property
-    def actor_id(self):
-        return self._get_prop('actor')
+    def assignee(self):
+        return self._get_prop('assignee')
 
     @property
     def count(self):
@@ -908,18 +896,14 @@ class Result(Entity, Generatable):
 
 ## Session entities
 class Session(Entity, Generatable, Targetable):
-    def __init__(self, actor=None, duration=None, endedAtTime=None, startedAtTime=None, **kwargs):
+    def __init__(self, duration=None, endedAtTime=None, startedAtTime=None, user=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_base_context(ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('type', ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'])
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
-
-    @property
-    def actor(self):
-        return self._get_prop('actor')
+        self._set_obj_prop('user', user, t=ENTITY_TYPES['AGENT'])
 
     @property
     def duration(self):
@@ -940,6 +924,10 @@ class Session(Entity, Generatable, Targetable):
     @property
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
+
+    @property
+    def user(self):
+        return self._get_prop('user')
 
 
 class LtiSession(Session):
