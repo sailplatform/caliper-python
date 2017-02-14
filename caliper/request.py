@@ -107,7 +107,7 @@ class EventStoreRequestor(object):
         st = send_time if send_time else self._get_time()
         payload, ids = self._get_payload_json(caliper_objects, described_entities, optimize, st,
                                               sensor_id)
-        return {'type': 'application/json', 'data': payload}, ids
+        return {'type': '{};profile={}'.format('application/ld+json', CALIPER_VERSION), 'data': payload}, ids
 
     def _get_payload_json(self,
                           caliper_objects=None,
