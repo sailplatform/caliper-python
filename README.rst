@@ -1,14 +1,15 @@
-==============
-Caliper-python
-==============
+===========
+IMS Caliper
+===========
 
-`Caliper-python` is a Python client bundle for `Caliper <http://imsglobal.org/caliper/>`_
-that provides a reference implementation of the Caliper SensorAPI(tm).
+The `imsglobal_caliper` package is a Python client library for `IMS Caliper Analytics
+<http://imsglobal.org/caliper/>`_ that provides a reference implementation of
+the Caliper SensorAPI(tm).
 
 
 Dependencies
 ============
-To effectively use this `caliper-python` bundle, you will need to have Python,
+To effectively use this `imsglobal_caliper` bundle, you will need to have Python,
 pip, and setuptools installed. This package also depends on several third-party
 packages:
 
@@ -20,12 +21,12 @@ packages:
 
 * tox, discover -- (soft-dependency used only for tests, MIT licensed)
 
-To work with the `caliper-python` bundle (maintain, use, run tests) you'll need
+To work with the `imsglobal_caliper` bundle (maintain, use, run tests) you'll need
 to have these third-party packages in your local Python environment.
 
 Which platform
 --------------
-We developed `caliper-python` primarily using the Python 3.6+ platform; however,
+We developed `imsglobal_caliper` primarily using the Python 3.6+ platform; however,
 we've taken steps to make it portably usbale with Python 2.7 as well (using
 the `future` package). Changes to the code base should ensure the tests run clean
 under Python 3.6 *and* 2.7.
@@ -33,16 +34,17 @@ under Python 3.6 *and* 2.7.
 
 Build and install
 =================
-We built `caliper-python` to be packagable for loading from PyPi, or direct
+We built `imsglobal_caliper` to be packagable for loading from PyPi, or direct
 from a source bundle, with `pip`.
 
 If it's on PyPi, you can simply install it into your site-packages with::
 
-  pip install caliper-python
+  pip install imsglobal_caliper
 
 Building and installing from a source bundle
 --------------------------------------------
-If you want to install it from a source bundle, then use these steps:
+If you want to install it from a source bundle, then use these steps (note that
+the name of the repository on GitHub is different to the distribution package name):
 
 #. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python-public.git>`_
    onto your local machine.
@@ -50,13 +52,13 @@ If you want to install it from a source bundle, then use these steps:
 #. Use pip to install the package as a writable source bundle; there's no need
    to do a package build step ahead of time::
 
-     pip install -e caliper-python
+     pip install -e caliper-python-public
 
 Changing and testing
 --------------------
-All the `caliper-python` code you would use to build and use a caliper sensor in
-your application you can find in the `caliper` main package. The bundle also
-includes a set of test files in a `caliper_tests` package; we did this not
+All the `imsglobal_caliper` code you would use to build and use a caliper sensor in
+your application you can find in the `caliper` main module. The bundle also
+includes a set of test files in a `caliper_tests` module; we did this not
 because we expect you'll use `caliper_tests` in production, but so that the
 various tests modules in `caliper_tests` can have portable visibility to one
 another.
@@ -71,15 +73,15 @@ canonical common JSON fixtures. To set up your tests, you should clone the
 <https://github.com/IMSGlobal/caliper-common-fixtures-public>`_ repository into the
 `caliper_tests/fixtures` directory, and pull changes there.
 
-Ideally, if you make changes to `caliper-python` you should ensure that your
+Ideally, if you make changes to `imsglobal_caliper` you should ensure that your
 changes will test well against the fixtures from the main common fixtures
-repository. When IMS makes updates to the `caliper-python` repository, it
+repository. When IMS makes updates to the `imsglobal_caliper` repository, it
 ensures that the updates do test well against the common fixtures repository.
 
 
 Using the package
 =================
-We made `caliper-python` with a lean integration layer for your application. To
+We made `imsglobal_caliper` with a lean integration layer for your application. To
 use the package, your application needs only::
 
   import caliper
