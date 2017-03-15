@@ -41,6 +41,7 @@ from caliper import entities
 ## Base event class
 class Event(BaseEvent):
     def __init__(self,
+                 id=None,
                  action=None,
                  actor=None,
                  edApp=None,
@@ -57,6 +58,7 @@ class Event(BaseEvent):
                  target=None,
                  uuid=None):
         BaseEvent.__init__(self)
+        self._set_id_prop('id', id or 'urn:uuid:{}'.format(uuid.uuid4()), str)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('type', EVENT_TYPES['EVENT'])
 
@@ -77,7 +79,6 @@ class Event(BaseEvent):
         self._set_obj_prop('referrer', referrer, t=entities.Referrable)
         self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
         self._set_obj_prop('target', target, t=entities.Targetable)
-        self._set_str_prop('uuid', uuid or str(uuid.uuid4()), req=True)
 
     def as_minimal_event(self):
         return MinimalEvent(
@@ -90,6 +91,10 @@ class Event(BaseEvent):
     @property
     def context(self):
         return self._unpack_context()
+
+    @property
+    def id(self):
+        return self._get_prop('id')
 
     @property
     def type(self):
@@ -143,14 +148,11 @@ class Event(BaseEvent):
     def target(self):
         return self._get_prop('target')
 
-    @property
-    def uuid(self):
-        return self._get_prop('uuid')
-
 
 class MinimalEvent(BaseEvent):
-    def __init__(self, action=None, actor=None, event_object=None, eventTime=None, uuid=None):
+    def __init__(self, id=None, action=None, actor=None, event_object=None, eventTime=None):
         BaseEvent.__init__(self)
+        self._set_id_prop('id', id or 'urn:uuid:{}'.format(uuid.uuid4()), str)
         self._set_base_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('type', EVENT_TYPES['EVENT'])
         self._set_str_prop('action', action, req=True)
@@ -174,7 +176,9 @@ class MinimalEvent(BaseEvent):
             d = event_object.as_dict()
             self._set_obj_prop('object', {'@id': d.get('@id'), 'type': d.get('type')})
 
-        self._set_str_prop('uuid', uuid)
+    @property
+    def id(self):
+        return self._get_prop('id')
 
     @property
     def action(self):
@@ -191,10 +195,6 @@ class MinimalEvent(BaseEvent):
     @property
     def object(self):
         return self._get_prop('object')
-
-    @property
-    def uuid(self):
-        return self._get_prop('uuid')
 
 
 ## Derived Events
