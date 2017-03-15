@@ -28,7 +28,6 @@ import collections
 
 from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, CALIPER_ROLES, CALIPER_STATUS
 from caliper.base import CaliperSerializable, BaseEntity
-from caliper.base import is_valid_date, is_valid_duration, is_valid_URI
 from caliper.base import ensure_type, ensure_list_type
 
 
