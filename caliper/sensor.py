@@ -82,12 +82,12 @@ class Client(object):
             self._process_results(results, self.stats.update_describes)
         return identifiers
 
-    def send(self, events=None, described_entities=None, sensor_id=None):
+    def send(self, events=None, described_objects=None, sensor_id=None):
         identifiers = None
         if ensure_list_type(events, Event):
             results, identifiers = self._requestor.send(
                 caliper_event_list=events,
-                described_entities=described_entities,
+                described_objects=described_objects,
                 sensor_id=sensor_id)
             self._process_results(results, self.stats.update_measures)
         return identifiers
@@ -126,7 +126,7 @@ class Sensor(object):
             identifiers.update({k: client.describe(entities=v, sensor_id=self.id)})
         return identifiers
 
-    def send(self, events=None, event=None, described_entities=None):
+    def send(self, events=None, event=None, described_objects=None):
         identifiers = {}
         v = events
         if event and not events:
@@ -137,7 +137,7 @@ class Sensor(object):
         for k, client in self.client_registry.items():
             identifiers.update({
                 k: client.send(
-                    events=v, described_entities=described_entities, sensor_id=self.id)
+                    events=v, described_objects=described_objects, sensor_id=self.id)
             })
         return identifiers
 
@@ -146,9 +146,9 @@ class Sensor(object):
             'Sensor.describe_batch(entity_list=e) deprecated; use Sensor.describe(entities=e).')
         self.describe(entities=entity_list)
 
-    def send_batch(self, event_list=None, described_entities=None):
+    def send_batch(self, event_list=None, described_objects=None):
         deprecation('Sensor.send_batch(event_list=e) deprecated; use Sensor.send(events=e).')
-        self.send(events=event_list, described_entities=described_entities)
+        self.send(events=event_list, described_objects=described_objects)
 
     @property
     def id(self):

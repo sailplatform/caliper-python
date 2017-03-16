@@ -78,28 +78,28 @@ def get_fixtures_of_type(name):
     ]
 
 
-def _rebuild_caliper_serializable(d, thin_props, thin_context, described_entities):
+def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
     return condensor.from_json_dict(d).as_json(
-        thin_props=thin_props, thin_context=thin_context, described_entities=described_entities)
+        thin_props=thin_props, thin_context=thin_context, described_objects=described_objects)
 
 
-def rebuild_event(fixture, thin_props=True, thin_context=True, described_entities=None):
+def rebuild_event(fixture, thin_props=True, thin_context=True, described_objects=None):
     f_dict = json.loads(get_fixture(fixture))
-    return _rebuild_caliper_serializable(f_dict, thin_props, thin_context, described_entities)
+    return _rebuild_caliper_serializable(f_dict, thin_props, thin_context, described_objects)
 
 
-def rebuild_entity(fixture, thin_props=True, thin_context=True, described_entities=None):
+def rebuild_entity(fixture, thin_props=True, thin_context=True, described_objects=None):
     f_dict = json.loads(get_fixture(fixture))
-    return _rebuild_caliper_serializable(f_dict, thin_props, thin_context, described_entities)
+    return _rebuild_caliper_serializable(f_dict, thin_props, thin_context, described_objects)
 
 
-def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_entities=None):
+def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_objects=None):
     env_dict = json.loads(get_fixture(fixture))
     payload = condensor.from_json_list(env_dict.get('data'))
     return caliper.request.Envelope(
         data=payload, send_time=env_dict.get('sendTime'),
         sensor_id=env_dict.get('sensor')).as_json(
-            thin_props=thin_props, thin_context=thin_context, described_entities=None)
+            thin_props=thin_props, thin_context=thin_context, described_objects=None)
 
 
 # build an envelope from a sensor and the contents of a fixture

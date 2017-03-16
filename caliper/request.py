@@ -73,14 +73,14 @@ class Envelope(CaliperSerializable):
 
     # override because Envelopes should only specially serialize
     # their data property's contents
-    def as_dict(self, described_entities=None, thin_context=False, thin_props=False):
+    def as_dict(self, described_objects=None, thin_context=False, thin_props=False):
         return copy.deepcopy({
             'sendTime': self.sendTime,
             'sensor': self.sensor,
             'dataVersion': self.dataVersion,
             'data': self._unpack_list(
                 self.data,
-                described_entities=described_entities or [],
+                described_objects=described_objects or [],
                 thin_context=thin_context,
                 thin_props=thin_props)
         })
@@ -91,7 +91,7 @@ class EventStoreRequestor(object):
         raise_with_traceback(
             NotImplementedError('Instance must implement EventStoreRequester.describe()'))
 
-    def send(self, caliper_event_list=None, described_entities=None, sensor_id=None):
+    def send(self, caliper_event_list=None, described_objects=None, sensor_id=None):
         raise_with_traceback(
             NotImplementedError('Instance must implement EventStoreRequester.send()'))
 
@@ -100,25 +100,25 @@ class EventStoreRequestor(object):
 
     def _generate_payload(self,
                           caliper_objects=None,
-                          described_entities=None,
+                          described_objects=None,
                           optimize=False,
                           send_time=None,
                           sensor_id=None):
         st = send_time if send_time else self._get_time()
-        payload, ids = self._get_payload_json(caliper_objects, described_entities, optimize, st,
+        payload, ids = self._get_payload_json(caliper_objects, described_objects, optimize, st,
                                               sensor_id)
         return {'type': '{}'.format('application/json'), 'data': payload}, ids
 
     def _get_payload_json(self,
                           caliper_objects=None,
-                          described_entities=None,
+                          described_objects=None,
                           optimize=False,
                           send_time=None,
                           sensor_id=None):
         envelope = Envelope(data=caliper_objects, send_time=send_time, sensor_id=sensor_id)
 
         return envelope.as_json_with_ids(
-            described_entities=described_entities, thin_context=optimize, thin_props=optimize)
+            described_objects=described_objects, thin_context=optimize, thin_props=optimize)
 
 
 class HttpRequestor(EventStoreRequestor):
@@ -130,7 +130,7 @@ class HttpRequestor(EventStoreRequestor):
         else:
             self._options = options
 
-    def _dispatch(self, caliper_objects=None, described_entities=None, sensor_id=None):
+    def _dispatch(self, caliper_objects=None, described_objects=None, sensor_id=None):
         results = []
         identifiers = []
 
@@ -138,7 +138,7 @@ class HttpRequestor(EventStoreRequestor):
             s = requests.Session()
             payload, ids = self._generate_payload(
                 caliper_objects=caliper_objects,
-                described_entities=described_entities,
+                described_objects=described_objects,
                 optimize=self._options.OPTIMIZE_SERIALIZATION,
                 sensor_id=sensor_id)
             r = s.post(
@@ -162,9 +162,9 @@ class HttpRequestor(EventStoreRequestor):
         results, ids = self._dispatch(caliper_objects=caliper_entity_list, sensor_id=sensor_id)
         return results, ids
 
-    def send(self, caliper_event_list=None, described_entities=None, sensor_id=None):
+    def send(self, caliper_event_list=None, described_objects=None, sensor_id=None):
         results, ids = self._dispatch(
             caliper_objects=caliper_event_list,
-            described_entities=described_entities,
+            described_objects=described_objects,
             sensor_id=sensor_id)
         return results, ids
