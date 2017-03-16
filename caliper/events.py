@@ -26,7 +26,7 @@ from builtins import *
 
 import collections, uuid
 
-from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS
+from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS, MARKER_TYPES
 from caliper.constants import ENTITY_TYPES
 from caliper.constants import CALIPER_ACTIONS
 from caliper.constants import (
@@ -35,8 +35,6 @@ from caliper.constants import (
     MEDIA_EVENT_ACTIONS, MESSAGE_EVENT_ACTIONS, NAVIGATION_EVENT_ACTIONS, OUTCOME_EVENT_ACTIONS,
     SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, TOOL_USE_EVENT_ACTIONS, VIEW_EVENT_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
-from caliper import entities
-
 
 ## Base event class
 class Event(BaseEvent):
@@ -45,7 +43,7 @@ class Event(BaseEvent):
                  action=None,
                  actor=None,
                  edApp=None,
-                 event_object=None,
+                 object=None,
                  eventTime=None,
                  extensions=None,
                  federatedSession=None,
@@ -58,8 +56,8 @@ class Event(BaseEvent):
                  target=None,
                  uuid=None):
         BaseEvent.__init__(self)
-        self._set_id_prop('id', id or 'urn:uuid:{}'.format(uuid.uuid4()), str)
-        self._set_base_context(EVENT_CONTEXTS['EVENT'])
+        self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
+        self._set_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('type', EVENT_TYPES['EVENT'])
 
         if action and (action not in CALIPER_ACTIONS.values()):
@@ -67,30 +65,31 @@ class Event(BaseEvent):
         else:
             self._set_str_prop('action', action, req=True)
 
-        self._set_obj_prop('actor', actor, t=entities.Agent, req=True)
+        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_date_prop('eventTime', eventTime, req=True)
         self._set_list_prop('extensions', extensions, t=collections.MutableMapping)
-        self._set_obj_prop('object', event_object, t=BaseEntity)
+        self._set_obj_prop('object', object, t=BaseEntity)
         self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['LTI_SESSION'])
-        self._set_obj_prop('generated', generated, t=entities.Generatable)
+        self._set_obj_prop('generated', generated, t=MARKER_TYPES['GENERATABLE'])
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
-        self._set_obj_prop('referrer', referrer, t=entities.Referrable)
+        self._set_obj_prop('referrer', referrer, t=MARKER_TYPES['REFERRABLE'])
         self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('target', target, t=entities.Targetable)
+        self._set_obj_prop('target', target, t=MARKER_TYPES['TARGETABLE'])
 
     def as_minimal_event(self):
         return MinimalEvent(
+            id=self.id,
             action=self.action,
             actor=self.actor,
-            event_object=self.object,
+            object=self.object,
             eventTime=self.eventTime,
             uuid=self.uuid)
 
     @property
     def context(self):
-        return self._unpack_context()
+        return self._get_prop('@context')
 
     @property
     def id(self):
@@ -150,31 +149,24 @@ class Event(BaseEvent):
 
 
 class MinimalEvent(BaseEvent):
-    def __init__(self, id=None, action=None, actor=None, event_object=None, eventTime=None):
+    def __init__(self, id=None, action=None, actor=None, object=None, eventTime=None):
         BaseEvent.__init__(self)
-        self._set_id_prop('id', id or 'urn:uuid:{}'.format(uuid.uuid4()), str)
-        self._set_base_context(EVENT_CONTEXTS['EVENT'])
+        self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
+        self._set_context(EVENT_CONTEXTS['EVENT'])
         self._set_str_prop('type', EVENT_TYPES['EVENT'])
         self._set_str_prop('action', action, req=True)
+        self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
+        self._set_date_prop('eventTime', eventTime, req=True)
+        self._set_obj_prop('object', object, t=ENTITY_TYPES['ENTITY'])
 
         if action and (action not in BASIC_EVENT_ACTIONS.values()):
             raise_with_traceback(ValueError('action must be in the list of Caliper actions'))
         else:
             self._set_str_prop('action', action, req=True)
 
-        if not isinstance(actor, entities.Agent):
-            raise_with_traceback(ValueError('actor must implement entities.Agent'))
-        else:
-            d = actor.as_dict()
-            self._set_obj_prop('actor', {'@id': d.get('@id'), 'type': d.get('type')})
-
-        self._set_date_prop('eventTime', eventTime, req=True)
-
-        if event_object and not isinstance(event_object, BaseEntity):
-            raise_with_traceback(ValueError('event_object must implement BaseEntity'))
-        else:
-            d = event_object.as_dict()
-            self._set_obj_prop('object', {'@id': d.get('@id'), 'type': d.get('type')})
+    @property
+    def context(self):
+        return self._get_prop('@context')
 
     @property
     def id(self):
@@ -208,8 +200,8 @@ class AnnotationEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'])
 
-        self._set_base_context(EVENT_CONTEXTS['ANNOTATION'])
-        self._set_str_prop('type', EVENT_TYPES['ANNOTATION'])
+        self._set_context(EVENT_CONTEXTS['ANNOTATION_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['ANNOTATION_EVENT'])
 
 
 class AssessmentEvent(Event):
@@ -225,8 +217,8 @@ class AssessmentEvent(Event):
             ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
-        self._set_base_context(EVENT_CONTEXTS['ASSESSMENT'])
-        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT'])
+        self._set_context(EVENT_CONTEXTS['ASSESSMENT_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_EVENT'])
 
 
 class AssessmentItemEvent(Event):
@@ -243,8 +235,8 @@ class AssessmentItemEvent(Event):
             ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
             ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
-        self._set_base_context(EVENT_CONTEXTS['ASSESSMENT_ITEM'])
-        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_ITEM'])
+        self._set_context(EVENT_CONTEXTS['ASSESSMENT_ITEM_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_ITEM_EVENT'])
 
 
 class AssignableEvent(Event):
@@ -257,8 +249,8 @@ class AssignableEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
-        self._set_base_context(EVENT_CONTEXTS['ASSIGNABLE'])
-        self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE'])
+        self._set_context(EVENT_CONTEXTS['ASSIGNABLE_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE_EVENT'])
 
 
 class ForumEvent(Event):
@@ -269,8 +261,8 @@ class ForumEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['FORUM'])
 
-        self._set_base_context(EVENT_CONTEXTS['FORUM'])
-        self._set_str_prop('type', EVENT_TYPES['FORUM'])
+        self._set_context(EVENT_CONTEXTS['FORUM_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['FORUM_EVENT'])
 
 
 class MediaEvent(Event):
@@ -282,8 +274,8 @@ class MediaEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['MEDIA_OBJECT'])
         ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'], optional=True)
 
-        self._set_base_context(EVENT_CONTEXTS['MEDIA'])
-        self._set_str_prop('type', EVENT_TYPES['MEDIA'])
+        self._set_context(EVENT_CONTEXTS['MEDIA_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['MEDIA_EVENT'])
 
 
 class MessageEvent(Event):
@@ -294,8 +286,8 @@ class MessageEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['MESSAGE'])
 
-        self._set_base_context(EVENT_CONTEXTS['FORUM'])
-        self._set_str_prop('type', EVENT_TYPES['MESSAGE'])
+        self._set_context(EVENT_CONTEXTS['MESSAGE_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['MESSAGE_EVENT'])
 
 
 class NavigationEvent(Event):
@@ -308,8 +300,8 @@ class NavigationEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
-        self._set_base_context(EVENT_CONTEXTS['NAVIGATION'])
-        self._set_str_prop('type', EVENT_TYPES['NAVIGATION'])
+        self._set_context(EVENT_CONTEXTS['NAVIGATION_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['NAVIGATION_EVENT'])
 
 
 class OutcomeEvent(Event):
@@ -320,8 +312,8 @@ class OutcomeEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
         ensure_type(self.generated, ENTITY_TYPES['RESULT'])
 
-        self._set_base_context(EVENT_CONTEXTS['OUTCOME'])
-        self._set_str_prop('type', EVENT_TYPES['OUTCOME'])
+        self._set_context(EVENT_CONTEXTS['OUTCOME_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['OUTCOME_EVENT'])
 
 
 class SessionEvent(Event):
@@ -343,8 +335,8 @@ class SessionEvent(Event):
         else:
             raise_with_traceback(ValueError('action must be in the list of Session event actions'))
 
-        self._set_base_context(EVENT_CONTEXTS['SESSION'])
-        self._set_str_prop('type', EVENT_TYPES['SESSION'])
+        self._set_context(EVENT_CONTEXTS['SESSION_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['SESSION_EVENT'])
 
 
 class ThreadEvent(Event):
@@ -355,8 +347,8 @@ class ThreadEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['THREAD'])
 
-        self._set_base_context(EVENT_CONTEXTS['THREAD'])
-        self._set_str_prop('type', EVENT_TYPES['THREAD'])
+        self._set_context(EVENT_CONTEXTS['THREAD_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['THREAD_EVENT'])
 
 
 class ToolUseEvent(Event):
@@ -367,8 +359,8 @@ class ToolUseEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
 
-        self._set_base_context(EVENT_CONTEXTS['TOOL_USE'])
-        self._set_str_prop('type', EVENT_TYPES['TOOL_USE'])
+        self._set_context(EVENT_CONTEXTS['TOOL_USE_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['TOOL_USE_EVENT'])
 
 
 class ViewEvent(Event):
@@ -379,5 +371,5 @@ class ViewEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
 
-        self._set_base_context(EVENT_CONTEXTS['VIEW'])
-        self._set_str_prop('type', EVENT_TYPES['VIEW'])
+        self._set_context(EVENT_CONTEXTS['VIEW_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['VIEW_EVENT'])

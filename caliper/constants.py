@@ -188,61 +188,75 @@ ENTITY_CLASSES = {
     ENTITY_TYPES['WEB_PAGE']: 'caliper.entities.WebPage'
 }
 
-
 EVENT_CONTEXTS = {
-    'ANNOTATION': CALIPER_VERSION,
-    'ASSESSMENT': CALIPER_VERSION,
-    'ASSESSMENT_ITEM': CALIPER_VERSION,
-    'ASSIGNABLE': CALIPER_VERSION,
+    'ANNOTATION_EVENT': CALIPER_VERSION,
+    'ASSESSMENT_EVENT': CALIPER_VERSION,
+    'ASSESSMENT_ITEM_EVENT': CALIPER_VERSION,
+    'ASSIGNABLE_EVENT': CALIPER_VERSION,
     'EVENT': CALIPER_VERSION,
-    'FORUM': CALIPER_VERSION,
-    'MEDIA': CALIPER_VERSION,
-    'MESSAGE': CALIPER_VERSION,
-    'NAVIGATION': CALIPER_VERSION,
-    'OUTCOME': CALIPER_VERSION,
-    'SESSION': CALIPER_VERSION,
-    'THREAD': CALIPER_VERSION,
-    'TOOL_USE': CALIPER_VERSION,
-    'VIEW': CALIPER_VERSION,
+    'FORUM_EVENT': CALIPER_VERSION,
+    'MEDIA_EVENT': CALIPER_VERSION,
+    'MESSAGE_EVENT': CALIPER_VERSION,
+    'NAVIGATION_EVENT': CALIPER_VERSION,
+    'OUTCOME_EVENT': CALIPER_VERSION,
+    'SESSION_EVENT': CALIPER_VERSION,
+    'THREAD_EVENT': CALIPER_VERSION,
+    'TOOL_USE_EVENT': CALIPER_VERSION,
+    'VIEW_EVENT': CALIPER_VERSION,
 }
 
 EVENT_TYPES = {
-    'ANNOTATION': 'AnnotationEvent',
-    'ASSESSMENT': 'AssessmentEvent',
-    'ASSESSMENT_ITEM': 'AssessmentItemEvent',
-    'ASSIGNABLE': 'AssignableEvent',
+    'ANNOTATION_EVENT': 'AnnotationEvent',
+    'ASSESSMENT_EVENT': 'AssessmentEvent',
+    'ASSESSMENT_ITEM_EVENT': 'AssessmentItemEvent',
+    'ASSIGNABLE_EVENT': 'AssignableEvent',
     'EVENT': 'Event',
-    'FORUM': 'ForumEvent',
-    'MEDIA': 'MediaEvent',
-    'MESSAGE': 'MessageEvent',
-    'NAVIGATION': 'NavigationEvent',
-    'OUTCOME': 'OutcomeEvent',
-    'SESSION': 'SessionEvent',
-    'THREAD': 'ThreadEvent',
-    'TOOL_USE': 'ToolUseEvent',
-    'VIEW': 'ViewEvent',
+    'FORUM_EVENT': 'ForumEvent',
+    'MEDIA_EVENT': 'MediaEvent',
+    'MESSAGE_EVENT': 'MessageEvent',
+    'NAVIGATION_EVENT': 'NavigationEvent',
+    'OUTCOME_EVENT': 'OutcomeEvent',
+    'SESSION_EVENT': 'SessionEvent',
+    'THREAD_EVENT': 'ThreadEvent',
+    'TOOL_USE_EVENT': 'ToolUseEvent',
+    'VIEW_EVENT': 'ViewEvent',
 }
 
 EVENT_CLASSES = {
-    EVENT_TYPES['ANNOTATION']: 'caliper.events.AnnotationEvent',
-    EVENT_TYPES['ASSESSMENT']: 'caliper.events.AssessmentEvent',
-    EVENT_TYPES['ASSESSMENT_ITEM']: 'caliper.events.AssessmentItemEvent',
-    EVENT_TYPES['ASSIGNABLE']: 'caliper.events.AssignableEvent',
+    EVENT_TYPES['ANNOTATION_EVENT']: 'caliper.events.AnnotationEvent',
+    EVENT_TYPES['ASSESSMENT_EVENT']: 'caliper.events.AssessmentEvent',
+    EVENT_TYPES['ASSESSMENT_ITEM_EVENT']: 'caliper.events.AssessmentItemEvent',
+    EVENT_TYPES['ASSIGNABLE_EVENT']: 'caliper.events.AssignableEvent',
     EVENT_TYPES['EVENT']: 'caliper.events.Event',
-    EVENT_TYPES['FORUM']: 'caliper.events.ForumEvent',
-    EVENT_TYPES['MEDIA']: 'caliper.events.MediaEvent',
-    EVENT_TYPES['MESSAGE']: 'caliper.events.MessageEvent',
-    EVENT_TYPES['NAVIGATION']: 'caliper.events.NavigationEvent',
-    EVENT_TYPES['OUTCOME']: 'caliper.events.OutcomeEvent',
-    EVENT_TYPES['SESSION']: 'caliper.events.SessionEvent',
-    EVENT_TYPES['THREAD']: 'caliper.events.ThreadEvent',
-    EVENT_TYPES['TOOL_USE']: 'caliper.events.ToolUseEvent',
-    EVENT_TYPES['VIEW']: 'caliper.events.ViewEvent',
+    EVENT_TYPES['FORUM_EVENT']: 'caliper.events.ForumEvent',
+    EVENT_TYPES['MEDIA_EVENT']: 'caliper.events.MediaEvent',
+    EVENT_TYPES['MESSAGE_EVENT']: 'caliper.events.MessageEvent',
+    EVENT_TYPES['NAVIGATION_EVENT']: 'caliper.events.NavigationEvent',
+    EVENT_TYPES['OUTCOME_EVENT']: 'caliper.events.OutcomeEvent',
+    EVENT_TYPES['SESSION_EVENT']: 'caliper.events.SessionEvent',
+    EVENT_TYPES['THREAD_EVENT']: 'caliper.events.ThreadEvent',
+    EVENT_TYPES['TOOL_USE_EVENT']: 'caliper.events.ToolUseEvent',
+    EVENT_TYPES['VIEW_EVENT']: 'caliper.events.ViewEvent',
+}
+
+MARKER_TYPES = {
+    'ASSIGNABLE': 'Assignable',
+    'GENERATABLE': 'Generatable',
+    'REFERRABLE': 'Referrable',
+    'TARGETABLE': 'Targetable',
+}
+
+MARKER_CLASSES = {
+    MARKER_TYPES['ASSIGNABLE']: 'caliper.entities.Assignable',
+    MARKER_TYPES['GENERATABLE']: 'caliper.entities.Generatable',
+    MARKER_TYPES['REFERRABLE']: 'caliper.entities.Referrable',
+    MARKER_TYPES['TARGETABLE']: 'caliper.entities.Targetable',
 }
 
 CALIPER_CLASSES = {}
 CALIPER_CLASSES.update(ENTITY_CLASSES)
 CALIPER_CLASSES.update(EVENT_CLASSES)
+CALIPER_CLASSES.update(MARKER_CLASSES)
 
 CALIPER_CONTEXTS = {}
 CALIPER_CONTEXTS.update(ENTITY_CONTEXTS)
@@ -251,6 +265,7 @@ CALIPER_CONTEXTS.update(EVENT_CONTEXTS)
 CALIPER_TYPES = {}
 CALIPER_TYPES.update(ENTITY_TYPES)
 CALIPER_TYPES.update(EVENT_TYPES)
+CALIPER_TYPES.update(MARKER_TYPES)
 
 CALIPER_ROLES = {
     'LEARNER': 'Learner',

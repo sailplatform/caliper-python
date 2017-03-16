@@ -29,7 +29,7 @@ from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as ani
                        parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
 from urllib.parse import urlparse as urllib_urlparse
 
-from caliper.constants import CALIPER_CLASSES
+from caliper.constants import CALIPER_CLASSES, CALIPER_TYPES
 
 ## Convenience functions
 
@@ -90,31 +90,28 @@ def _get_type(t):
 def is_subtype(t1, t2):
     return issubclass(_get_type(t1), _get_type(t2))
 
-
 def ensure_type(p, t, optional=False):
     # exception or True
-    if optional:
-        if p == None:
+    if p == None:
+        if optional:
             return True
-        elif t == None:
-            raise_with_traceback(ValueError('for present properties, type cannot be None type'))
-    else:
-        if p == None:
-            raise_with_traceback(ValueError('non-optional properties cannot be None'))
-        if t == None:
-            raise_with_traceback(ValueError('for present properties, type cannot be None type'))
-        elif t == collections.MutableMapping:
-            if not isinstance(p, t):
-                raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
-            else:
-                return True
-        elif t and not (
-                (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-                (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', dict), t)) or
-                (isinstance(p, t))):
+        else:
+            raise_with_traceback(TypeError('non-optional properties cannot be None'))
+    if t == None:
+        raise_with_traceback(TypeError('for present properties, type cannot be None type'))
+    elif t == collections.MutableMapping:
+        if not isinstance(p, t):
             raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
+        else:
+            return True
+    elif t and not (
+            (isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
+            (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+            (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
+            (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', dict), t)) or
+            (isinstance(p, _get_type(t)))):
+        raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
-
 
 def ensure_list_type(l, t):
     # exception or True
@@ -247,7 +244,6 @@ class CaliperSerializable(object):
     def __init__(self):
         self._objects = {}
         self._props = {}
-        self._context = {'base': None, 'local': []}
 
     # these methods are the only ones that directly touch the object's underlying
     # property/object cache
@@ -265,23 +261,6 @@ class CaliperSerializable(object):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if k:
             self._props.update({k: v})
-
-    def _update_base_context(self, v):
-        if v:
-            self._context['base'] = v
-
-    def _update_local_context(self, v):
-        if v:
-            self._context['local'].append(v)
-
-    def _is_in_local_context(self, k):
-        for item in self._context['local']:
-            if (self._context['local'][item] == k or (isinstance(self._context['local'][item],
-                                                                 collections.MutableMapping) and
-                                                      k in self._context['local'][item])):
-                return True
-        else:
-            return False
 
     # protected base-type setters that inheriting classes use internally to set
     # underlying state
@@ -315,11 +294,15 @@ class CaliperSerializable(object):
         else:
             self._update_props(k, v, req=req)
 
+    def _set_uri_prop(self, k, v, req=False):
+        val = None
+        if is_valid_URI(v):
+            val = v
+        self._set_str_prop(k, v, req=req)
+
     # protected complex-type setters
-    def _set_base_context(self, v):
-        if v and not is_valid_URI(v):
-            raise_with_traceback(ValueError('Base context must be a valid URI'))
-        self._update_base_context(v)
+    def _set_context(self, v):
+        self._set_uri_prop('@context', v, req=True)
 
     def _set_date_prop(self, k, v, req=False):
         val = None
@@ -340,18 +323,8 @@ class CaliperSerializable(object):
             val = v
         self._set_untyped_prop(k, v, req=req)
 
-    def _set_id_prop(self, k, v, t, req=False):
-        val = None
-        if is_valid_URI(v):
-            val = v
-        elif (isinstance(v, BaseEntity) and is_subtype(v.type, t)):
-            val = v.id
-            self._update_objects(k, v, req=req)
-        elif (isinstance(v, collections.MutableMapping) and is_subtype(v.get('type'), t) and
-              is_valid_URI(v.get('id'))):
-            val = v.get('id')
-            self._update_objects(k, v, req=req)
-        self._set_str_prop(k, val, req=req)
+    def _set_id(self, v):
+        self._set_uri_prop('id', v, req=True)
 
     def _set_list_prop(self, k, v, t=None, req=False):
         if req and (v == None):
@@ -364,20 +337,14 @@ class CaliperSerializable(object):
                     ensure_type(item, t)
         self._update_props(k, v or [], req=req)
 
-    def _set_obj_prop(self, k, v, t=None, req=False, id_only=False):
+    def _set_obj_prop(self, k, v, t=None, req=False):
         if req and (v == None):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
-        if isinstance(v, BaseEntity) and not (is_subtype(v.type, t)):
-            self._update_props(k, None)
-        else:
-            if not id_only:
-                self._update_props(k, v)
-            else:
-                the_type = getattr(v, 'type', None)
-                if the_type and not is_valid_URI(the_type):
-                    raise_with_traceback(ValueError("Value's type must be a valid URI"))
-                self._update_local_context({k: {'id': the_type, 'type': 'id'}})
-                self._set_id_prop(k, v)
+        if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
+            raise_with_traceback(TypeError('Provided property is not of required type: {}'.format(t)))
+        if isinstance(v, str) and t and not is_subtype(t, CaliperSerializable):
+            raise_with_traceback(ValueError('URI IDs can only be provided for objects of known Caliper types'))
+        self._update_props(k, v)
 
     def _set_time_prop(self, k, v, req=False):
         val = None
@@ -385,24 +352,20 @@ class CaliperSerializable(object):
             val = v
         self._set_untyped_prop(k, v, req=req)
 
+
     # protected unpacker methods, used by dict and json-string representation
     # public functions
     def _unpack_context(self, ctxt_bases=[]):
-        r = []
-        for item in self._context['local']:
-            if item not in ctxt_bases:
-                r.append(item)
-        if self._context['base'] and (self._context['base'] not in ctxt_bases):
-            if r:
-                r.insert(0, self._context['base'])
-            else:
-                r = self._context['base']
-        return copy.deepcopy(r)
+        r = self._get_prop('@context')
+        if r in ctxt_bases:
+            return None
+        else:
+            return r
 
     def _unpack_list(self,
                      l,
                      ctxt_bases=[],
-                     described_entities=[],
+                     described_objects=[],
                      thin_context=False,
                      thin_props=False):
         r = []
@@ -412,35 +375,23 @@ class CaliperSerializable(object):
                     self._unpack_list(
                         item,
                         ctxt_bases=ctxt_bases,
-                        described_entities=described_entities,
+                        described_objects=described_objects,
                         thin_context=thin_context,
                         thin_props=thin_props))
             elif isinstance(item, CaliperSerializable):
                 r.append(
                     item._unpack_object(
                         ctxt_bases=ctxt_bases,
-                        described_entities=described_entities,
+                        described_objects=described_objects,
                         thin_context=thin_context,
                         thin_props=thin_props))
             else:
                 r.append(copy.deepcopy(item))
         return r
 
-    def _update_context(self, context, k, v):
-        if not self._is_in_local_context(k):
-            lc = {k: {'id': v, 'type': 'id'}}
-            if context == None:
-                return [lc]
-            elif isinstance(context, str):
-                return [context, lc]
-            elif isinstance(context, collections.MutableSequence):
-                return context + [lc]
-            else:
-                return None
-
     def _unpack_object(self,
                        ctxt_bases=[],
-                       described_entities=[],
+                       described_objects=[],
                        thin_context=False,
                        thin_props=False):
         r = {}
@@ -448,12 +399,12 @@ class CaliperSerializable(object):
         ctxt_prop = self._unpack_context(ctxt_bases=cb)
         if ctxt_prop:
             r.update({'@context': ctxt_prop})
+            if thin_context and (ctxt_prop not in cb):
+                cb.append(ctxt_prop)
 
         for k, v in sorted(self._props.items()):
-            if thin_context and self._context['base']:
-                cb.append(self._context['base'])
-            else:
-                cb = []
+            if k == '@context':
+                continue
 
             # handle value based on its type: list, composite, or basic type
             if thin_props and v in (None, {}, []):
@@ -462,39 +413,29 @@ class CaliperSerializable(object):
                 value = self._unpack_list(
                     v,
                     ctxt_bases=cb,
-                    described_entities=described_entities,
+                    described_objects=described_objects,
                     thin_context=thin_context,
                     thin_props=thin_props)
-            elif isinstance(v, BaseEntity):
-                if v.id in described_entities:
-                    r.update({'@context': self._update_context(r.get('@context'), k, v.type)})
-                    value = v.id
-                else:
-                    value = v._unpack_object(
-                        ctxt_bases=cb,
-                        described_entities=described_entities,
-                        thin_context=thin_context,
-                        thin_props=thin_props)
             elif isinstance(v, CaliperSerializable):
                 the_id = v._get_prop('id')
                 the_type = v._get_prop('type')
-                if (the_id and the_type) and (the_id in described_entities):
-                    r.update({'@context': self._update_context(r.get('@context'), k, the_type)})
+                if (the_id and the_type
+                    and is_subtype(the_type, CaliperSerializable)
+                    and the_id in described_objects):
                     value = the_id
                 else:
                     value = v._unpack_object(
                         ctxt_bases=cb,
-                        described_entities=described_entities,
+                        described_objects=described_objects,
                         thin_context=thin_context,
                         thin_props=thin_props)
             elif isinstance(v, collections.MutableMapping):
-                the_id = v.get('id')
-                the_type = v.get('type')
-                if (the_id and the_type) and (the_id in described_entities):
-                    r.update({'@context': self._update_context(r.get('@context'), k, the_type)})
-                    value = the_id
-                else:
-                    value = v
+                 the_id = v.get('id')
+                 the_type = v.get('type')
+                 if (the_id and the_type) and (the_id in described_objects):
+                     value = the_id
+                 else:
+                     value = v
             else:
                 value = v
             r.update({k: value})
@@ -502,22 +443,22 @@ class CaliperSerializable(object):
         return copy.deepcopy(r)
 
     # public methods, to repr this event or entity as a dict or as a json-string
-    def as_dict(self, described_entities=None, thin_context=False, thin_props=False):
+    def as_dict(self, described_objects=None, thin_context=False, thin_props=False):
         return self._unpack_object(
-            described_entities=described_entities or [],
+            described_objects=described_objects or [],
             thin_context=thin_context,
             thin_props=thin_props)
 
-    def as_json(self, described_entities=None, thin_context=False, thin_props=False):
+    def as_json(self, described_objects=None, thin_context=False, thin_props=False):
         r = self.as_dict(
-            described_entities=described_entities,
+            described_objects=described_objects,
             thin_context=thin_context,
             thin_props=thin_props)
         return json.dumps(r, sort_keys=True)
 
-    def as_json_with_ids(self, described_entities=None, thin_context=False, thin_props=False):
+    def as_json_with_ids(self, described_objects=None, thin_context=False, thin_props=False):
         ret = self.as_json(
-            described_entities=described_entities,
+            described_objects=described_objects,
             thin_context=thin_context,
             thin_props=thin_props)
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))

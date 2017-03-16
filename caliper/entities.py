@@ -26,7 +26,8 @@ from builtins import *
 
 import collections
 
-from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, CALIPER_ROLES, CALIPER_STATUS
+from caliper.constants import ENTITY_TYPES, ENTITY_CONTEXTS, MARKER_TYPES
+from caliper.constants import CALIPER_ROLES, CALIPER_STATUS
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import ensure_type, ensure_list_type
 
@@ -47,8 +48,8 @@ class Entity(BaseEntity):
                  version=None,
                  extensions=None):
         BaseEntity.__init__(self)
-        self._set_id_prop('id', id, str, req=True)
-        self._set_base_context(ENTITY_CONTEXTS['ENTITY'])
+        self._set_id(id)
+        self._set_context(ENTITY_CONTEXTS['ENTITY'])
         self._set_str_prop('type', ENTITY_TYPES['ENTITY'])
         self._set_date_prop('dateCreated', dateCreated)
         self._set_date_prop('dateModified', dateModified)
@@ -58,7 +59,7 @@ class Entity(BaseEntity):
 
     @property
     def context(self):
-        return self._unpack_context()
+        return self._get_prop('@context')
 
     @property
     def id(self):
@@ -139,7 +140,7 @@ class Targetable(BaseEntity):
 class Membership(Entity):
     def __init__(self, member=None, organization=None, roles=None, status=None, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['MEMBERSHIP'])
+        self._set_context(ENTITY_CONTEXTS['MEMBERSHIP'])
         self._set_str_prop('type', ENTITY_TYPES['MEMBERSHIP'])
 
         self._set_obj_prop('member', member, t=ENTITY_TYPES['PERSON'], req=True)
@@ -187,7 +188,7 @@ class Agent(Entity, Referrable):
 class SoftwareApplication(Agent):
     def __init__(self, version=None, **kwargs):
         Agent.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['SOFTWARE_APPLICATION'])
+        self._set_context(ENTITY_CONTEXTS['SOFTWARE_APPLICATION'])
         self._set_str_prop('type', ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_str_prop('version', version)
 
@@ -199,7 +200,7 @@ class SoftwareApplication(Agent):
 class Person(Agent):
     def __init__(self, **kwargs):
         Agent.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['PERSON'])
+        self._set_context(ENTITY_CONTEXTS['PERSON'])
         self._set_str_prop('type', ENTITY_TYPES['PERSON'])
 
 
@@ -207,7 +208,7 @@ class Person(Agent):
 class Organization(Agent):
     def __init__(self, members=None, subOrganizationOf=None, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['ORGANIZATION'])
+        self._set_context(ENTITY_CONTEXTS['ORGANIZATION'])
         self._set_str_prop('type', ENTITY_TYPES['ORGANIZATION'])
         self._set_list_prop('members', members, t=ENTITY_TYPES['AGENT'])
         self._set_obj_prop('subOrganizationOf', subOrganizationOf, t=ENTITY_TYPES['ORGANIZATION'])
@@ -224,7 +225,7 @@ class Organization(Agent):
 class CourseOffering(Organization):
     def __init__(self, academicSession=None, courseNumber=None, **kwargs):
         Organization.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['COURSE_OFFERING'])
+        self._set_context(ENTITY_CONTEXTS['COURSE_OFFERING'])
         self._set_str_prop('type', ENTITY_TYPES['COURSE_OFFERING'])
         self._set_str_prop('academicSession', academicSession)
         self._set_str_prop('courseNumber', courseNumber)
@@ -249,7 +250,7 @@ class CourseOffering(Organization):
 class CourseSection(CourseOffering):
     def __init__(self, category=None, **kwargs):
         CourseOffering.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['COURSE_SECTION'])
+        self._set_context(ENTITY_CONTEXTS['COURSE_SECTION'])
         self._set_str_prop('type', ENTITY_TYPES['COURSE_SECTION'])
         self._set_str_prop('category', category)
 
@@ -261,12 +262,13 @@ class CourseSection(CourseOffering):
 class Group(Organization):
     def __init__(self, members=None, **kwargs):
         Organization.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['GROUP'])
+        self._set_context(ENTITY_CONTEXTS['GROUP'])
         self._set_str_prop('type', ENTITY_TYPES['GROUP'])
         self._set_list_prop('members', members, t=ENTITY_TYPES['PERSON'])
 
 
 ## Learning Context
+# not really a Caliper Entity, but capable of serializing itself like one, for convenience
 class LearningContext(CaliperSerializable):
     def __init__(self, edApp=None, group=None, membership=None, session=None):
         CaliperSerializable.__init__(self)
@@ -296,7 +298,7 @@ class LearningContext(CaliperSerializable):
 class LearningObjective(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['LEARNING_OBJECTIVE'])
+        self._set_context(ENTITY_CONTEXTS['LEARNING_OBJECTIVE'])
         self._set_str_prop('type', ENTITY_TYPES['LEARNING_OBJECTIVE'])
 
 
@@ -312,7 +314,7 @@ class DigitalResource(Entity, Referrable, Targetable):
                  version=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE'])
+        self._set_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE'])
         self._set_str_prop('type', ENTITY_TYPES['DIGITAL_RESOURCE'])
         self._set_list_prop(
             'learningObjectives', learningObjectives, t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
@@ -359,7 +361,7 @@ class DigitalResource(Entity, Referrable, Targetable):
 class DigitalResourceCollection(DigitalResource):
     def __init__(self, items=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE_COLLECTION'])
+        self._set_context(ENTITY_CONTEXTS['DIGITAL_RESOURCE_COLLECTION'])
         self._set_str_prop('type', ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
 
@@ -371,7 +373,7 @@ class DigitalResourceCollection(DigitalResource):
 class Frame(DigitalResource, Targetable):
     def __init__(self, index=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['FRAME'])
+        self._set_context(ENTITY_CONTEXTS['FRAME'])
         self._set_str_prop('type', ENTITY_TYPES['FRAME'])
         self._set_int_prop('index', index, req=True)
 
@@ -383,63 +385,63 @@ class Frame(DigitalResource, Targetable):
 class Reading(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['READING'])
+        self._set_context(ENTITY_CONTEXTS['READING'])
         self._set_str_prop('type', ENTITY_TYPES['READING'])
 
 
 class WebPage(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['WEB_PAGE'])
+        self._set_context(ENTITY_CONTEXTS['WEB_PAGE'])
         self._set_str_prop('type', ENTITY_TYPES['WEB_PAGE'])
 
 
 class Document(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['DOCUMENT'])
+        self._set_context(ENTITY_CONTEXTS['DOCUMENT'])
         self._set_str_prop('type', ENTITY_TYPES['DOCUMENT'])
 
 
 class Chapter(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['CHAPTER'])
+        self._set_context(ENTITY_CONTEXTS['CHAPTER'])
         self._set_str_prop('type', ENTITY_TYPES['CHAPTER'])
 
 
 class Page(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['PAGE'])
+        self._set_context(ENTITY_CONTEXTS['PAGE'])
         self._set_str_prop('type', ENTITY_TYPES['PAGE'])
 
 
 class EpubChapter(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['EPUB_CHAPTER'])
+        self._set_context(ENTITY_CONTEXTS['EPUB_CHAPTER'])
         self._set_str_prop('type', ENTITY_TYPES['EPUB_CHAPTER'])
 
 
 class EpubPart(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['EPUB_PART'])
+        self._set_context(ENTITY_CONTEXTS['EPUB_PART'])
         self._set_str_prop('type', ENTITY_TYPES['EPUB_PART'])
 
 
 class EpubSubChapter(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['EPUB_SUB_CHAPTER'])
+        self._set_context(ENTITY_CONTEXTS['EPUB_SUB_CHAPTER'])
         self._set_str_prop('type', ENTITY_TYPES['EPUB_SUB_CHAPTER'])
 
 
 class EpubVolume(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['EPUB_VOLUME'])
+        self._set_context(ENTITY_CONTEXTS['EPUB_VOLUME'])
         self._set_str_prop('type', ENTITY_TYPES['EPUB_VOLUME'])
 
 
@@ -447,7 +449,7 @@ class EpubVolume(DigitalResource):
 class Annotation(Entity, Generatable):
     def __init__(self, annotated=None, annotator=None, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['ANNOTATION'])
+        self._set_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['ANNOTATION'])
         self._set_obj_prop('annotated', annotated, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
         self._set_obj_prop('annotator', annotator, t=ENTITY_TYPES['AGENT'], req=True)
@@ -464,7 +466,7 @@ class Annotation(Entity, Generatable):
 class BookmarkAnnotation(Annotation):
     def __init__(self, bookmarkNotes=None, **kwargs):
         Annotation.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['BOOKMARK_ANNOTATION'])
+        self._set_context(ENTITY_CONTEXTS['BOOKMARK_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['BOOKMARK_ANNOTATION'])
         self._set_str_prop('bookmarkNotes', bookmarkNotes)
 
@@ -476,9 +478,9 @@ class BookmarkAnnotation(Annotation):
 class HighlightAnnotation(Annotation):
     def __init__(self, selection=None, selectionText=None, **kwargs):
         Annotation.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['HIGHLIGHT_ANNOTATION'])
+        self._set_context(ENTITY_CONTEXTS['HIGHLIGHT_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['HIGHLIGHT_ANNOTATION'])
-        self._set_obj_prop('selection', selection, t=TextPositionSelector)
+        self._set_obj_prop('selection', selection, t=ENTITY_TYPES['TEXT_POSITION_SELECTOR'])
         self._set_str_prop('selectionText', selectionText)
 
     @property
@@ -493,7 +495,7 @@ class HighlightAnnotation(Annotation):
 class SharedAnnotation(Annotation):
     def __init__(self, withAgents=None, **kwargs):
         Annotation.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['SHARED_ANNOTATION'])
+        self._set_context(ENTITY_CONTEXTS['SHARED_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['SHARED_ANNOTATION'])
         self._set_list_prop('withAgents', withAgents, t=ENTITY_TYPES['AGENT'])
 
@@ -505,18 +507,22 @@ class SharedAnnotation(Annotation):
 class TagAnnotation(Annotation):
     def __init__(self, tags=None, **kwargs):
         Annotation.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['TAG_ANNOTATION'])
+        self._set_context(ENTITY_CONTEXTS['TAG_ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['TAG_ANNOTATION'])
         self._set_list_prop('tags', tags, t=str)
 
 
-class TextPositionSelector(CaliperSerializable):
-    def __init__(self, id=None, start=None, end=None, **kwargs):
-        CaliperSerializable.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['TEXT_POSITION_SELECTOR'])
+class TextPositionSelector(BaseEntity):
+    def __init__(self, start=None, end=None, **kwargs):
+        BaseEntity.__init__(self, **kwargs)
+        self._set_context(ENTITY_CONTEXTS['TEXT_POSITION_SELECTOR'])
         self._set_str_prop('type', ENTITY_TYPES['TEXT_POSITION_SELECTOR'])
         self._set_int_prop('end', end, req=True)
         self._set_int_prop('start', start, req=True)
+
+    @property
+    def context(self):
+        return self._get_prop('@context')
 
     @property
     def end(self):
@@ -547,7 +553,7 @@ class AssignableDigitalResource(DigitalResource, Assignable):
                  maxScore=None,
                  **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['ASSIGNABLE_DIGITAL_RESOURCE'])
+        self._set_context(ENTITY_CONTEXTS['ASSIGNABLE_DIGITAL_RESOURCE'])
         self._set_str_prop('type', ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         self._set_date_prop('dateToActivate', dateToActivate)
         self._set_date_prop('dateToShow', dateToShow)
@@ -565,7 +571,7 @@ class AssignableDigitalResource(DigitalResource, Assignable):
 class Assessment(AssignableDigitalResource, DigitalResourceCollection):
     def __init__(self, items=None, **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['ASSESSMENT'])
+        self._set_context(ENTITY_CONTEXTS['ASSESSMENT'])
         self._set_str_prop('type', ENTITY_TYPES['ASSESSMENT'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['ASSESSMENT_ITEM'])
 
@@ -573,7 +579,7 @@ class Assessment(AssignableDigitalResource, DigitalResourceCollection):
 class AssessmentItem(AssignableDigitalResource):
     def __init__(self, isTimeDependent=None, **kwargs):
         AssignableDigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['ASSESSMENT_ITEM'])
+        self._set_context(ENTITY_CONTEXTS['ASSESSMENT_ITEM'])
         self._set_str_prop('type', ENTITY_TYPES['ASSESSMENT_ITEM'])
         self._set_bool_prop('isTimeDependent', isTimeDependent)
 
@@ -594,9 +600,9 @@ class Attempt(Entity, Generatable):
                  startedAtTime=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['ATTEMPT'])
+        self._set_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('type', ENTITY_TYPES['ATTEMPT'])
-        self._set_obj_prop('assignable', assignable, t=Assignable)
+        self._set_obj_prop('assignable', assignable, t=MARKER_TYPES['ASSIGNABLE'])
         self._set_obj_prop('assignee', assignee, t=ENTITY_TYPES['AGENT'])
         self._set_int_prop('count', count)
         self._set_duration_prop('duration', duration)
@@ -649,7 +655,7 @@ class Response(Entity, Generatable):
     def __init__(self, attempt=None, duration=None, endedAtTime=None, startedAtTime=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['RESPONSE'])
+        self._set_context(ENTITY_CONTEXTS['RESPONSE'])
         self._set_str_prop('type', ENTITY_TYPES['RESPONSE'])
         self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
         self._set_duration_prop('duration', duration)
@@ -684,7 +690,7 @@ class Response(Entity, Generatable):
 class FillinBlankResponse(Response):
     def __init__(self, values=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['FILLINBLANK'])
+        self._set_context(ENTITY_CONTEXTS['FILLINBLANK'])
         self._set_str_prop('type', ENTITY_TYPES['FILLINBLANK'])
         self._set_list_prop('values', values, t=str)
 
@@ -696,7 +702,7 @@ class FillinBlankResponse(Response):
 class MultipleChoiceResponse(Response):
     def __init__(self, value=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['MULTIPLECHOICE'])
+        self._set_context(ENTITY_CONTEXTS['MULTIPLECHOICE'])
         self._set_str_prop('type', ENTITY_TYPES['MULTIPLECHOICE'])
         self._set_str_prop('value', value)
 
@@ -708,7 +714,7 @@ class MultipleChoiceResponse(Response):
 class MultipleResponseResponse(Response):
     def __init__(self, values=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['MULTIPLERESPONSE'])
+        self._set_context(ENTITY_CONTEXTS['MULTIPLERESPONSE'])
         self._set_str_prop('type', ENTITY_TYPES['MULTIPLERESPONSE'])
         self._set_list_prop('values', values, t=str)
 
@@ -720,7 +726,7 @@ class MultipleResponseResponse(Response):
 class SelectTextResponse(Response):
     def __init__(self, values=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['SELECTTEXT'])
+        self._set_context(ENTITY_CONTEXTS['SELECTTEXT'])
         self._set_str_prop('type', ENTITY_TYPES['SELECTTEXT'])
         self._set_list_prop('values', values, t=str)
 
@@ -732,7 +738,7 @@ class SelectTextResponse(Response):
 class TrueFalseResponse(Response):
     def __init__(self, value=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['TRUEFALSE'])
+        self._set_context(ENTITY_CONTEXTS['TRUEFALSE'])
         self._set_str_prop('type', ENTITY_TYPES['TRUEFALSE'])
         self._set_str_prop('value', value)
 
@@ -745,7 +751,7 @@ class TrueFalseResponse(Response):
 class Forum(DigitalResourceCollection):
     def __init__(self, items=None, **kwargs):
         DigitalResourceCollection.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['FORUM'])
+        self._set_context(ENTITY_CONTEXTS['FORUM'])
         self._set_str_prop('type', ENTITY_TYPES['FORUM'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['THREAD'])
 
@@ -753,7 +759,7 @@ class Forum(DigitalResourceCollection):
 class Thread(DigitalResourceCollection):
     def __init__(self, items=None, **kwargs):
         DigitalResourceCollection.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['THREAD'])
+        self._set_context(ENTITY_CONTEXTS['THREAD'])
         self._set_str_prop('type', ENTITY_TYPES['THREAD'])
         self._set_list_prop('items', items, t=ENTITY_TYPES['MESSAGE'])
 
@@ -761,7 +767,7 @@ class Thread(DigitalResourceCollection):
 class Message(DigitalResource):
     def __init__(self, body=None, replyTo=None, attachments=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['MESSAGE'])
+        self._set_context(ENTITY_CONTEXTS['MESSAGE'])
         self._set_str_prop('type', ENTITY_TYPES['MESSAGE'])
         self._set_str_prop('body', body)
         self._set_obj_prop('replyTo', replyTo, t=ENTITY_TYPES['MESSAGE'])
@@ -772,7 +778,7 @@ class Message(DigitalResource):
 class MediaObject(DigitalResource):
     def __init__(self, duration=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['MEDIA_OBJECT'])
+        self._set_context(ENTITY_CONTEXTS['MEDIA_OBJECT'])
         self._set_str_prop('type', ENTITY_TYPES['MEDIA_OBJECT'])
         self._set_duration_prop('duration', duration)
 
@@ -784,7 +790,7 @@ class MediaObject(DigitalResource):
 class MediaLocation(DigitalResource, Targetable):
     def __init__(self, currentTime=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['MEDIA_LOCATION'])
+        self._set_context(ENTITY_CONTEXTS['MEDIA_LOCATION'])
         self._set_str_prop('type', ENTITY_TYPES['MEDIA_LOCATION'])
         self._set_duration_prop('currentTime', currentTime)
 
@@ -796,7 +802,7 @@ class MediaLocation(DigitalResource, Targetable):
 class AudioObject(MediaObject):
     def __init__(self, muted=None, volumeLevel=None, volumeMax=None, volumeMin=None, **kwargs):
         MediaObject.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['AUDIO_OBJECT'])
+        self._set_context(ENTITY_CONTEXTS['AUDIO_OBJECT'])
         self._set_str_prop('type', ENTITY_TYPES['AUDIO_OBJECT'])
         self._set_bool_prop('muted', muted)
         self._set_str_prop('volumeLevel', volumeLevel)
@@ -823,14 +829,14 @@ class AudioObject(MediaObject):
 class ImageObject(MediaObject):
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['IMAGE_OBJECT'])
+        self._set_context(ENTITY_CONTEXTS['IMAGE_OBJECT'])
         self._set_str_prop('type', ENTITY_TYPES['IMAGE_OBJECT'])
 
 
 class VideoObject(MediaObject):
     def __init__(self, **kwargs):
         MediaObject.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['VIDEO_OBJECT'])
+        self._set_context(ENTITY_CONTEXTS['VIDEO_OBJECT'])
         self._set_str_prop('type', ENTITY_TYPES['VIDEO_OBJECT'])
 
 
@@ -848,7 +854,7 @@ class Result(Entity, Generatable):
                  totalScore=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['RESULT'])
+        self._set_context(ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('type', ENTITY_TYPES['RESULT'])
         self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
         self._set_str_prop('comment', comment)
@@ -897,7 +903,7 @@ class Result(Entity, Generatable):
 class Session(Entity, Generatable, Targetable):
     def __init__(self, duration=None, endedAtTime=None, startedAtTime=None, user=None, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['SESSION'])
+        self._set_context(ENTITY_CONTEXTS['SESSION'])
         self._set_str_prop('type', ENTITY_TYPES['SESSION'])
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
@@ -932,7 +938,7 @@ class Session(Entity, Generatable, Targetable):
 class LtiSession(Session):
     def __init__(self, launchParameters=None, **kwargs):
         Session.__init__(self, **kwargs)
-        self._set_base_context(ENTITY_CONTEXTS['LTI_SESSION'])
+        self._set_context(ENTITY_CONTEXTS['LTI_SESSION'])
         self._set_str_prop('type', ENTITY_TYPES['LTI_SESSION'])
         self._set_dict_prop('launchParameters', launchParameters)
 
