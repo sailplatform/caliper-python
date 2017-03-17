@@ -50,13 +50,14 @@ def from_json_dict(d):
         # transmogrify key or move to next item
         if k in ['type', '@context']:
             continue
-
         key = k
 
         # recursively condense value if complex, otherwise use value
-        if isinstance(v, collections.MutableSequence):
+        if CALIPER_CLASSES.get(t) and k in ['extensions']:
+            value = v
+        elif isinstance(v, collections.MutableSequence):
             value = from_json_list(v)
-        elif isinstance(v, collections.MutableMapping) and v.get('type'):
+        elif isinstance(v, collections.MutableMapping) and CALIPER_CLASSES.get(v.get('type')):
             value = from_json_dict(v)
         else:
             value = v
@@ -79,7 +80,7 @@ def from_json_list(l):
     for item in l:
         if isinstance(item, collections.MutableSequence):
             r.append(from_json_list(item))
-        elif isinstance(item, collections.MutableMapping) and item.get('type'):
+        elif isinstance(item, collections.MutableMapping):
             r.append(from_json_dict(item))
         else:
             r.append(item)
