@@ -27,6 +27,7 @@ from builtins import *
 import collections, copy, importlib, json, re, warnings
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as aniso_parse_date,
                        parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
+from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
 from urllib.parse import urlparse as urllib_urlparse
 
 from caliper.constants import CALIPER_CLASSES, CALIPER_TYPES
@@ -69,7 +70,9 @@ def is_valid_time(time):
 def is_valid_URI(uri):
     if not uri:
         return False
-    elif isinstance(uri, str) and (urllib_urlparse(uri).geturl() == uri):
+    elif (isinstance(uri, str)
+          and (urllib_urlparse(uri).geturl() == uri)
+          and rfc3986_is_valid_uri(uri)):
         return True
     else:
         return False

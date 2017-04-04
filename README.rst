@@ -19,7 +19,9 @@ packages:
 
 * requests -- (Apache 2 licensed)
 
-* tox, discover -- (soft-dependency used only for tests, MIT licensed)
+* rfc3986 -- (Apache 2 licensed)
+
+* tox, discover -- (soft-dependencies used only for tests, MIT licensed)
 
 To work with the `imsglobal_caliper` bundle (maintain, use, run tests) you'll need
 to have these third-party packages in your local Python environment.

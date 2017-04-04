@@ -19,7 +19,7 @@ if sys.argv[-1] == 'publish':
 
 _packages = ['caliper', 'caliper.util', 'caliper_tests']
 
-_requires = ['aniso8601 >= 1.1.0', 'future >= 0.14.3', 'requests >= 2.7.0']
+_requires = ['aniso8601 >= 1.1.0', 'future >= 0.14.3', 'requests >= 2.7.0', 'rfc3986 == 0.4.1']
 
 _fixtures = ['fixtures/src/test/resources/fixtures/*.json']
 
