@@ -375,7 +375,7 @@ BASIC_EVENT_ACTIONS = {
     'QUESTIONED': 'Questioned',
     'RANKED': 'Ranked',
     'RECOMMENDED': 'Recommended',
-    'REMOVED': 'Removed', #
+    'REMOVED': 'Removed',
     'REPLIED': 'Replied',
     'RESET': 'Reset',
     'RESTARTED': 'Restarted',
