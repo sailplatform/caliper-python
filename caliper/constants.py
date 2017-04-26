@@ -408,6 +408,7 @@ ANNOTATION_EVENT_ACTIONS = {
 ASSESSMENT_EVENT_ACTIONS = {
     'PAUSED': 'Paused',
     'RESTARTED': 'Restarted',
+    'RESUMED': 'Resumed',
     'STARTED': 'Started',
     'SUBMITTED': 'Submitted',
 }
@@ -447,6 +448,7 @@ MEDIA_EVENT_ACTIONS = {
     'OPENED_POPOUT': 'OpenedPopout',
     'PAUSED': 'Paused',
     'RESUMED': 'Resumed',
+    'RESTARTED': 'Restarted',
     'REWOUND': 'Rewound',
     'STARTED': 'Started',
     'UNMUTED': 'Unmuted',
