@@ -424,6 +424,7 @@ ASSIGNABLE_EVENT_ACTIONS = {
     'COMPLETED': 'Completed',
     'DEACTIVATED': 'Deactivated',
     'STARTED': 'Started',
+    'SUBMITTED': 'Submitted',
 }
 
 FORUM_EVENT_ACTIONS = {
