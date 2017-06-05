@@ -211,10 +211,7 @@ class AssessmentEvent(Event):
             raise_with_traceback(
                 ValueError('action must be in the list of Assessment Item event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        if self.action == ASSESSMENT_EVENT_ACTIONS['SUBMITTED']:
-            ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
-        else:
-            ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
+        ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
         self._set_context(EVENT_CONTEXTS['ASSESSMENT_EVENT'])
@@ -228,11 +225,10 @@ class AssessmentItemEvent(Event):
             raise_with_traceback(
                 ValueError('action must be in the list of Assessment event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
         if self.action == ASSESSMENT_ITEM_EVENT_ACTIONS['COMPLETED']:
-            ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
             ensure_type(self.generated, ENTITY_TYPES['RESPONSE'], optional=True)
         else:
-            ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
             ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
         self._set_context(EVENT_CONTEXTS['ASSESSMENT_ITEM_EVENT'])
