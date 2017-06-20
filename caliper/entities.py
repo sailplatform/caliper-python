@@ -845,26 +845,18 @@ class Result(Entity, Generatable):
     def __init__(self,
                  attempt=None,
                  comment=None,
-                 curvedTotalScore=None,
-                 curveFactor=None,
-                 extraCreditScore=None,
-                 normalScore=None,
-                 penaltyScore=None,
+                 maxResultScore=None,
+                 resultScore=None,
                  scoredBy=None,
-                 totalScore=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_context(ENTITY_CONTEXTS['RESULT'])
         self._set_str_prop('type', ENTITY_TYPES['RESULT'])
         self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
         self._set_str_prop('comment', comment)
-        self._set_float_prop('curvedTotalScore', curvedTotalScore)
-        self._set_float_prop('curveFactor', curveFactor)
-        self._set_float_prop('extraCreditScore', extraCreditScore)
-        self._set_float_prop('normalScore', normalScore)
-        self._set_float_prop('penaltyScore', penaltyScore)
+        self._set_float_prop('maxResultScore', maxResultScore)
+        self._set_float_prop('resultScore', resultScore)
         self._set_obj_prop('scoredBy', scoredBy, t=ENTITY_TYPES['AGENT'])
-        self._set_float_prop('totalScore', totalScore)
 
     @property
     def attempt(self):
@@ -875,29 +867,34 @@ class Result(Entity, Generatable):
         return self._get_prop('comment')
 
     @property
-    def curvedTotalScore(self):
-        return self._get_prop('curvedTotalScore')
+    def maxResultScore(self):
+        return self._get_prop('maxResultScore')
 
     @property
-    def curveFactor(self):
-        return self._get_prop('curveFactor')
-
-    @property
-    def extraCreditScore(self):
-        return self._get_prop('extraCreditScore')
-
-    @property
-    def normalScore(self):
-        return self._get_prop('normalScore')
-
-    @property
-    def penaltyScore(self):
-        return self._get_prop('penaltyScore')
+    def resultScore(self):
+        return self._get_prop('resultScore')
 
     @property
     def scoredBy(self):
         return self._get_prop('scoredBy')
 
+
+class Score(Entity, Generatable):
+    def __init__(self,
+                 attempt=None,
+                 comment=None,
+                 maxScore=None,
+                 scoreGiven=None,
+                 scoredBy=None,
+                 **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_context(ENTITY_CONTEXTS['SCORE'])
+        self._set_str_prop('type', ENTITY_TYPES['SCORE'])
+        self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
+        self._set_str_prop('comment', comment)
+        self._set_float_prop('maxScore', maxScore)
+        self._set_float_prop('scoreGiven', scoreGiven)
+        self._set_obj_prop('scoredBy', scoredBy, t=ENTITY_TYPES['AGENT'])
 
 ## Session entities
 class Session(Entity, Generatable, Targetable):
