@@ -70,6 +70,7 @@ ENTITY_CONTEXTS = {
     'READING': CALIPER_VERSION,
     'RESPONSE': CALIPER_VERSION,
     'RESULT': CALIPER_VERSION,
+    'SCORE': CALIPER_VERSION,
     'SELECTTEXT': CALIPER_VERSION,
     'SESSION': CALIPER_VERSION,
     'SHARED_ANNOTATION': CALIPER_VERSION,
@@ -123,6 +124,7 @@ ENTITY_TYPES = {
     'READING': 'Reading',
     'RESPONSE': 'Response',
     'RESULT': 'Result',
+    'SCORE': 'Score',
     'SELECTTEXT': 'SelectTextResponse',
     'SESSION': 'Session',
     'SHARED_ANNOTATION': 'SharedAnnotation',
@@ -176,6 +178,7 @@ ENTITY_CLASSES = {
     ENTITY_TYPES['READING']: 'caliper.entities.Reading',
     ENTITY_TYPES['RESPONSE']: 'caliper.entities.Response',
     ENTITY_TYPES['RESULT']: 'caliper.entities.Result',
+    ENTITY_TYPES['SCORE']: 'caliper.entities.Score',
     ENTITY_TYPES['SELECTTEXT']: 'caliper.entities.SelectTextResponse',
     ENTITY_TYPES['SESSION']: 'caliper.entities.Session',
     ENTITY_TYPES['SHARED_ANNOTATION']: 'caliper.entities.SharedAnnotation',
@@ -350,6 +353,7 @@ BASIC_EVENT_ACTIONS = {
     'DESCRIBED': 'Described',
     'DISABLED_CLOSED_CAPTIONING': 'DisabledClosedCaptioning',
     'DISLIKED': 'Disliked',
+    'EARNED': 'Earned',
     'ENABLED_CLOSED_CAPTIONING': 'EnabledClosedCaptioning',
     'ENDED': 'Ended',
     'ENTERED_FULLSCREEN': 'EnteredFullscreen',
@@ -466,6 +470,7 @@ NAVIGATION_EVENT_ACTIONS = {
 }
 
 OUTCOME_EVENT_ACTIONS = {
+    'EARNED': 'Earned',
     'GRADED': 'Graded',
 }
 
