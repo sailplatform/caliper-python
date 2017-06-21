@@ -303,13 +303,11 @@ class NavigationEvent(Event):
 class OutcomeEvent(Event):
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action == OUTCOME_EVENT_ACTIONS['EARNED']:
-            ensure_type(self.object, ENTITY_TYPES['RESULT'])
-        elif self.action == OUTCOME_EVENT_ACTIONS['GRADED']:
+        if self.action == OUTCOME_EVENT_ACTIONS['GRADED']:
             ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
             ensure_type(self.generated, ENTITY_TYPES['SCORE'])
         else:
-            raise_with_traceback(ValueError('action must be in the list of Outcome evnet actions'))
+            raise_with_traceback(ValueError('action must be in the list of Outcome event actions'))
 
         self._set_context(EVENT_CONTEXTS['OUTCOME_EVENT'])
         self._set_str_prop('type', EVENT_TYPES['OUTCOME_EVENT'])

@@ -470,7 +470,6 @@ NAVIGATION_EVENT_ACTIONS = {
 }
 
 OUTCOME_EVENT_ACTIONS = {
-    'EARNED': 'Earned',
     'GRADED': 'Graded',
 }
 
