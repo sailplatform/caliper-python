@@ -201,7 +201,7 @@ EVENT_CONTEXTS = {
     'MEDIA_EVENT': CALIPER_VERSION,
     'MESSAGE_EVENT': CALIPER_VERSION,
     'NAVIGATION_EVENT': CALIPER_VERSION,
-    'OUTCOME_EVENT': CALIPER_VERSION,
+    'GRADE_EVENT': CALIPER_VERSION,
     'SESSION_EVENT': CALIPER_VERSION,
     'THREAD_EVENT': CALIPER_VERSION,
     'TOOL_USE_EVENT': CALIPER_VERSION,
@@ -218,7 +218,7 @@ EVENT_TYPES = {
     'MEDIA_EVENT': 'MediaEvent',
     'MESSAGE_EVENT': 'MessageEvent',
     'NAVIGATION_EVENT': 'NavigationEvent',
-    'OUTCOME_EVENT': 'OutcomeEvent',
+    'GRADE_EVENT': 'GradeEvent',
     'SESSION_EVENT': 'SessionEvent',
     'THREAD_EVENT': 'ThreadEvent',
     'TOOL_USE_EVENT': 'ToolUseEvent',
@@ -235,7 +235,7 @@ EVENT_CLASSES = {
     EVENT_TYPES['MEDIA_EVENT']: 'caliper.events.MediaEvent',
     EVENT_TYPES['MESSAGE_EVENT']: 'caliper.events.MessageEvent',
     EVENT_TYPES['NAVIGATION_EVENT']: 'caliper.events.NavigationEvent',
-    EVENT_TYPES['OUTCOME_EVENT']: 'caliper.events.OutcomeEvent',
+    EVENT_TYPES['GRADE_EVENT']: 'caliper.events.GradeEvent',
     EVENT_TYPES['SESSION_EVENT']: 'caliper.events.SessionEvent',
     EVENT_TYPES['THREAD_EVENT']: 'caliper.events.ThreadEvent',
     EVENT_TYPES['TOOL_USE_EVENT']: 'caliper.events.ToolUseEvent',
@@ -436,6 +436,10 @@ FORUM_EVENT_ACTIONS = {
     'UNSUBSCRIBED': 'Unsubscribed',
 }
 
+GRADE_EVENT_ACTIONS = {
+    'GRADED': 'Graded',
+}
+
 MEDIA_EVENT_ACTIONS = {
     'CHANGED_RESOLUTION': 'ChangedResolution',
     'CHANGED_SIZE': 'ChangedSize',
@@ -467,10 +471,6 @@ MESSAGE_EVENT_ACTIONS = {
 
 NAVIGATION_EVENT_ACTIONS = {
     'NAVIGATED_TO': 'NavigatedTo',
-}
-
-OUTCOME_EVENT_ACTIONS = {
-    'GRADED': 'Graded',
 }
 
 SESSION_EVENT_ACTIONS = {
@@ -519,7 +519,7 @@ FORUM_PROFILE_ACTIONS.update(NAVIGATION_EVENT_ACTIONS)
 FORUM_PROFILE_ACTIONS.update(VIEW_EVENT_ACTIONS)
 
 GRADING_PROFILE_ACTIONS = {}
-GRADING_PROFILE_ACTIONS.update(OUTCOME_EVENT_ACTIONS)
+GRADING_PROFILE_ACTIONS.update(GRADE_EVENT_ACTIONS)
 GRADING_PROFILE_ACTIONS.update(VIEW_EVENT_ACTIONS)
 
 MEDIA_PROFILE_ACTIONS = {}

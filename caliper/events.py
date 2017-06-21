@@ -32,7 +32,7 @@ from caliper.constants import CALIPER_ACTIONS
 from caliper.constants import (
     BASIC_EVENT_ACTIONS, ANNOTATION_EVENT_ACTIONS, ASSESSMENT_EVENT_ACTIONS,
     ASSESSMENT_ITEM_EVENT_ACTIONS, ASSIGNABLE_EVENT_ACTIONS, FORUM_EVENT_ACTIONS,
-    MEDIA_EVENT_ACTIONS, MESSAGE_EVENT_ACTIONS, NAVIGATION_EVENT_ACTIONS, OUTCOME_EVENT_ACTIONS,
+    GRADE_EVENT_ACTIONS, MEDIA_EVENT_ACTIONS, MESSAGE_EVENT_ACTIONS, NAVIGATION_EVENT_ACTIONS,
     SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, TOOL_USE_EVENT_ACTIONS, VIEW_EVENT_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
 
@@ -300,17 +300,17 @@ class NavigationEvent(Event):
         self._set_str_prop('type', EVENT_TYPES['NAVIGATION_EVENT'])
 
 
-class OutcomeEvent(Event):
+class GradeEvent(Event):
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
-        if self.action == OUTCOME_EVENT_ACTIONS['GRADED']:
+        if self.action == GRADE_EVENT_ACTIONS['GRADED']:
             ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
             ensure_type(self.generated, ENTITY_TYPES['SCORE'])
         else:
             raise_with_traceback(ValueError('action must be in the list of Outcome event actions'))
 
-        self._set_context(EVENT_CONTEXTS['OUTCOME_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['OUTCOME_EVENT'])
+        self._set_context(EVENT_CONTEXTS['GRADE_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['GRADE_EVENT'])
 
 
 class SessionEvent(Event):
