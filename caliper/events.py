@@ -249,6 +249,19 @@ class AssignableEvent(Event):
         self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE_EVENT'])
 
 
+class GradeEvent(Event):
+    def __init__(self, target=None, **kwargs):
+        Event.__init__(self, target=None, **kwargs)
+        if self.action == GRADE_EVENT_ACTIONS['GRADED']:
+            ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
+            ensure_type(self.generated, ENTITY_TYPES['SCORE'])
+        else:
+            raise_with_traceback(ValueError('action must be in the list of Outcome event actions'))
+
+        self._set_context(EVENT_CONTEXTS['GRADE_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['GRADE_EVENT'])
+
+
 class ForumEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
@@ -298,19 +311,6 @@ class NavigationEvent(Event):
 
         self._set_context(EVENT_CONTEXTS['NAVIGATION_EVENT'])
         self._set_str_prop('type', EVENT_TYPES['NAVIGATION_EVENT'])
-
-
-class GradeEvent(Event):
-    def __init__(self, target=None, **kwargs):
-        Event.__init__(self, target=None, **kwargs)
-        if self.action == GRADE_EVENT_ACTIONS['GRADED']:
-            ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
-            ensure_type(self.generated, ENTITY_TYPES['SCORE'])
-        else:
-            raise_with_traceback(ValueError('action must be in the list of Outcome event actions'))
-
-        self._set_context(EVENT_CONTEXTS['GRADE_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['GRADE_EVENT'])
 
 
 class SessionEvent(Event):
