@@ -896,6 +896,7 @@ class Score(Entity, Generatable):
         self._set_float_prop('scoreGiven', scoreGiven)
         self._set_obj_prop('scoredBy', scoredBy, t=ENTITY_TYPES['AGENT'])
 
+
 ## Session entities
 class Session(Entity, Generatable, Targetable):
     def __init__(self, duration=None, endedAtTime=None, startedAtTime=None, user=None, **kwargs):
