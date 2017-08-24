@@ -241,12 +241,23 @@ class AssignableEvent(Event):
         if self.action not in ASSIGNABLE_EVENT_ACTIONS.values():
             raise_with_traceback(
                 ValueError('action must be in the list of Assignable event actions'))
-        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
         self._set_context(EVENT_CONTEXTS['ASSIGNABLE_EVENT'])
         self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE_EVENT'])
+
+
+class ForumEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        if self.action not in FORUM_EVENT_ACTIONS.values():
+            raise_with_traceback(ValueError('action must be in the list of Forum event actions'))
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['FORUM'])
+
+        self._set_context(EVENT_CONTEXTS['FORUM_EVENT'])
+        self._set_str_prop('type', EVENT_TYPES['FORUM_EVENT'])
 
 
 class GradeEvent(Event):
@@ -260,18 +271,6 @@ class GradeEvent(Event):
 
         self._set_context(EVENT_CONTEXTS['GRADE_EVENT'])
         self._set_str_prop('type', EVENT_TYPES['GRADE_EVENT'])
-
-
-class ForumEvent(Event):
-    def __init__(self, **kwargs):
-        Event.__init__(self, **kwargs)
-        if self.action not in FORUM_EVENT_ACTIONS.values():
-            raise_with_traceback(ValueError('action must be in the list of Forum event actions'))
-        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['FORUM'])
-
-        self._set_context(EVENT_CONTEXTS['FORUM_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['FORUM_EVENT'])
 
 
 class MediaEvent(Event):
@@ -318,7 +317,6 @@ class SessionEvent(Event):
         Event.__init__(self, **kwargs)
         if self.action == SESSION_EVENT_ACTIONS['LOGGED_IN']:
             ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-            ensure_type(self.edApp, ENTITY_TYPES['SOFTWARE_APPLICATION'], optional=True)
             ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.generated, ENTITY_TYPES['SESSION'], optional=True)
             ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
@@ -355,6 +353,7 @@ class ToolUseEvent(Event):
             raise_with_traceback(ValueError('action must be in the list of Tool Use event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        ensure_type(self.target, ENTITY_TYPES['SOFTWARE_APPLICATION'], optional=True)
 
         self._set_context(EVENT_CONTEXTS['TOOL_USE_EVENT'])
         self._set_str_prop('type', EVENT_TYPES['TOOL_USE_EVENT'])

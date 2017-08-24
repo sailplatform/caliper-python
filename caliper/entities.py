@@ -143,7 +143,7 @@ class Membership(Entity):
         self._set_context(ENTITY_CONTEXTS['MEMBERSHIP'])
         self._set_str_prop('type', ENTITY_TYPES['MEMBERSHIP'])
 
-        self._set_obj_prop('member', member, t=ENTITY_TYPES['PERSON'], req=True)
+        self._set_obj_prop('member', member, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('organization', organization, t=ENTITY_TYPES['ORGANIZATION'], req=True)
 
         if roles and isinstance(roles, collections.MutableSequence):
@@ -934,12 +934,12 @@ class Session(Entity, Generatable, Targetable):
 
 
 class LtiSession(Session):
-    def __init__(self, launchParameters=None, **kwargs):
+    def __init__(self, messageParameters=None, **kwargs):
         Session.__init__(self, **kwargs)
         self._set_context(ENTITY_CONTEXTS['LTI_SESSION'])
         self._set_str_prop('type', ENTITY_TYPES['LTI_SESSION'])
-        self._set_dict_prop('launchParameters', launchParameters)
+        self._set_dict_prop('messageParameters', messageParameters)
 
     @property
-    def launchParameters(self):
-        return self._get_prop('launchParameters')
+    def messageParameters(self):
+        return self._get_prop('messageParameters')
