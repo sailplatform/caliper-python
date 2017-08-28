@@ -452,7 +452,7 @@ class Annotation(Entity, Generatable):
         self._set_context(ENTITY_CONTEXTS['ANNOTATION'])
         self._set_str_prop('type', ENTITY_TYPES['ANNOTATION'])
         self._set_obj_prop('annotated', annotated, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
-        self._set_obj_prop('annotator', annotator, t=ENTITY_TYPES['AGENT'], req=True)
+        self._set_obj_prop('annotator', annotator, t=ENTITY_TYPES['PERSON'], req=True)
 
     @property
     def annotated(self):
@@ -603,7 +603,7 @@ class Attempt(Entity, Generatable):
         self._set_context(ENTITY_CONTEXTS['ATTEMPT'])
         self._set_str_prop('type', ENTITY_TYPES['ATTEMPT'])
         self._set_obj_prop('assignable', assignable, t=MARKER_TYPES['ASSIGNABLE'])
-        self._set_obj_prop('assignee', assignee, t=ENTITY_TYPES['AGENT'])
+        self._set_obj_prop('assignee', assignee, t=ENTITY_TYPES['PERSON'])
         self._set_int_prop('count', count)
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
@@ -906,7 +906,7 @@ class Session(Entity, Generatable, Targetable):
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
-        self._set_obj_prop('user', user, t=ENTITY_TYPES['AGENT'])
+        self._set_obj_prop('user', user, t=ENTITY_TYPES['PERSON'])
 
     @property
     def duration(self):

@@ -241,6 +241,7 @@ class AssignableEvent(Event):
         if self.action not in ASSIGNABLE_EVENT_ACTIONS.values():
             raise_with_traceback(
                 ValueError('action must be in the list of Assignable event actions'))
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
