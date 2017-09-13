@@ -136,7 +136,9 @@ class Options(object):
         'SOCKET_TIMEOUT': 1000,
     }
 
-    def __init__(self, opts={}):
+    def __init__(self, opts=None):
+        if opts is None:
+            opts = {}
         self._config = self.default_options.copy()
         self._config.update((k, opts[k]) for k in (set(opts.keys()) & set(self._config.keys())))
 

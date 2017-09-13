@@ -34,7 +34,10 @@ from caliper.util.stats import Statistics
 
 
 class Client(object):
-    def __init__(self, config_options=Options(), requestor=None, stats=None, **kwargs):
+    def __init__(self, config_options=None, requestor=None, stats=None, **kwargs):
+
+        if config_options is None:
+            config_options=Options()
 
         if config_options and not (isinstance(config_options, Options)):
             raise_with_traceback(TypeError('config_options must implement base.Options'))
