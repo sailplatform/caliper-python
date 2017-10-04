@@ -26,7 +26,7 @@ from builtins import *
 
 import collections, uuid
 
-from caliper.constants import EVENT_TYPES, EVENT_CONTEXTS, MARKER_TYPES
+from caliper.constants import EVENT_TYPES, MARKER_TYPES
 from caliper.constants import ENTITY_TYPES
 from caliper.constants import CALIPER_ACTIONS
 from caliper.constants import (
@@ -57,14 +57,10 @@ class Event(BaseEvent):
                  uuid=None):
         BaseEvent.__init__(self)
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
-        self._set_context(EVENT_CONTEXTS['EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['EVENT'])
-
         if action and (action not in CALIPER_ACTIONS.values()):
             raise_with_traceback(ValueError('action must be in the list of Caliper actions'))
         else:
             self._set_str_prop('action', action, req=True)
-
         self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_date_prop('eventTime', eventTime, req=True)
@@ -88,16 +84,8 @@ class Event(BaseEvent):
             uuid=self.uuid)
 
     @property
-    def context(self):
-        return self._get_prop('@context')
-
-    @property
     def id(self):
         return self._get_prop('id')
-
-    @property
-    def type(self):
-        return self._get_prop('type')
 
     @property
     def action(self):
@@ -152,8 +140,6 @@ class MinimalEvent(BaseEvent):
     def __init__(self, id=None, action=None, actor=None, object=None, eventTime=None):
         BaseEvent.__init__(self)
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
-        self._set_context(EVENT_CONTEXTS['EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['EVENT'])
         self._set_str_prop('action', action, req=True)
         self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_date_prop('eventTime', eventTime, req=True)
@@ -163,10 +149,6 @@ class MinimalEvent(BaseEvent):
             raise_with_traceback(ValueError('action must be in the list of Caliper actions'))
         else:
             self._set_str_prop('action', action, req=True)
-
-    @property
-    def context(self):
-        return self._get_prop('@context')
 
     @property
     def id(self):
@@ -200,9 +182,6 @@ class AnnotationEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'])
 
-        self._set_context(EVENT_CONTEXTS['ANNOTATION_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['ANNOTATION_EVENT'])
-
 
 class AssessmentEvent(Event):
     def __init__(self, target=None, **kwargs):
@@ -213,9 +192,6 @@ class AssessmentEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
-
-        self._set_context(EVENT_CONTEXTS['ASSESSMENT_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_EVENT'])
 
 
 class AssessmentItemEvent(Event):
@@ -231,9 +207,6 @@ class AssessmentItemEvent(Event):
         else:
             ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
-        self._set_context(EVENT_CONTEXTS['ASSESSMENT_ITEM_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['ASSESSMENT_ITEM_EVENT'])
-
 
 class AssignableEvent(Event):
     def __init__(self, **kwargs):
@@ -245,9 +218,6 @@ class AssignableEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
-        self._set_context(EVENT_CONTEXTS['ASSIGNABLE_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['ASSIGNABLE_EVENT'])
-
 
 class ForumEvent(Event):
     def __init__(self, **kwargs):
@@ -256,9 +226,6 @@ class ForumEvent(Event):
             raise_with_traceback(ValueError('action must be in the list of Forum event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['FORUM'])
-
-        self._set_context(EVENT_CONTEXTS['FORUM_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['FORUM_EVENT'])
 
 
 class GradeEvent(Event):
@@ -270,9 +237,6 @@ class GradeEvent(Event):
         else:
             raise_with_traceback(ValueError('action must be in the list of Outcome event actions'))
 
-        self._set_context(EVENT_CONTEXTS['GRADE_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['GRADE_EVENT'])
-
 
 class MediaEvent(Event):
     def __init__(self, **kwargs):
@@ -283,9 +247,6 @@ class MediaEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['MEDIA_OBJECT'])
         ensure_type(self.target, ENTITY_TYPES['MEDIA_LOCATION'], optional=True)
 
-        self._set_context(EVENT_CONTEXTS['MEDIA_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['MEDIA_EVENT'])
-
 
 class MessageEvent(Event):
     def __init__(self, **kwargs):
@@ -294,9 +255,6 @@ class MessageEvent(Event):
             raise_with_traceback(ValueError('action must be in the list of Message event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['MESSAGE'])
-
-        self._set_context(EVENT_CONTEXTS['MESSAGE_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['MESSAGE_EVENT'])
 
 
 class NavigationEvent(Event):
@@ -308,9 +266,6 @@ class NavigationEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
-
-        self._set_context(EVENT_CONTEXTS['NAVIGATION_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['NAVIGATION_EVENT'])
 
 
 class SessionEvent(Event):
@@ -331,9 +286,6 @@ class SessionEvent(Event):
         else:
             raise_with_traceback(ValueError('action must be in the list of Session event actions'))
 
-        self._set_context(EVENT_CONTEXTS['SESSION_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['SESSION_EVENT'])
-
 
 class ThreadEvent(Event):
     def __init__(self, **kwargs):
@@ -342,9 +294,6 @@ class ThreadEvent(Event):
             raise_with_traceback(ValueError('action must be in the list of Thread event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['THREAD'])
-
-        self._set_context(EVENT_CONTEXTS['THREAD_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['THREAD_EVENT'])
 
 
 class ToolUseEvent(Event):
@@ -356,9 +305,6 @@ class ToolUseEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
         ensure_type(self.target, ENTITY_TYPES['SOFTWARE_APPLICATION'], optional=True)
 
-        self._set_context(EVENT_CONTEXTS['TOOL_USE_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['TOOL_USE_EVENT'])
-
 
 class ViewEvent(Event):
     def __init__(self, **kwargs):
@@ -367,6 +313,3 @@ class ViewEvent(Event):
             raise_with_traceback(ValueError('action must be in the list of View event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
-
-        self._set_context(EVENT_CONTEXTS['VIEW_EVENT'])
-        self._set_str_prop('type', EVENT_TYPES['VIEW_EVENT'])

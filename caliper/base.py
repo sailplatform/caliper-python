@@ -30,7 +30,8 @@ from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as ani
 from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
 from urllib.parse import urlparse as urllib_urlparse
 
-from caliper.constants import CALIPER_CLASSES, CALIPER_TYPES
+from caliper.constants import (CALIPER_CLASSES, CALIPER_TYPES, CALIPER_CONTEXTS,
+                               CALIPER_TYPES_FOR_CLASSES)
 
 ## Convenience functions
 
@@ -93,6 +94,7 @@ def _get_type(t):
 def is_subtype(t1, t2):
     return issubclass(_get_type(t1), _get_type(t2))
 
+
 def ensure_type(p, t, optional=False):
     # exception or True
     if p == None:
@@ -108,13 +110,14 @@ def ensure_type(p, t, optional=False):
         else:
             return True
     elif t and not (
-            (isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
-            (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-            (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
-            (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', dict), t)) or
-            (isinstance(p, _get_type(t)))):
+        (isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
+        (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+        (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
+        (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', dict), t)) or
+        (isinstance(p, _get_type(t)))):
         raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
+
 
 def ensure_list_type(l, t):
     # exception or True
@@ -357,7 +360,6 @@ class CaliperSerializable(object):
             val = v
         self._set_untyped_prop(k, v, req=req)
 
-
     # protected unpacker methods, used by dict and json-string representation
     # public functions
     def _unpack_context(self, ctxt_bases=[]):
@@ -435,12 +437,12 @@ class CaliperSerializable(object):
                         thin_context=thin_context,
                         thin_props=thin_props)
             elif isinstance(v, collections.MutableMapping):
-                 the_id = v.get('id')
-                 the_type = v.get('type')
-                 if (the_id and the_type) and (the_id in described_objects):
-                     value = the_id
-                 else:
-                     value = v
+                the_id = v.get('id')
+                the_type = v.get('type')
+                if (the_id and the_type) and (the_id in described_objects):
+                    value = the_id
+                else:
+                    value = v
             else:
                 value = v
             r.update({k: value})
@@ -473,16 +475,32 @@ class CaliperSerializable(object):
 class BaseEntity(CaliperSerializable):
     def __init__(self):
         CaliperSerializable.__init__(self)
+        self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
+        self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
+        self._set_str_prop('type', self._typename)
+        self._set_context(CALIPER_CONTEXTS[self._get_prop('type')])
+
+    @property
+    def context(self):
+        return self._get_prop('@context')
 
     @property
     def type(self):
-        return self.__class__
+        return self._get_prop('type')
 
 
 class BaseEvent(CaliperSerializable):
     def __init__(self):
         CaliperSerializable.__init__(self)
+        self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
+        self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
+        self._set_str_prop('type', self._typename)
+        self._set_context(CALIPER_CONTEXTS[self._get_prop('type')])
+
+    @property
+    def context(self):
+        return self._get_prop('@context')
 
     @property
     def type(self):
-        return self.__class__
+        return self._get_prop('type')
