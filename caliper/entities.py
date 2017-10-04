@@ -41,13 +41,14 @@ class Entity(BaseEntity):
 
     def __init__(self,
                  id=None,
+                 context=None,
                  dateCreated=None,
                  dateModified=None,
                  description=None,
                  name=None,
                  version=None,
                  extensions=None):
-        BaseEntity.__init__(self)
+        BaseEntity.__init__(self, context=context)
         self._set_id(id)
         self._set_date_prop('dateCreated', dateCreated)
         self._set_date_prop('dateModified', dateModified)

@@ -40,6 +40,7 @@ from caliper.base import BaseEntity, BaseEvent, ensure_type
 class Event(BaseEvent):
     def __init__(self,
                  id=None,
+                 context=None,
                  action=None,
                  actor=None,
                  edApp=None,
@@ -55,7 +56,7 @@ class Event(BaseEvent):
                  sourcedId=None,
                  target=None,
                  uuid=None):
-        BaseEvent.__init__(self)
+        BaseEvent.__init__(self, context=context)
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
         if action and (action not in CALIPER_ACTIONS.values()):
             raise_with_traceback(ValueError('action must be in the list of Caliper actions'))
@@ -138,7 +139,7 @@ class Event(BaseEvent):
 
 class MinimalEvent(BaseEvent):
     def __init__(self, id=None, action=None, actor=None, object=None, eventTime=None):
-        BaseEvent.__init__(self)
+        BaseEvent.__init__(self, context=None)
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
         self._set_str_prop('action', action, req=True)
         self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)

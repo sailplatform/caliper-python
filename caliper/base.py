@@ -40,6 +40,16 @@ def deprecation(m):
     warnings.warn(m, DeprecationWarning, stacklevel=2)
 
 
+def is_valid_context(ctxt, expected_base_context):
+    base_context = _get_base_context(ctxt)
+    return is_valid_URI(base_context) and (base_context == expected_base_context)
+
+def _get_base_context(ctxt):
+    if isinstance(ctxt, collections.MutableSequence):
+        return ctxt[-1]
+    else:
+        return ctxt
+
 def is_valid_date(date):
     try:
         aniso_parse_datetime(date)
@@ -309,8 +319,11 @@ class CaliperSerializable(object):
         self._set_str_prop(k, v, req=req)
 
     # protected complex-type setters
-    def _set_context(self, v):
-        self._set_uri_prop('@context', v, req=True)
+    def _set_context(self, v, expected_base_context):
+        if not v:
+            self._update_props('@context', expected_base_context, req=True)
+        elif is_valid_context(v, expected_base_context):
+            self._update_props('@context', v, req=True)
 
     def _set_date_prop(self, k, v, req=False):
         val = None
@@ -364,8 +377,9 @@ class CaliperSerializable(object):
     # public functions
     def _unpack_context(self, ctxt_bases=[]):
         r = self._get_prop('@context')
-        if r in ctxt_bases:
-            return None
+        for ctxt in ctxt_bases:
+            if r == ctxt:
+                return None
         else:
             return r
 
@@ -406,7 +420,9 @@ class CaliperSerializable(object):
         ctxt_prop = self._unpack_context(ctxt_bases=cb)
         if ctxt_prop:
             r.update({'@context': ctxt_prop})
-            if thin_context and (ctxt_prop not in cb):
+            if thin_context:
+                if not cb:
+                    cb.append(_get_base_context(ctxt_prop))
                 cb.append(ctxt_prop)
 
         for k, v in sorted(self._props.items()):
@@ -471,14 +487,14 @@ class CaliperSerializable(object):
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 
-        ### Entities and Events ###
+### Entities and Events ###
 class BaseEntity(CaliperSerializable):
-    def __init__(self):
+    def __init__(self, context=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
         self._set_str_prop('type', self._typename)
-        self._set_context(CALIPER_CONTEXTS[self._get_prop('type')])
+        self._set_context(context, CALIPER_CONTEXTS[self._typename])
 
     @property
     def context(self):
@@ -490,12 +506,12 @@ class BaseEntity(CaliperSerializable):
 
 
 class BaseEvent(CaliperSerializable):
-    def __init__(self):
+    def __init__(self, context=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
         self._set_str_prop('type', self._typename)
-        self._set_context(CALIPER_CONTEXTS[self._get_prop('type')])
+        self._set_context(context, CALIPER_CONTEXTS[self._typename])
 
     @property
     def context(self):

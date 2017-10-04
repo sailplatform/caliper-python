@@ -48,12 +48,17 @@ def from_json_dict(d):
     for k, v in d.items():
 
         # transmogrify key or move to next item
-        if k in ['type', '@context']:
+        if k in ['type']:
             continue
-        key = k
+        elif k in ['@context']:
+            key = 'context'
+        else:
+            key = k
 
         # recursively condense value if complex, otherwise use value
         if CALIPER_CLASSES.get(t) and k in ['extensions']:
+            value = v
+        elif k in ['@context']:
             value = v
         elif isinstance(v, collections.MutableSequence):
             value = from_json_list(v)
