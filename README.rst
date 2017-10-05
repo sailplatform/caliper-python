@@ -21,8 +21,6 @@ packages:
 
 * rfc3986 -- (Apache 2 licensed)
 
-* tox, discover -- (soft-dependencies used only for tests, MIT licensed)
-
 To work with the `imsglobal_caliper` bundle (maintain, use, run tests) you'll need
 to have these third-party packages in your local Python environment.
 
@@ -59,21 +57,22 @@ the name of the repository on GitHub is different to the distribution package na
 Changing and testing
 --------------------
 All the `imsglobal_caliper` code you would use to build and use a caliper sensor in
-your application you can find in the `caliper` main module. The bundle also
-includes a set of test files in a `caliper_tests` module; we did this not
-because we expect you'll use `caliper_tests` in production, but so that the
-various tests modules in `caliper_tests` can have portable visibility to one
-another.
+your application you can find in the `caliper` main module.
 
-**Testing**. In general, whenever you might make changes to code in `caliper`,
-you should run the unit tests. From the package's top-level directory, just use
-`tox` to run all the tests on both Python 2.7 and Python 3.5.
+**Testing**. When you work with the source bundle, we include tests in the
+`tests` directory. The tests use the `tox` test runner, so you will need that
+in your environment. In general, whenever you might make changes to code in
+`caliper`, you should run the fixture tests. From the source repo's top-level
+directory, use `tox` to run all the tests on both Python 2.7 and Python 3.6.
+
+Before you can run the tests, you will also need a copy of the Caliper fixtures
+(see below).
 
 **Fixtures**. The test suites are principally designed to test against the
 canonical common JSON fixtures. To set up your tests, you should clone the
 `Caliper common fixtures repository
 <https://github.com/IMSGlobal/caliper-common-fixtures-public>`_ repository into the
-`caliper_tests/fixtures` directory, and pull changes there.
+`tests/fixtures` directory, and pull changes there.
 
 Ideally, if you make changes to `imsglobal_caliper` you should ensure that your
 changes will test well against the fixtures from the main common fixtures

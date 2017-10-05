@@ -29,9 +29,8 @@ import os
 import sys
 import unittest
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import caliper
-import caliper_tests.util as util
+from .context import caliper
+from . import util
 
 
 class TestCaliperSensor(unittest.TestCase):

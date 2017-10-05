@@ -9,19 +9,17 @@ import sys
 from codecs import open
 
 try:
-    from setuptools import setup, find_packages
+    from setuptools import setup
 except ImportError:
-    from distutils.core import setup, find_packages
+    from distutils.core import setup
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-_packages = ['caliper', 'caliper.util', 'caliper_tests']
+_packages = ['caliper', 'caliper.util']
 
-_requires = ['aniso8601 >= 1.1.0', 'future >= 0.14.3', 'requests >= 2.7.0', 'rfc3986 == 0.4.1']
-
-_fixtures = ['fixtures/src/test/resources/fixtures/*.json']
+_requires = ['aniso8601 >= 1.3.0', 'future >= 0.16.0', 'requests >= 2.18.3', 'rfc3986 == 1.1.0']
 
 
 def _get_val_from_mod(k):
@@ -47,7 +45,6 @@ setup(
     maintainer_email='info@imsglobal.org',
     url='https://github.com/IMSGlobal/caliper-python',
     packages=_packages,
-    package_data={'caliper_tests': _fixtures},
     install_requires=_requires,
     license=_license,
     zip_safe=False,

@@ -28,12 +28,8 @@ import json
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import caliper
+from .context import caliper, TESTDIR
 import caliper.condensor as condensor
-
-# needed to root the fixtures directory
-import caliper_tests
 
 ###
 # NOTE: FIXTURE_DIR assumes that the caliper fixtures repo contents are hosted
@@ -41,7 +37,7 @@ import caliper_tests
 # that the tests can find all the json fixture files in that sub-directory
 ###
 _FIXTURE_PREFIX = 'fixtures'
-_FIXTURE_BASE_DIR = os.path.join(os.path.dirname(caliper_tests.__file__), _FIXTURE_PREFIX)
+_FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
 _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, 'src', 'test', 'resources', _FIXTURE_PREFIX)
 
 _SENSOR_ID = 'https://example.edu/sensors/1'
