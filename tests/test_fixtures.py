@@ -42,10 +42,6 @@ class TestCaliperEntities(unittest.TestCase):
     def testAllCaliperEntities(self):
         passing = True
         for fixture in self.fixtures:
-            # coerced fixtures require extra care to rebuild exactly as received
-            # see tests in sensor and/or condensor testing
-            if 'Coerced' in fixture:
-                continue
             print('Testing entity fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_entity(fixture))
@@ -66,10 +62,6 @@ class TestCaliperEnvelopes(unittest.TestCase):
     def testAllCaliperEnvelopes(self):
         passing = True
         for fixture in self.fixtures:
-            # coerced fixtures require extra care to rebuild exactly as received
-            # see tests in sensor and/or condensor testing
-            if 'Coerced' in fixture:
-                continue
             print('Testing envelope fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_envelope(fixture))
@@ -90,10 +82,6 @@ class TestCaliperEvents(unittest.TestCase):
     def testAllCaliperEvents(self):
         passing = True
         for fixture in self.fixtures:
-            # coerced fixtures require extra care to rebuild exactly as received
-            # see tests in sensor and/or condensor testing
-            if 'Coerced' in fixture:
-                continue
             print('Testing event fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_event(fixture))
