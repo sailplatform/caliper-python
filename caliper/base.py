@@ -260,19 +260,12 @@ class HttpOptions(Options):
 ### Caliper serializable base class for all caliper objects that need serialization ###
 class CaliperSerializable(object):
     def __init__(self):
-        self._objects = {}
         self._props = {}
 
     # these methods are the only ones that directly touch the object's underlying
     # property/object cache
     def _get_prop(self, k):
-        return self._objects.get(k) or self._props.get(k)
-
-    def _update_objects(self, k, v, req=False):
-        if req and (v == None):
-            pass
-        elif k:
-            self._objects.update({k: v})
+        return self._props.get(k)
 
     def _update_props(self, k, v, req=False):
         if req and (v == None):
