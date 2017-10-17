@@ -54,8 +54,7 @@ class Event(BaseEvent):
                  referrer=None,
                  session=None,
                  sourcedId=None,
-                 target=None,
-                 uuid=None):
+                 target=None):
         BaseEvent.__init__(self, context=context)
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
         if action and (action not in CALIPER_ACTIONS.values()):
@@ -81,8 +80,7 @@ class Event(BaseEvent):
             action=self.action,
             actor=self.actor,
             object=self.object,
-            eventTime=self.eventTime,
-            uuid=self.uuid)
+            eventTime=self.eventTime)
 
     @property
     def id(self):
