@@ -313,7 +313,7 @@ class DigitalResource(Entity, Referrable, Targetable):
 
     @isPartOf.setter
     def isPartOf(self, new_object):
-        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
+        self._set_obj_prop('isPartOf', new_object, t=ENTITY_TYPES['ENTITY'])
 
     @property
     def keywords(self):
@@ -568,7 +568,7 @@ class Attempt(Entity, Generatable):
 
     @isPartOf.setter
     def isPartOf(self, new_object):
-        self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['Attempt'])
+        self._set_obj_prop('isPartOf', new_object, t=ENTITY_TYPES['Attempt'])
 
     @property
     def startedAtTime(self):
