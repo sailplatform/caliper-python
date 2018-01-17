@@ -163,5 +163,5 @@ Copyright and License
 =====================
 For details about the copyright and license information, see the NOTICE file.
 
-©2015-2017 IMS Global Learning Consortium, Inc. All Rights Reserved.
+©2015-2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information - http://www.imsglobal.org/copyright.html
