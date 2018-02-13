@@ -104,6 +104,7 @@ EVENT_TYPES = {
     'GRADE_EVENT': 'GradeEvent',
     'SESSION_EVENT': 'SessionEvent',
     'THREAD_EVENT': 'ThreadEvent',
+    'TOOL_LAUNCH_EVENT': 'ToolLaunchEvent',
     'TOOL_USE_EVENT': 'ToolUseEvent',
     'VIEW_EVENT': 'ViewEvent',
 }
