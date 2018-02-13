@@ -28,7 +28,7 @@ from builtins import *
 
 ## Caliper constants
 
-CALIPER_VERSION = 'http://purl.imsglobal.org/ctx/caliper/v1p1'
+CALIPER_VERSION = 'http://purl.imsglobal.org/ctx/caliper/v1p2'
 
 ENTITY_TYPES = {
     'AGENT': 'Agent',
