@@ -33,10 +33,8 @@ from caliper.constants import (
     BASIC_EVENT_ACTIONS, ANNOTATION_EVENT_ACTIONS, ASSESSMENT_EVENT_ACTIONS,
     ASSESSMENT_ITEM_EVENT_ACTIONS, ASSIGNABLE_EVENT_ACTIONS, FORUM_EVENT_ACTIONS,
     GRADE_EVENT_ACTIONS, MEDIA_EVENT_ACTIONS, MESSAGE_EVENT_ACTIONS, NAVIGATION_EVENT_ACTIONS,
-    SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, TOOL_LAUNCH_EVENT_ACTIONS, TOOL_USE_EVENT_ACTIONS,
-    VIEW_EVENT_ACTIONS)
+    SESSION_EVENT_ACTIONS, THREAD_EVENT_ACTIONS, TOOL_USE_EVENT_ACTIONS, VIEW_EVENT_ACTIONS)
 from caliper.base import BaseEntity, BaseEvent, ensure_type
-
 
 ## Base event class
 class Event(BaseEvent):
@@ -297,23 +295,11 @@ class ThreadEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['THREAD'])
 
 
-class ToolLaunchEvent(Event):
-    def __init__(self, **kwargs):
-        Event.__init__(self, **kwargs)
-        if self.action not in TOOL_LAUNCH_EVENT_ACTIONS.values():
-            raise_with_traceback(
-                ValueError('action must be in the list of Tool Launch event actions'))
-        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'])
-
-
 class ToolUseEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
         if self.action not in TOOL_USE_EVENT_ACTIONS.values():
-            raise_with_traceback(
-                ValueError('action must be in the list of Tool Use event actions'))
+            raise_with_traceback(ValueError('action must be in the list of Tool Use event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
         ensure_type(self.target, ENTITY_TYPES['SOFTWARE_APPLICATION'], optional=True)
