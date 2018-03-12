@@ -30,7 +30,6 @@ import sys
 
 from .context import caliper, TESTDIR
 import caliper.condensor as condensor
-from caliper.constants import CALIPER_VERSION
 
 ###
 # NOTE: FIXTURE_DIR assumes that the caliper fixtures repo contents are hosted
@@ -39,7 +38,7 @@ from caliper.constants import CALIPER_VERSION
 ###
 _FIXTURE_PREFIX = 'fixtures'
 _FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
-_FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
+_FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, 'src', 'test', 'resources', _FIXTURE_PREFIX)
 
 _SENSOR_ID = 'https://example.edu/sensors/1'
 
