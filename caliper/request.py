@@ -27,13 +27,13 @@ from builtins import *
 import collections, copy, datetime, json, requests
 
 from caliper.base import CaliperSerializable, HttpOptions
-from caliper.constants import CALIPER_VERSION
+from caliper.constants import CALIPER_MASTER_CONTEXT
 
 
 class Envelope(CaliperSerializable):
     def __init__(self,
                  data=None,
-                 dataVersion=CALIPER_VERSION,
+                 dataVersion=CALIPER_MASTER_CONTEXT,
                  send_time=None,
                  sensor_id=None,
                  **kwargs):
