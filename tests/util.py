@@ -29,8 +29,9 @@ import os
 import sys
 
 from .context import caliper, TESTDIR
+from caliper import CALIPER_VERSION
 import caliper.condensor as condensor
-from caliper.constants import CALIPER_VERSION
+
 
 ###
 # NOTE: FIXTURE_DIR assumes that the caliper fixtures repo contents are hosted
