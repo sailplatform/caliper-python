@@ -27,7 +27,6 @@ from builtins import *
 # yapf: disable
 
 ## Caliper constants
-
 CALIPER_VERSION = 'v1p2'
 CALIPER_MASTER_CONTEXT = 'https://purl.imsglobal.org/caliper/{}/context/'.format(CALIPER_VERSION)
 

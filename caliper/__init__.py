@@ -40,9 +40,10 @@ __license__ = 'LGPLv3'
 
 import logging, os
 
-from caliper.sensor import Sensor as Sensor
 from caliper.base import HttpOptions as HttpOptions
-__all__ = ['Sensor', 'HttpOptions']
+from caliper.constants import CALIPER_VERSION as CALIPER_VERSION
+from caliper.sensor import Sensor as Sensor
+__all__ = ['Sensor', 'HttpOptions', CALIPER_VERSION]
 
 
 def build_default_sensor(sensor_id=None):
