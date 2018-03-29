@@ -26,8 +26,8 @@ from builtins import *
 
 import copy, collections, importlib
 
-from caliper.base import is_valid_URI, is_valid_date
-from caliper.constants import CALIPER_CLASSES
+from caliper.base import is_valid_URI, is_valid_date, _get_base_context
+from caliper.constants import CALIPER_CLASSES, CALIPER_PROFILES_FOR_CONTEXTS
 
 
 def from_caliper_envelope(d):
@@ -52,6 +52,8 @@ def from_json_dict(d):
             continue
         elif k in ['@context']:
             key = 'context'
+            # use context value to look for hinted-at profile
+            r['profile'] = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(v))
         else:
             key = k
 

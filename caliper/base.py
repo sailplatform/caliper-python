@@ -30,8 +30,8 @@ from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as ani
 from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
 from urllib.parse import urlparse as urllib_urlparse
 
-from caliper.constants import (CALIPER_CLASSES, CALIPER_TYPES, CALIPER_CONTEXTS,
-                               CALIPER_TYPES_FOR_CLASSES)
+from caliper.constants import (CALIPER_CLASSES, CALIPER_CLASSES, CALIPER_CONTEXTS,
+                               CALIPER_PROFILES, CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
 
 ## Convenience functions
 
@@ -44,11 +44,13 @@ def is_valid_context(ctxt, expected_base_context):
     base_context = _get_base_context(ctxt)
     return is_valid_URI(base_context) and (base_context == expected_base_context)
 
+
 def _get_base_context(ctxt):
     if isinstance(ctxt, collections.MutableSequence):
         return ctxt[-1]
     else:
         return ctxt
+
 
 def is_valid_date(date):
     try:
@@ -81,8 +83,7 @@ def is_valid_time(time):
 def is_valid_URI(uri):
     if not uri:
         return False
-    elif (isinstance(uri, str)
-          and (urllib_urlparse(uri).geturl() == uri)
+    elif (isinstance(uri, str) and (urllib_urlparse(uri).geturl() == uri)
           and rfc3986_is_valid_uri(uri)):
         return True
     else:
@@ -243,7 +244,8 @@ class HttpOptions(Options):
             connection_timeout=10000,
             host='http://httpbin.org/post',
             optimize_serialization=True,
-            socket_timeout=10000, ):
+            socket_timeout=10000,
+    ):
         Options.__init__(self)
         self.API_KEY = api_key
         self.AUTH_SCHEME = auth_scheme
@@ -355,9 +357,11 @@ class CaliperSerializable(object):
         if req and (v == None):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
-            raise_with_traceback(TypeError('Provided property is not of required type: {}'.format(t)))
+            raise_with_traceback(
+                TypeError('Provided property is not of required type: {}'.format(t)))
         if isinstance(v, str) and t and not is_subtype(t, CaliperSerializable):
-            raise_with_traceback(ValueError('URI IDs can only be provided for objects of known Caliper types'))
+            raise_with_traceback(
+                ValueError('URI IDs can only be provided for objects of known Caliper types'))
         self._update_props(k, v)
 
     def _set_time_prop(self, k, v, req=False):
@@ -435,9 +439,8 @@ class CaliperSerializable(object):
             elif isinstance(v, CaliperSerializable):
                 the_id = v._get_prop('id')
                 the_type = v._get_prop('type')
-                if (the_id and the_type
-                    and is_subtype(the_type, CaliperSerializable)
-                    and the_id in described_objects):
+                if (the_id and the_type and is_subtype(the_type, CaliperSerializable)
+                        and the_id in described_objects):
                     value = the_id
                 else:
                     value = v._unpack_object(
@@ -467,27 +470,25 @@ class CaliperSerializable(object):
 
     def as_json(self, described_objects=None, thin_context=False, thin_props=False):
         r = self.as_dict(
-            described_objects=described_objects,
-            thin_context=thin_context,
-            thin_props=thin_props)
+            described_objects=described_objects, thin_context=thin_context, thin_props=thin_props)
         return json.dumps(r, sort_keys=True)
 
     def as_json_with_ids(self, described_objects=None, thin_context=False, thin_props=False):
         ret = self.as_json(
-            described_objects=described_objects,
-            thin_context=thin_context,
-            thin_props=thin_props)
+            described_objects=described_objects, thin_context=thin_context, thin_props=thin_props)
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 
 ### Entities and Events ###
 class BaseEntity(CaliperSerializable):
-    def __init__(self, context=None):
+    def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
         self._set_str_prop('type', self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._typename])
+        _expected_base_context = CALIPER_CONTEXTS.get(
+            profile, CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']])
+        self._set_context(context, _expected_base_context)
 
     @property
     def context(self):
@@ -499,12 +500,14 @@ class BaseEntity(CaliperSerializable):
 
 
 class BaseEvent(CaliperSerializable):
-    def __init__(self, context=None):
+    def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
         self._set_str_prop('type', self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._typename])
+        _expected_base_context = CALIPER_CONTEXTS.get(
+            profile, CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']])
+        self._set_context(context, _expected_base_context)
 
     @property
     def context(self):

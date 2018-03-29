@@ -28,7 +28,31 @@ from builtins import *
 
 ## Caliper constants
 CALIPER_VERSION = 'v1p1'
-CALIPER_MASTER_CONTEXT = 'http://purl.imsglobal.org/ctx/caliper/{}'.format(CALIPER_VERSION)
+CALIPER_CORE_CONTEXT = 'http://purl.imsglobal.org/ctx/caliper/{}'.format(CALIPER_VERSION)
+_CALIPER_PROFILE_CTXTS = 'http://purl.imsglobal.org/caliper/' + CALIPER_VERSION + '/{}'
+_CALIPER_PROFILE_EXT_CTXTS = _CALIPER_PROFILE_CTXTS + '-extension'
+
+CALIPER_PROFILES = {
+    'BASIC_PROFILE': 'BasicProfile',
+    'ANNOTATION_PROFILE': 'AnnotationProfile',
+    'ASSESSMENT_PROFILE': 'AssessmentProfile',
+    'FORUM_PROFILE': 'ForumProfile',
+    'GRADING_PROFILE': 'GradingProfile',
+    'MEDIA_PROFILE': 'MediaProfile',
+    'READING_PROFILE': 'ReadingProfile',
+    'SESSION_PROFILE': 'SessionProfile',
+    'TOOL_USE_PROFILE': 'ToolUseProfile',
+    }
+
+PROFILE_CONTEXTS = { CALIPER_PROFILES[key]:_CALIPER_PROFILE_CTXTS.format(CALIPER_PROFILES[key])
+                     for key in CALIPER_PROFILES.keys() }
+
+## profile context exceptions
+PROFILE_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']] = CALIPER_CORE_CONTEXT
+
+CALIPER_CONTEXTS = {'Caliper': CALIPER_CORE_CONTEXT}
+CALIPER_CONTEXTS.update(PROFILE_CONTEXTS)
+CALIPER_PROFILES_FOR_CONTEXTS = { CALIPER_CONTEXTS[key]:key for key in PROFILE_CONTEXTS.keys() }
 
 ENTITY_TYPES = {
     'AGENT': 'Agent',
@@ -83,113 +107,9 @@ ENTITY_TYPES = {
     'WEB_PAGE': 'WebPage'
 }
 
-## map context onto entity types
-ENTITY_CONTEXTS = {
-    ENTITY_TYPES['AGENT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ANNOTATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ASSESSMENT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ASSESSMENT_ITEM']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ATTEMPT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['AUDIO_OBJECT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['BOOKMARK_ANNOTATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['CHAPTER']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['COURSE_OFFERING']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['COURSE_SECTION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['DIGITAL_RESOURCE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['DOCUMENT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ENTITY']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['EPUB_CHAPTER']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['EPUB_PART']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['EPUB_SUB_CHAPTER']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['EPUB_VOLUME']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['FILLINBLANK']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['FORUM']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['FRAME']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['GROUP']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['HIGHLIGHT_ANNOTATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['IMAGE_OBJECT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['LEARNING_OBJECTIVE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['LTI_SESSION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['MEDIA_LOCATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['MEDIA_OBJECT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['MEMBERSHIP']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['MESSAGE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['MULTIPLECHOICE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['MULTIPLERESPONSE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['ORGANIZATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['PAGE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['PERSON']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['READING']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['RESPONSE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['RESULT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['SCORE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['SELECTTEXT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['SESSION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['SHARED_ANNOTATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['SOFTWARE_APPLICATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['TAG_ANNOTATION']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['TEXT_POSITION_SELECTOR']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['THREAD']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['TRUEFALSE']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['VIDEO_OBJECT']: CALIPER_MASTER_CONTEXT,
-    ENTITY_TYPES['WEB_PAGE']: CALIPER_MASTER_CONTEXT
-}
-
 ## map implementing Python classes onto entity types
-ENTITY_CLASSES = {
-    ENTITY_TYPES['AGENT']: 'caliper.entities.Agent',
-    ENTITY_TYPES['ANNOTATION']: 'caliper.entities.Annotation',
-    ENTITY_TYPES['ASSESSMENT']: 'caliper.entities.Assessment',
-    ENTITY_TYPES['ASSESSMENT_ITEM']: 'caliper.entities.AssessmentItem',
-    ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE']: 'caliper.entities.AssignableDigitalResource',
-    ENTITY_TYPES['ATTEMPT']: 'caliper.entities.Attempt',
-    ENTITY_TYPES['AUDIO_OBJECT']: 'caliper.entities.AudioObject',
-    ENTITY_TYPES['BOOKMARK_ANNOTATION']: 'caliper.entities.BookmarkAnnotation',
-    ENTITY_TYPES['CHAPTER']: 'caliper.entities.Chapter',
-    ENTITY_TYPES['COURSE_OFFERING']: 'caliper.entities.CourseOffering',
-    ENTITY_TYPES['COURSE_SECTION']: 'caliper.entities.CourseSection',
-    ENTITY_TYPES['DIGITAL_RESOURCE']: 'caliper.entities.DigitalResource',
-    ENTITY_TYPES['DIGITAL_RESOURCE_COLLECTION']: 'caliper.entities.DigitalResourceCollection',
-    ENTITY_TYPES['DOCUMENT']: 'caliper.entities.Document',
-    ENTITY_TYPES['ENTITY']: 'caliper.entities.Entity',
-    ENTITY_TYPES['EPUB_CHAPTER']: 'caliper.entities.EpubChapter',
-    ENTITY_TYPES['EPUB_PART']: 'caliper.entities.EpubPart',
-    ENTITY_TYPES['EPUB_SUB_CHAPTER']: 'caliper.entities.EpubSubChapter',
-    ENTITY_TYPES['EPUB_VOLUME']: 'caliper.entities.EpubVolume',
-    ENTITY_TYPES['FILLINBLANK']: 'caliper.entities.FillinBlankResponse',
-    ENTITY_TYPES['FORUM']: 'caliper.entities.Forum',
-    ENTITY_TYPES['FRAME']: 'caliper.entities.Frame',
-    ENTITY_TYPES['GROUP']: 'caliper.entities.Group',
-    ENTITY_TYPES['HIGHLIGHT_ANNOTATION']: 'caliper.entities.HighlightAnnotation',
-    ENTITY_TYPES['IMAGE_OBJECT']: 'caliper.entities.ImageObject',
-    ENTITY_TYPES['LEARNING_OBJECTIVE']: 'caliper.entities.LearningObjective',
-    ENTITY_TYPES['LTI_SESSION']: 'caliper.entities.LtiSession',
-    ENTITY_TYPES['MEDIA_LOCATION']: 'caliper.entities.MediaLocation',
-    ENTITY_TYPES['MEDIA_OBJECT']: 'caliper.entities.MediaObject',
-    ENTITY_TYPES['MEMBERSHIP']: 'caliper.entities.Membership',
-    ENTITY_TYPES['MESSAGE']: 'caliper.entities.Message',
-    ENTITY_TYPES['MULTIPLECHOICE']: 'caliper.entities.MultipleChoiceResponse',
-    ENTITY_TYPES['MULTIPLERESPONSE']: 'caliper.entities.MultipleResponseResponse',
-    ENTITY_TYPES['ORGANIZATION']: 'caliper.entities.Organization',
-    ENTITY_TYPES['PAGE']: 'caliper.entities.Page',
-    ENTITY_TYPES['PERSON']: 'caliper.entities.Person',
-    ENTITY_TYPES['READING']: 'caliper.entities.Reading',
-    ENTITY_TYPES['RESPONSE']: 'caliper.entities.Response',
-    ENTITY_TYPES['RESULT']: 'caliper.entities.Result',
-    ENTITY_TYPES['SCORE']: 'caliper.entities.Score',
-    ENTITY_TYPES['SELECTTEXT']: 'caliper.entities.SelectTextResponse',
-    ENTITY_TYPES['SESSION']: 'caliper.entities.Session',
-    ENTITY_TYPES['SHARED_ANNOTATION']: 'caliper.entities.SharedAnnotation',
-    ENTITY_TYPES['SOFTWARE_APPLICATION']: 'caliper.entities.SoftwareApplication',
-    ENTITY_TYPES['TAG_ANNOTATION']: 'caliper.entities.TagAnnotation',
-    ENTITY_TYPES['TEXT_POSITION_SELECTOR']: 'caliper.entities.TextPositionSelector',
-    ENTITY_TYPES['THREAD']: 'caliper.entities.Thread',
-    ENTITY_TYPES['TRUEFALSE']: 'caliper.entities.TrueFalseResponse',
-    ENTITY_TYPES['VIDEO_OBJECT']: 'caliper.entities.VideoObject',
-    ENTITY_TYPES['WEB_PAGE']: 'caliper.entities.WebPage'
-}
+ENTITY_CLASSES = { ENTITY_TYPES[key]:'caliper.entities.{}'.format(ENTITY_TYPES[key])
+                   for key in ENTITY_TYPES.keys() }
 
 
 EVENT_TYPES = {
@@ -209,41 +129,9 @@ EVENT_TYPES = {
     'VIEW_EVENT': 'ViewEvent',
 }
 
-## map context onto event types
-EVENT_CONTEXTS = {
-    EVENT_TYPES['ANNOTATION_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['ASSESSMENT_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['ASSESSMENT_ITEM_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['ASSIGNABLE_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['FORUM_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['MEDIA_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['MESSAGE_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['NAVIGATION_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['GRADE_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['SESSION_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['THREAD_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['TOOL_USE_EVENT']: CALIPER_MASTER_CONTEXT,
-    EVENT_TYPES['VIEW_EVENT']: CALIPER_MASTER_CONTEXT,
-}
-
 ## map implementing Python classes onto entity types
-EVENT_CLASSES = {
-    EVENT_TYPES['ANNOTATION_EVENT']: 'caliper.events.AnnotationEvent',
-    EVENT_TYPES['ASSESSMENT_EVENT']: 'caliper.events.AssessmentEvent',
-    EVENT_TYPES['ASSESSMENT_ITEM_EVENT']: 'caliper.events.AssessmentItemEvent',
-    EVENT_TYPES['ASSIGNABLE_EVENT']: 'caliper.events.AssignableEvent',
-    EVENT_TYPES['EVENT']: 'caliper.events.Event',
-    EVENT_TYPES['FORUM_EVENT']: 'caliper.events.ForumEvent',
-    EVENT_TYPES['MEDIA_EVENT']: 'caliper.events.MediaEvent',
-    EVENT_TYPES['MESSAGE_EVENT']: 'caliper.events.MessageEvent',
-    EVENT_TYPES['NAVIGATION_EVENT']: 'caliper.events.NavigationEvent',
-    EVENT_TYPES['GRADE_EVENT']: 'caliper.events.GradeEvent',
-    EVENT_TYPES['SESSION_EVENT']: 'caliper.events.SessionEvent',
-    EVENT_TYPES['THREAD_EVENT']: 'caliper.events.ThreadEvent',
-    EVENT_TYPES['TOOL_USE_EVENT']: 'caliper.events.ToolUseEvent',
-    EVENT_TYPES['VIEW_EVENT']: 'caliper.events.ViewEvent',
-}
+EVENT_CLASSES = { EVENT_TYPES[key]:'caliper.events.{}'.format(EVENT_TYPES[key])
+                  for key in EVENT_TYPES.keys() }
 
 
 MARKER_TYPES = {
@@ -253,26 +141,10 @@ MARKER_TYPES = {
     'TARGETABLE': 'Targetable',
 }
 
-## map context onto event types
-MARKER_CONTEXTS = {
-    MARKER_TYPES['ASSIGNABLE']: CALIPER_MASTER_CONTEXT,
-    MARKER_TYPES['GENERATABLE']: CALIPER_MASTER_CONTEXT,
-    MARKER_TYPES['REFERRABLE']: CALIPER_MASTER_CONTEXT,
-    MARKER_TYPES['TARGETABLE']: CALIPER_MASTER_CONTEXT,
-}
-
 ## map implementing Python classes onto event types
-MARKER_CLASSES = {
-    MARKER_TYPES['ASSIGNABLE']: 'caliper.entities.Assignable',
-    MARKER_TYPES['GENERATABLE']: 'caliper.entities.Generatable',
-    MARKER_TYPES['REFERRABLE']: 'caliper.entities.Referrable',
-    MARKER_TYPES['TARGETABLE']: 'caliper.entities.Targetable',
-}
+MARKER_CLASSES = { MARKER_TYPES[key]:'caliper.entities.{}'.format(MARKER_TYPES[key])
+                   for key in MARKER_TYPES.keys() }
 
-CALIPER_CONTEXTS = {}
-CALIPER_CONTEXTS.update(ENTITY_CONTEXTS)
-CALIPER_CONTEXTS.update(EVENT_CONTEXTS)
-CALIPER_CONTEXTS.update(MARKER_CONTEXTS)
 
 CALIPER_TYPES = {}
 CALIPER_TYPES.update(ENTITY_TYPES)
@@ -311,7 +183,7 @@ CALIPER_ROLES = {
     'ADMINISTRATOR_EXTERNAL_SYSTEM_ADMINISTRATOR': 'Administrator#ExternalSystemAdministrator',
     'CONTENT_DEVELOPER': 'ContentDeveloper',
     'CONTENT_DEVELOPER_CONTENT_DEVELOPER': 'ContentDeveloper#ContentDeveloper',
-    'CONTENT_DEVELOPER_LIBRARIAN': 'ContentDeveloper#Librarian',
+'CONTENT_DEVELOPER_LIBRARIAN': 'ContentDeveloper#Librarian',
     'CONTENT_DEVELOPER_CONTENT_EXPERT': 'ContentDeveloper#ContentExpert',
     'CONTENT_DEVELOPER_EXTERNAL_CONTENT_EXPERT': 'ContentDeveloper#ExternalContentExpert',
     'MANAGER': 'Manager',
