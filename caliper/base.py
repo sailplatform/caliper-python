@@ -30,8 +30,9 @@ from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as ani
 from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
 from urllib.parse import urlparse as urllib_urlparse
 
-from caliper.constants import (CALIPER_CLASSES, CALIPER_CLASSES, CALIPER_CONTEXTS,
-                               CALIPER_PROFILES, CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
+from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
+                               CALIPER_PROFILES_FOR_CONTEXTS, CALIPER_PROFILES_FOR_EVENT_TYPES,
+                               CALIPER_PROFILE_ACTIONS, CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
 
 ## Convenience functions
 
@@ -40,9 +41,33 @@ def deprecation(m):
     warnings.warn(m, DeprecationWarning, stacklevel=2)
 
 
+def is_valid_profile(p):
+    return p in CALIPER_PROFILES.values()
+
+
+def suggest_profile(prf=None, ctxt=None, typ=None):
+    _basic_profile = CALIPER_PROFILES['BASIC_PROFILE']
+    if prf and not is_valid_profile(prf):
+        raise_with_traceback(
+            ValueError('profile must be in the list of Caliper profiles: {}'.format(prf)))
+        return CALIPER_PROFILES.get(prf, _basic_profile)
+    else:
+        p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt), _basic_profile)
+        if p_from_context is not _basic_profile:
+            return p_from_context
+        else:
+            return CALIPER_PROFILES_FOR_EVENT_TYPES.get(typ, _basic_profile)
+
+
+def is_valid_context_for_base(c1, c2):
+    return (c1 == c2 or (c1 == CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]
+                         and c2 in CALIPER_CONTEXTS.values()))
+
+
 def is_valid_context(ctxt, expected_base_context):
     base_context = _get_base_context(ctxt)
-    return is_valid_URI(base_context) and (base_context == expected_base_context)
+    return (is_valid_URI(base_context)
+            and is_valid_context_for_base(base_context, expected_base_context))
 
 
 def _get_base_context(ctxt):
@@ -486,9 +511,8 @@ class BaseEntity(CaliperSerializable):
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
         self._set_str_prop('type', self._typename)
-        _expected_base_context = CALIPER_CONTEXTS.get(
-            profile, CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']])
-        self._set_context(context, _expected_base_context)
+        self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
+        self._set_context(context, CALIPER_CONTEXTS[self._profile])
 
     @property
     def context(self):
@@ -500,19 +524,50 @@ class BaseEntity(CaliperSerializable):
 
 
 class BaseEvent(CaliperSerializable):
-    def __init__(self, context=None, profile=None):
+    def __init__(self,
+                 context=None,
+                 id=id,
+                 profile=None,
+                 action=None,
+                 eventTime=None,
+                 object=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
+
         self._set_str_prop('type', self._typename)
-        _expected_base_context = CALIPER_CONTEXTS.get(
-            profile, CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']])
-        self._set_context(context, _expected_base_context)
+        self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
+
+        self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
+        self._set_context(context, CALIPER_CONTEXTS[self._profile])
+        if action not in CALIPER_PROFILE_ACTIONS[self._profile][self._typename]:
+            raise_with_traceback(
+                ValueError('invalid action for profile and event: {} for {]:{}'.format(
+                    action, self._profile, self._typename)))
+        self._set_str_prop('action', action, req=True)
+        self._set_date_prop('eventTime', eventTime, req=True)
+        self._set_obj_prop('object', object, t=BaseEntity)
 
     @property
     def context(self):
         return self._get_prop('@context')
 
     @property
+    def id(self):
+        return self._get_prop('id')
+
+    @property
     def type(self):
         return self._get_prop('type')
+
+    @property
+    def action(self):
+        return self._get_prop('action')
+
+    @property
+    def eventTime(self):
+        return self._get_prop('eventTime')
+
+    @property
+    def object(self):
+        return self._get_prop('object')
