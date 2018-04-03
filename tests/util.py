@@ -41,7 +41,6 @@ import caliper.condensor as condensor
 _FIXTURE_PREFIX = 'fixtures'
 _FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
 _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
-
 _SENSOR_ID = 'https://example.edu/sensors/1'
 
 

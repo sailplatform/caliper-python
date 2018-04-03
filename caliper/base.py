@@ -30,8 +30,9 @@ from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as ani
 from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
 from urllib.parse import urlparse as urllib_urlparse
 
-from caliper.constants import (CALIPER_CLASSES, CALIPER_TYPES, CALIPER_CONTEXTS,
-                               CALIPER_TYPES_FOR_CLASSES)
+from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
+                               CALIPER_PROFILES_FOR_CONTEXTS, CALIPER_PROFILES_FOR_EVENT_TYPES,
+                               CALIPER_PROFILE_ACTIONS, CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
 
 ## Convenience functions
 
@@ -40,15 +41,41 @@ def deprecation(m):
     warnings.warn(m, DeprecationWarning, stacklevel=2)
 
 
+def is_valid_profile(p):
+    return p in CALIPER_PROFILES.values()
+
+
+def suggest_profile(prf=None, ctxt=None, typ=None):
+    _basic_profile = CALIPER_PROFILES['BASIC_PROFILE']
+    if prf and not is_valid_profile(prf):
+        raise_with_traceback(
+            ValueError('profile must be in the list of Caliper profiles: {}'.format(prf)))
+        return CALIPER_PROFILES.get(prf, _basic_profile)
+    else:
+        p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt), _basic_profile)
+        if p_from_context is not _basic_profile:
+            return p_from_context
+        else:
+            return CALIPER_PROFILES_FOR_EVENT_TYPES.get(typ, _basic_profile)
+
+
+def is_valid_context_for_base(c1, c2):
+    return (c1 == c2 or (c1 == CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]
+                         and c2 in CALIPER_CONTEXTS.values()))
+
+
 def is_valid_context(ctxt, expected_base_context):
     base_context = _get_base_context(ctxt)
-    return is_valid_URI(base_context) and (base_context == expected_base_context)
+    return (is_valid_URI(base_context)
+            and is_valid_context_for_base(base_context, expected_base_context))
+
 
 def _get_base_context(ctxt):
     if isinstance(ctxt, collections.MutableSequence):
         return ctxt[-1]
     else:
         return ctxt
+
 
 def is_valid_date(date):
     try:
@@ -81,8 +108,7 @@ def is_valid_time(time):
 def is_valid_URI(uri):
     if not uri:
         return False
-    elif (isinstance(uri, str)
-          and (urllib_urlparse(uri).geturl() == uri)
+    elif (isinstance(uri, str) and (urllib_urlparse(uri).geturl() == uri)
           and rfc3986_is_valid_uri(uri)):
         return True
     else:
@@ -243,7 +269,8 @@ class HttpOptions(Options):
             connection_timeout=10000,
             host='http://httpbin.org/post',
             optimize_serialization=True,
-            socket_timeout=10000, ):
+            socket_timeout=10000,
+    ):
         Options.__init__(self)
         self.API_KEY = api_key
         self.AUTH_SCHEME = auth_scheme
@@ -355,9 +382,11 @@ class CaliperSerializable(object):
         if req and (v == None):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
-            raise_with_traceback(TypeError('Provided property is not of required type: {}'.format(t)))
+            raise_with_traceback(
+                TypeError('Provided property is not of required type: {}'.format(t)))
         if isinstance(v, str) and t and not is_subtype(t, CaliperSerializable):
-            raise_with_traceback(ValueError('URI IDs can only be provided for objects of known Caliper types'))
+            raise_with_traceback(
+                ValueError('URI IDs can only be provided for objects of known Caliper types'))
         self._update_props(k, v)
 
     def _set_time_prop(self, k, v, req=False):
@@ -435,9 +464,8 @@ class CaliperSerializable(object):
             elif isinstance(v, CaliperSerializable):
                 the_id = v._get_prop('id')
                 the_type = v._get_prop('type')
-                if (the_id and the_type
-                    and is_subtype(the_type, CaliperSerializable)
-                    and the_id in described_objects):
+                if (the_id and the_type and is_subtype(the_type, CaliperSerializable)
+                        and the_id in described_objects):
                     value = the_id
                 else:
                     value = v._unpack_object(
@@ -467,27 +495,24 @@ class CaliperSerializable(object):
 
     def as_json(self, described_objects=None, thin_context=False, thin_props=False):
         r = self.as_dict(
-            described_objects=described_objects,
-            thin_context=thin_context,
-            thin_props=thin_props)
+            described_objects=described_objects, thin_context=thin_context, thin_props=thin_props)
         return json.dumps(r, sort_keys=True)
 
     def as_json_with_ids(self, described_objects=None, thin_context=False, thin_props=False):
         ret = self.as_json(
-            described_objects=described_objects,
-            thin_context=thin_context,
-            thin_props=thin_props)
+            described_objects=described_objects, thin_context=thin_context, thin_props=thin_props)
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 
 ### Entities and Events ###
 class BaseEntity(CaliperSerializable):
-    def __init__(self, context=None):
+    def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
         self._set_str_prop('type', self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._typename])
+        self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
+        self._set_context(context, CALIPER_CONTEXTS[self._profile])
 
     @property
     def context(self):
@@ -499,17 +524,50 @@ class BaseEntity(CaliperSerializable):
 
 
 class BaseEvent(CaliperSerializable):
-    def __init__(self, context=None):
+    def __init__(self,
+                 context=None,
+                 id=id,
+                 profile=None,
+                 action=None,
+                 eventTime=None,
+                 object=None):
         CaliperSerializable.__init__(self)
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
+
         self._set_str_prop('type', self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._typename])
+        self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
+
+        self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
+        self._set_context(context, CALIPER_CONTEXTS[self._profile])
+        if action not in CALIPER_PROFILE_ACTIONS[self._profile][self._typename]:
+            raise_with_traceback(
+                ValueError('invalid action for profile and event: {} for {]:{}'.format(
+                    action, self._profile, self._typename)))
+        self._set_str_prop('action', action, req=True)
+        self._set_date_prop('eventTime', eventTime, req=True)
+        self._set_obj_prop('object', object, t=BaseEntity)
 
     @property
     def context(self):
         return self._get_prop('@context')
 
     @property
+    def id(self):
+        return self._get_prop('id')
+
+    @property
     def type(self):
         return self._get_prop('type')
+
+    @property
+    def action(self):
+        return self._get_prop('action')
+
+    @property
+    def eventTime(self):
+        return self._get_prop('eventTime')
+
+    @property
+    def object(self):
+        return self._get_prop('object')

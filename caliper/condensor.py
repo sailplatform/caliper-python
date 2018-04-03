@@ -26,14 +26,15 @@ from builtins import *
 
 import copy, collections, importlib
 
-from caliper.base import is_valid_URI, is_valid_date
-from caliper.constants import CALIPER_CLASSES
+from caliper.base import is_valid_URI, is_valid_date, suggest_profile
+from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
+                               CALIPER_PROFILES_FOR_CONTEXTS)
 
 
 def from_caliper_envelope(d):
     r = None
-    if (is_valid_URI(d.get('sensor')) and is_valid_date(d.get('sendTime')) and
-            isinstance(d.get('data'), collections.MutableSequence)):
+    if (is_valid_URI(d.get('sensor')) and is_valid_date(d.get('sendTime'))
+            and isinstance(d.get('data'), collections.MutableSequence)):
         r = from_json_list(d.get('data'))
     return r
 
@@ -44,7 +45,12 @@ def from_json_dict(d):
         return copy.deepcopy(d)
     type_path = CALIPER_CLASSES.get(t) or d.__class__.__name__
 
-    r = {}
+    p = suggest_profile(
+        prf=None,
+        ctxt=d.get('@context', CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]),
+        typ=t)
+
+    r = {'profile': p}
     for k, v in d.items():
 
         # transmogrify key or move to next item
@@ -90,4 +96,3 @@ def from_json_list(l):
         else:
             r.append(item)
     return r or None
-
