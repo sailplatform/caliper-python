@@ -401,8 +401,13 @@ class CaliperSerializable(object):
         r = self._get_prop('@context')
         for ctxt in ctxt_bases:
             if r == ctxt:
+                # this Caliper object's context already exists in list of context bases
+                return None
+            if is_valid_context_for_base(_get_base_context(ctxt), _get_base_context(r)):
+                # the base of this Cailper object's context is valid for an entry in the lists of context bases
                 return None
         else:
+            # this Caliper object's context is new, so return as value to unpack
             return r
 
     def _unpack_list(self,
