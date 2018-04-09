@@ -225,7 +225,7 @@ class ToolLaunchEvent(Event):
                 ValueError('action must be in the list of Tool Launch event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'])
+        ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'], optional=True)
 
 
 class ToolUseEvent(Event):
