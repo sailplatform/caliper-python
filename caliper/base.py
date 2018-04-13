@@ -24,7 +24,7 @@ install_aliases()
 from future.utils import raise_with_traceback, with_metaclass
 from builtins import *
 
-import collections, copy, importlib, json, re, warnings
+import collections, copy, importlib, json, re, warnings, uuid
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as aniso_parse_date,
                        parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
 from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
@@ -531,7 +531,7 @@ class BaseEntity(CaliperSerializable):
 class BaseEvent(CaliperSerializable):
     def __init__(self,
                  context=None,
-                 id=id,
+                 id=None,
                  profile=None,
                  action=None,
                  eventTime=None,
