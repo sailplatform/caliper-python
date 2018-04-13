@@ -547,8 +547,9 @@ class BaseEvent(CaliperSerializable):
         self._set_context(context, CALIPER_CONTEXTS[self._profile])
         if action not in CALIPER_PROFILE_ACTIONS[self._profile][self._typename]:
             raise_with_traceback(
-                ValueError('invalid action for profile and event: {} for {]:{}'.format(
-                    action, self._profile, self._typename)))
+                ValueError('invalid action for profile and event: {} for {}:{}'.format(
+                    action, self._profile, self._typename)
+                ))
         self._set_str_prop('action', action, req=True)
         self._set_date_prop('eventTime', eventTime, req=True)
         self._set_obj_prop('object', object, t=BaseEntity)
