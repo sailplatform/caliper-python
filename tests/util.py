@@ -75,12 +75,12 @@ def get_fixtures_of_type(name):
 
 
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
-    r = condensor.from_json_dict(d)
-    if hasattr(r, 'as_json'):
+    try:
+        r = condensor.from_json_dict(d, strict=True)
         return r.as_json(
             thin_props=thin_props, thin_context=thin_context, described_objects=described_objects)
-    else:
-        return json.dumps({'error': 'not a known caliper object', 'fixture': r})
+    except Exception as e:
+        return json.dumps({'error': str(e), 'fixture': d})
 
 
 def rebuild_event(fixture, thin_props=True, thin_context=True, described_objects=None):
@@ -95,16 +95,23 @@ def rebuild_entity(fixture, thin_props=True, thin_context=True, described_object
 
 def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_objects=None):
     env_dict = json.loads(get_fixture(fixture))
-    payload = condensor.from_json_list(env_dict.get('data'))
-    return caliper.request.Envelope(
-        data=payload, send_time=env_dict.get('sendTime'),
-        sensor_id=env_dict.get('sensor')).as_json(
-            thin_props=thin_props, thin_context=thin_context, described_objects=None)
+    try:
+        payload = condensor.from_json_list(env_dict.get('data'), strict=True)
+        return caliper.request.Envelope(
+            data=payload, send_time=env_dict.get('sendTime'),
+            sensor_id=env_dict.get('sensor')).as_json(
+                thin_props=thin_props, thin_context=thin_context, described_objects=None)
+    except Exception as e:
+        return json.dumps({'error': str(e), 'fixture': env_dict})
 
 
 # build an envelope from a sensor and the contents of a fixture
 def get_envelope(sensor, fixture):
     env_dict = json.loads(get_fixture(fixture))
-    payload = condensor.from_json_list(env_dict.get('data'))
-    return caliper.request.Envelope(
-        data=payload, send_time=env_dict.get('sendTime'), sensor_id=sensor.id)
+    try:
+        payload = condensor.from_json_list(env_dict.get('data'), strict=True)
+        return caliper.request.Envelope(
+            data=payload, send_time=env_dict.get('sendTime'), sensor_id=sensor.id)
+    except Exception as e:
+        return json.dumps({'error': str(e), 'fixture': env_dict})
+
