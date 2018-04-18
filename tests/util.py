@@ -32,7 +32,6 @@ from .context import caliper, TESTDIR
 from caliper import CALIPER_VERSION
 import caliper.condensor as condensor
 
-
 ###
 # NOTE: FIXTURE_DIR assumes that the caliper fixtures repo contents are hosted
 # in the tests module's directory in a 'fixtures_common' subdirectory so
@@ -76,8 +75,12 @@ def get_fixtures_of_type(name):
 
 
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
-    return condensor.from_json_dict(d).as_json(
-        thin_props=thin_props, thin_context=thin_context, described_objects=described_objects)
+    r = condensor.from_json_dict(d)
+    if hasattr(r, 'as_json'):
+        return r.as_json(
+            thin_props=thin_props, thin_context=thin_context, described_objects=described_objects)
+    else:
+        return json.dumps({'error': 'not a known caliper object', 'fixture': r})
 
 
 def rebuild_event(fixture, thin_props=True, thin_context=True, described_objects=None):
