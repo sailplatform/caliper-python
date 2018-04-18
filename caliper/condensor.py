@@ -31,11 +31,11 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFIL
                                CALIPER_PROFILES_FOR_CONTEXTS)
 
 
-def from_caliper_envelope(d):
+def from_caliper_envelope(d, strict=False):
     r = None
     if (is_valid_URI(d.get('sensor')) and is_valid_date(d.get('sendTime'))
             and isinstance(d.get('data'), collections.MutableSequence)):
-        r = from_json_list(d.get('data'))
+        r = from_json_list(d.get('data'), strict=strict)
     return r
 
 
