@@ -26,7 +26,7 @@ from builtins import *
 
 import copy, collections, importlib
 
-from caliper.base import is_valid_URI, is_valid_date, suggest_profile
+from caliper.base import is_valid_context, is_valid_date, is_valid_URI, suggest_profile
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
                                CALIPER_PROFILES_FOR_CONTEXTS)
 
@@ -39,18 +39,19 @@ def from_caliper_envelope(d):
     return r
 
 
-def from_json_dict(d):
-    t = d.get('type')
-    if t and not CALIPER_CLASSES.get(t):
+def from_json_dict(d, strict=False):
+    ctxt = d.get('@context')
+    if strict and not is_valid_context(ctxt, CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]):
+        raise ValueError('While strictly parsing, encountered unknown context: {}'.format(ctxt))
+    else:
+        ctxt = ctxt or CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]
+
+    typ = d.get('type')
+    if typ and not CALIPER_CLASSES.get(typ):
         return copy.deepcopy(d)
-    type_path = CALIPER_CLASSES.get(t) or d.__class__.__name__
+    type_path = CALIPER_CLASSES.get(typ) or d.__class__.__name__
 
-    p = suggest_profile(
-        prf=None,
-        ctxt=d.get('@context', CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]),
-        typ=t)
-
-    r = {'profile': p}
+    r = {'profile': suggest_profile(prf=None, ctxt=ctxt, typ=typ)}
     for k, v in d.items():
 
         # transmogrify key or move to next item
@@ -62,7 +63,7 @@ def from_json_dict(d):
             key = k
 
         # recursively condense value if complex, otherwise use value
-        if CALIPER_CLASSES.get(t) and k in ['extensions']:
+        if CALIPER_CLASSES.get(typ) and k in ['extensions']:
             value = v
         elif k in ['@context']:
             value = v
@@ -86,13 +87,13 @@ def from_json_dict(d):
     return TheClass(**r)
 
 
-def from_json_list(l):
+def from_json_list(l, strict=False):
     r = []
     for item in l:
         if isinstance(item, collections.MutableSequence):
-            r.append(from_json_list(item))
+            r.append(from_json_list(item, strict=strict))
         elif isinstance(item, collections.MutableMapping):
-            r.append(from_json_dict(item))
+            r.append(from_json_dict(item, strict=strict))
         else:
             r.append(item)
     return r or None
