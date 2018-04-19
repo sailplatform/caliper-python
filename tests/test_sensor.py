@@ -46,29 +46,25 @@ class TestCaliperSensor(unittest.TestCase):
         fixture = 'caliperEnvelopeEventSingle'
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(
-            envelope.as_json(
-                thin_props=True, thin_context=True), util.get_fixture(fixture))
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
 
     def testEventPayloadBatch(self):
         fixture = 'caliperEnvelopeEventBatch'
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(
-            envelope.as_json(
-                thin_props=True, thin_context=True), util.get_fixture(fixture))
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
 
     def testEntityPayloadSingle(self):
         fixture = 'caliperEnvelopeEntitySingle'
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(
-            envelope.as_json(
-                thin_props=True, thin_context=True), util.get_fixture(fixture))
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
 
     def testEntityPayloadSingle(self):
         fixture = 'caliperEnvelopeEntitySingle'
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(
-            envelope.as_json(
-                thin_props=True, thin_context=True), util.get_fixture(fixture))
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
 
     # test transmission stats for sensor.send()
     def testEventSend(self):

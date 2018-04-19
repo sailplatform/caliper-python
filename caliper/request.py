@@ -75,10 +75,14 @@ class Envelope(CaliperSerializable):
     # their data property's contents
     def as_dict(self, described_objects=None, thin_context=False, thin_props=False):
         return copy.deepcopy({
-            'sendTime': self.sendTime,
-            'sensor': self.sensor,
-            'dataVersion': self.dataVersion,
-            'data': self._unpack_list(
+            'sendTime':
+            self.sendTime,
+            'sensor':
+            self.sensor,
+            'dataVersion':
+            self.dataVersion,
+            'data':
+            self._unpack_list(
                 self.data,
                 described_objects=described_objects or [],
                 thin_context=thin_context,

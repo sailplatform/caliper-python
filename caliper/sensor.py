@@ -37,7 +37,7 @@ class Client(object):
     def __init__(self, config_options=None, requestor=None, stats=None, **kwargs):
 
         if config_options is None:
-            config_options=Options()
+            config_options = Options()
 
         if config_options and not (isinstance(config_options, Options)):
             raise_with_traceback(TypeError('config_options must implement base.Options'))
@@ -139,8 +139,8 @@ class Sensor(object):
             v = [v]
         for k, client in self.client_registry.items():
             identifiers.update({
-                k: client.send(
-                    events=v, described_objects=described_objects, sensor_id=self.id)
+                k:
+                client.send(events=v, described_objects=described_objects, sensor_id=self.id)
             })
         return identifiers
 

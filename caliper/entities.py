@@ -127,6 +127,7 @@ class Targetable(BaseEntity):
 
 ### Derived entities ###
 
+
 ## Membership entities
 class Membership(Entity):
     def __init__(self, member=None, organization=None, roles=None, status=None, **kwargs):

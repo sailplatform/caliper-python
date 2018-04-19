@@ -114,4 +114,3 @@ def get_envelope(sensor, fixture):
             data=payload, send_time=env_dict.get('sendTime'), sensor_id=sensor.id)
     except Exception as e:
         return json.dumps({'error': str(e), 'fixture': env_dict})
-

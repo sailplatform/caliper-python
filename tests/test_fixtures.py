@@ -90,4 +90,3 @@ class TestCaliperEvents(unittest.TestCase):
                 print('Unable to rebuild matching event fixture: {}'.format(fixture))
         if not passing:
             raise AssertionError
-
