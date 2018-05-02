@@ -109,7 +109,6 @@ EVENT_TYPES = {
     'VIEW_EVENT': 'ViewEvent',
 }
 
-## map implementing Python classes onto entity types
 EVENT_CLASSES = { EVENT_TYPES[key]:'caliper.events.{}'.format(EVENT_TYPES[key])
                   for key in EVENT_TYPES.keys() }
 
@@ -318,6 +317,7 @@ CALIPER_ACTIONS = {
     'USED': 'Used',
     'VIEWED': 'Viewed'
 }
+
 
 BASIC_EVENT_ACTIONS = list(CALIPER_ACTIONS.values())
 ANNOTATION_EVENT_ACTIONS = [
