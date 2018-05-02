@@ -1,0 +1,33 @@
+==============
+Change history
+==============
+
+
+
+1.1.1
+-----
+- Revise test utility code for new arrangement of fixtures repository
+- Revise package constants (including actions, events) for better profile-based
+  context handling, including support for the new profile-specific context
+  documents
+- Export CALIPER_VERSION as top-level package property
+- Refactor context examination so that the Caliper Basic profile's context is
+  always a valid base for the other, known Caliper profile contexts
+- Refactor to move profile/event/action verification into the BaseEvent class,
+  and ensure it properly produces the right exception description string on
+  unknown actions passed in
+- Re-order tox's building of virtual environments to avoid dependency problems
+  with pytest/funcsigs
+- Improve on cleanliness of test erroring on fixtures not rebuildable as
+  Caliper things
+- Improve condensor to support more strict context checking
+- Add CONTRIBUTING and HISTORY files to package
+
+1.1
+---
+- Supports IMS Caliper specification 1.1
+
+1.0
+---
+- Supports IMS Caliper specification 1.0
+
