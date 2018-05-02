@@ -220,9 +220,6 @@ class ThreadEvent(Event):
 class ToolLaunchEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
-        if self.action not in TOOL_LAUNCH_EVENT_ACTIONS.values():
-            raise_with_traceback(
-                ValueError('action must be in the list of Tool Launch event actions'))
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
         ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'], optional=True)
