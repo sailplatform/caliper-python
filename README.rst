@@ -1,10 +1,39 @@
 ===========
-IMS Caliper
+IMS Global Learning Consortium, Inc.
 ===========
 
-The `imsglobal_caliper` package is a Python client library for `IMS Caliper Analytics
-<http://imsglobal.org/caliper/>`_ that provides a reference implementation of
-the Caliper SensorAPI(tm).
+caliper-python
+=============
+
+The Caliper Analytics® Specification provides a structured approach to describing, 
+collecting and exchanging learning activity data at scale. Caliper also defines 
+an application programming interface (the Sensor API™) for marshalling and 
+transmitting event data from instrumented applications to target endpoints for 
+storage, analysis and use.
+
+caliper-python is a reference implementation of the Sensor API™ written in Python.
+
+Branches
+========
+
+master: stable, deployable branch that stores the official release history.
+develop: unstable development branch. Current work that targets a future release 
+is merged to this branch.
+
+Tags
+====
+
+caliper-python releases are tagged and versioned MAJOR.MINOR.PATCH[-label] 
+(e.g., 1.1.0). Pre-release tags are identified with an extensions label (e.g., 
+"1.2.0-RC01"). The tags are stored in this repository.
+
+Contributing
+============
+
+We welcome the posting of issues by non IMS Global Learning Consortium members 
+(e.g., feature requests, bug reports, questions, etc.) but we do not accept 
+contributions in the form of pull requests from non-members. See CONTRIBUTING.md 
+for more information.
 
 
 Dependencies
@@ -161,7 +190,9 @@ the package, and the common fixtures they test against.
 
 Copyright and License
 =====================
-For details about the copyright and license information, see the NOTICE file.
+This project is licensed under the terms of the GNU Lesser General Public License 
+(LGPL), version 3. See the LICENSE file for details. For additional information 
+on licensing options for IMS members, please see the NOTICE file.
 
-©2015-2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
+©2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information - http://www.imsglobal.org/copyright.html
