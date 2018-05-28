@@ -1,9 +1,6 @@
-===========
+====================================
 IMS Global Learning Consortium, Inc.
-===========
-
-caliper-python
-=============
+====================================
 
 The Caliper Analytics® Specification provides a structured approach to describing, 
 collecting and exchanging learning activity data at scale. Caliper also defines 
@@ -12,28 +9,6 @@ transmitting event data from instrumented applications to target endpoints for
 storage, analysis and use.
 
 caliper-python is a reference implementation of the Sensor API™ written in Python.
-
-Branches
-========
-
-master: stable, deployable branch that stores the official release history.
-develop: unstable development branch. Current work that targets a future release 
-is merged to this branch.
-
-Tags
-====
-
-caliper-python releases are tagged and versioned MAJOR.MINOR.PATCH[-label] 
-(e.g., 1.1.0). Pre-release tags are identified with an extensions label (e.g., 
-"1.2.0-RC01"). The tags are stored in this repository.
-
-Contributing
-============
-
-We welcome the posting of issues by non IMS Global Learning Consortium members 
-(e.g., feature requests, bug reports, questions, etc.) but we do not accept 
-contributions in the form of pull requests from non-members. See CONTRIBUTING.md 
-for more information.
 
 
 Dependencies
@@ -83,10 +58,28 @@ the name of the repository on GitHub is different to the distribution package na
 
      pip install -e caliper-python-public
 
+
 Changing and testing
---------------------
+====================
 All the `imsglobal_caliper` code you would use to build and use a caliper sensor in
 your application you can find in the `caliper` main module.
+
+**Branches and tags**. This project organizes around two, long-running branches:
+
+- *master*. Stable, deployable branch that stores the official release history.
+
+- *develop*. Unstable development branch; current work that targets a future
+  release is merged to this branch.
+
+Project releases are tagged and versioned using git tags of the form
+*MAJOR*.*MINOR*.*PATCH*[-*label*] (for example: `1.1.0`; or, for signalling a pre-release
+version with a label extension, `1.2.0-RC01`).
+
+**Making contributions**. We welcome the posting of issues by those who are not
+members of IMS Global Learning Consortium (for example, for feature requests,
+bug reports, questions, and so on) but we do not accept contributions in the
+form of pull requests from non-members. See `CONTRIBUTING.rst` for more
+information.
 
 **Testing**. When you work with the source bundle, we include tests in the
 `tests` directory. The tests use the `tox` test runner, so you will need that
