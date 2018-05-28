@@ -1,10 +1,14 @@
-===========
-IMS Caliper
-===========
+====================================
+IMS Global Learning Consortium, Inc.
+====================================
 
-The `imsglobal_caliper` package is a Python client library for `IMS Caliper Analytics
-<http://imsglobal.org/caliper/>`_ that provides a reference implementation of
-the Caliper SensorAPI(tm).
+The Caliper Analytics® Specification provides a structured approach to describing, 
+collecting and exchanging learning activity data at scale. Caliper also defines 
+an application programming interface (the Sensor API™) for marshalling and 
+transmitting event data from instrumented applications to target endpoints for 
+storage, analysis and use.
+
+caliper-python is a reference implementation of the Sensor API™ written in Python.
 
 
 Dependencies
@@ -54,10 +58,28 @@ the name of the repository on GitHub is different to the distribution package na
 
      pip install -e caliper-python-public
 
+
 Changing and testing
---------------------
+====================
 All the `imsglobal_caliper` code you would use to build and use a caliper sensor in
 your application you can find in the `caliper` main module.
+
+**Branches and tags**. This project organizes around two, long-running branches:
+
+- *master*. Stable, deployable branch that stores the official release history.
+
+- *develop*. Unstable development branch; current work that targets a future
+  release is merged to this branch.
+
+Project releases are tagged and versioned using git tags of the form
+*MAJOR*.*MINOR*.*PATCH*[-*label*] (for example: `1.1.0`; or, for signalling a pre-release
+version with a label extension, `1.2.0-RC01`).
+
+**Making contributions**. We welcome the posting of issues by those who are not
+members of IMS Global Learning Consortium (for example, for feature requests,
+bug reports, questions, and so on) but we do not accept contributions in the
+form of pull requests from non-members. See `CONTRIBUTING.rst` for more
+information.
 
 **Testing**. When you work with the source bundle, we include tests in the
 `tests` directory. The tests use the `tox` test runner, so you will need that
@@ -161,7 +183,9 @@ the package, and the common fixtures they test against.
 
 Copyright and License
 =====================
-For details about the copyright and license information, see the NOTICE file.
+This project is licensed under the terms of the GNU Lesser General Public License 
+(LGPL), version 3. See the LICENSE file for details. For additional information 
+on licensing options for IMS members, please see the NOTICE file.
 
-©2015-2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
+©2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information - http://www.imsglobal.org/copyright.html
