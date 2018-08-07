@@ -263,7 +263,7 @@ class Options(object):
 class HttpOptions(Options):
     def __init__(
             self,
-            api_key='CaliperKey',
+            api_key='',
             auth_scheme='',
             connection_request_timeout=10000,
             connection_timeout=10000,
