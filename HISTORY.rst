@@ -2,7 +2,10 @@
 Change history
 ==============
 
-
+1.1.2
+-----
+- Fix bug in HttpRequestor in which it could send a malformed HTTP header when
+  the requestor's bound HttpOptions had no auth scheme specified
 
 1.1.1
 -----
