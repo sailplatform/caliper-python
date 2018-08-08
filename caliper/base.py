@@ -263,7 +263,7 @@ class Options(object):
 class HttpOptions(Options):
     def __init__(
             self,
-            api_key='CaliperKey',
+            api_key='',
             auth_scheme='',
             connection_request_timeout=10000,
             connection_timeout=10000,
@@ -281,7 +281,10 @@ class HttpOptions(Options):
         self.SOCKET_TIMEOUT = socket_timeout
 
     def get_auth_header_value(self):
-        return '{0} {1}'.format(self.AUTH_SCHEME, self.API_KEY)
+        if self.AUTH_SCHEME:
+            return '{0} {1}'.format(self.AUTH_SCHEME, self.API_KEY)
+        else:
+            return None
 
 
 ### Caliper serializable base class for all caliper objects that need serialization ###
