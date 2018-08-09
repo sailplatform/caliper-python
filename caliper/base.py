@@ -109,7 +109,7 @@ def is_valid_URI(uri):
     if not uri:
         return False
     elif (isinstance(uri, str) and (urllib_urlparse(uri).geturl() == uri)
-          and rfc3986_is_valid_uri(uri)):
+          and rfc3986_is_valid_uri(uri, require_scheme=True)):
         return True
     else:
         return False
@@ -387,9 +387,13 @@ class CaliperSerializable(object):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
             raise_with_traceback(
                 TypeError('Provided property is not of required type: {}'.format(t)))
-        if isinstance(v, str) and t and not is_subtype(t, CaliperSerializable):
-            raise_with_traceback(
-                ValueError('URI IDs can only be provided for objects of known Caliper types'))
+        if isinstance(v, str):
+            if not is_valid_URI(v):
+                raise_with_traceback(
+                    ValueError('ID value for object property must be valid URI: {}'.format(v)))
+            if t and not is_subtype(t, CaliperSerializable):
+                raise_with_traceback(
+                    ValueError('URI IDs can only be provided for objects of known Caliper types'))
         self._update_props(k, v)
 
     def _set_time_prop(self, k, v, req=False):
