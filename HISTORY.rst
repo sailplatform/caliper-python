@@ -2,6 +2,11 @@
 Change history
 ==============
 
+1.1.3
+-----
+- Add in a debug option for sensor clients to capture HTTP response objects for
+  later inspection.
+
 1.1.2
 -----
 - Fix bug in HttpRequestor in which it could send a malformed HTTP header when
