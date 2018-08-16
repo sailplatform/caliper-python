@@ -50,13 +50,13 @@ Building and installing from a source bundle
 If you want to install it from a source bundle, then use these steps (note that
 the name of the repository on GitHub is different to the distribution package name):
 
-#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python-public.git>`_
+#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python.git>`_
    onto your local machine.
 
 #. Use pip to install the package as a writable source bundle; there's no need
    to do a package build step ahead of time::
 
-     pip install -e caliper-python-public
+     pip install -e caliper-python
 
 
 Changing and testing
@@ -93,7 +93,7 @@ Before you can run the tests, you will also need a copy of the Caliper fixtures
 **Fixtures**. The test suites are principally designed to test against the
 canonical common JSON fixtures. To set up your tests, you should clone the
 `Caliper common fixtures repository
-<https://github.com/IMSGlobal/caliper-common-fixtures-public>`_ repository into the
+<https://github.com/IMSGlobal/caliper-common-fixtures>`_ repository into the
 `tests/fixtures` directory, and pull changes there.
 
 Ideally, if you make changes to `imsglobal_caliper` you should ensure that your

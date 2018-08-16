@@ -91,11 +91,11 @@ class Envelope(CaliperSerializable):
 
 
 class EventStoreRequestor(object):
-    def describe(self, caliper_entity_list=None, sensor_id=None):
+    def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
         raise_with_traceback(
             NotImplementedError('Instance must implement EventStoreRequester.describe()'))
 
-    def send(self, caliper_event_list=None, described_objects=None, sensor_id=None):
+    def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):
         raise_with_traceback(
             NotImplementedError('Instance must implement EventStoreRequester.send()'))
 
@@ -134,9 +134,10 @@ class HttpRequestor(EventStoreRequestor):
         else:
             self._options = options
 
-    def _dispatch(self, caliper_objects=None, described_objects=None, sensor_id=None):
+    def _dispatch(self, caliper_objects=None, described_objects=None, sensor_id=None, debug=False):
         results = []
         identifiers = []
+        response = None
 
         if isinstance(caliper_objects, collections.MutableSequence):
             s = requests.Session()
@@ -155,17 +156,20 @@ class HttpRequestor(EventStoreRequestor):
             else:
                 v = False
             results += len(caliper_objects) * [v]
+            if debug:
+                response = r
             s.close()
 
-        return results, identifiers
+        return results, identifiers, response
 
-    def describe(self, caliper_entity_list=None, sensor_id=None):
-        results, ids = self._dispatch(caliper_objects=caliper_entity_list, sensor_id=sensor_id)
-        return results, ids
+    def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
+        results, ids, response = self._dispatch(caliper_objects=caliper_entity_list, sensor_id=sensor_id, debug=debug)
+        return results, ids, response
 
-    def send(self, caliper_event_list=None, described_objects=None, sensor_id=None):
-        results, ids = self._dispatch(
+    def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):
+        results, ids, response = self._dispatch(
             caliper_objects=caliper_event_list,
             described_objects=described_objects,
-            sensor_id=sensor_id)
-        return results, ids
+            sensor_id=sensor_id,
+            debug=debug)
+        return results, ids, response
