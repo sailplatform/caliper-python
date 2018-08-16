@@ -126,3 +126,17 @@ class TestCaliperSensor(unittest.TestCase):
             self.assertEqual(counted, self.iterations)
             self.assertEqual(succeeded, self.iterations)
             self.assertEqual(failed, 0)
+
+
+class TestDebugSensor(unittest.TestCase):
+    def setUp(self):
+        self.sensor = util.build_debug_sensor()
+        self.iterations = 4
+
+    def testEventSend(self):
+        fixture = 'caliperEventBasicCreated'
+        for i in range(self.iterations):
+            self.sensor.send(
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+        for response in self.sensor.client_registry['default'].debug:
+            self.assertEqual(response.status_code, 200)

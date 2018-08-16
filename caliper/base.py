@@ -170,6 +170,7 @@ class Options(object):
         'AUTH_SCHEME': '',
         'CONNECTION_REQUEST_TIMEOUT': 1000,
         'CONNECTION_TIMEOUT': 1000,
+        'DEBUG': False,
         'HOST': None,
         'OPTIMIZE_SERIALIZATION': True,
         'SOCKET_TIMEOUT': 1000,
@@ -228,6 +229,17 @@ class Options(object):
                 ValueError('new timeout value must be at least 1000 milliseconds'))
 
     @property
+    def DEBUG(self):
+        return self._config['DEBUG']
+
+    @DEBUG.setter
+    def DEBUG(self, new_debug):
+        if new_debug:
+            self._config['DEBUG'] = True
+        else:
+            self._config['DEBUG'] = False
+
+    @property
     def HOST(self):
         return self._config['HOST']
 
@@ -267,6 +279,7 @@ class HttpOptions(Options):
             auth_scheme='',
             connection_request_timeout=10000,
             connection_timeout=10000,
+            debug=False,
             host='http://httpbin.org/post',
             optimize_serialization=True,
             socket_timeout=10000,
@@ -276,6 +289,7 @@ class HttpOptions(Options):
         self.AUTH_SCHEME = auth_scheme
         self.CONNECTION_REQUEST_TIMEOUT = connection_request_timeout
         self.CONNECTION_TIMEOUT = connection_timeout
+        self.DEBUG = debug
         self.HOST = host
         self.OPTIMIZE_SERIALIZATION = optimize_serialization
         self.SOCKET_TIMEOUT = socket_timeout
