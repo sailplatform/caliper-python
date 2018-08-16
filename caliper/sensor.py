@@ -36,6 +36,8 @@ from caliper.util.stats import Statistics
 class Client(object):
     def __init__(self, config_options=None, requestor=None, stats=None, **kwargs):
 
+        self._debug = []
+
         if config_options is None:
             config_options = Options()
 
@@ -53,9 +55,17 @@ class Client(object):
         else:
             self._stats = Statistics()
 
+    def _reset(self):
+        self._stats = Statistics()
+        self._debug = []
+
     @property
     def config(self):
         return self._config
+
+    @property
+    def debug(self):
+        return self._debug
 
     @property
     def stats(self):
@@ -80,19 +90,23 @@ class Client(object):
     def describe(self, entities=None, sensor_id=None):
         identifiers = None
         if ensure_list_type(entities, Entity):
-            results, identifiers = self._requestor.describe(
-                caliper_entity_list=entities, sensor_id=sensor_id)
+            results, identifiers, debug = self._requestor.describe(
+                caliper_entity_list=entities, sensor_id=sensor_id, debug=self._config.DEBUG)
             self._process_results(results, self.stats.update_describes)
+        if self._config.DEBUG:
+            self.debug.append(debug)
         return identifiers
 
     def send(self, events=None, described_objects=None, sensor_id=None):
         identifiers = None
         if ensure_list_type(events, Event):
-            results, identifiers = self._requestor.send(
+            results, identifiers, debug = self._requestor.send(
                 caliper_event_list=events,
                 described_objects=described_objects,
-                sensor_id=sensor_id)
+                sensor_id=sensor_id, debug=self._config.DEBUG)
             self._process_results(results, self.stats.update_measures)
+        if self._config.DEBUG:
+            self.debug.append(debug)
         return identifiers
 
 

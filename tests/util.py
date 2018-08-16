@@ -43,17 +43,31 @@ _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
 _SENSOR_ID = 'https://example.edu/sensors/1'
 
 
-def get_testing_options():
+def _get_options(debug=False):
     return caliper.base.HttpOptions(
         host='http://httpbin.org/post',
         optimize_serialization=True,
         api_key='6xp7jKrOSOWOgy3acxHFWA',
-        auth_scheme='Bearer')
+        auth_scheme='Bearer',
+        debug=debug)
+
+
+def get_testing_options():
+    return _get_options()
+
+
+def get_debug_options():
+    return _get_options(debug=True)
 
 
 def build_default_sensor():
     return caliper.build_sensor_from_config(
         config_options=get_testing_options(), sensor_id=_SENSOR_ID)
+
+
+def build_debug_sensor():
+    return caliper.build_sensor_from_config(
+        config_options=get_debug_options(), sensor_id=_SENSOR_ID + '/debug')
 
 
 # basic condensor functions to condense and extract json starting from fixtures
