@@ -27,8 +27,7 @@ from builtins import *
 import collections, copy, importlib, json, re, warnings, uuid
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as aniso_parse_date,
                        parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
-from rfc3986 import is_valid_uri as rfc3986_is_valid_uri
-from urllib.parse import urlparse as urllib_urlparse
+from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
                                CALIPER_PROFILES_FOR_CONTEXTS, CALIPER_PROFILES_FOR_EVENT_TYPES,
@@ -36,6 +35,9 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFIL
 
 ## Convenience functions
 
+_uri_validator = rfc3986_validators.Validator().require_presence_of(
+    'scheme',
+    )
 
 def deprecation(m):
     warnings.warn(m, DeprecationWarning, stacklevel=2)
@@ -106,12 +108,10 @@ def is_valid_time(time):
 
 
 def is_valid_URI(uri):
-    if not uri:
-        return False
-    elif (isinstance(uri, str) and (urllib_urlparse(uri).geturl() == uri)
-          and rfc3986_is_valid_uri(uri, require_scheme=True)):
+    try:
+        _uri_validator.validate(rfc3986_api.uri_reference(uri))
         return True
-    else:
+    except Exception:
         return False
 
 
