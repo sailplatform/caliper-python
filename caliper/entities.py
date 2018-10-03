@@ -24,7 +24,10 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections
+try:
+    from collections.abc import MutableSequence, MutableMapping
+except ImportError:
+    from collections import MutableSequence, MutableMapping
 
 from caliper.constants import ENTITY_TYPES, MARKER_TYPES
 from caliper.constants import CALIPER_ROLES, CALIPER_STATUS
@@ -135,7 +138,7 @@ class Membership(Entity):
         self._set_obj_prop('member', member, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('organization', organization, t=ENTITY_TYPES['ORGANIZATION'], req=True)
 
-        if roles and isinstance(roles, collections.MutableSequence):
+        if roles and isinstance(roles, MutableSequence):
             if set(roles).issubset(set(CALIPER_ROLES.values())):
                 self._set_list_prop('roles', roles)
             else:

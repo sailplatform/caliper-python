@@ -24,7 +24,10 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections
+try:
+    from collections.abc import MutableSequence, MutableMapping
+except ImportError:
+    from collections import MutableSequence, MutableMapping
 
 from caliper.base import Options, HttpOptions, deprecation, ensure_list_type
 from caliper.entities import Entity
@@ -137,7 +140,7 @@ class Sensor(object):
         if entity and not entities:
             deprecation('Sensor.describe(e) deprecated; use Sensor.describe(entities=e).')
             v = entity
-        if not isinstance(v, collections.MutableSequence):
+        if not isinstance(v, MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
             identifiers.update({k: client.describe(entities=v, sensor_id=self.id)})
@@ -149,7 +152,7 @@ class Sensor(object):
         if event and not events:
             deprecation('Sensor.send(event=e) deprecated; use Sensor.send(events=e).')
             v = event
-        if not isinstance(v, collections.MutableSequence):
+        if not isinstance(v, MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
             identifiers.update({
