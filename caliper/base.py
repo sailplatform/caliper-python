@@ -24,7 +24,12 @@ install_aliases()
 from future.utils import raise_with_traceback, with_metaclass
 from builtins import *
 
-import collections, copy, importlib, json, re, warnings, uuid
+try:
+    from collections.abc import MutableSequence, MutableMapping
+except ImportError:
+    from collections import MutableSequence, MutableMapping
+
+import copy, importlib, json, re, warnings, uuid
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as aniso_parse_date,
                        parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
 from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
@@ -73,7 +78,7 @@ def is_valid_context(ctxt, expected_base_context):
 
 
 def _get_base_context(ctxt):
-    if isinstance(ctxt, collections.MutableSequence):
+    if isinstance(ctxt, MutableSequence):
         return ctxt[-1]
     else:
         return ctxt
@@ -140,7 +145,7 @@ def ensure_type(p, t, optional=False):
             raise_with_traceback(TypeError('non-optional properties cannot be None'))
     if t == None:
         raise_with_traceback(TypeError('for present properties, type cannot be None type'))
-    elif t == collections.MutableMapping:
+    elif t == MutableMapping:
         if not isinstance(p, t):
             raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
         else:
@@ -149,7 +154,7 @@ def ensure_type(p, t, optional=False):
         (isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
         (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
         (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
-        (isinstance(p, collections.MutableMapping) and is_subtype(p.get('type', dict), t)) or
+        (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
         (isinstance(p, _get_type(t)))):
         raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
@@ -371,7 +376,7 @@ class CaliperSerializable(object):
     def _set_dict_prop(self, k, v, req=False):
         if req and (v == None):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
-        elif v and not (isinstance(v, collections.MutableMapping)):
+        elif v and not (isinstance(v, MutableMapping)):
             raise_with_traceback(ValueError('{0} must be a dictionary'.format(str(k))))
         self._update_props(k, v or {}, req=req)
 
@@ -388,7 +393,7 @@ class CaliperSerializable(object):
         if req and (v == None):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         elif v:
-            if not (isinstance(v, collections.MutableSequence)):
+            if not (isinstance(v, MutableSequence)):
                 raise_with_traceback(ValueError('{0} must be a list'.format(str(k))))
             elif t:
                 for item in v:
@@ -439,7 +444,7 @@ class CaliperSerializable(object):
                      thin_props=False):
         r = []
         for item in l:
-            if isinstance(item, collections.MutableSequence):
+            if isinstance(item, MutableSequence):
                 r.append(
                     self._unpack_list(
                         item,
@@ -480,7 +485,7 @@ class CaliperSerializable(object):
             # handle value based on its type: list, composite, or basic type
             if thin_props and v in (None, {}, []):
                 continue
-            elif isinstance(v, collections.MutableSequence):
+            elif isinstance(v, MutableSequence):
                 value = self._unpack_list(
                     v,
                     ctxt_bases=cb,
@@ -499,7 +504,7 @@ class CaliperSerializable(object):
                         described_objects=described_objects,
                         thin_context=thin_context,
                         thin_props=thin_props)
-            elif isinstance(v, collections.MutableMapping):
+            elif isinstance(v, MutableMapping):
                 the_id = v.get('id')
                 the_type = v.get('type')
                 if (the_id and the_type) and (the_id in described_objects):

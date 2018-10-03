@@ -24,7 +24,12 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import copy, collections, importlib
+try:
+    from collections.abc import MutableSequence, MutableMapping
+except ImportError:
+    from collections import MutableSequence, MutableMapping
+
+import copy, importlib
 
 from caliper.base import is_valid_context, is_valid_date, is_valid_URI, suggest_profile
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
@@ -34,7 +39,7 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFIL
 def from_caliper_envelope(d, strict=False):
     r = None
     if (is_valid_URI(d.get('sensor')) and is_valid_date(d.get('sendTime'))
-            and isinstance(d.get('data'), collections.MutableSequence)):
+            and isinstance(d.get('data'), MutableSequence)):
         r = from_json_list(d.get('data'), strict=strict)
     return r
 
@@ -67,9 +72,9 @@ def from_json_dict(d, strict=False):
             value = v
         elif k in ['@context']:
             value = v
-        elif isinstance(v, collections.MutableSequence):
+        elif isinstance(v, MutableSequence):
             value = from_json_list(v)
-        elif isinstance(v, collections.MutableMapping) and CALIPER_CLASSES.get(v.get('type')):
+        elif isinstance(v, MutableMapping) and CALIPER_CLASSES.get(v.get('type')):
             value = from_json_dict(v)
         else:
             value = v
@@ -90,9 +95,9 @@ def from_json_dict(d, strict=False):
 def from_json_list(l, strict=False):
     r = []
     for item in l:
-        if isinstance(item, collections.MutableSequence):
+        if isinstance(item, MutableSequence):
             r.append(from_json_list(item, strict=strict))
-        elif isinstance(item, collections.MutableMapping):
+        elif isinstance(item, MutableMapping):
             r.append(from_json_dict(item, strict=strict))
         else:
             r.append(item)
