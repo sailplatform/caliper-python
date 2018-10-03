@@ -2,6 +2,13 @@
 Change history
 ==============
 
+1.1.4
+-----
+- Cope with deprecations in dependencies: rfc3986.api.is_valid_uri(s) now
+  deprecated in favour of using rfc3986.validators.Validator class; collections
+  ABCs no longer loadable from root module in 3.7+, should be loaded from
+  collections.abc instead.
+
 1.1.3
 -----
 - Add in a debug option for sensor clients to capture HTTP response objects for

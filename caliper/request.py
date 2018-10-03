@@ -24,7 +24,12 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections, copy, datetime, json, requests
+try:
+    from collections.abc import MutableSequence, MutableMapping
+except ImportError:
+    from collections import MutableSequence, MutableMapping
+
+import copy, datetime, json, requests
 
 from caliper.base import CaliperSerializable, HttpOptions
 from caliper.constants import CALIPER_CORE_CONTEXT
@@ -139,7 +144,7 @@ class HttpRequestor(EventStoreRequestor):
         identifiers = []
         response = None
 
-        if isinstance(caliper_objects, collections.MutableSequence):
+        if isinstance(caliper_objects, MutableSequence):
             s = requests.Session()
             payload, ids = self._generate_payload(
                 caliper_objects=caliper_objects,

@@ -24,8 +24,6 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-import collections
-
 from caliper.constants import CALIPER_ACTIONS, ENTITY_TYPES, EVENT_TYPES, MARKER_TYPES
 from caliper.base import BaseEvent, ensure_type
 
