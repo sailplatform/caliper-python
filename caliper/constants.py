@@ -60,6 +60,8 @@ ENTITY_TYPES = {
     'HIGHLIGHT_ANNOTATION': 'HighlightAnnotation',
     'IMAGE_OBJECT': 'ImageObject',
     'LEARNING_OBJECTIVE': 'LearningObjective',
+    'LINK': 'Link',
+    'LTI_LINK': 'LtiLink',
     'LTI_SESSION': 'LtiSession',
     'MEDIA_LOCATION': 'MediaLocation',
     'MEDIA_OBJECT': 'MediaObject',
@@ -139,7 +141,14 @@ CALIPER_CLASSES.update(MARKER_CLASSES)
 ## maps Python classnames back to types
 CALIPER_TYPES_FOR_CLASSES = { CALIPER_CLASSES[key]:key for key in CALIPER_CLASSES.keys() }
 
-## Caliper Roles and Status vocabulary
+## Caliper LTI, Roles and Status vocabulary
+
+CALIPER_LTI_MESSAGES = {
+    'RESOURCE_LINK_REQUEST': 'LtiResourceLinkRequest',
+    'DEEP_LINKING_REQUEST': 'LtiDeepLinkingResponse',
+    'DEEP_LINKING_RESPONSE': 'LtiDeepLinkingResponse',
+}
+
 CALIPER_ROLES = {
     'LEARNER': 'Learner',
     'EXTERNAL_LEARNER': 'Learner#ExternalLearner',
@@ -302,6 +311,7 @@ CALIPER_ACTIONS = {
     'RESUMED': 'Resumed',
     'RETRIEVED': 'Retrieved',
     'REVIEWED': 'Reviewed',
+    'RETURNED': 'Returned',
     'REWOUND': 'Rewound',
     'SEARCHED': 'Searched',
     'SHARED': 'Shared',
@@ -386,7 +396,10 @@ THREAD_EVENT_ACTIONS = [
     CALIPER_ACTIONS['MARKED_AS_READ'],
     CALIPER_ACTIONS['MARKED_AS_UNREAD']
 ]
-TOOL_LAUNCH_EVENT_ACTIONS = [ CALIPER_ACTIONS['LAUNCHED'] ]
+TOOL_LAUNCH_EVENT_ACTIONS = [
+    CALIPER_ACTIONS['LAUNCHED'],
+    CALIPER_ACTIONS['RETURNED']
+]
 TOOL_USE_EVENT_ACTIONS = [ CALIPER_ACTIONS['USED'] ]
 VIEW_EVENT_ACTIONS = [ CALIPER_ACTIONS['VIEWED'] ]
 

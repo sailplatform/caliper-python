@@ -40,9 +40,8 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFIL
 
 ## Convenience functions
 
-_uri_validator = rfc3986_validators.Validator().require_presence_of(
-    'scheme',
-    )
+_uri_validator = rfc3986_validators.Validator().require_presence_of('scheme', )
+
 
 def deprecation(m):
     warnings.warn(m, DeprecationWarning, stacklevel=2)
@@ -150,14 +149,29 @@ def ensure_type(p, t, optional=False):
             raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
         else:
             return True
-    elif t and not (
-        (isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
-        (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-        (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
-        (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
-        (isinstance(p, _get_type(t)))):
+    elif t and not ((isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
+                    (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+                    (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
+                    (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
+                    (isinstance(p, _get_type(t)))):
         raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
+
+
+def ensure_types(l, t, optional=False):
+    return True
+
+
+def ensure_types(p, tl, optional=False):
+    # exception or True
+    messages = []
+    for t in tl:
+        try:
+            ensure_type(p, t, optional=optional)
+            return True
+        except Exception as e:
+            messages.append(str(e))
+    raise_with_traceback(TypeError(' or '.join(messages)))
 
 
 def ensure_list_type(l, t):
