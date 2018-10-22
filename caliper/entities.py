@@ -808,6 +808,32 @@ class Score(Entity, Generatable):
         self._set_obj_prop('scoredBy', scoredBy, t=ENTITY_TYPES['AGENT'])
 
 
+## Search entities
+class Query(Entity):
+    def __init__(self, creator=None, searchTarget=None, searchTerms=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_obj_prop('creator', creator, t=ENTITY_TYPES['PERSON'])
+        self._set_obj_prop('searchTarget', searchTarget, t=ENTITY_TYPES['ENTITY'])
+        self._set_str_prop('searchTerms', searchTerms)
+
+
+class SearchResponse(Entity, Generatable):
+    def __init__(self,
+                 searchProvider=None,
+                 searchTarget=None,
+                 query=None,
+                 searchResultsItemCount=None,
+                 searchResults=None,
+                 **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_obj_prop(
+            'searchProvider', searchProvider, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        self._set_obj_prop('searchTarget', searchTarget, t=ENTITY_TYPES['ENTITY'])
+        self._set_obj_prop('query', query, t=ENTITY_TYPES['QUERY'])
+        self._set_int_prop('searchResultsItemCount', searchResultsItemCount)
+        self._set_list_prop('searchResults', searchResults, t=ENTITY_TYPES['ENTITY'])
+
+
 ## Session entities
 class Session(Entity, Generatable, Targetable):
     def __init__(self, duration=None, endedAtTime=None, startedAtTime=None, user=None, **kwargs):
