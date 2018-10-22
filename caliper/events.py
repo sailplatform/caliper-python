@@ -191,6 +191,14 @@ class NavigationEvent(Event):
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
 
+class SearchEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['ENTITY'])
+        ensure_type(self.generated, ENTITY_TYPES['SEARCH_RESPONSE'], optional=True)
+
+
 class SessionEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
