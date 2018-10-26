@@ -19,7 +19,7 @@ if sys.argv[-1] == 'publish':
 
 _packages = ['caliper', 'caliper.util']
 
-_requires = ['aniso8601 >= 3.0.0', 'future >= 0.16.0', 'requests >= 2.18.4', 'rfc3986 >= 1.1.0']
+_requires = ['aniso8601 >= 3.0.0', 'future == 0.16.0', 'requests >= 2.18.4', 'rfc3986 >= 1.1.0']
 
 
 def _get_val_from_mod(k):
