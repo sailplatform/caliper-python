@@ -25,7 +25,7 @@ from future.utils import raise_with_traceback
 from builtins import *
 
 from caliper.constants import CALIPER_ACTIONS, ENTITY_TYPES, EVENT_TYPES, MARKER_TYPES
-from caliper.base import BaseEvent, ensure_type
+from caliper.base import BaseEvent, ensure_type, ensure_types
 
 
 ## Base event class
@@ -221,6 +221,15 @@ class ThreadEvent(Event):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['THREAD'])
+
+
+class ToolLaunchEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'], optional=True)
+        ensure_types(self.target, [ ENTITY_TYPES['LINK'], ENTITY_TYPES['LTI_LINK'] ], optional=True)
 
 
 class ToolUseEvent(Event):

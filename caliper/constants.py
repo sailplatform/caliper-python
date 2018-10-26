@@ -60,6 +60,8 @@ ENTITY_TYPES = {
     'HIGHLIGHT_ANNOTATION': 'HighlightAnnotation',
     'IMAGE_OBJECT': 'ImageObject',
     'LEARNING_OBJECTIVE': 'LearningObjective',
+    'LINK': 'Link',
+    'LTI_LINK': 'LtiLink',
     'LTI_SESSION': 'LtiSession',
     'MEDIA_LOCATION': 'MediaLocation',
     'MEDIA_OBJECT': 'MediaObject',
@@ -107,11 +109,11 @@ EVENT_TYPES = {
     'SEARCH_EVENT': 'SearchEvent',
     'SESSION_EVENT': 'SessionEvent',
     'THREAD_EVENT': 'ThreadEvent',
+    'TOOL_LAUNCH_EVENT': 'ToolLaunchEvent',
     'TOOL_USE_EVENT': 'ToolUseEvent',
     'VIEW_EVENT': 'ViewEvent',
 }
 
-## map implementing Python classes onto entity types
 EVENT_CLASSES = { EVENT_TYPES[key]:'caliper.events.{}'.format(EVENT_TYPES[key])
                   for key in EVENT_TYPES.keys() }
 
@@ -142,7 +144,14 @@ CALIPER_CLASSES.update(MARKER_CLASSES)
 ## maps Python classnames back to types
 CALIPER_TYPES_FOR_CLASSES = { CALIPER_CLASSES[key]:key for key in CALIPER_CLASSES.keys() }
 
-## Caliper Roles and Status vocabulary
+## Caliper LTI, Roles and Status vocabulary
+
+CALIPER_LTI_MESSAGES = {
+    'RESOURCE_LINK_REQUEST': 'LtiResourceLinkRequest',
+    'DEEP_LINKING_REQUEST': 'LtiDeepLinkingResponse',
+    'DEEP_LINKING_RESPONSE': 'LtiDeepLinkingResponse',
+}
+
 CALIPER_ROLES = {
     'LEARNER': 'Learner',
     'EXTERNAL_LEARNER': 'Learner#ExternalLearner',
@@ -216,11 +225,14 @@ CALIPER_PROFILES = {
     'READING_PROFILE': 'ReadingProfile',
     'SEARCH_PROFILE': 'SearchProfile',
     'SESSION_PROFILE': 'SessionProfile',
+    'TOOL_LAUNCH_PROFILE': 'ToolLaunchProfile',
     'TOOL_USE_PROFILE': 'ToolUseProfile',
     }
 
 PROFILE_CONTEXTS = { CALIPER_PROFILES[key]:CALIPER_CORE_CONTEXT for key in CALIPER_PROFILES.keys() }
 ## profile context exceptions
+PROFILE_CONTEXTS[CALIPER_PROFILES['TOOL_LAUNCH_PROFILE']] = _CALIPER_PROFILE_EXT_CTXTS.format(
+    CALIPER_PROFILES['TOOL_LAUNCH_PROFILE'])
 PROFILE_CONTEXTS[CALIPER_PROFILES['SEARCH_PROFILE']] = _CALIPER_PROFILE_EXT_CTXTS.format(
     CALIPER_PROFILES['SEARCH_PROFILE'])
 
@@ -246,6 +258,7 @@ CALIPER_PROFILES_FOR_EVENT_TYPES = {
     EVENT_TYPES['SEARCH_EVENT'] : CALIPER_PROFILES['SEARCH_PROFILE'],
     EVENT_TYPES['SESSION_EVENT'] : CALIPER_PROFILES['SESSION_PROFILE'],
     EVENT_TYPES['THREAD_EVENT'] : CALIPER_PROFILES['FORUM_PROFILE'],
+    EVENT_TYPES['TOOL_LAUNCH_EVENT']: CALIPER_PROFILES['TOOL_LAUNCH_PROFILE'],
     EVENT_TYPES['TOOL_USE_EVENT'] : CALIPER_PROFILES['TOOL_USE_PROFILE'],
     EVENT_TYPES['VIEW_EVENT'] : CALIPER_PROFILES['BASIC_PROFILE']
 }
@@ -281,6 +294,7 @@ CALIPER_ACTIONS = {
     'HIGHLIGHTED': 'Highlighted',
     'IDENTIFIED': 'Identified',
     'JUMPED_TO': 'JumpedTo',
+    'LAUNCHED': 'Launched',
     'LIKED': 'Liked',
     'LINKED': 'Linked',
     'LOGGED_IN': 'LoggedIn',
@@ -303,6 +317,7 @@ CALIPER_ACTIONS = {
     'RESUMED': 'Resumed',
     'RETRIEVED': 'Retrieved',
     'REVIEWED': 'Reviewed',
+    'RETURNED': 'Returned',
     'REWOUND': 'Rewound',
     'SEARCHED': 'Searched',
     'SHARED': 'Shared',
@@ -318,6 +333,7 @@ CALIPER_ACTIONS = {
     'USED': 'Used',
     'VIEWED': 'Viewed'
 }
+
 
 BASIC_EVENT_ACTIONS = list(CALIPER_ACTIONS.values())
 ANNOTATION_EVENT_ACTIONS = [
@@ -387,6 +403,10 @@ THREAD_EVENT_ACTIONS = [
     CALIPER_ACTIONS['MARKED_AS_READ'],
     CALIPER_ACTIONS['MARKED_AS_UNREAD']
 ]
+TOOL_LAUNCH_EVENT_ACTIONS = [
+    CALIPER_ACTIONS['LAUNCHED'],
+    CALIPER_ACTIONS['RETURNED']
+]
 TOOL_USE_EVENT_ACTIONS = [ CALIPER_ACTIONS['USED'] ]
 VIEW_EVENT_ACTIONS = [ CALIPER_ACTIONS['VIEWED'] ]
 
@@ -407,6 +427,7 @@ CALIPER_PROFILE_ACTIONS.update(
         EVENT_TYPES['SEARCH_EVENT'] : SEARCH_EVENT_ACTIONS,
         EVENT_TYPES['SESSION_EVENT'] : SESSION_EVENT_ACTIONS,
         EVENT_TYPES['THREAD_EVENT'] : THREAD_EVENT_ACTIONS,
+        EVENT_TYPES['TOOL_LAUNCH_EVENT'] : TOOL_LAUNCH_EVENT_ACTIONS,
         EVENT_TYPES['TOOL_USE_EVENT'] : TOOL_USE_EVENT_ACTIONS,
         EVENT_TYPES['VIEW_EVENT'] : VIEW_EVENT_ACTIONS,
     }}
@@ -468,6 +489,11 @@ CALIPER_PROFILE_ACTIONS.update(
 CALIPER_PROFILE_ACTIONS.update(
     { CALIPER_PROFILES['SESSION_PROFILE']: {
         EVENT_TYPES['SESSION_EVENT'] : SESSION_EVENT_ACTIONS,
+    }}
+)
+CALIPER_PROFILE_ACTIONS.update(
+    { CALIPER_PROFILES['TOOL_LAUNCH_PROFILE']: {
+        EVENT_TYPES['TOOL_LAUNCH_EVENT'] : TOOL_LAUNCH_EVENT_ACTIONS,
     }}
 )
 CALIPER_PROFILE_ACTIONS.update(

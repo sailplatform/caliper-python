@@ -30,7 +30,7 @@ except ImportError:
     from collections import MutableSequence, MutableMapping
 
 from caliper.constants import ENTITY_TYPES, MARKER_TYPES
-from caliper.constants import CALIPER_ROLES, CALIPER_STATUS
+from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_ROLES, CALIPER_STATUS
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import ensure_type, ensure_list_type
 
@@ -357,6 +357,20 @@ class Reading(DigitalResource):
     def __init__(self, **kwargs):
         DigitalResource.__init__(self, **kwargs)
 
+
+# not a digital resource, just a web endpoint
+class Link(Entity, Targetable):
+    def __init__(self, **kwargs):
+        Entity.__init__(self, **kwargs)
+
+class LtiLink(DigitalResource):
+    def __init__(self, messageType=None, **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+
+        if messageType and messageType not in CALIPER_LTI_MESSAGES.values():
+            raise_with_traceback(ValueError('LTI message type must be in list of valid message types'))
+        else:
+            self._set_str_prop('messageType', messageType)
 
 class WebPage(DigitalResource):
     def __init__(self, **kwargs):
