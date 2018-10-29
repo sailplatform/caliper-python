@@ -2,6 +2,12 @@
 Change history
 ==============
 
+1.1.5
+-----
+- Future package at 0.17.0 has problems when pip attempts to install for both
+  Py2 and Py3 local environments; configure tox to enforce no-cache-dir for pip
+  when building virtual envs for tests.
+
 1.1.4
 -----
 - Cope with deprecations in dependencies: rfc3986.api.is_valid_uri(s) now
