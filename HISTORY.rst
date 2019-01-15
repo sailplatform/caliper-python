@@ -2,6 +2,10 @@
 Change history
 ==============
 
+1.1.6
+-----
+- No need any longer to import with_metaclass from future.utils, so pruned.
+
 1.1.5
 -----
 - Future package at 0.17.0 has problems when pip attempts to install for both
