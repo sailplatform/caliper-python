@@ -280,7 +280,7 @@ class LearningObjective(Entity):
 
 
 ## Creative works
-class DigitalResource(Entity, Referrable, Targetable):
+class DigitalResource(Entity, Generatable, Referrable, Targetable):
     def __init__(self,
                  learningObjectives=None,
                  creators=None,
