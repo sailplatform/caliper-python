@@ -190,6 +190,16 @@ class NavigationEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
+class ResourceManagementEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['ENTITY'])
+        if self.action == CALIPER_ACTIONS['COPIED']:
+            ensure_type(self.generated, ENTITY_TYPES['ENTITY'])
+        else:
+            ensure_type(self.generated, ENTITY_TYPES['ENTITY'], optional=True)
+
 
 class SearchEvent(Event):
     def __init__(self, **kwargs):
