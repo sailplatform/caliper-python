@@ -2,6 +2,10 @@
 Change history
 ==============
 
+1.1.7
+-----
+- Add in support for the Research Management metric profile.
+
 1.1.6
 -----
 - No need any longer to import with_metaclass from future.utils, so pruned.
