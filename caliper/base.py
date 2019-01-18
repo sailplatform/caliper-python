@@ -556,7 +556,7 @@ class BaseEntity(CaliperSerializable):
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
         self._set_str_prop('type', self._typename)
         self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._profile])
+        self._set_context(context, CALIPER_CONTEXTS[self._profile][0])
 
     @property
     def context(self):
@@ -583,7 +583,7 @@ class BaseEvent(CaliperSerializable):
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
 
         self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._profile])
+        self._set_context(context, CALIPER_CONTEXTS[self._profile][0])
         if action not in CALIPER_PROFILE_ACTIONS[self._profile][self._typename]:
             raise_with_traceback(
                 ValueError('invalid action for profile and event: {} for {}:{}'.format(
