@@ -65,8 +65,8 @@ def suggest_profile(prf=None, ctxt=None, typ=None):
 
 
 def is_valid_context_for_base(c1, c2):
-    return (c2 == c1 or (c2 == CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']]
-                         and c1 in CALIPER_CONTEXTS.values()))
+    return (c2 == c1 or (c2 == CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']][0]
+                         and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
 
 
 def is_valid_context(ctxt, expected_base_context):
