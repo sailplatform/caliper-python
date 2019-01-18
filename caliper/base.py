@@ -56,7 +56,6 @@ def suggest_profile(prf=None, ctxt=None, typ=None):
     if prf and not is_valid_profile(prf):
         raise_with_traceback(
             ValueError('profile must be in the list of Caliper profiles: {}'.format(prf)))
-        return CALIPER_PROFILES.get(prf, _basic_profile)
     else:
         p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt), _basic_profile)
         if p_from_context is not _basic_profile:
