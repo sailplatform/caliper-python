@@ -34,9 +34,10 @@ from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as ani
                        parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
 from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 
-from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
-                               CALIPER_PROFILES_FOR_CONTEXTS, CALIPER_PROFILES_FOR_EVENT_TYPES,
-                               CALIPER_PROFILE_ACTIONS, CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
+from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CONTEXTS,
+                               CALIPER_PROFILES, CALIPER_PROFILES_FOR_CONTEXTS,
+                               CALIPER_PROFILES_FOR_EVENT_TYPES, CALIPER_PROFILE_ACTIONS,
+                               CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
 
 ## Convenience functions
 
@@ -65,7 +66,7 @@ def suggest_profile(prf=None, ctxt=None, typ=None):
 
 
 def is_valid_context_for_base(c1, c2):
-    return (c2 == c1 or (c2 == CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']][0]
+    return (c2 == c1 or (c2 == CALIPER_CORE_CONTEXT
                          and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
 
 
@@ -73,6 +74,10 @@ def is_valid_context(ctxt, expected_base_context):
     base_context = _get_base_context(ctxt)
     return (is_valid_URI(base_context)
             and is_valid_context_for_base(base_context, expected_base_context))
+
+
+def _get_root_context_for_profile(p):
+    return CALIPER_CONTEXTS.get(p, [CALIPER_CORE_CONTEXT])[0]
 
 
 def _get_base_context(ctxt):
@@ -556,7 +561,7 @@ class BaseEntity(CaliperSerializable):
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
         self._set_str_prop('type', self._typename)
         self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._profile][0])
+        self._set_context(context, _get_root_context_for_profile(self._profile))
 
     @property
     def context(self):
@@ -583,7 +588,7 @@ class BaseEvent(CaliperSerializable):
         self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
 
         self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
-        self._set_context(context, CALIPER_CONTEXTS[self._profile][0])
+        self._set_context(context, _get_root_context_for_profile(self._profile))
         if action not in CALIPER_PROFILE_ACTIONS[self._profile][self._typename]:
             raise_with_traceback(
                 ValueError('invalid action for profile and event: {} for {}:{}'.format(

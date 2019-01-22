@@ -32,7 +32,7 @@ except ImportError:
 import copy, importlib
 
 from caliper.base import is_valid_context, is_valid_date, is_valid_URI, suggest_profile
-from caliper.constants import (CALIPER_CLASSES, CALIPER_CONTEXTS, CALIPER_PROFILES,
+from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_PROFILES,
                                CALIPER_PROFILES_FOR_CONTEXTS)
 
 
@@ -46,10 +46,10 @@ def from_caliper_envelope(d, strict=False):
 
 def from_json_dict(d, strict=False):
     ctxt = d.get('@context')
-    if strict and not is_valid_context(ctxt, CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']][0]):
+    if strict and not is_valid_context(ctxt, CALIPER_CORE_CONTEXT):
         raise ValueError('While strictly parsing, encountered unknown context: {}'.format(ctxt))
     else:
-        ctxt = ctxt or CALIPER_CONTEXTS[CALIPER_PROFILES['BASIC_PROFILE']][0]
+        ctxt = ctxt or CALIPER_CORE_CONTEXT
 
     typ = d.get('type')
     if typ and not CALIPER_CLASSES.get(typ):
