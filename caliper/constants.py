@@ -35,6 +35,10 @@ _CALIPER_PROFILE_EXT_CTXTS = _CALIPER_PROFILE_CTXTS + '-extension'
 
 ENTITY_TYPES = {
     'AGENT': 'Agent',
+    'AGGREGATE_MEASURE': 'AggregateMeasure',
+    'AGGREGATE_MEASURE_COLLECTION': 'AggregateMeasureCollection',
+    'AGGREGATE_PROGRESS': 'AggregateProgress',
+    'AGGREGATE_TIME_ON_TASK': 'AggregateTimeOnTask',
     'ANNOTATION': 'Annotation',
     'ASSESSMENT': 'Assessment',
     'ASSESSMENT_ITEM': 'AssessmentItem',
@@ -145,12 +149,27 @@ CALIPER_CLASSES.update(MARKER_CLASSES)
 ## maps Python classnames back to types
 CALIPER_TYPES_FOR_CLASSES = { CALIPER_CLASSES[key]:key for key in CALIPER_CLASSES.keys() }
 
-## Caliper LTI, Roles and Status vocabulary
+## Caliper LTI, Metrics, Roles and Status vocabulary
 
 CALIPER_LTI_MESSAGES = {
     'RESOURCE_LINK_REQUEST': 'LtiResourceLinkRequest',
     'DEEP_LINKING_REQUEST': 'LtiDeepLinkingResponse',
     'DEEP_LINKING_RESPONSE': 'LtiDeepLinkingResponse',
+}
+
+CALIPER_METRICS = {
+    'ACTIVITIES_COMPLETED': 'ActivitiesCompleted',
+    'ACTIVITIES_PASSED': 'ActivitiesPassed',
+    'ASSESSMENTS_COMPLETED': 'AssessmentsCompleted',
+    'ASSESSMENTS_PASSED': 'AssessmentsPassed',
+    'DOCUMENTS_READ': 'DocumentsRead',
+    'LESSONS_COMPLETED': 'LessonsCompled',
+    'LESSONS_PASSED': 'LessonsPassed',
+    'STANDARDS_MASTERED': 'StandardsMastered',
+    'UNITS_COMPLETED': 'UnitsCompleted',
+    'UNITS_PASSED': 'UnitsPassed',
+    'WORDS_READ': 'WordsRead',
+    'WORDS_WRITTEN': 'WordsWritten'
 }
 
 CALIPER_ROLES = {
@@ -236,6 +255,8 @@ PROFILE_CONTEXTS = { CALIPER_PROFILES[key]:[CALIPER_CORE_CONTEXT] for key in CAL
 ## exceptions that extend the core profile
 PROFILE_CONTEXTS[CALIPER_PROFILES['TOOL_LAUNCH_PROFILE']].append( _CALIPER_PROFILE_EXT_CTXTS.format(
     CALIPER_PROFILES['TOOL_LAUNCH_PROFILE']))
+PROFILE_CONTEXTS[CALIPER_PROFILES['TOOL_USE_PROFILE']].append( _CALIPER_PROFILE_EXT_CTXTS.format(
+    CALIPER_PROFILES['TOOL_USE_PROFILE']))
 ## exceptions that are net-new from the core profile
 PROFILE_CONTEXTS[CALIPER_PROFILES['RESOURCE_MANAGEMENT_PROFILE']] = [_CALIPER_PROFILE_EXT_CTXTS.format(
     CALIPER_PROFILES['RESOURCE_MANAGEMENT_PROFILE'])]
