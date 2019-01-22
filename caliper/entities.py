@@ -279,6 +279,43 @@ class LearningObjective(Entity):
         Entity.__init__(self, **kwargs)
 
 
+## Aggregate measures
+class AggregateMeasure(Entity, Generatable):
+    def __init__(self, endedAtTime=None, startedAtTime=None, value=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_date_prop('startedAtTime', startedAtTime)
+        self._set_float_prop('value', value)
+
+
+class AggregateMeasureCollection(AggregateMeasure):
+    def __init__(self, items=None, **kwargs):
+        AggregateMeasure.__init__(self, **kwargs)
+        self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
+
+    @property
+    def items(self):
+        return self._get_prop('items')
+
+
+class AggregateProgress(AggregateMeasure):
+    def __init__(self, metric=None, value=None, valueMax=None, **kwargs):
+        AggregateMeasure.__init__(self, **kwargs)
+        self._set_float_prop('value', value, req=True)
+        self._set_float_prop('valueMax', valueMax)
+
+        if metric and metric not in CALIPER_METRICS.values():
+            raise_with_traceback(ValueError('metric must be in the list of valid metric values'))
+        else:
+            self._set_str_prop('metric', metric)
+
+
+class AggregateTimeOnTask(AggregateMeasure):
+    def __init__(self, duration=None, **kwargs):
+        AggregateMeasure.__init__(self, **kwargs)
+        self._set_duration_prop('duration', duration, req=True)
+
+
 ## Creative works
 class DigitalResource(Entity, Generatable, Referrable, Targetable):
     def __init__(self,
