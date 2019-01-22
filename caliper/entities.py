@@ -30,7 +30,7 @@ except ImportError:
     from collections import MutableSequence, MutableMapping
 
 from caliper.constants import ENTITY_TYPES, MARKER_TYPES
-from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_ROLES, CALIPER_STATUS
+from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES, CALIPER_STATUS
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import ensure_type, ensure_list_type
 
