@@ -2,6 +2,13 @@
 Change history
 ==============
 
+1.1.8
+-----
+- Provide a SimpleSensor that reduces complexity for most straightforward use
+  of the reference implementation: the simple sensor has only the `send()`
+  method, used to send both Caliper Entities and Events, and supports only a
+  single `HttpRequestor` transport connection to a single configured endpoint.
+
 1.1.7
 -----
 - Add in support for the Research Management metric profile.
