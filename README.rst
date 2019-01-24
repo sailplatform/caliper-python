@@ -75,13 +75,13 @@ Building and installing from a source bundle
 If you want to install it from a source bundle, then use these steps (note that
 the name of the repository on GitHub is different to the distribution package name):
 
-#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python-public.git>`_
+#. Clone the `repository from GitHub <https://github.com/IMSGlobal/caliper-python.git>`_
    onto your local machine.
 
 #. Use pip to install the package as a writable source bundle; there's no need
    to do a package build step ahead of time::
 
-     pip install -e caliper-python-public
+     pip install -e caliper-python
 
 Changing and testing
 --------------------
@@ -155,10 +155,10 @@ might send a basic navigation event to a caliper endpoint::
   # Caliper base profile: caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO']
   #
   the_event = caliper.events.NavigationEvent(
-          actor = the_user_currently_acting_as_caliper_Actor_entity,
+          actor = the_user_currently_acting_as_caliper_Person_entity,
           edApp = your_application_as_caliper_SoftwareApplication_entity,
           group = the_course_offering_in_play_as_caliper_Organization_entity,
-          event_object = the_caliper_DigitalResource_the_actor_is_using,
+          object = the_caliper_DigitalResource_the_actor_is_using,
           referrer = the_caliper_DigitalResource_the_actor_came_from,
           target = the_caliper_DigitalResource_the_actor_is_going_to,
           eventTime = the_time_when_the_actor_did_the_action )
