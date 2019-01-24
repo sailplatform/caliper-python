@@ -114,14 +114,12 @@ Your application will need awareness of these parts of the package:
 * The `caliper.HttpOptions` class (for use with simple HTTP transport to a Caliper
   endpoint).
 
-* The `caliper.Sensor` class and its API.
-
-* The appropriate `caliper.profiles` metric profile enumeration classes that
-  contain the metric profile actions you want to support.
+* The `caliper.SimpleSensor` class and its API.
 
 * The `Event` and `Entity` subclasses (found in `caliper.events` and
   `caliper.entities`, respectively) that you will need to use for the metric
-  profile actions you want to support.
+  profile actions you want to support (see `caliper.constants` for the
+  association of entities and events with profiles).
 
 Here is a very simple example code scrap that demonstrates how an application
 might send a basic navigation event to a caliper endpoint::
@@ -135,7 +133,7 @@ might send a basic navigation event to a caliper endpoint::
 
   # Here you build your sensor; it will have one client in its registry,
   # with the key 'default'.
-  the_sensor = caliper.build_sensor_from_config(
+  the_sensor = caliper.build_simple_sensor(
           sensor_id = 'http://learning-app.your-school.edu/sensor',
           config_options = the_config )
 
@@ -156,11 +154,11 @@ might send a basic navigation event to a caliper endpoint::
           target = the_caliper_DigitalResource_the_actor_is_going_to,
           eventTime = the_time_when_the_actor_did_the_action )
 
-  # Once built, you can use your sensor to describe one or more often used
+  # Once built, you can use your sensor to send one or more often used
   # entities; suppose for example, you'll be sending a number of events
   # that all have the same actor
 
-  ret = the_sensor.describe(the_event.actor)
+  sent_identities = the_sensor.send(the_event.actor)
 
   # The return structure from the sensor will be a dictionary of lists: each
   # item in the dictionary has a key corresponding to a client key,
@@ -169,11 +167,25 @@ might send a basic navigation event to a caliper endpoint::
   #
   # Now you can use this list with event sendings to send only the identifiers
   # of already-described entities, and not their full forms:
-  the_sensor.send(the_event, described_objects=ret['default'])
+  the_sensor.send(the_event, described_objects=sent_identities)
 
   # You can also just send the event in its full form, with all fleshed out
   # entities:
   the_sensor.send(the_event)
+
+  # You can check the status code sent back by the endpoint for the last
+  # invocation of send():
+
+  assert the_sensor.status_code in [200, 201, 202]
+
+  # If you create your configuration with debug=true, then your sensor will
+  # keep a list of the full responses (it uses the "requests" library under the
+  # covers, so these will be response objects from that library:
+
+  the_sensor.config.DEBUG = true
+  sent_identifies = the_sensor.send(the_event.actor)
+  the_sensor.send(the_event, described_objects=sent_identities)
+  responses = the_sensor.debug
 
 Your actual use of the caliper code will certainly be more complex than
 this. For assistance getting from this very simple example through to more
