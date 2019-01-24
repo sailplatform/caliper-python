@@ -29,11 +29,11 @@ try:
 except ImportError:
     from collections import MutableSequence, MutableMapping
 
-from caliper.base import Options, HttpOptions, deprecation, ensure_list_type
+from caliper.base import CaliperSerializable, Options, HttpOptions, deprecation, ensure_list_type
 from caliper.entities import Entity
 from caliper.events import Event
 from caliper.request import EventStoreRequestor, HttpRequestor
-from caliper.util.stats import Statistics
+from caliper.util.stats import Statistics, SimpleStatistics
 
 
 class Client(object):
@@ -111,6 +111,88 @@ class Client(object):
         if self._config.DEBUG:
             self.debug.append(debug)
         return identifiers
+
+
+class SimpleSensor(object):
+    def __init__(self, config_options=None, sensor_id=None):
+        if not config_options:
+            self._config = HttpOptions(optimize_serialization=True)
+        elif not (isinstance(config_options, HttpOptions)):
+            raise_with_traceback(TypeError('config_options must implement HttpOptions'))
+        else:
+            self._config = config_options
+        self._id = sensor_id
+        self._requestor = HttpRequestor(options=self._config)
+        self._stats = SimpleStatistics()
+        self._status_code = None
+        self._debug = []
+
+    @staticmethod
+    def fashion_simple_sensor(config_options=None, sensor_id=None):
+        s = SimpleSensor(config_options=config_options, sensor_id=sensor_id)
+        return s
+
+    def _reset(self):
+        self._stats = SimpleStatistics()
+        self._status_code = None
+        self._debug = []
+
+    def _dispatch(self, caliper_objects, sensor_id, described_objects):
+        identifiers = []
+        if ensure_list_type(caliper_objects, CaliperSerializable):
+            results, identifiers, debug = self._requestor.send(
+                caliper_event_list=caliper_objects,
+                described_objects=described_objects,
+                sensor_id=sensor_id,
+                debug=True)
+            self._process_results(results, self._stats.update_sent)
+            self._status_code = debug.status_code
+            if self._config.DEBUG:
+                self._debug.append(debug)
+        return identifiers
+
+    def _process_results(self, results, update_func):
+        for r in results:
+            if r:
+                self._stats.update_successful(1)
+            else:
+                self._stats.update_failed(1)
+            update_func(1)
+
+    def send(self, caliper_objects, described_objects=None):
+        v = caliper_objects
+        if not isinstance(v, MutableSequence):
+            v = [v]
+        identifiers = self._dispatch(v, self.id, described_objects)
+        return identifiers
+
+    @property
+    def apiKey(self):
+        return self._config.API_KEY
+
+    @apiKey.setter
+    def apiKey(self, new_key):
+        self._config.API_KEY = new_key
+
+    @property
+    def config(self):
+        return self._config
+
+    @property
+    def debug(self):
+        return self._debug
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def statistics(self):
+        return [self._stats]
+
+    @property
+    def status_code(self):
+        return self._status_code
 
 
 class Sensor(object):
