@@ -32,6 +32,101 @@ from .context import caliper
 from . import util
 
 
+class TestCaliperSimpleSensor(unittest.TestCase):
+    def setUp(self):
+        self.sensor = util.build_simple_sensor()
+        self.iterations = 4
+
+    def tearDown(self):
+        del (self.sensor)
+
+    # test the simple ability to construct the same envelope as in the fixture
+    def testEventPayloadSingle(self):
+        fixture = 'caliperEnvelopeEventSingle'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    def testEventPayloadBatch(self):
+        fixture = 'caliperEnvelopeEventBatch'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    def testEntityPayloadSingle(self):
+        fixture = 'caliperEnvelopeEntitySingle'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    def testEntityPayloadSingle(self):
+        fixture = 'caliperEnvelopeEntitySingle'
+        envelope = util.get_envelope(self.sensor, fixture)
+        self.assertEqual(
+            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+
+    # test transmission stats for sensor.send()
+    def testEventSend(self):
+        fixture = 'caliperEventBasicCreated'
+        for i in range(self.iterations):
+            self.sensor.send(
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+        for stats in self.sensor.statistics:
+            counted = stats.sent.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted, self.iterations)
+            self.assertEqual(succeeded, self.iterations)
+            self.assertEqual(failed, 0)
+
+    def testEventSendBatch(self):
+        fixture = 'caliperEventBasicCreated'
+        batch = [
+            caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
+            for x in range(self.iterations)
+        ]
+        self.sensor.send(batch)
+        for stats in self.sensor.statistics:
+            counted = stats.sent.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted, self.iterations)
+            self.assertEqual(succeeded, self.iterations)
+            self.assertEqual(failed, 0)
+
+    def testEntityDescribe(self):
+        fixture = 'caliperEntityPerson'
+        for i in range(self.iterations):
+            self.sensor.send(
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+        for stats in self.sensor.statistics:
+            counted = stats.sent.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted, self.iterations)
+            self.assertEqual(succeeded, self.iterations)
+            self.assertEqual(failed, 0)
+
+    def testEntityDescribeBatch(self):
+        fixture = 'caliperEntityPerson'
+        batch = [
+            caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
+            for x in range(self.iterations)
+        ]
+        self.sensor.send(batch)
+        for stats in self.sensor.statistics:
+            counted = stats.sent.count
+            succeeded = stats.successful.count
+            failed = stats.failed.count
+            stats.clear()
+            self.assertEqual(counted, self.iterations)
+            self.assertEqual(succeeded, self.iterations)
+            self.assertEqual(failed, 0)
+
+
 class TestCaliperSensor(unittest.TestCase):
     def setUp(self):
         self.sensor = util.build_default_sensor()

@@ -116,10 +116,8 @@ class Statistic(object):
         return self._last
 
 
-class Statistics(object):
+class BaseStatistics(object):
     _keys = {
-        'MEASURE': 'Measure',
-        'DESCRIBE': 'Describe',
         'SUCCESSFUL': 'Successful',
         'FAILED': 'Failed'
     }
@@ -142,6 +140,50 @@ class Statistics(object):
             self._map[self._keys[k]].clear()
 
     @property
+    def successful(self):
+        return self._map[self._keys['SUCCESSFUL']]
+
+    def update_successful(self, val):
+        self._map[self._keys['SUCCESSFUL']].update(val)
+
+    @property
+    def failed(self):
+        return self._map[self._keys['FAILED']]
+
+    def update_failed(self, val):
+        self._map[self._keys['FAILED']].update(val)
+
+
+class SimpleStatistics(BaseStatistics):
+    _keys = {
+        'SENT' : 'Sent',
+        'SUCCESSFUL': 'Successful',
+        'FAILED': 'Failed'
+    }
+
+    def __init__(self):
+        BaseStatistics.__init__(self)
+
+    @property
+    def sent(self):
+        return self._map[self._keys['SENT']]
+
+    def update_sent(self, val):
+        self._map[self._keys['SENT']].update(val)
+
+
+class Statistics(BaseStatistics):
+    _keys = {
+        'MEASURE': 'Measure',
+        'DESCRIBE': 'Describe',
+        'SUCCESSFUL': 'Successful',
+        'FAILED': 'Failed'
+    }
+
+    def __init__(self):
+        BaseStatistics.__init__(self)
+
+    @property
     def describes(self):
         return self._map[self._keys['DESCRIBE']]
 
@@ -155,16 +197,3 @@ class Statistics(object):
     def update_measures(self, val):
         self._map[self._keys['MEASURE']].update(val)
 
-    @property
-    def successful(self):
-        return self._map[self._keys['SUCCESSFUL']]
-
-    def update_successful(self, val):
-        self._map[self._keys['SUCCESSFUL']].update(val)
-
-    @property
-    def failed(self):
-        return self._map[self._keys['FAILED']]
-
-    def update_failed(self, val):
-        self._map[self._keys['FAILED']].update(val)

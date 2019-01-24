@@ -68,6 +68,10 @@ def build_debug_sensor():
     return caliper.build_sensor_from_config(
         config_options=get_debug_options(), sensor_id=_SENSOR_ID + '/debug')
 
+def build_simple_sensor():
+    return caliper.build_simple_sensor(
+        config_options=get_testing_options(), sensor_id=_SENSOR_ID)
+
 
 # basic condensor functions to condense and extract json starting from fixtures
 def _shape_fixture(s):
