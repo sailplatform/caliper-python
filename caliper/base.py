@@ -21,7 +21,7 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from future.utils import raise_with_traceback
+from future.utils import raise_with_traceback, string_types
 from builtins import *
 
 try:
@@ -153,7 +153,7 @@ def ensure_type(p, t, optional=False):
             raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
         else:
             return True
-    elif t and not ((isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
+    elif t and not ((isinstance(p, string_types) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
                     (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
                     (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
                     (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
@@ -211,7 +211,7 @@ class Options(object):
 
     @API_KEY.setter
     def API_KEY(self, new_key):
-        if isinstance(new_key, str):
+        if isinstance(new_key, string_types):
             self._config['API_KEY'] = new_key
         else:
             raise_with_traceback(ValueError('new key value must be a string'))
@@ -222,7 +222,7 @@ class Options(object):
 
     @AUTH_SCHEME.setter
     def AUTH_SCHEME(self, new_scheme):
-        if isinstance(new_scheme, str):
+        if isinstance(new_scheme, string_types):
             self._config['AUTH_SCHEME'] = new_scheme
         else:
             raise_with_traceback(ValueError('new key value must be a string'))
@@ -424,7 +424,7 @@ class CaliperSerializable(object):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
             raise_with_traceback(
                 TypeError('Provided property is not of required type: {}'.format(t)))
-        if isinstance(v, str):
+        if isinstance(v, string_types):
             if not is_valid_URI(v):
                 raise_with_traceback(
                     ValueError('ID value for object property must be valid URI: {}'.format(v)))
