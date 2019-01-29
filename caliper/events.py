@@ -117,6 +117,10 @@ class MinimalEvent(BaseEvent):
         BaseEvent.__init__(self, id=id, action=action, object=object, eventTime=eventTime)
         self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
 
+    @property
+    def actor(self):
+        return self._get_prop('actor')
+
 
 ## Derived Events
 class AnnotationEvent(Event):
