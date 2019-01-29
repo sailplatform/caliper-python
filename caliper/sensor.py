@@ -106,7 +106,8 @@ class Client(object):
             results, identifiers, debug = self._requestor.send(
                 caliper_event_list=events,
                 described_objects=described_objects,
-                sensor_id=sensor_id, debug=self._config.DEBUG)
+                sensor_id=sensor_id,
+                debug=self._config.DEBUG)
             self._process_results(results, self.stats.update_measures)
         if self._config.DEBUG:
             self.debug.append(debug)

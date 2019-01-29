@@ -168,7 +168,8 @@ class HttpRequestor(EventStoreRequestor):
         return results, identifiers, response
 
     def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
-        results, ids, response = self._dispatch(caliper_objects=caliper_entity_list, sensor_id=sensor_id, debug=debug)
+        results, ids, response = self._dispatch(
+            caliper_objects=caliper_entity_list, sensor_id=sensor_id, debug=debug)
         return results, ids, response
 
     def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):

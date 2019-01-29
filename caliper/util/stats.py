@@ -117,10 +117,7 @@ class Statistic(object):
 
 
 class BaseStatistics(object):
-    _keys = {
-        'SUCCESSFUL': 'Successful',
-        'FAILED': 'Failed'
-    }
+    _keys = {'SUCCESSFUL': 'Successful', 'FAILED': 'Failed'}
 
     def __init__(self):
         self._map = {}
@@ -155,11 +152,7 @@ class BaseStatistics(object):
 
 
 class SimpleStatistics(BaseStatistics):
-    _keys = {
-        'SENT' : 'Sent',
-        'SUCCESSFUL': 'Successful',
-        'FAILED': 'Failed'
-    }
+    _keys = {'SENT': 'Sent', 'SUCCESSFUL': 'Successful', 'FAILED': 'Failed'}
 
     def __init__(self):
         BaseStatistics.__init__(self)
@@ -196,4 +189,3 @@ class Statistics(BaseStatistics):
 
     def update_measures(self, val):
         self._map[self._keys['MEASURE']].update(val)
-

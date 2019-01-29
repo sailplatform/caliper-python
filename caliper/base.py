@@ -66,8 +66,8 @@ def suggest_profile(prf=None, ctxt=None, typ=None):
 
 
 def is_valid_context_for_base(c1, c2):
-    return (c2 == c1 or (c2 == CALIPER_CORE_CONTEXT
-                         and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
+    return (c2 == c1
+            or (c2 == CALIPER_CORE_CONTEXT and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
 
 
 def is_valid_context(ctxt, expected_base_context):
@@ -153,11 +153,12 @@ def ensure_type(p, t, optional=False):
             raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
         else:
             return True
-    elif t and not ((isinstance(p, string_types) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
-                    (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-                    (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
-                    (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
-                    (isinstance(p, _get_type(t)))):
+    elif t and not (
+        (isinstance(p, string_types) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
+        (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+        (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
+        (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
+        (isinstance(p, _get_type(t)))):
         raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
 
