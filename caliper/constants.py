@@ -165,6 +165,7 @@ CALIPER_METRICS = {
     'DOCUMENTS_READ': 'DocumentsRead',
     'LESSONS_COMPLETED': 'LessonsCompleted',
     'LESSONS_PASSED': 'LessonsPassed',
+    'MINUTES_ON_TASK': 'MinutesOnTask',
     'STANDARDS_MASTERED': 'StandardsMastered',
     'UNITS_COMPLETED': 'UnitsCompleted',
     'UNITS_PASSED': 'UnitsPassed',

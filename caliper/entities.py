@@ -273,11 +273,22 @@ class LearningObjective(Entity):
 
 ## Aggregate measures
 class AggregateMeasure(Entity, Generatable):
-    def __init__(self, endedAtTime=None, startedAtTime=None, value=None, **kwargs):
+    def __init__(self,
+                 endedAtTime=None,
+                 metric=None,
+                 startedAtTime=None,
+                 value=None,
+                 valueMax=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
-        self._set_float_prop('value', value)
+        self._set_float_prop('value', value, req=True)
+        self._set_float_prop('valueMax', valueMax)
+
+        if metric not in CALIPER_METRICS.values():
+            raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
+        else:
+            self._set_str_prop('metric', metric)
 
     @property
     def endedAtTime(self):
@@ -288,6 +299,10 @@ class AggregateMeasure(Entity, Generatable):
         self._set_date_prop('endedAtTime', new_time)
 
     @property
+    def metric(self):
+        return self._get_prop('metric')
+
+    @property
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
 
@@ -295,49 +310,19 @@ class AggregateMeasure(Entity, Generatable):
     def value(self):
         return self._get_prop('value')
 
-
-class AggregateMeasureCollection(AggregateMeasure):
-    def __init__(self, items=None, **kwargs):
-        AggregateMeasure.__init__(self, **kwargs)
-        self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
-
-    @property
-    def items(self):
-        return self._get_prop('items')
-
-
-class AggregateProgress(AggregateMeasure):
-    def __init__(self, metric=None, value=None, valueMax=None, **kwargs):
-        AggregateMeasure.__init__(self, **kwargs)
-        self._set_float_prop('value', value, req=True)
-        self._set_float_prop('valueMax', valueMax)
-
-        if metric not in CALIPER_METRICS.values():
-            raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
-        else:
-            self._set_str_prop('metric', metric)
-
-    @property
-    def metric(self):
-        return self._get_prop('metric')
-
     @property
     def valueMax(self):
         return self._get_prop('valueMax')
 
 
-class AggregateTimeOnTask(AggregateMeasure):
-    def __init__(self, duration=None, **kwargs):
-        AggregateMeasure.__init__(self, **kwargs)
-        self._set_duration_prop('duration', duration, req=True)
+class AggregateMeasureCollection(Entity, Generatable):
+    def __init__(self, items=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
 
     @property
-    def duration(self):
-        return self._get_prop('duration')
-
-    @duration.setter
-    def duration(self, new_duration):
-        self._set_duration_prop('duration', new_duration)
+    def items(self):
+        return self._get_prop('items')
 
 
 ## Creative works
