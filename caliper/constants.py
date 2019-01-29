@@ -163,7 +163,7 @@ CALIPER_METRICS = {
     'ASSESSMENTS_COMPLETED': 'AssessmentsCompleted',
     'ASSESSMENTS_PASSED': 'AssessmentsPassed',
     'DOCUMENTS_READ': 'DocumentsRead',
-    'LESSONS_COMPLETED': 'LessonsCompled',
+    'LESSONS_COMPLETED': 'LessonsCompleted',
     'LESSONS_PASSED': 'LessonsPassed',
     'STANDARDS_MASTERED': 'StandardsMastered',
     'UNITS_COMPLETED': 'UnitsCompleted',
