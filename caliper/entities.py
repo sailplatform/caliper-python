@@ -355,14 +355,17 @@ class Link(Entity, Targetable):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
 
+
 class LtiLink(DigitalResource):
     def __init__(self, messageType=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
 
         if messageType and messageType not in CALIPER_LTI_MESSAGES.values():
-            raise_with_traceback(ValueError('LTI message type must be in list of valid message types'))
+            raise_with_traceback(
+                ValueError('LTI message type must be in list of valid message types'))
         else:
             self._set_str_prop('messageType', messageType)
+
 
 class WebPage(DigitalResource):
     def __init__(self, **kwargs):
@@ -858,7 +861,6 @@ class Score(Entity, Generatable):
     @property
     def scoredBy(self):
         return self._get_prop('scoredBy')
-
 
 
 ## Search entities

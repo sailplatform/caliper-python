@@ -194,6 +194,7 @@ class NavigationEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
+
 class ResourceManagementEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
@@ -243,7 +244,7 @@ class ToolLaunchEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
         ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'], optional=True)
-        ensure_types(self.target, [ ENTITY_TYPES['LINK'], ENTITY_TYPES['LTI_LINK'] ], optional=True)
+        ensure_types(self.target, [ENTITY_TYPES['LINK'], ENTITY_TYPES['LTI_LINK']], optional=True)
 
 
 class ToolUseEvent(Event):
