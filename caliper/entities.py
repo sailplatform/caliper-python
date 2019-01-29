@@ -221,14 +221,6 @@ class CourseOffering(Organization):
     def courseNumber(self):
         return self._get_prop('courseNumber')
 
-    @property
-    def label(self):
-        return self._get_prop('label')
-
-    @property
-    def semester(self):
-        return self._get_prop('semester')
-
 
 class CourseSection(CourseOffering):
     def __init__(self, category=None, **kwargs):
@@ -468,6 +460,10 @@ class TagAnnotation(Annotation):
         Annotation.__init__(self, **kwargs)
         self._set_list_prop('tags', tags, t=str)
 
+    @property
+    def tags(self):
+        return self._get_prop('tags')
+
 
 class TextPositionSelector(BaseEntity):
     def __init__(self, start=None, end=None, **kwargs):
@@ -513,8 +509,32 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         self._set_float_prop('maxScore', maxScore)
 
     @property
+    def dateToActivate(self):
+        return self._get_prop('dateToActivate')
+
+    @property
+    def dateToShow(self):
+        return self._get_prop('dateToShow')
+
+    @property
+    def dateToStartOn(self):
+        return self._get_prop('dateToStartOn')
+
+    @property
+    def dateToSubmit(self):
+        return self._get_prop('dateToSubmit')
+
+    @property
+    def maxAttempts(self):
+        return self._get_prop('maxAttempts')
+
+    @property
     def maxScore(self):
         return self._get_prop('maxScore')
+
+    @property
+    def maxSubmits(self):
+        return self._get_prop('maxSubmits')
 
 
 class Assessment(AssignableDigitalResource, DigitalResourceCollection):
@@ -698,6 +718,18 @@ class Message(DigitalResource):
         self._set_obj_prop('replyTo', replyTo, t=ENTITY_TYPES['MESSAGE'])
         self._set_list_prop('attachments', attachments, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
 
+    @property
+    def body(self):
+        return self._get_prop('body')
+
+    @property
+    def replyTo(self):
+        return self._get_prop('replyTo')
+
+    @property
+    def attachments(self):
+        return self._get_prop('attachments')
+
 
 ## Media entities
 class MediaObject(DigitalResource):
@@ -807,6 +839,27 @@ class Score(Entity, Generatable):
         self._set_float_prop('scoreGiven', scoreGiven)
         self._set_obj_prop('scoredBy', scoredBy, t=ENTITY_TYPES['AGENT'])
 
+    @property
+    def attempt(self):
+        return self._get_prop('attempt')
+
+    @property
+    def comment(self):
+        return self._get_prop('comment')
+
+    @property
+    def maxScore(self):
+        return self._get_prop('maxScore')
+
+    @property
+    def scoreGiven(self):
+        return self._get_prop('scoreGiven')
+
+    @property
+    def scoredBy(self):
+        return self._get_prop('scoredBy')
+
+
 
 ## Search entities
 class Query(Entity):
@@ -815,6 +868,18 @@ class Query(Entity):
         self._set_obj_prop('creator', creator, t=ENTITY_TYPES['PERSON'])
         self._set_obj_prop('searchTarget', searchTarget, t=ENTITY_TYPES['ENTITY'])
         self._set_str_prop('searchTerms', searchTerms)
+
+    @property
+    def creator(self):
+        return self._get_prop('creator')
+
+    @property
+    def searchTarget(self):
+        return self._get_prop('searchTarget')
+
+    @property
+    def searchTerms(self):
+        return self._get_prop('searchTerms')
 
 
 class SearchResponse(Entity, Generatable):
@@ -832,6 +897,34 @@ class SearchResponse(Entity, Generatable):
         self._set_obj_prop('query', query, t=ENTITY_TYPES['QUERY'])
         self._set_int_prop('searchResultsItemCount', searchResultsItemCount)
         self._set_list_prop('searchResults', searchResults, t=ENTITY_TYPES['ENTITY'])
+
+    @property
+    def searchProvider(self):
+        return self._get_prop('searchProvider')
+
+    @property
+    def searchTarget(self):
+        return self._get_prop('searchTarget')
+
+    @property
+    def query(self):
+        return self._get_prop('query')
+
+    @property
+    def searchResultsItemCount(self):
+        return self._get_prop('searchResultsItemCount')
+
+    @searchResultsItemCount.setter
+    def searchResultsItemCount(self, new_count):
+        self._set_int_prop('searchResultsItemCount', new_count)
+
+    @property
+    def searchResults(self):
+        return self._get_prop('searchResults')
+
+    @searchResults.setter
+    def searchResults(self, new_results):
+        self._set_list_prop('searchResults', new_results, t=ENTITY_TYPES['ENTITY'])
 
 
 ## Session entities
