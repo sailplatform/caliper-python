@@ -2,6 +2,11 @@
 Change history
 ==============
 
+1.1.9
+-----
+- Ensure that all Events and Entities have appropriate properties available for
+  their expected fields.
+
 1.1.8
 -----
 - Provide a SimpleSensor that reduces complexity for most straightforward use
