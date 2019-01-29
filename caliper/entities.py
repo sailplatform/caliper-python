@@ -287,6 +287,18 @@ class AggregateMeasure(Entity, Generatable):
         self._set_date_prop('startedAtTime', startedAtTime)
         self._set_float_prop('value', value)
 
+    @property
+    def endedAtTime(self):
+        return self._get_prop('endedAtTime')
+
+    @property
+    def startedAtTime(self):
+        return self._get_prop('startedAtTime')
+
+    @property
+    def value(self):
+        return self._get_prop('value')
+
 
 class AggregateMeasureCollection(AggregateMeasure):
     def __init__(self, items=None, **kwargs):
@@ -309,11 +321,23 @@ class AggregateProgress(AggregateMeasure):
         else:
             self._set_str_prop('metric', metric)
 
+    @property
+    def metric(self):
+        return self._get_prop('metric')
+
+    @property
+    def valueMax(self):
+        return self._get_prop('valueMax')
+
 
 class AggregateTimeOnTask(AggregateMeasure):
     def __init__(self, duration=None, **kwargs):
         AggregateMeasure.__init__(self, **kwargs)
         self._set_duration_prop('duration', duration, req=True)
+
+    @property
+    def duration(self):
+        return self._get_prop('duration')
 
 
 ## Creative works
