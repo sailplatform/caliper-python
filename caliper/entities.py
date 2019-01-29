@@ -291,6 +291,10 @@ class AggregateMeasure(Entity, Generatable):
     def endedAtTime(self):
         return self._get_prop('endedAtTime')
 
+    @endedAtTime.setter
+    def endedAtTime(self, new_time):
+        self._set_date_prop('endedAtTime', new_time)
+
     @property
     def startedAtTime(self):
         return self._get_prop('startedAtTime')
@@ -338,6 +342,10 @@ class AggregateTimeOnTask(AggregateMeasure):
     @property
     def duration(self):
         return self._get_prop('duration')
+
+    @duration.setter
+    def duration(self, new_duration):
+        self._set_duration_prop('duration', new_duration)
 
 
 ## Creative works
