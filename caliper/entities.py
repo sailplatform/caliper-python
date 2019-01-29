@@ -304,8 +304,8 @@ class AggregateProgress(AggregateMeasure):
         self._set_float_prop('value', value, req=True)
         self._set_float_prop('valueMax', valueMax)
 
-        if metric and metric not in CALIPER_METRICS.values():
-            raise_with_traceback(ValueError('metric must be in the list of valid metric values'))
+        if metric not in CALIPER_METRICS.values():
+            raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
         else:
             self._set_str_prop('metric', metric)
 
