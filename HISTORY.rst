@@ -7,6 +7,8 @@ Change history
 - Ensure that all Events and Entities have appropriate properties available for
   their expected fields.
 
+  *1.1.9.1*. Bug fix for `Issue #147 <https://github.com/IMSGlobal/caliper-python/issues/147>`_.
+
 1.1.8
 -----
 - Provide a SimpleSensor that reduces complexity for most straightforward use
@@ -64,11 +66,13 @@ Change history
 - Improve condensor to support more strict context checking
 - Add CONTRIBUTING and HISTORY files to package
 
-1.1
----
+1.1.0
+-----
 - Supports IMS Caliper specification 1.1
 
-1.0
----
+  *1.1.0.1*. Bug fix for `Issue #147 <https://github.com/IMSGlobal/caliper-python/issues/147>`_.
+
+1.0.0
+-----
 - Supports IMS Caliper specification 1.0
 
