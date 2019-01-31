@@ -116,6 +116,12 @@ class Assignable(BaseEntity):
         return self._get_prop('maxSubmits')
 
 
+class Collectable(BaseEntity):
+    @property
+    def items(self):
+        return self._get_prop('items')
+
+
 class Generatable(BaseEntity):
     pass
 
@@ -315,14 +321,10 @@ class AggregateMeasure(Entity, Generatable):
         return self._get_prop('valueMax')
 
 
-class AggregateMeasureCollection(Entity, Generatable):
+class AggregateMeasureCollection(Entity, Collectable, Generatable):
     def __init__(self, items=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
-
-    @property
-    def items(self):
-        return self._get_prop('items')
 
 
 ## Creative works
@@ -379,14 +381,10 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
         return self._get_prop('version')
 
 
-class DigitalResourceCollection(DigitalResource):
+class DigitalResourceCollection(DigitalResource, Collectable):
     def __init__(self, items=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
-
-    @property
-    def items(self):
-        return self._get_prop('items')
 
 
 class Frame(DigitalResource, Targetable):
