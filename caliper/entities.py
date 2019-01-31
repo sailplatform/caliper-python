@@ -579,7 +579,7 @@ class Response(Entity, Generatable):
     def __init__(self, attempt=None, duration=None, endedAtTime=None, startedAtTime=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'], req=True)
+        self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'])
         self._set_duration_prop('duration', duration)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
