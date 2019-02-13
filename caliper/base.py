@@ -163,10 +163,6 @@ def ensure_type(p, t, optional=False):
     return True
 
 
-def ensure_types(l, t, optional=False):
-    return True
-
-
 def ensure_types(p, tl, optional=False):
     # exception or True
     messages = []
