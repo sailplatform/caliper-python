@@ -30,7 +30,7 @@ except ImportError:
     from collections import MutableSequence, MutableMapping
 
 from caliper.constants import ENTITY_TYPES, MARKER_TYPES
-from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_ROLES, CALIPER_STATUS
+from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES, CALIPER_STATUS
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import ensure_type, ensure_list_type
 
@@ -269,6 +269,60 @@ class LearningContext(CaliperSerializable):
 class LearningObjective(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
+
+
+## Aggregate measures
+class AggregateMeasure(Entity, Generatable):
+    def __init__(self,
+                 endedAtTime=None,
+                 metric=None,
+                 startedAtTime=None,
+                 value=None,
+                 valueMax=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_date_prop('startedAtTime', startedAtTime)
+        self._set_float_prop('value', value, req=True)
+        self._set_float_prop('valueMax', valueMax)
+
+        if metric not in CALIPER_METRICS.values():
+            raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
+        else:
+            self._set_str_prop('metric', metric)
+
+    @property
+    def endedAtTime(self):
+        return self._get_prop('endedAtTime')
+
+    @endedAtTime.setter
+    def endedAtTime(self, new_time):
+        self._set_date_prop('endedAtTime', new_time)
+
+    @property
+    def metric(self):
+        return self._get_prop('metric')
+
+    @property
+    def startedAtTime(self):
+        return self._get_prop('startedAtTime')
+
+    @property
+    def value(self):
+        return self._get_prop('value')
+
+    @property
+    def valueMax(self):
+        return self._get_prop('valueMax')
+
+
+class AggregateMeasureCollection(Entity, Generatable):
+    def __init__(self, items=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
+
+    @property
+    def items(self):
+        return self._get_prop('items')
 
 
 ## Creative works
