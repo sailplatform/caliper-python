@@ -166,13 +166,17 @@ def ensure_type(p, t, optional=False):
 def ensure_types(p, tl, optional=False):
     # exception or True
     messages = []
+    ret = False
     for t in tl:
         try:
             ensure_type(p, t, optional=optional)
-            return True
+            ret = True
         except Exception as e:
             messages.append(str(e))
-    raise_with_traceback(TypeError(' or '.join(messages)))
+    if ret:
+        return ret
+    else:
+        raise_with_traceback(TypeError(' or '.join(messages)))
 
 
 def ensure_list_type(l, t):
