@@ -277,13 +277,14 @@ class AggregateMeasure(Entity, Generatable):
                  endedAtTime=None,
                  metric=None,
                  startedAtTime=None,
-                 value=None,
-                 valueMax=None, **kwargs):
+                 progressValue=None,
+                 progressValueMax=None,
+                 **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
-        self._set_float_prop('value', value, req=True)
-        self._set_float_prop('valueMax', valueMax)
+        self._set_float_prop('progressValue', progressValue, req=True)
+        self._set_float_prop('progressValueMax', progressValueMax)
 
         if metric not in CALIPER_METRICS.values():
             raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
@@ -307,12 +308,12 @@ class AggregateMeasure(Entity, Generatable):
         return self._get_prop('startedAtTime')
 
     @property
-    def value(self):
-        return self._get_prop('value')
+    def progressValue(self):
+        return self._get_prop('progressValue')
 
     @property
-    def valueMax(self):
-        return self._get_prop('valueMax')
+    def progressValueMax(self):
+        return self._get_prop('progressValueMax')
 
 
 class AggregateMeasureCollection(Entity, Generatable):
