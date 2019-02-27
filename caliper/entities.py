@@ -788,6 +788,171 @@ class Message(DigitalResource):
     def attachments(self):
         return self._get_prop('attachments')
 
+## Feedback entities
+class Rating(Entity, Generatable):
+    def __init__(self,
+                 rater=None,
+                 rated=None,
+                 ratingComment=None,
+                 scale=None,
+                 selections=None,
+                 **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_obj_prop('rater', rater, t=ENTITY_TYPES['PERSON'])
+        self._set_obj_prop('rated', rated, t=ENTITY_TYPES['ENTITY'])
+        self._set_obj_prop('ratingComment', ratingComment, t=ENTITY_TYPES['COMMENT'])
+        self._set_obj_prop('scale', scale, t=ENTITY_TYPES['SCALE'])
+        self._set_list_prop('selections', selections)
+
+    @property
+    def rater(self):
+        return self._get_prop('rater')
+
+    @property
+    def rated(self):
+        return self._get_prop('rated')
+
+    @property
+    def ratingComment(self):
+        return self._get_prop('ratingComment')
+
+    @property
+    def scale(self):
+        return self._get_prop('scale')
+
+    @property
+    def selections(self):
+        return self._get_prop('selections')
+
+
+class Comment(Entity, Generatable):
+    def __init__(self, commenter=None, commentedOn=None, value=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_obj_prop('commenter', commenter, t=ENTITY_TYPES['PERSON'])
+        self._set_obj_prop('commentedOn', commentedOn, t=ENTITY_TYPES['ENTITY'])
+        self._set_str_prop('value', value)
+
+    @property
+    def commenter(self):
+        return self._get_prop('commenter')
+
+    @property
+    def commentedOn(self):
+        return self._get_prop('commentedOn')
+
+    @property
+    def value(self):
+        return self._get_prop('value')
+
+
+class Scale(Entity):
+    def __init__(self, question=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_str_prop('question', question)
+
+    @property
+    def questions(self):
+        return self._get_prop('questions')
+
+
+class LikertScale(Scale):
+    def __init__(self, itemLabels=None, itemValues=None, points=None,
+                 **kwargs):
+        Scale.__init__(self, **kwargs)
+        self._set_list_prop('itemLabels', itemLabels)
+        self._set_list_prop('itemValues', itemValues)
+        self._set_int_prop('points', points)
+
+    @property
+    def itemLabels(self):
+        return self._get_prop('itemLabels')
+
+    @property
+    def itemValues(self):
+        return self._get_prop('itemValues')
+
+    @property
+    def points(self):
+        return self._get_prop('points')
+
+
+class MultiselectionScale(Scale):
+    def __init__(self,
+                 itemLabels=None,
+                 itemValues=None,
+                 orderedSelection=None,
+                 maxSelections=None,
+                 minSelections=None,
+                 points=None,
+                 **kwargs):
+        Scale.__init__(self, **kwargs)
+        self._set_list_prop('itemLabels', itemLabels)
+        self._set_list_prop('itemValues', itemValues)
+        self._set_int_prop('maxSelections', maxSelections)
+        self._set_int_prop('minSelections', minSelections)
+        self._set_bool_prop('orderedSelection', orderedSelection)
+        self._set_int_prop('points', points)
+
+    @property
+    def itemLabels(self):
+        return self._get_prop('itemLabels')
+
+    @property
+    def itemValues(self):
+        return self._get_prop('itemValues')
+
+    @property
+    def maxSelections(self):
+        return self._get_prop('maxSelections')
+
+    @property
+    def minSelections(self):
+        return self._get_prop('minSelections')
+
+    @property
+    def orderedSelection(self):
+        return self._get_prop('orderedSelection')
+
+    @property
+    def points(self):
+        return self._get_prop('points')
+
+
+class NumericScale(Scale):
+    def __init__(self,
+                 maxLabel=None,
+                 maxValue=None,
+                 minLabel=None,
+                 minValue=None,
+                 step=None,
+                 **kwargs):
+        Scale.__init__(self, **kwargs)
+        self._set_str_prop('maxLabel', maxLabel)
+        self._set_float_prop('maxValue', maxValue)
+        self._set_str_prop('minLabel', minLabel)
+        self._set_float_prop('minValue', minValue)
+        self._set_float_prop('step', step)
+
+    @property
+    def maxLabel(self):
+        return self._get_prop('maxLabel')
+
+    @property
+    def maxValue(self):
+        return self._get_prop('maxValue')
+
+    @property
+    def minLabel(self):
+        return self._get_prop('minLabel')
+
+    @property
+    def minValue(self):
+        return self._get_prop('minValue')
+
+    @property
+    def step(self):
+        return self._get_prop('step')
+
 
 ## Media entities
 class MediaObject(DigitalResource):

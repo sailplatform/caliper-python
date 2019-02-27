@@ -2,6 +2,10 @@
 Change history
 ==============
 
+1.1.10
+------
+- Add in support for the Feedback metric profile.
+
 1.1.9
 -----
 - Ensure that all Events and Entities have appropriate properties available for

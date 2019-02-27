@@ -158,6 +158,14 @@ class AssignableEvent(Event):
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
 
+class FeedbackEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['ENTITY'])
+        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
+        ensure_types(self.generated, [ENTITY_TYPES['RATING'], ENTITY_TYPES['COMMENT']], optional=True)
+
 class ForumEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
