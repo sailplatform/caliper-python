@@ -322,6 +322,7 @@ CALIPER_ACTIONS = {
     'DESCRIBED': 'Described',
     'DISABLED_CLOSED_CAPTIONING': 'DisabledClosedCaptioning',
     'DISLIKED': 'Disliked',
+    'DOWNLOADED': 'Downlaoded',
     'EARNED': 'Earned',
     'ENABLED_CLOSED_CAPTIONING': 'EnabledClosedCaptioning',
     'ENDED': 'Ended',
@@ -346,6 +347,7 @@ CALIPER_ACTIONS = {
     'OPENED_POPOUT': 'OpenedPopout',
     'PAUSED': 'Paused',
     'POSTED': 'Posted',
+    'PRINTED': 'Printed',
     'PUBLISHED': 'Published',
     'QUESTIONED': 'Questioned',
     'RANKED': 'Ranked',
@@ -360,6 +362,7 @@ CALIPER_ACTIONS = {
     'REVIEWED': 'Reviewed',
     'RETURNED': 'Returned',
     'REWOUND': 'Rewound',
+    'SAVED': 'Saved',
     'SEARCHED': 'Searched',
     'SHARED': 'Shared',
     'SHOWED': 'Showed',
@@ -372,6 +375,7 @@ CALIPER_ACTIONS = {
     'UNMUTED': 'Unmuted',
     'UNPUBLISHED': 'Unpublished',
     'UNSUBSCRIBED': 'Unsubscribed',
+    'UPLOADED': 'Uploaded',
     'USED': 'Used',
     'VIEWED': 'Viewed'
 }
@@ -445,11 +449,15 @@ RESOURCE_MANAGEMENT_EVENT_ACTIONS = [
     CALIPER_ACTIONS['CREATED'],
     CALIPER_ACTIONS['DELETED'],
     CALIPER_ACTIONS['DESCRIBED'],
+    CALIPER_ACTIONS['DOWNLOADED'],
     CALIPER_ACTIONS['MODIFIED'],
+    CALIPER_ACTIONS['PRINTED'],
     CALIPER_ACTIONS['PUBLISHED'],
     CALIPER_ACTIONS['RESTORED'],
     CALIPER_ACTIONS['RETRIEVED'],
-    CALIPER_ACTIONS['UNPUBLISHED']
+    CALIPER_ACTIONS['SAVED'],
+    CALIPER_ACTIONS['UNPUBLISHED'],
+    CALIPER_ACTIONS['UPLOADED'],
 ]
 SEARCH_EVENT_ACTIONS = [ CALIPER_ACTIONS['SEARCHED'] ]
 SESSION_EVENT_ACTIONS = [
