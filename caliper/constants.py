@@ -75,7 +75,7 @@ ENTITY_TYPES = {
     'MESSAGE': 'Message',
     'MULTIPLECHOICE': 'MultipleChoiceResponse',
     'MULTIPLERESPONSE': 'MultipleResponseResponse',
-    'MULTISELECTION_SCALE': 'MultiselectionScale',
+    'MULTISELECT_SCALE': 'MultiselectScale',
     'NUMERIC_SCALE': 'NumericScale',
     'ORGANIZATION': 'Organization',
     'PAGE': 'Page',

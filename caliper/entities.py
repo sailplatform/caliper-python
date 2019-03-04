@@ -876,7 +876,7 @@ class LikertScale(Scale):
         return self._get_prop('points')
 
 
-class MultiselectionScale(Scale):
+class MultiselectScale(Scale):
     def __init__(self,
                  itemLabels=None,
                  itemValues=None,
