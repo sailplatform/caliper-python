@@ -6,6 +6,8 @@ Change history
 ------
 - Add in support for the Feedback metric profile.
 
+  *1.1.10.1*. Bug fix for `Issue #162 <https://github.com/IMSGlobal/caliper-python/issues/162>`_.
+
 1.1.9
 -----
 - Ensure that all Events and Entities have appropriate properties available for
