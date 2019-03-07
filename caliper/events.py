@@ -207,7 +207,7 @@ class ResourceManagementEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['ENTITY'])
+        ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         if self.action == CALIPER_ACTIONS['COPIED']:
             ensure_type(self.generated, ENTITY_TYPES['ENTITY'])
         else:
