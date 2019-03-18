@@ -278,13 +278,13 @@ class AggregateMeasure(Entity, Generatable):
                  metric=None,
                  startedAtTime=None,
                  metricValue=None,
-                 metricValueMax=None,
+                 maxMetricValue=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_date_prop('endedAtTime', endedAtTime)
         self._set_date_prop('startedAtTime', startedAtTime)
         self._set_float_prop('metricValue', metricValue, req=True)
-        self._set_float_prop('metricValueMax', metricValueMax)
+        self._set_float_prop('maxMetricValue', maxMetricValue)
 
         if metric not in CALIPER_METRICS.values():
             raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
@@ -312,8 +312,8 @@ class AggregateMeasure(Entity, Generatable):
         return self._get_prop('metricValue')
 
     @property
-    def metricValueMax(self):
-        return self._get_prop('metricValueMax')
+    def maxMetricValue(self):
+        return self._get_prop('maxMetricValue')
 
 
 class AggregateMeasureCollection(Entity, Generatable):
