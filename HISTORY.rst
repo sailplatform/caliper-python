@@ -10,7 +10,9 @@ Change history
 
   *1.1.10.2*. Bug fix for `Issue #168 <https://github.com/IMSGlobal/caliper-python/issues/168>`_.
 
-  *1.1.10.3*. Bug fix for `Issue #168 <https://github.com/IMSGlobal/caliper-python/issues/170>`_.
+  *1.1.10.3*. Bug fix for `Issue #170 <https://github.com/IMSGlobal/caliper-python/issues/170>`_.
+
+  *1.1.10.4*. Bug fix for `Issue #167 <https://github.com/IMSGlobal/caliper-python/issues/167>`_.
 
 1.1.9
 -----
