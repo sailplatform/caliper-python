@@ -851,17 +851,17 @@ class Scale(Entity):
         self._set_str_prop('question', question)
 
     @property
-    def questions(self):
-        return self._get_prop('questions')
+    def question(self):
+        return self._get_prop('question')
 
 
 class LikertScale(Scale):
-    def __init__(self, itemLabels=None, itemValues=None, points=None,
+    def __init__(self, itemLabels=None, itemValues=None, scalePoints=None,
                  **kwargs):
         Scale.__init__(self, **kwargs)
         self._set_list_prop('itemLabels', itemLabels)
         self._set_list_prop('itemValues', itemValues)
-        self._set_int_prop('points', points)
+        self._set_int_prop('scalePoints', scalePoints)
 
     @property
     def itemLabels(self):
@@ -872,26 +872,26 @@ class LikertScale(Scale):
         return self._get_prop('itemValues')
 
     @property
-    def points(self):
-        return self._get_prop('points')
+    def scalePoints(self):
+        return self._get_prop('scalePoints')
 
 
 class MultiselectScale(Scale):
     def __init__(self,
                  itemLabels=None,
                  itemValues=None,
-                 orderedSelection=None,
+                 isOrderedSelection=None,
                  maxSelections=None,
                  minSelections=None,
-                 points=None,
+                 scalePoints=None,
                  **kwargs):
         Scale.__init__(self, **kwargs)
         self._set_list_prop('itemLabels', itemLabels)
         self._set_list_prop('itemValues', itemValues)
         self._set_int_prop('maxSelections', maxSelections)
         self._set_int_prop('minSelections', minSelections)
-        self._set_bool_prop('orderedSelection', orderedSelection)
-        self._set_int_prop('points', points)
+        self._set_bool_prop('isOrderedSelection', isOrderedSelection)
+        self._set_int_prop('scalePoints', scalePoints)
 
     @property
     def itemLabels(self):
@@ -910,12 +910,12 @@ class MultiselectScale(Scale):
         return self._get_prop('minSelections')
 
     @property
-    def orderedSelection(self):
-        return self._get_prop('orderedSelection')
+    def isOrderedSelection(self):
+        return self._get_prop('isOrderedSelection')
 
     @property
-    def points(self):
-        return self._get_prop('points')
+    def scalePoints(self):
+        return self._get_prop('scalePoints')
 
 
 class NumericScale(Scale):
