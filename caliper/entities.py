@@ -87,34 +87,7 @@ class Entity(BaseEntity):
 
 ## Behavioural interfaces for entities ##
 class Assignable(BaseEntity):
-    @property
-    def datePublished(self):
-        return self._get_prop('datePublished')
-
-    @property
-    def dateToActivate(self):
-        return self._get_prop('dateToActivate')
-
-    @property
-    def dateToShow(self):
-        return self._get_prop('dateToShow')
-
-    @property
-    def dateToStartOn(self):
-        return self._get_prop('dateToStartOn')
-
-    @property
-    def dateToSubmit(self):
-        return self._get_prop('dateToSubmit')
-
-    @property
-    def maxAttempts(self):
-        return self._get_prop('maxAttempts')
-
-    @property
-    def maxSubmits(self):
-        return self._get_prop('maxSubmits')
-
+    pass
 
 class Generatable(BaseEntity):
     pass
@@ -565,6 +538,10 @@ class AssignableDigitalResource(DigitalResource, Assignable):
         self._set_int_prop('maxAttempts', maxAttempts)
         self._set_int_prop('maxSubmits', maxSubmits)
         self._set_float_prop('maxScore', maxScore)
+
+    @property
+    def datePublished(self):
+        return self._get_prop('datePublished')
 
     @property
     def dateToActivate(self):
