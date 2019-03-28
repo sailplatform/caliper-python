@@ -40,11 +40,12 @@ _FIXTURE_PREFIX = 'fixtures'
 _FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
 _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
 _SENSOR_ID = 'https://example.edu/sensors/1'
+_TEST_ENDPOINT = 'https://example.edu/caliper/endpoint'
 
 
 def _get_options(debug=False):
     return caliper.base.HttpOptions(
-        host='http://httpbin.org/post',
+        host=_TEST_ENDPOINT,
         optimize_serialization=True,
         api_key='6xp7jKrOSOWOgy3acxHFWA',
         auth_scheme='Bearer',

@@ -24,12 +24,27 @@ install_aliases()
 from builtins import *
 
 import json
+import responses
 import os
 import sys
 import unittest
 
 from .context import caliper
 from . import util
+
+
+def send(sensor, data):
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.POST, util._TEST_ENDPOINT, status=201)
+        ids = sensor.send(data)
+    return ids, sensor.statistics
+
+
+def describe(sensor, data):
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.POST, util._TEST_ENDPOINT, status=201)
+        ids = sensor.describe(data)
+    return ids, sensor.statistics
 
 
 class TestCaliperSimpleSensor(unittest.TestCase):
@@ -69,9 +84,10 @@ class TestCaliperSimpleSensor(unittest.TestCase):
     def testEventSend(self):
         fixture = 'caliperEventBasicCreated'
         for i in range(self.iterations):
-            self.sensor.send(
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
-        for stats in self.sensor.statistics:
+            _, statistics = send(
+                self.sensor, caliper.condensor.from_json_dict(
+                    json.loads(util.get_fixture(fixture))))
+        for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -86,8 +102,8 @@ class TestCaliperSimpleSensor(unittest.TestCase):
             caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
-        self.sensor.send(batch)
-        for stats in self.sensor.statistics:
+        _, statistics = send(self.sensor, batch)
+        for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -99,9 +115,10 @@ class TestCaliperSimpleSensor(unittest.TestCase):
     def testEntityDescribe(self):
         fixture = 'caliperEntityPerson'
         for i in range(self.iterations):
-            self.sensor.send(
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
-        for stats in self.sensor.statistics:
+            _, statistics = send(
+                self.sensor, caliper.condensor.from_json_dict(
+                    json.loads(util.get_fixture(fixture))))
+        for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -116,8 +133,8 @@ class TestCaliperSimpleSensor(unittest.TestCase):
             caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
-        self.sensor.send(batch)
-        for stats in self.sensor.statistics:
+        _, statistics = send(self.sensor, batch)
+        for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -164,9 +181,10 @@ class TestCaliperSensor(unittest.TestCase):
     def testEventSend(self):
         fixture = 'caliperEventBasicCreated'
         for i in range(self.iterations):
-            self.sensor.send(
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
-        for stats in self.sensor.statistics:
+            _, statistics = send(
+                self.sensor, caliper.condensor.from_json_dict(
+                    json.loads(util.get_fixture(fixture))))
+        for stats in statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -181,8 +199,8 @@ class TestCaliperSensor(unittest.TestCase):
             caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
-        self.sensor.send(batch)
-        for stats in self.sensor.statistics:
+        _, statistics = send(self.sensor, batch)
+        for stats in statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -194,9 +212,10 @@ class TestCaliperSensor(unittest.TestCase):
     def testEntityDescribe(self):
         fixture = 'caliperEntityPerson'
         for i in range(self.iterations):
-            self.sensor.describe(
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
-        for stats in self.sensor.statistics:
+            _, statistics = describe(
+                self.sensor, caliper.condensor.from_json_dict(
+                    json.loads(util.get_fixture(fixture))))
+        for stats in statistics:
             counted = stats.describes.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -211,8 +230,8 @@ class TestCaliperSensor(unittest.TestCase):
             caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
-        self.sensor.describe(batch)
-        for stats in self.sensor.statistics:
+        _, statistics = describe(self.sensor, batch)
+        for stats in statistics:
             counted = stats.describes.count
             succeeded = stats.successful.count
             failed = stats.failed.count
@@ -230,7 +249,7 @@ class TestDebugSensor(unittest.TestCase):
     def testEventSend(self):
         fixture = 'caliperEventBasicCreated'
         for i in range(self.iterations):
-            self.sensor.send(
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+            send(self.sensor,
+                 caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
         for response in self.sensor.client_registry['default'].debug:
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 201)

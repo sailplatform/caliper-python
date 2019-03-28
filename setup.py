@@ -18,7 +18,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 _packages = ['caliper', 'caliper.util']
-_test_requirements = ['pytest', 'pytest-cov', 'tox']
+_test_requirements = ['pytest', 'pytest-cov', 'responses', 'tox']
 
 with open('requirements.txt', 'r', 'utf-8') as fd:
     _install_requirements = fd.read().splitlines()
