@@ -14,7 +14,7 @@ http://www.imsglobal.org/ipr/imsipr_policyFinal.pdf.
  
 Use of materials are governed by the license found in the repo under NOTICE.
  
-All materials are © 2018 IMS Global Learning Consortium, Inc. All Rights
+All materials are © 2019 IMS Global Learning Consortium, Inc. All Rights
 Reserved. Trademark information: https://www.imsglobal.org/trademarks No
 rights to republish works in progress is granted. Use of the IMS trademarks is
 governed by the policy: https://www.imsglobal.org/trademarks and limited to IMS

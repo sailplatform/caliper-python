@@ -33,7 +33,7 @@ Which platform
 We developed `imsglobal_caliper` primarily using the Python 3.7+ platform; however,
 we've taken steps to make it portably usbale with Python 2.7 as well (using
 the `future` package). Changes to the code base should ensure the tests run clean
-under Python 3.7 *and* 2.7.
+under Python 3.7, 2.7, PyPy, and PyPy3.
 
 
 Build and install
@@ -56,7 +56,7 @@ the name of the repository on GitHub is different to the distribution package na
 #. Use pip to install the package as a writable source bundle; there's no need
    to do a package build step ahead of time::
 
-     pip install -e caliper-python
+     pip3 install -e caliper-python
 
 
 Changing and testing
@@ -85,7 +85,8 @@ information.
 `tests` directory. The tests use the `tox` test runner, so you will need that
 in your environment. In general, whenever you might make changes to code in
 `caliper`, you should run the fixture tests. From the source repo's top-level
-directory, use `tox` to run all the tests on both Python 2.7 and Python 3.6.
+directory, use `tox` to run all the tests on Python 2.7, Python 3.7, PyPy, and
+PyPy3.
 
 Before you can run the tests, you will also need a copy of the Caliper fixtures
 (see below).
@@ -199,5 +200,5 @@ This project is licensed under the terms of the GNU Lesser General Public Licens
 (LGPL), version 3. See the LICENSE file for details. For additional information 
 on licensing options for IMS members, please see the NOTICE file.
 
-©2018 IMS Global Learning Consortium, Inc. All Rights Reserved.
+©2019 IMS Global Learning Consortium, Inc. All Rights Reserved.
 Trademark Information - http://www.imsglobal.org/copyright.html
