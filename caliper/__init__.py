@@ -33,8 +33,8 @@ install_aliases()
 from builtins import *
 
 __title__ = 'imsglobal_caliper'
-__version__ = '1.1.10.4'
-__build__ = 0x01011004
+__version__ = '1.1.10.5'
+__build__ = 0x01011005
 __author__ = 'IMS Global Learning Consortium, Inc.'
 __license__ = 'LGPLv3'
 

@@ -14,6 +14,8 @@ Change history
 
   *1.1.10.4*. Bug fix for `Issue #167 <https://github.com/IMSGlobal/caliper-python/issues/167>`_.
 
+  *1.1.10.5*. Bug fix for `Issue #176 <https://github.com/IMSGlobal/caliper-python/issues/176>`_.
+
 1.1.9
 -----
 - Ensure that all Events and Entities have appropriate properties available for

@@ -600,7 +600,7 @@ class Attempt(Entity, Generatable):
                  startedAtTime=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop('assignable', assignable, t=MARKER_TYPES['ASSIGNABLE'])
+        self._set_obj_prop('assignable', assignable, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
         self._set_obj_prop('assignee', assignee, t=ENTITY_TYPES['PERSON'])
         self._set_int_prop('count', count)
         self._set_duration_prop('duration', duration)
