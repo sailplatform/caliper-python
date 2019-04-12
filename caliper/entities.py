@@ -821,9 +821,9 @@ class Comment(Entity, Generatable):
     def value(self):
         return self._get_prop('value')
 
-class Question(Entity):
+class Question(DigitalResource):
     def __init__(self, questionPosed=None, **kwargs):
-        Entity.__init__(self, **kwargs)
+        DigitalResource.__init__(self, **kwargs)
         self._set_str_prop('questionPosed', questionPosed)
 
     @property
