@@ -771,14 +771,14 @@ class Rating(Entity, Generatable):
                  rater=None,
                  rated=None,
                  ratingComment=None,
-                 scale=None,
+                 question=None,
                  selections=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_obj_prop('rater', rater, t=ENTITY_TYPES['PERSON'])
         self._set_obj_prop('rated', rated, t=ENTITY_TYPES['ENTITY'])
         self._set_obj_prop('ratingComment', ratingComment, t=ENTITY_TYPES['COMMENT'])
-        self._set_obj_prop('scale', scale, t=ENTITY_TYPES['SCALE'])
+        self._set_obj_prop('question', question, t=ENTITY_TYPES['QUESTION'])
         self._set_list_prop('selections', selections)
 
     @property
@@ -794,8 +794,8 @@ class Rating(Entity, Generatable):
         return self._get_prop('ratingComment')
 
     @property
-    def scale(self):
-        return self._get_prop('scale')
+    def question(self):
+        return self._get_prop('question')
 
     @property
     def selections(self):
@@ -821,16 +821,27 @@ class Comment(Entity, Generatable):
     def value(self):
         return self._get_prop('value')
 
-
-class Scale(Entity):
-    def __init__(self, question=None, **kwargs):
+class Question(Entity):
+    def __init__(self, questionPosed=None, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_str_prop('question', question)
+        self._set_str_prop('questionPosed', questionPosed)
 
     @property
-    def question(self):
-        return self._get_prop('question')
+    def questionPosed(self):
+        return self._get_prop('questionPosed')
 
+class RatingScaleQuestion(Question):
+    def __init__(self, scale=None, **kwargs):
+        Question.__init__(self, **kwargs)
+        self._set_obj_prop('scale', scale, t=ENTITY_TYPES['SCALE'])
+
+    @property
+    def scale(self):
+        return self._get_prop('scale')
+
+class Scale(Entity):
+    def __init__(self, **kwargs):
+        Entity.__init__(self, **kwargs)
 
 class LikertScale(Scale):
     def __init__(self, itemLabels=None, itemValues=None, scalePoints=None,
