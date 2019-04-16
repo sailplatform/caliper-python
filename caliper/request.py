@@ -87,11 +87,10 @@ class Envelope(CaliperSerializable):
             'dataVersion':
             self.dataVersion,
             'data':
-            self._unpack_list(
-                self.data,
-                described_objects=described_objects or [],
-                thin_context=thin_context,
-                thin_props=thin_props)
+            self._unpack_list(self.data,
+                              described_objects=described_objects or [],
+                              thin_context=thin_context,
+                              thin_props=thin_props)
         })
 
 
@@ -126,8 +125,9 @@ class EventStoreRequestor(object):
                           sensor_id=None):
         envelope = Envelope(data=caliper_objects, send_time=send_time, sensor_id=sensor_id)
 
-        return envelope.as_json_with_ids(
-            described_objects=described_objects, thin_context=optimize, thin_props=optimize)
+        return envelope.as_json_with_ids(described_objects=described_objects,
+                                         thin_context=optimize,
+                                         thin_props=optimize)
 
 
 class HttpRequestor(EventStoreRequestor):
@@ -146,11 +146,10 @@ class HttpRequestor(EventStoreRequestor):
 
         if isinstance(caliper_objects, MutableSequence):
             s = requests.Session()
-            payload, ids = self._generate_payload(
-                caliper_objects=caliper_objects,
-                described_objects=described_objects,
-                optimize=self._options.OPTIMIZE_SERIALIZATION,
-                sensor_id=sensor_id)
+            payload, ids = self._generate_payload(caliper_objects=caliper_objects,
+                                                  described_objects=described_objects,
+                                                  optimize=self._options.OPTIMIZE_SERIALIZATION,
+                                                  sensor_id=sensor_id)
             hdrs = {'Content-Type': payload['type']}
             if self._options.get_auth_header_value():
                 hdrs.update({'Authorization': self._options.get_auth_header_value()})
@@ -168,14 +167,14 @@ class HttpRequestor(EventStoreRequestor):
         return results, identifiers, response
 
     def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
-        results, ids, response = self._dispatch(
-            caliper_objects=caliper_entity_list, sensor_id=sensor_id, debug=debug)
+        results, ids, response = self._dispatch(caliper_objects=caliper_entity_list,
+                                                sensor_id=sensor_id,
+                                                debug=debug)
         return results, ids, response
 
     def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):
-        results, ids, response = self._dispatch(
-            caliper_objects=caliper_event_list,
-            described_objects=described_objects,
-            sensor_id=sensor_id,
-            debug=debug)
+        results, ids, response = self._dispatch(caliper_objects=caliper_event_list,
+                                                described_objects=described_objects,
+                                                sensor_id=sensor_id,
+                                                debug=debug)
         return results, ids, response

@@ -48,14 +48,13 @@ class Event(BaseEvent):
                  session=None,
                  sourcedId=None,
                  target=None):
-        BaseEvent.__init__(
-            self,
-            context=context,
-            id=id,
-            profile=profile,
-            action=action,
-            eventTime=eventTime,
-            object=object)
+        BaseEvent.__init__(self,
+                           context=context,
+                           id=id,
+                           profile=profile,
+                           action=action,
+                           eventTime=eventTime,
+                           object=object)
         self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_obj_prop('extensions', extensions)
@@ -68,12 +67,11 @@ class Event(BaseEvent):
         self._set_obj_prop('target', target, t=MARKER_TYPES['TARGETABLE'])
 
     def as_minimal_event(self):
-        return MinimalEvent(
-            id=self.id,
-            action=self.action,
-            actor=self.actor,
-            object=self.object,
-            eventTime=self.eventTime)
+        return MinimalEvent(id=self.id,
+                            action=self.action,
+                            actor=self.actor,
+                            object=self.object,
+                            eventTime=self.eventTime)
 
     @property
     def actor(self):
@@ -164,7 +162,9 @@ class FeedbackEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ENTITY'])
         ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
-        ensure_types(self.generated, [ENTITY_TYPES['RATING'], ENTITY_TYPES['COMMENT']], optional=True)
+        ensure_types(self.generated, [ENTITY_TYPES['RATING'], ENTITY_TYPES['COMMENT']],
+                     optional=True)
+
 
 class ForumEvent(Event):
     def __init__(self, **kwargs):

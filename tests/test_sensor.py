@@ -59,34 +59,34 @@ class TestCaliperSimpleSensor(unittest.TestCase):
     def testEventPayloadSingle(self):
         fixture = 'caliperEnvelopeEventSingle'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     def testEventPayloadBatch(self):
         fixture = 'caliperEnvelopeEventBatch'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     def testEntityPayloadSingle(self):
         fixture = 'caliperEnvelopeEntitySingle'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     def testEntityPayloadSingle(self):
         fixture = 'caliperEnvelopeEntitySingle'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     # test transmission stats for sensor.send()
     def testEventSend(self):
         fixture = 'caliperEventBasicCreated'
         for i in range(self.iterations):
             _, statistics = send(
-                self.sensor, caliper.condensor.from_json_dict(
-                    json.loads(util.get_fixture(fixture))))
+                self.sensor,
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
@@ -116,8 +116,8 @@ class TestCaliperSimpleSensor(unittest.TestCase):
         fixture = 'caliperEntityPerson'
         for i in range(self.iterations):
             _, statistics = send(
-                self.sensor, caliper.condensor.from_json_dict(
-                    json.loads(util.get_fixture(fixture))))
+                self.sensor,
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
@@ -156,34 +156,34 @@ class TestCaliperSensor(unittest.TestCase):
     def testEventPayloadSingle(self):
         fixture = 'caliperEnvelopeEventSingle'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     def testEventPayloadBatch(self):
         fixture = 'caliperEnvelopeEventBatch'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     def testEntityPayloadSingle(self):
         fixture = 'caliperEnvelopeEntitySingle'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     def testEntityPayloadSingle(self):
         fixture = 'caliperEnvelopeEntitySingle'
         envelope = util.get_envelope(self.sensor, fixture)
-        self.assertEqual(
-            envelope.as_json(thin_props=True, thin_context=True), util.get_fixture(fixture))
+        self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
+                         util.get_fixture(fixture))
 
     # test transmission stats for sensor.send()
     def testEventSend(self):
         fixture = 'caliperEventBasicCreated'
         for i in range(self.iterations):
             _, statistics = send(
-                self.sensor, caliper.condensor.from_json_dict(
-                    json.loads(util.get_fixture(fixture))))
+                self.sensor,
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
@@ -213,8 +213,8 @@ class TestCaliperSensor(unittest.TestCase):
         fixture = 'caliperEntityPerson'
         for i in range(self.iterations):
             _, statistics = describe(
-                self.sensor, caliper.condensor.from_json_dict(
-                    json.loads(util.get_fixture(fixture))))
+                self.sensor,
+                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.describes.count
             succeeded = stats.successful.count

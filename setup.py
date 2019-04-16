@@ -26,10 +26,12 @@ with open('requirements.txt', 'r', 'utf-8') as fd:
 with open('README.rst', 'r', 'utf-8') as f:
     _readme = f.read()
 
+
 def _get_val_from_mod(k):
     with open('caliper/__init__.py', 'r', 'utf-8') as fd:
         return re.search(r'^__{0}__\s*=\s*[\'"]([^\'"]*)[\'"]'.format(k), fd.read(),
                          re.MULTILINE).group(1)
+
 
 _author = _get_val_from_mod('author')
 _license = _get_val_from_mod('license')
@@ -49,11 +51,12 @@ setup(
     tests_require=_test_requirements,
     license=_license,
     zip_safe=False,
-    classifiers=['Development Status :: 3 - Beta', 'Intended Audience :: Developers',
-                 'Natural Language :: English',
-                 'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
-                 'Programming Language :: Python',
-                 'Programming Language :: Python :: 2', 'Programming Language :: Python :: 2.7',
-                 'Programming Language :: Python :: 3', 'Programming Language :: Python :: 3.7',
-                 'Programming Language :: Python :: Implementation :: PyPy']
-)
+    classifiers=[
+        'Development Status :: 3 - Beta', 'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+        'Programming Language :: Python', 'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7', 'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: Implementation :: PyPy'
+    ])

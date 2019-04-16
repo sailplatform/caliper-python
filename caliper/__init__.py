@@ -56,9 +56,10 @@ def build_default_sensor_for_client(client=None, sensor_id=None):
 
 
 def build_sensor_from_config(config_options=None, sensor_id=None):
-    return Sensor.fashion_sensor_with_config(
-        config_options=config_options or HttpOptions(optimize_serialization=True),
-        sensor_id=sensor_id)
+    return Sensor.fashion_sensor_with_config(config_options=config_options
+                                             or HttpOptions(optimize_serialization=True),
+                                             sensor_id=sensor_id)
+
 
 def build_simple_sensor(config_options=None, sensor_id=None):
     return SimpleSensor.fashion_simple_sensor(config_options=config_options, sensor_id=sensor_id)

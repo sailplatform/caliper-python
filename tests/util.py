@@ -44,12 +44,11 @@ _TEST_ENDPOINT = 'https://example.edu/caliper/endpoint'
 
 
 def _get_options(debug=False):
-    return caliper.base.HttpOptions(
-        host=_TEST_ENDPOINT,
-        optimize_serialization=True,
-        api_key='6xp7jKrOSOWOgy3acxHFWA',
-        auth_scheme='Bearer',
-        debug=debug)
+    return caliper.base.HttpOptions(host=_TEST_ENDPOINT,
+                                    optimize_serialization=True,
+                                    api_key='6xp7jKrOSOWOgy3acxHFWA',
+                                    auth_scheme='Bearer',
+                                    debug=debug)
 
 
 def get_testing_options():
@@ -61,13 +60,13 @@ def get_debug_options():
 
 
 def build_default_sensor():
-    return caliper.build_sensor_from_config(
-        config_options=get_testing_options(), sensor_id=_SENSOR_ID)
+    return caliper.build_sensor_from_config(config_options=get_testing_options(),
+                                            sensor_id=_SENSOR_ID)
 
 
 def build_debug_sensor():
-    return caliper.build_sensor_from_config(
-        config_options=get_debug_options(), sensor_id=_SENSOR_ID + '/debug')
+    return caliper.build_sensor_from_config(config_options=get_debug_options(),
+                                            sensor_id=_SENSOR_ID + '/debug')
 
 
 def build_simple_sensor():
@@ -95,8 +94,9 @@ def get_fixtures_of_type(name):
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
     try:
         r = condensor.from_json_dict(d, strict=True)
-        return r.as_json(
-            thin_props=thin_props, thin_context=thin_context, described_objects=described_objects)
+        return r.as_json(thin_props=thin_props,
+                         thin_context=thin_context,
+                         described_objects=described_objects)
     except Exception as e:
         return json.dumps({'error': str(e), 'fixture': d})
 
@@ -115,10 +115,12 @@ def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_obje
     env_dict = json.loads(get_fixture(fixture))
     try:
         payload = condensor.from_json_list(env_dict.get('data'), strict=True)
-        return caliper.request.Envelope(
-            data=payload, send_time=env_dict.get('sendTime'),
-            sensor_id=env_dict.get('sensor')).as_json(
-                thin_props=thin_props, thin_context=thin_context, described_objects=None)
+        return caliper.request.Envelope(data=payload,
+                                        send_time=env_dict.get('sendTime'),
+                                        sensor_id=env_dict.get('sensor')).as_json(
+                                            thin_props=thin_props,
+                                            thin_context=thin_context,
+                                            described_objects=None)
     except Exception as e:
         return json.dumps({'error': str(e), 'fixture': env_dict})
 
@@ -128,7 +130,8 @@ def get_envelope(sensor, fixture):
     env_dict = json.loads(get_fixture(fixture))
     try:
         payload = condensor.from_json_list(env_dict.get('data'), strict=True)
-        return caliper.request.Envelope(
-            data=payload, send_time=env_dict.get('sendTime'), sensor_id=sensor.id)
+        return caliper.request.Envelope(data=payload,
+                                        send_time=env_dict.get('sendTime'),
+                                        sensor_id=sensor.id)
     except Exception as e:
         return json.dumps({'error': str(e), 'fixture': env_dict})

@@ -89,6 +89,7 @@ class Entity(BaseEntity):
 class Assignable(BaseEntity):
     pass
 
+
 class Generatable(BaseEntity):
     pass
 
@@ -311,8 +312,9 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
                  version=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_list_prop(
-            'learningObjectives', learningObjectives, t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
+        self._set_list_prop('learningObjectives',
+                            learningObjectives,
+                            t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
         self._set_list_prop('creators', creators, t=ENTITY_TYPES['AGENT'])
         self._set_date_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
@@ -765,6 +767,7 @@ class Message(DigitalResource):
     def attachments(self):
         return self._get_prop('attachments')
 
+
 ## Feedback entities
 class Rating(Entity, Generatable):
     def __init__(self,
@@ -821,6 +824,7 @@ class Comment(Entity, Generatable):
     def value(self):
         return self._get_prop('value')
 
+
 class Question(DigitalResource):
     def __init__(self, questionPosed=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
@@ -829,6 +833,7 @@ class Question(DigitalResource):
     @property
     def questionPosed(self):
         return self._get_prop('questionPosed')
+
 
 class RatingScaleQuestion(Question):
     def __init__(self, scale=None, **kwargs):
@@ -839,13 +844,14 @@ class RatingScaleQuestion(Question):
     def scale(self):
         return self._get_prop('scale')
 
+
 class Scale(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
 
+
 class LikertScale(Scale):
-    def __init__(self, itemLabels=None, itemValues=None, scalePoints=None,
-                 **kwargs):
+    def __init__(self, itemLabels=None, itemValues=None, scalePoints=None, **kwargs):
         Scale.__init__(self, **kwargs)
         self._set_list_prop('itemLabels', itemLabels)
         self._set_list_prop('itemValues', itemValues)
@@ -1101,8 +1107,9 @@ class SearchResponse(Entity, Generatable):
                  searchResults=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop(
-            'searchProvider', searchProvider, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        self._set_obj_prop('searchProvider',
+                           searchProvider,
+                           t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_obj_prop('searchTarget', searchTarget, t=ENTITY_TYPES['ENTITY'])
         self._set_obj_prop('query', query, t=ENTITY_TYPES['QUERY'])
         self._set_int_prop('searchResultsItemCount', searchResultsItemCount)

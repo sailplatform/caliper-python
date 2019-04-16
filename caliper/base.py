@@ -465,19 +465,17 @@ class CaliperSerializable(object):
         for item in l:
             if isinstance(item, MutableSequence):
                 r.append(
-                    self._unpack_list(
-                        item,
-                        ctxt_bases=ctxt_bases,
-                        described_objects=described_objects,
-                        thin_context=thin_context,
-                        thin_props=thin_props))
+                    self._unpack_list(item,
+                                      ctxt_bases=ctxt_bases,
+                                      described_objects=described_objects,
+                                      thin_context=thin_context,
+                                      thin_props=thin_props))
             elif isinstance(item, CaliperSerializable):
                 r.append(
-                    item._unpack_object(
-                        ctxt_bases=ctxt_bases,
-                        described_objects=described_objects,
-                        thin_context=thin_context,
-                        thin_props=thin_props))
+                    item._unpack_object(ctxt_bases=ctxt_bases,
+                                        described_objects=described_objects,
+                                        thin_context=thin_context,
+                                        thin_props=thin_props))
             else:
                 r.append(copy.deepcopy(item))
         return r
@@ -505,12 +503,11 @@ class CaliperSerializable(object):
             if thin_props and v in (None, {}, []):
                 continue
             elif isinstance(v, MutableSequence):
-                value = self._unpack_list(
-                    v,
-                    ctxt_bases=cb,
-                    described_objects=described_objects,
-                    thin_context=thin_context,
-                    thin_props=thin_props)
+                value = self._unpack_list(v,
+                                          ctxt_bases=cb,
+                                          described_objects=described_objects,
+                                          thin_context=thin_context,
+                                          thin_props=thin_props)
             elif isinstance(v, CaliperSerializable):
                 the_id = v._get_prop('id')
                 the_type = v._get_prop('type')
@@ -518,11 +515,10 @@ class CaliperSerializable(object):
                         and the_id in described_objects):
                     value = the_id
                 else:
-                    value = v._unpack_object(
-                        ctxt_bases=cb,
-                        described_objects=described_objects,
-                        thin_context=thin_context,
-                        thin_props=thin_props)
+                    value = v._unpack_object(ctxt_bases=cb,
+                                             described_objects=described_objects,
+                                             thin_context=thin_context,
+                                             thin_props=thin_props)
             elif isinstance(v, MutableMapping):
                 the_id = v.get('id')
                 the_type = v.get('type')
@@ -538,19 +534,20 @@ class CaliperSerializable(object):
 
     # public methods, to repr this event or entity as a dict or as a json-string
     def as_dict(self, described_objects=None, thin_context=False, thin_props=False):
-        return self._unpack_object(
-            described_objects=described_objects or [],
-            thin_context=thin_context,
-            thin_props=thin_props)
+        return self._unpack_object(described_objects=described_objects or [],
+                                   thin_context=thin_context,
+                                   thin_props=thin_props)
 
     def as_json(self, described_objects=None, thin_context=False, thin_props=False):
-        r = self.as_dict(
-            described_objects=described_objects, thin_context=thin_context, thin_props=thin_props)
+        r = self.as_dict(described_objects=described_objects,
+                         thin_context=thin_context,
+                         thin_props=thin_props)
         return json.dumps(r, sort_keys=True)
 
     def as_json_with_ids(self, described_objects=None, thin_context=False, thin_props=False):
-        ret = self.as_json(
-            described_objects=described_objects, thin_context=thin_context, thin_props=thin_props)
+        ret = self.as_json(described_objects=described_objects,
+                           thin_context=thin_context,
+                           thin_props=thin_props)
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 

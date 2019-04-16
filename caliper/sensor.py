@@ -93,8 +93,9 @@ class Client(object):
     def describe(self, entities=None, sensor_id=None):
         identifiers = None
         if ensure_list_type(entities, Entity):
-            results, identifiers, debug = self._requestor.describe(
-                caliper_entity_list=entities, sensor_id=sensor_id, debug=self._config.DEBUG)
+            results, identifiers, debug = self._requestor.describe(caliper_entity_list=entities,
+                                                                   sensor_id=sensor_id,
+                                                                   debug=self._config.DEBUG)
             self._process_results(results, self.stats.update_describes)
         if self._config.DEBUG:
             self.debug.append(debug)
@@ -103,11 +104,10 @@ class Client(object):
     def send(self, events=None, described_objects=None, sensor_id=None):
         identifiers = None
         if ensure_list_type(events, Event):
-            results, identifiers, debug = self._requestor.send(
-                caliper_event_list=events,
-                described_objects=described_objects,
-                sensor_id=sensor_id,
-                debug=self._config.DEBUG)
+            results, identifiers, debug = self._requestor.send(caliper_event_list=events,
+                                                               described_objects=described_objects,
+                                                               sensor_id=sensor_id,
+                                                               debug=self._config.DEBUG)
             self._process_results(results, self.stats.update_measures)
         if self._config.DEBUG:
             self.debug.append(debug)
@@ -141,11 +141,10 @@ class SimpleSensor(object):
     def _dispatch(self, caliper_objects, sensor_id, described_objects):
         identifiers = []
         if ensure_list_type(caliper_objects, CaliperSerializable):
-            results, identifiers, debug = self._requestor.send(
-                caliper_event_list=caliper_objects,
-                described_objects=described_objects,
-                sensor_id=sensor_id,
-                debug=True)
+            results, identifiers, debug = self._requestor.send(caliper_event_list=caliper_objects,
+                                                               described_objects=described_objects,
+                                                               sensor_id=sensor_id,
+                                                               debug=True)
             self._process_results(results, self._stats.update_sent)
             self._status_code = debug.status_code
             if self._config.DEBUG:
@@ -238,10 +237,8 @@ class Sensor(object):
         if not isinstance(v, MutableSequence):
             v = [v]
         for k, client in self.client_registry.items():
-            identifiers.update({
-                k:
-                client.send(events=v, described_objects=described_objects, sensor_id=self.id)
-            })
+            identifiers.update(
+                {k: client.send(events=v, described_objects=described_objects, sensor_id=self.id)})
         return identifiers
 
     def describe_batch(self, entity_list=None):
