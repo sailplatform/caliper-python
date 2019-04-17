@@ -854,7 +854,7 @@ class LikertScale(Scale):
     def __init__(self, itemLabels=None, itemValues=None, scalePoints=None, **kwargs):
         Scale.__init__(self, **kwargs)
         self._set_list_prop('itemLabels', itemLabels)
-        self._set_list_prop('itemValues', itemValues)
+        self._set_list_prop('itemValues', itemValues, t=str)
         self._set_int_prop('scalePoints', scalePoints)
 
     @property
