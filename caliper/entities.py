@@ -102,6 +102,17 @@ class Targetable(BaseEntity):
     pass
 
 
+## Fundamental entities ##
+class Collection(Entity):
+    def __init__(self, items=None, **kwargs):
+        Entity.__init__(self, **kwargs)
+        self._set_list_prop('items', items, t=ENTITY_TYPES['ENTITY'])
+
+    @property
+    def items(self):
+        return self._get_prop('items')
+
+
 ### Derived entities ###
 
 
@@ -290,14 +301,10 @@ class AggregateMeasure(Entity, Generatable):
         return self._get_prop('maxMetricValue')
 
 
-class AggregateMeasureCollection(Entity, Generatable):
+class AggregateMeasureCollection(Collection, Generatable):
     def __init__(self, items=None, **kwargs):
-        Entity.__init__(self, **kwargs)
+        Collection.__init__(self, **kwargs)
         self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
-
-    @property
-    def items(self):
-        return self._get_prop('items')
 
 
 ## Creative works
@@ -355,14 +362,10 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
         return self._get_prop('version')
 
 
-class DigitalResourceCollection(DigitalResource):
+class DigitalResourceCollection(DigitalResource, Collection):
     def __init__(self, items=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
-
-    @property
-    def items(self):
-        return self._get_prop('items')
 
 
 class Frame(DigitalResource, Targetable):
@@ -569,10 +572,6 @@ class AssignableDigitalResource(DigitalResource, Assignable):
     def maxScore(self):
         return self._get_prop('maxScore')
 
-    @property
-    def maxSubmits(self):
-        return self._get_prop('maxSubmits')
-
 
 class Assessment(AssignableDigitalResource, DigitalResourceCollection):
     def __init__(self, items=None, **kwargs):
@@ -685,6 +684,16 @@ class Response(Entity, Generatable):
         return self._get_prop('startedAtTime')
 
 
+class DateTimeResponse(Response):
+    def __init__(self, dateTimeSelected=None, **kwargs):
+        Response.__init__(self, **kwargs)
+        self._set_date_prop('dateTimeSelected', dateTimeSelected)
+
+    @property
+    def dateTimeSelected(self):
+        return self._get_prop('dateTimeSelected')
+
+
 class FillinBlankResponse(Response):
     def __init__(self, values=None, **kwargs):
         Response.__init__(self, **kwargs)
@@ -713,6 +722,36 @@ class MultipleResponseResponse(Response):
     @property
     def values(self):
         return self._get_prop('values')
+
+
+class MultiselectResponse(Response):
+    def __init__(self, selections=None, **kwargs):
+        Response.__init__(self, **kwargs)
+        self._set_list_prop('selections', selections)
+
+    @property
+    def selections(self):
+        return self._get_prop('selections')
+
+
+class OpenEndedResponse(Response):
+    def __init__(self, value, **kwargs):
+        Response.__init__(self, **kwargs)
+        self._set_str_prop('value', value)
+
+    @property
+    def value(self):
+        return self._get_prop('value')
+
+
+class RatingScaleResponse(Response):
+    def __init__(self, selections=None, **kwargs):
+        Response.__init__(self, **kwargs)
+        self._set_list_prop('selections', selections)
+
+    @property
+    def selections(self):
+        return self._get_prop('selections')
 
 
 class SelectTextResponse(Response):
@@ -835,6 +874,56 @@ class Question(DigitalResource):
         return self._get_prop('questionPosed')
 
 
+class DateTimeQuestion(Question):
+    def __init__(self, maxDateTime=None, maxLabel=None, minDateTime=None, minLabel=None, **kwargs):
+        Question.__init__(self, **kwargs)
+        self._set_date_prop('maxDateTime', maxDateTime)
+        self._set_str_prop('maxLabel', maxLabel)
+        self._set_date_prop('minDateTime', minDateTime)
+        self._set_str_prop('minLabel', minLabel)
+
+    @property
+    def maxDateTime(self):
+        return self._get_prop('maxDateTime')
+
+    @property
+    def maxLabel(self):
+        return self._get_prop('maxLabel')
+
+    @property
+    def minDateTime(self):
+        return self._get_prop('minDateTime')
+
+    @property
+    def minLabel(self):
+        return self._get_prop('minLabel')
+
+
+class MultiselectQuestion(Question):
+    def __init__(self, itemLabels=None, itemValues=None, points=None, **kwargs):
+        Question.__init__(self, **kwargs)
+        self._set_list_prop('itemLabels', itemLabels)
+        self._set_list_prop('itemValues', itemValues)
+        self._set_int_prop('points', points)
+
+    @property
+    def itemLabels(self):
+        return self._get_prop('itemLabels')
+
+    @property
+    def itemValues(self):
+        return self._get_prop('itemValues')
+
+    @property
+    def points(self):
+        return self._get_prop('points')
+
+
+class OpenEndedQuestion(Question):
+    def __init__(self, **kwargs):
+        Question.__init__(self, **kwargs)
+
+
 class RatingScaleQuestion(Question):
     def __init__(self, scale=None, **kwargs):
         Question.__init__(self, **kwargs)
@@ -946,6 +1035,64 @@ class NumericScale(Scale):
     @property
     def step(self):
         return self._get_prop('step')
+
+
+## Survey entities
+class Survey(Collection):
+    def __init__(self, items=None, **kwargs):
+        Collection.__init__(self, **kwargs)
+        self._set_list_prop('items', items, t=ENTITY_TYPES['QUESTIONNAIRE'])
+
+
+class SurveyInvitation(DigitalResource):
+    def __init__(self, rater=None, sentCount=None, sentDate=None, survey=None, **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_obj_prop('rater', rater, t=ENTITY_TYPES['PERSON'])
+        self._set_int_prop('sentCount', sentCount)
+        self._set_date_prop('sentDate', sentDate)
+        self._set_obj_prop('survey', survey, t=ENTITY_TYPES['SURVEY'])
+
+    @property
+    def rater(self):
+        return self._get_prop('rater')
+
+    @property
+    def sentCount(self):
+        return self._get_prop('sentCount')
+
+    @property
+    def sentDate(self):
+        return self._get_prop('sentDate')
+
+    @property
+    def survey(self):
+        return self._get_prop('survey')
+
+
+class Questionnaire(DigitalResourceCollection):
+    def __init(self, items=None, **kwargs):
+        DigitalResourceCollection.__init__(self, **kwargs)
+        self._set_list_prop('items', items, t=ENTITY_TYPES['QUESTIONNAIRE_ITEM'], req=True)
+
+
+class QuestionnaireItem(DigitalResource):
+    def __init__(self, categories=None, question=None, weight=None, **kwargs):
+        DigitalResource.__init__(self, **kwargs)
+        self._set_list_prop('categories', categories, t=str)
+        self._set_obj_prop('question', question, t=ENTITY_TYPES['QUESTION'])
+        self._set_float_prop('weight', weight)
+
+    @property
+    def categories(self):
+        return self._get_prop('categories')
+
+    @property
+    def question(self):
+        return self._get_prop('question')
+
+    @property
+    def weight(self):
+        return self._get_prop('weight')
 
 
 ## Media entities

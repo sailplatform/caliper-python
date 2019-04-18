@@ -24,7 +24,8 @@ install_aliases()
 from future.utils import raise_with_traceback
 from builtins import *
 
-from caliper.constants import CALIPER_ACTIONS, ENTITY_TYPES, EVENT_TYPES, MARKER_TYPES
+from caliper.constants import CALIPER_ACTIONS, CALIPER_PROFILES
+from caliper.constants import ENTITY_TYPES, EVENT_TYPES, MARKER_TYPES
 from caliper.base import BaseEvent, ensure_type, ensure_types
 
 
@@ -203,6 +204,21 @@ class NavigationEvent(Event):
         ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
 
+class QuestionnaireEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['QUESTIONNAIRE'])
+
+
+class QuestionnaireItemEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['QUESTIONNAIRE_ITEM'])
+        ensure_type(self.generated, ENTITY_TYPES['RESPONSE'], optional=True)
+
+
 class ResourceManagementEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
@@ -238,6 +254,20 @@ class SessionEvent(Event):
             ensure_type(self.actor, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.object, ENTITY_TYPES['SESSION'])
 
+
+class SurveyEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['SURVEY'])
+
+
+class SurveyInvitationEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES['PERSON'])
+        ensure_type(self.object, ENTITY_TYPES['SURVEY_INVITATION'])
+        
 
 class ThreadEvent(Event):
     def __init__(self, **kwargs):
