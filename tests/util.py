@@ -91,6 +91,13 @@ def get_fixtures_of_type(name):
     ]
 
 
+class TestError(caliper.base.CaliperSerializable):
+    def __init__(self, error=None, fixture=None, **kwargs):
+        caliper.base.CaliperSerializable.__init__(self)
+        self._set_str_prop('error', error)
+        self._set_obj_prop('fixture', fixture)
+
+
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
     try:
         r = condensor.from_json_dict(d, strict=True)
@@ -122,7 +129,7 @@ def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_obje
                                             thin_context=thin_context,
                                             described_objects=None)
     except Exception as e:
-        return json.dumps({'error': str(e), 'fixture': env_dict})
+        return TestError(e, env_dict)
 
 
 # build an envelope from a sensor and the contents of a fixture
@@ -134,4 +141,4 @@ def get_envelope(sensor, fixture):
                                         send_time=env_dict.get('sendTime'),
                                         sensor_id=sensor.id)
     except Exception as e:
-        return json.dumps({'error': str(e), 'fixture': env_dict})
+        return TestError(e, env_dict)
