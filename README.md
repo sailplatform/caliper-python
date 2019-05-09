@@ -55,15 +55,15 @@ pip install imsglobal_caliper
 If you want to install it from a source bundle, then use these steps (note that
 the name of the repository on GitHub is different to the distribution package name):
 
-#. Clone the [repository from GitHub](https://github.com/IMSGlobal/caliper-python.git>)
+1. Clone the [repository from GitHub](https://github.com/IMSGlobal/caliper-python.git>)
    onto your local machine.
 
-#. Use pip to install the package as a writable source bundle; there's no need
+2. Use pip to install the package as a writable source bundle; there's no need
    to do a package build step ahead of time:
 
-``` shell
-pip3 install -e caliper-python
-```
+   ``` shell
+   pip3 install -e caliper-python
+   ```
 
 
 ## Changing and testing
@@ -132,15 +132,15 @@ navigation event to a caliper endpoint:
 import caliper
 
 the_config = caliper.HttpOptions(
-        host='http://caliper-endpoint.your-school.edu/events/',
-        auth_scheme='Bearer',
-        api_key='your-caliper-API-key' )
+    host='http://caliper-endpoint.your-school.edu/events/',
+    auth_scheme='Bearer',
+    api_key='your-caliper-API-key' )
 
 # Here you build your sensor; it will have one client in its registry,
 # with the key 'default'.
 the_sensor = caliper.build_simple_sensor(
-        sensor_id = 'http://learning-app.your-school.edu/sensor',
-        config_options = the_config )
+    sensor_id = 'http://learning-app.your-school.edu/sensor',
+    config_options = the_config )
 
 # Here, you will have caliper entity representations of the various
 # learning objects and entities in your wider system, and you provide
@@ -151,13 +151,13 @@ the_sensor = caliper.build_simple_sensor(
 # Caliper base profile: caliper.constants.BASE_PROFILE_ACTIONS['NAVIGATED_TO']
 #
 the_event = caliper.events.NavigationEvent(
-        actor = the_user_currently_acting_as_caliper_Actor_entity,
-        edApp = your_application_as_caliper_SoftwareApplication_entity,
-        group = the_course_offering_in_play_as_caliper_Organization_entity,
-        event_object = the_caliper_DigitalResource_the_actor_is_using,
-        referrer = the_caliper_DigitalResource_the_actor_came_from,
-        target = the_caliper_DigitalResource_the_actor_is_going_to,
-        eventTime = the_time_when_the_actor_did_the_action )
+    actor = the_user_currently_acting_as_caliper_Actor_entity,
+    edApp = your_application_as_caliper_SoftwareApplication_entity,
+    group = the_course_offering_in_play_as_caliper_Organization_entity,
+    event_object = the_caliper_DigitalResource_the_actor_is_using,
+    referrer = the_caliper_DigitalResource_the_actor_came_from,
+    target = the_caliper_DigitalResource_the_actor_is_going_to,
+    eventTime = the_time_when_the_actor_did_the_action )
 
 # Once built, you can use your sensor to send one or more often used
 # entities; suppose for example, you'll be sending a number of events
@@ -173,26 +173,26 @@ sent_identities = the_sensor.send(the_event.actor)
 # Now you can use this list with event sendings to send only the identifiers
 # of already-described entities, and not their full forms:
 
-  the_sensor.send(the_event, described_objects=sent_identities)
+the_sensor.send(the_event, described_objects=sent_identities)
 
 # You can also just send the event in its full form, with all fleshed out
 # entities:
 
-  the_sensor.send(the_event)
+the_sensor.send(the_event)
 
 # You can check the status code sent back by the endpoint for the last
 # invocation of send():
 
-  assert the_sensor.status_code in [200, 201, 202]
+assert the_sensor.status_code in [200, 201, 202]
 
 # If you create your configuration with debug=true, then your sensor will
 # keep a list of the full responses (it uses the "requests" library under the
 # covers, so these will be response objects from that library:
 
-  the_sensor.config.DEBUG = true
-  sent_identifies = the_sensor.send(the_event.actor)
-  the_sensor.send(the_event, described_objects=sent_identities)
-  responses = the_sensor.debug
+the_sensor.config.DEBUG = true
+sent_identifies = the_sensor.send(the_event.actor)
+the_sensor.send(the_event, described_objects=sent_identities)
+responses = the_sensor.debug
 ```
 
 Your actual use of the caliper code will certainly be more complex than this. For assistance
