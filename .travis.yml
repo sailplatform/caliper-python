@@ -1,0 +1,22 @@
+language: python
+python: 3.7
+dist: xenial
+sudo: true
+
+before_install:
+  # note that TRAVIS_BRANCH tells us the _target branch_ in PR builds;
+  # this is explicitly what we want
+  # don't bother building branches not destined for merging into develop or master
+  - echo "Current build type is $TRAVIS_BRANCH."
+  - echo "Current PR number is $TRAVIS_PULL_REQUEST."
+  - echo "(Only develop, master, and PR builds for develop and master, actually get built.)"
+  - if [[ "$TRAVIS_BRANCH" != "master" ]] && [[ "$TRAVIS_BRANCH" != "develop" ]] ; then travis_terminate 0 ; fi
+
+before_script:
+    - wget https://github.com/IMSGlobal/caliper-common-fixtures/archive/develop.zip
+    - unzip develop.zip -d ./tests
+    - mv ./tests/caliper-common-fixtures-develop ./tests/fixtures
+
+script:
+    - python3 setup.py sdist
+    - tox
