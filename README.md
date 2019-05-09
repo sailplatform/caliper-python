@@ -96,9 +96,9 @@ PyPy3.
 Before you can run the tests, you will also need a copy of the Caliper fixtures (see below).
 
 **Fixtures**. The test suites are principally designed to test against the canonical common JSON
-fixtures. To set up your tests, you should clone the [Caliper common fixtures repository]
-(https://github.com/IMSGlobal/caliper-common-fixtures>) repository into the `tests/fixtures`
-directory, and pull changes there.
+fixtures. To set up your tests, you should clone the
+[Caliper common fixtures repository](https://github.com/IMSGlobal/caliper-common-fixtures)
+repository into the `tests/fixtures` directory, and pull changes there.
 
 Ideally, if you make changes to `imsglobal_caliper` you should ensure that your changes will test
 well against the fixtures from the main common fixtures repository. When IMS makes updates to the
