@@ -1,11 +1,16 @@
+| branch  | status |
+|---------|--------|
+| master  | [![Build Status](https://travis-ci.org/IMSGlobal/caliper-python.svg?branch=master)](https://travis-ci.org/IMSGlobal/caliper-python)|
+| develop | [![Build Status](https://travis-ci.org/IMSGlobal/caliper-python.svg?branch=develop)](https://travis-ci.org/IMSGlobal/caliper-python)|
+
 ====================================
 IMS Global Learning Consortium, Inc.
 ====================================
 
-The Caliper Analytics® Specification provides a structured approach to describing, 
-collecting and exchanging learning activity data at scale. Caliper also defines 
-an application programming interface (the Sensor API™) for marshalling and 
-transmitting event data from instrumented applications to target endpoints for 
+The Caliper Analytics® Specification provides a structured approach to describing,
+collecting and exchanging learning activity data at scale. Caliper also defines
+an application programming interface (the Sensor API™) for marshalling and
+transmitting event data from instrumented applications to target endpoints for
 storage, analysis and use.
 
 caliper-python is a reference implementation of the Sensor API™ written in Python.
@@ -196,8 +201,8 @@ the package, and the common fixtures they test against.
 
 Copyright and License
 =====================
-This project is licensed under the terms of the GNU Lesser General Public License 
-(LGPL), version 3. See the LICENSE file for details. For additional information 
+This project is licensed under the terms of the GNU Lesser General Public License
+(LGPL), version 3. See the LICENSE file for details. For additional information
 on licensing options for IMS members, please see the NOTICE file.
 
 ©2019 IMS Global Learning Consortium, Inc. All Rights Reserved.
