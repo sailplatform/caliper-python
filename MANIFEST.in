@@ -1,2 +1,2 @@
-include README.rst LICENSE NOTICE tox.ini requirements.txt
+include README.md HISTORY.md CONTRIBUTING.md LICENSE NOTICE requirements.txt tox.ini
 

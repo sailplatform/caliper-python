@@ -7,3 +7,4 @@ dist
 tests/fixtures
 tests/fixtures_out
 tests/contexts
+venv

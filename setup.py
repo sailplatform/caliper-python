@@ -18,9 +18,13 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 _packages = ['caliper', 'caliper.util']
+_test_requirements = ['pytest', 'pytest-cov', 'responses', 'tox']
 
-_requires = ['aniso8601 >= 1.3.0', 'future >= 0.16.0', 'requests >= 2.18.3', 'rfc3986 == 1.1.0']
+with open('requirements.txt', 'r', 'utf-8') as fd:
+    _install_requirements = fd.read().splitlines()
 
+with open('README.md', 'r', 'utf-8') as fd:
+    _readme = fd.read()
 
 def _get_val_from_mod(k):
     with open('caliper/__init__.py', 'r') as fd:
@@ -33,9 +37,6 @@ _license = _get_val_from_mod('license')
 _title = _get_val_from_mod('title')
 _version = _get_val_from_mod('version')
 
-with open('README.rst', 'r', 'utf-8') as f:
-    _readme = f.read()
-
 setup(
     name=_title,
     version=_version,
@@ -45,12 +46,13 @@ setup(
     maintainer_email='info@imsglobal.org',
     url='https://github.com/IMSGlobal/caliper-python',
     packages=_packages,
-    install_requires=_requires,
+    install_requires=_install_requirements,
+    tests_require=_test_requirements,
     license=_license,
     zip_safe=False,
-    classifiers=('Development Status :: 3 - Beta', 'Intended Audience :: Developers',
+    classifiers=['Development Status :: 3 - Beta', 'Intended Audience :: Developers',
                  'Natural Language :: English',
                  'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
                  'Programming Language :: Python', 'Programming Language :: Python :: 2',
                  'Programming Language :: Python :: 2.7', 'Programming Language :: Python :: 3',
-                 'Programming Language :: Python :: 3.6'))
+                 'Programming Language :: Python :: 3.7'])
