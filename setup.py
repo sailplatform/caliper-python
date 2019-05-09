@@ -23,7 +23,7 @@ _test_requirements = ['pytest', 'pytest-cov', 'responses', 'tox']
 with open('requirements.txt', 'r', 'utf-8') as fd:
     _install_requirements = fd.read().splitlines()
 
-with open('README.rst', 'r', 'utf-8') as f:
+with open('README.md', 'r', 'utf-8') as f:
     _readme = f.read()
 
 
