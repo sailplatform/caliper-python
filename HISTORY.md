@@ -15,6 +15,8 @@
 
   *1.1.10.5*. Bug fix for [Issue #176](https://github.com/IMSGlobal/caliper-python/issues/176).
 
+  *1.1.10.6*. Bug fix for [Issue #181](https://github.com/IMSGlobal/caliper-python/issues/181).
+
 
 ## 1.1.9
 
