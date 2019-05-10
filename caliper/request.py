@@ -45,7 +45,7 @@ class Envelope(CaliperSerializable):
         CaliperSerializable.__init__(self)
         self._set_list_prop('data', data, t=CaliperSerializable, req=True)
         self._set_str_prop('dataVersion', dataVersion, req=True)
-        self._set_date_prop('sendTime', send_time, req=True)
+        self._set_datetime_prop('sendTime', send_time, req=True)
         self._set_str_prop('sensor', sensor_id, req=True)
 
     @property
@@ -70,7 +70,7 @@ class Envelope(CaliperSerializable):
 
     @sendTime.setter
     def sendTime(self, v):
-        self._set_date_prop('sendTime', v)
+        self._set_datetime_prop('sendTime', v)
 
     @property
     def sensor(self):

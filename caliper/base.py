@@ -87,16 +87,20 @@ def _get_base_context(ctxt):
         return ctxt
 
 
-def is_valid_date(date):
+def is_valid_datetime(dt):
+    _time_re = '\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(YYYY='([0-9]{4})',
+                                                                   MM='([0-9]{2})',
+                                                                   DD='([0-9]{2})',
+                                                                   HH='([0-9]{2})',
+                                                                   mm='([0-9]{2})',
+                                                                   ss='([0-9]{2})',
+                                                                   SSS='([0-9]{3})')
     try:
-        aniso_parse_datetime(date)
+        assert (re.match(_time_re, dt))
+        aniso_parse_datetime(dt)
         return True
     except Exception:
-        try:
-            aniso_parse_date(date)
-            return True
-        except Exception:
-            return False
+        return False
 
 
 def is_valid_duration(dur):
@@ -386,11 +390,13 @@ class CaliperSerializable(object):
         elif is_valid_context(v, expected_base_context):
             self._update_props('@context', v, req=True)
 
-    def _set_date_prop(self, k, v, req=False):
-        val = None
-        if is_valid_date(v):
-            val = v
-        self._set_untyped_prop(k, val, req=req)
+    def _set_datetime_prop(self, k, v, req=False):
+        if req and (v == None):
+            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
+        elif v and not is_valid_datetime(v):
+            raise_with_traceback(
+                ValueError('{0} must be validly formatted date time'.format(str(k))))
+        self._set_untyped_prop(k, v, req=req)
 
     def _set_dict_prop(self, k, v, req=False):
         if req and (v == None):
@@ -592,7 +598,7 @@ class BaseEvent(CaliperSerializable):
                 ValueError('invalid action for profile and event: {} for {}:{}'.format(
                     action, self._profile, self._typename)))
         self._set_str_prop('action', action, req=True)
-        self._set_date_prop('eventTime', eventTime, req=True)
+        self._set_datetime_prop('eventTime', eventTime, req=True)
         self._set_obj_prop('object', object, t=BaseEntity)
 
     @property
