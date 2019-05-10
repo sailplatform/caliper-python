@@ -88,13 +88,14 @@ def _get_base_context(ctxt):
 
 
 def is_valid_datetime(dt):
-    _time_re = '\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(YYYY='([0-9]{4})',
-                                                                   MM='([0-9]{2})',
-                                                                   DD='([0-9]{2})',
-                                                                   HH='([0-9]{2})',
-                                                                   mm='([0-9]{2})',
-                                                                   ss='([0-9]{2})',
-                                                                   SSS='([0-9]{3})')
+    _time_re = r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(
+        YYYY='([0-9]{4})',
+        MM='([0-9]{2})',
+        DD='([0-9]{2})',
+        HH='([0-9]{2})',
+        mm='([0-9]{2})',
+        ss='([0-9]{2})',
+        SSS='([0-9]{3})')
     try:
         assert (re.match(_time_re, dt))
         aniso_parse_datetime(dt)
