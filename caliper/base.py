@@ -348,42 +348,26 @@ class CaliperSerializable(object):
 
     # protected base-type setters that inheriting classes use internally to set
     # underlying state
+
+    def _set_typed_prop(self, k, v, t, req=False):
+        if v and not (isinstance(v, t)):
+            raise_with_traceback(ValueError('{0} must be a {1}'.format(str(k), t.__name__)))
+        self._update_props(k, v, req=req)
+
     def _set_bool_prop(self, k, v, req=False):
-        if v == None:
-            self._update_props(k, None, req=req)
-        else:
-            self._update_props(k, bool(v), req=req)
+        self._set_typed_prop(k, v, bool, req=req)
 
     def _set_int_prop(self, k, v, req=False):
-        if v == None:
-            self._update_props(k, None, req=req)
-        else:
-            self._update_props(k, int(v), req=req)
+        self._set_typed_prop(k, v, int, req=req)
 
     def _set_float_prop(self, k, v, req=False):
-        if v == None:
-            self._update_props(k, None, req=req)
-        else:
-            self._update_props(k, float(v), req=req)
+        self._set_typed_prop(k, v, float, req=req)
 
     def _set_str_prop(self, k, v, req=False):
-        if v == None:
-            self._update_props(k, None, req=req)
-        else:
-            self._update_props(k, str(v), req=req)
+        self._set_typed_prop(k, v, string_types, req=req)
 
-    def _set_untyped_prop(self, k, v, req=False):
-        if not v:
-            self._update_props(k, None, req=req)
-        else:
-            self._update_props(k, v, req=req)
-
-    def _set_uri_prop(self, k, v, req=False):
-        if req and (v == None):
-            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
-        elif v and not is_valid_URI(v):
-            raise_with_traceback(ValueError('{0} must be a valid URI'.format(str(k))))
-        self._set_str_prop(k, v, req=req)
+    def _set_dict_prop(self, k, v, req=False):
+        self._set_typed_prop(k, v, MutableMapping, req=req)
 
     # protected complex-type setters
     def _set_context(self, v, expected_base_context):
@@ -393,60 +377,45 @@ class CaliperSerializable(object):
             self._update_props('@context', v, req=True)
 
     def _set_datetime_prop(self, k, v, req=False):
-        if req and (v == None):
-            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
-        elif v and not is_valid_datetime(v):
-            raise_with_traceback(
-                ValueError('{0} must be validly formatted date time'.format(str(k))))
-        self._set_untyped_prop(k, v, req=req)
+        if v and not is_valid_datetime(v):
+            raise_with_traceback(ValueError('{0} must be a valid date-time'.format(str(k))))
+        self._update_props(k, v, req=req)
 
-    def _set_dict_prop(self, k, v, req=False):
-        if req and (v == None):
-            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
-        elif v and not (isinstance(v, MutableMapping)):
-            raise_with_traceback(ValueError('{0} must be a dictionary'.format(str(k))))
-        self._update_props(k, v or {}, req=req)
+    def _set_uri_prop(self, k, v, req=False):
+        if v and not is_valid_URI(v):
+            raise_with_traceback(ValueError('{0} must be a valid URI'.format(str(k))))
+        self._update_props(k, v, req=req)
 
     def _set_duration_prop(self, k, v, req=False):
-        val = None
-        if is_valid_duration(v):
-            val = v
-        self._set_untyped_prop(k, v, req=req)
+        if v and not is_valid_duration(v):
+            raise_with_traceback(ValueError('{0} must be a valid duration'.format(str(k))))
+        self._update_props(k, v, req=req)
 
     def _set_id(self, v):
         self._set_uri_prop('id', v, req=True)
 
     def _set_list_prop(self, k, v, t=None, req=False):
-        if req and (v == None):
-            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
-        elif v:
+        if v:
             if not (isinstance(v, MutableSequence)):
                 raise_with_traceback(ValueError('{0} must be a list'.format(str(k))))
             elif t:
                 for item in v:
                     ensure_type(item, t)
-        self._update_props(k, v or [], req=req)
+        self._update_props(k, v, req=req)
 
-    def _set_obj_prop(self, k, v, t=None, req=False):
-        if req and (v == None):
-            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
+    def _set_obj_prop(self, k, v, t=MutableMapping, req=False):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
-            raise_with_traceback(
-                TypeError('Provided property is not of required type: {}'.format(t)))
-        if isinstance(v, string_types):
-            if not is_valid_URI(v):
-                raise_with_traceback(
-                    ValueError('ID value for object property must be valid URI: {}'.format(v)))
-            if t and not is_subtype(t, CaliperSerializable):
-                raise_with_traceback(
-                    ValueError('URI IDs can only be provided for objects of known Caliper types'))
-        self._update_props(k, v)
+            raise_with_traceback(TypeError('Provided property is not of required type: {}'.format(t)))
+        if isinstance(v, string_types) and not is_valid_URI(v):
+            raise_with_traceback(ValueError('ID value for object property must be valid URI: {}'.format(v)))
+        if isinstance(v, string_types) and t and not (is_subtype(t, CaliperSerializable)):
+            raise_with_traceback(ValueError('URI IDs can only be provided for objects of known Caliper types'))
+        self._update_props(k, v, req=req)
 
     def _set_time_prop(self, k, v, req=False):
-        val = None
-        if is_valid_time(v):
-            val = v
-        self._set_untyped_prop(k, v, req=req)
+        if v and not is_valid_time(v):
+            raise_with_traceback(ValueError('{0} must be a valid time'.format(str(k))))
+        self._update_props(k, v, req=req)
 
     # protected unpacker methods, used by dict and json-string representation
     # public functions
