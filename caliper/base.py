@@ -97,7 +97,7 @@ def _get_base_context(ctxt):
 
 def is_valid_datetime(dt):
     try:
-        assert (re.match(_time_re, dt))
+        assert (_time_re.match(dt))
         aniso_parse_datetime(dt)
         return True
     except Exception:
