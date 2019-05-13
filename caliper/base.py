@@ -43,13 +43,13 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CO
 
 _uri_validator = rfc3986_validators.Validator().require_presence_of('scheme', )
 
-_time_re = re.compile(r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(YYYY='([0-9]{4})',
-                                                                           MM='([0-9]{2})',
-                                                                           DD='([0-9]{2})',
-                                                                           HH='([0-9]{2})',
-                                                                           mm='([0-9]{2})',
-                                                                           ss='([0-9]{2})',
-                                                                           SSS='([0-9]{3})'))
+_datetime_re = re.compile(r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(YYYY='([0-9]{4})',
+                                                                               MM='([0-9]{2})',
+                                                                               DD='([0-9]{2})',
+                                                                               HH='([0-9]{2})',
+                                                                               mm='([0-9]{2})',
+                                                                               ss='([0-9]{2})',
+                                                                               SSS='([0-9]{3})'))
 
 
 def deprecation(m):
@@ -97,7 +97,7 @@ def _get_base_context(ctxt):
 
 def is_valid_datetime(dt):
     try:
-        assert (_time_re.match(dt))
+        assert (_datetime_re.match(dt))
         aniso_parse_datetime(dt)
         return True
     except Exception:
