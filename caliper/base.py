@@ -403,7 +403,7 @@ class CaliperSerializable(object):
                     ensure_type(item, t)
         self._update_props(k, v, req=req)
 
-    def _set_obj_prop(self, k, v, t=MutableMapping, req=False):
+    def _set_obj_prop(self, k, v, t=None, req=False):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
             raise_with_traceback(TypeError('Provided property is not of required type: {}'.format(t)))
         if isinstance(v, string_types) and not is_valid_URI(v):
