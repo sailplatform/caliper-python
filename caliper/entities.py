@@ -54,8 +54,8 @@ class Entity(BaseEntity):
                  extensions=None):
         BaseEntity.__init__(self, context=context, profile=profile)
         self._set_id(id)
-        self._set_date_prop('dateCreated', dateCreated)
-        self._set_date_prop('dateModified', dateModified)
+        self._set_datetime_prop('dateCreated', dateCreated)
+        self._set_datetime_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
         self._set_dict_prop('extensions', extensions)
@@ -266,8 +266,8 @@ class AggregateMeasure(Entity, Generatable):
                  maxMetricValue=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_date_prop('endedAtTime', endedAtTime)
-        self._set_date_prop('startedAtTime', startedAtTime)
+        self._set_datetime_prop('endedAtTime', endedAtTime)
+        self._set_datetime_prop('startedAtTime', startedAtTime)
         self._set_float_prop('metricValue', metricValue, req=True)
         self._set_float_prop('maxMetricValue', maxMetricValue)
 
@@ -282,7 +282,7 @@ class AggregateMeasure(Entity, Generatable):
 
     @endedAtTime.setter
     def endedAtTime(self, new_time):
-        self._set_date_prop('endedAtTime', new_time)
+        self._set_datetime_prop('endedAtTime', new_time)
 
     @property
     def metric(self):
@@ -323,7 +323,7 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
                             learningObjectives,
                             t=ENTITY_TYPES['LEARNING_OBJECTIVE'])
         self._set_list_prop('creators', creators, t=ENTITY_TYPES['AGENT'])
-        self._set_date_prop('datePublished', datePublished)
+        self._set_datetime_prop('datePublished', datePublished)
         self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
         self._set_list_prop('keywords', keywords, t=str)
         self._set_str_prop('mediaType', mediaType)
@@ -536,10 +536,10 @@ class AssignableDigitalResource(DigitalResource, Assignable):
                  maxScore=None,
                  **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_date_prop('dateToActivate', dateToActivate)
-        self._set_date_prop('dateToShow', dateToShow)
-        self._set_date_prop('dateToStartOn', dateToStartOn)
-        self._set_date_prop('dateToSubmit', dateToSubmit)
+        self._set_datetime_prop('dateToActivate', dateToActivate)
+        self._set_datetime_prop('dateToShow', dateToShow)
+        self._set_datetime_prop('dateToStartOn', dateToStartOn)
+        self._set_datetime_prop('dateToSubmit', dateToSubmit)
         self._set_int_prop('maxAttempts', maxAttempts)
         self._set_int_prop('maxSubmits', maxSubmits)
         self._set_float_prop('maxScore', maxScore)
@@ -605,9 +605,9 @@ class Attempt(Entity, Generatable):
         self._set_obj_prop('assignee', assignee, t=ENTITY_TYPES['PERSON'])
         self._set_int_prop('count', count)
         self._set_duration_prop('duration', duration)
-        self._set_date_prop('endedAtTime', endedAtTime)
+        self._set_datetime_prop('endedAtTime', endedAtTime)
         self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ATTEMPT'])
-        self._set_date_prop('startedAtTime', startedAtTime)
+        self._set_datetime_prop('startedAtTime', startedAtTime)
 
     @property
     def assignable(self):
@@ -635,7 +635,7 @@ class Attempt(Entity, Generatable):
 
     @endedAtTime.setter
     def endedAtTime(self, new_time):
-        self._set_date_prop('endedAtTime', new_time)
+        self._set_datetime_prop('endedAtTime', new_time)
 
     @property
     def isPartOf(self):
@@ -656,8 +656,8 @@ class Response(Entity, Generatable):
         Entity.__init__(self, **kwargs)
         self._set_obj_prop('attempt', attempt, t=ENTITY_TYPES['ATTEMPT'])
         self._set_duration_prop('duration', duration)
-        self._set_date_prop('endedAtTime', endedAtTime)
-        self._set_date_prop('startedAtTime', startedAtTime)
+        self._set_datetime_prop('endedAtTime', endedAtTime)
+        self._set_datetime_prop('startedAtTime', startedAtTime)
 
     @property
     def attempt(self):
@@ -677,7 +677,7 @@ class Response(Entity, Generatable):
 
     @endedAtTime.setter
     def endedAtTime(self, new_time):
-        self._set_date_prop('endedAtTime', new_time)
+        self._set_datetime_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):
@@ -687,7 +687,7 @@ class Response(Entity, Generatable):
 class DateTimeResponse(Response):
     def __init__(self, dateTimeSelected=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_date_prop('dateTimeSelected', dateTimeSelected)
+        self._set_datetime_prop('dateTimeSelected', dateTimeSelected)
 
     @property
     def dateTimeSelected(self):
@@ -877,9 +877,9 @@ class Question(DigitalResource):
 class DateTimeQuestion(Question):
     def __init__(self, maxDateTime=None, maxLabel=None, minDateTime=None, minLabel=None, **kwargs):
         Question.__init__(self, **kwargs)
-        self._set_date_prop('maxDateTime', maxDateTime)
+        self._set_datetime_prop('maxDateTime', maxDateTime)
         self._set_str_prop('maxLabel', maxLabel)
-        self._set_date_prop('minDateTime', minDateTime)
+        self._set_datetime_prop('minDateTime', minDateTime)
         self._set_str_prop('minLabel', minLabel)
 
     @property
@@ -1049,7 +1049,7 @@ class SurveyInvitation(DigitalResource):
         DigitalResource.__init__(self, **kwargs)
         self._set_obj_prop('rater', rater, t=ENTITY_TYPES['PERSON'])
         self._set_int_prop('sentCount', sentCount)
-        self._set_date_prop('sentDate', sentDate)
+        self._set_datetime_prop('sentDate', sentDate)
         self._set_obj_prop('survey', survey, t=ENTITY_TYPES['SURVEY'])
 
     @property
@@ -1296,8 +1296,8 @@ class Session(Entity, Generatable, Targetable):
     def __init__(self, duration=None, endedAtTime=None, startedAtTime=None, user=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_duration_prop('duration', duration)
-        self._set_date_prop('endedAtTime', endedAtTime)
-        self._set_date_prop('startedAtTime', startedAtTime)
+        self._set_datetime_prop('endedAtTime', endedAtTime)
+        self._set_datetime_prop('startedAtTime', startedAtTime)
         self._set_obj_prop('user', user, t=ENTITY_TYPES['PERSON'])
 
     @property
@@ -1314,7 +1314,7 @@ class Session(Entity, Generatable, Targetable):
 
     @endedAtTime.setter
     def endedAtTime(self, new_time):
-        self._set_date_prop('endedAtTime', new_time)
+        self._set_datetime_prop('endedAtTime', new_time)
 
     @property
     def startedAtTime(self):

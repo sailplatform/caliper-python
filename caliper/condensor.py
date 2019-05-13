@@ -31,14 +31,14 @@ except ImportError:
 
 import copy, importlib
 
-from caliper.base import is_valid_context, is_valid_date, is_valid_URI, suggest_profile
+from caliper.base import is_valid_context, is_valid_datetime, is_valid_URI, suggest_profile
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_PROFILES,
                                CALIPER_PROFILES_FOR_CONTEXTS)
 
 
 def from_caliper_envelope(d, strict=False):
     r = None
-    if (is_valid_URI(d.get('sensor')) and is_valid_date(d.get('sendTime'))
+    if (is_valid_URI(d.get('sensor')) and is_valid_datetime(d.get('sendTime'))
             and isinstance(d.get('data'), MutableSequence)):
         r = from_json_list(d.get('data'), strict=strict)
     return r
