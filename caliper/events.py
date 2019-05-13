@@ -58,7 +58,7 @@ class Event(BaseEvent):
                            object=object)
         self._set_obj_prop('actor', actor, t=ENTITY_TYPES['AGENT'], req=True)
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        self._set_obj_prop('extensions', extensions)
+        self._set_dict_prop('extensions', extensions)
         self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['LTI_SESSION'])
         self._set_obj_prop('generated', generated, t=MARKER_TYPES['GENERATABLE'])
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
@@ -267,7 +267,7 @@ class SurveyInvitationEvent(Event):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SURVEY_INVITATION'])
-        
+
 
 class ThreadEvent(Event):
     def __init__(self, **kwargs):

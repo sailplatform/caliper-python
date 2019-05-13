@@ -58,7 +58,7 @@ class Entity(BaseEntity):
         self._set_date_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
-        self._set_obj_prop('extensions', extensions)
+        self._set_dict_prop('extensions', extensions)
 
     @property
     def id(self):
