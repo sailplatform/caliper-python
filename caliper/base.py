@@ -379,9 +379,10 @@ class CaliperSerializable(object):
             self._update_props(k, v, req=req)
 
     def _set_uri_prop(self, k, v, req=False):
-        val = None
-        if is_valid_URI(v):
-            val = v
+        if req and (v == None):
+            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
+        elif v and not is_valid_URI(v):
+            raise_with_traceback(ValueError('{0} must be a valid URI'.format(str(k))))
         self._set_str_prop(k, v, req=req)
 
     # protected complex-type setters
