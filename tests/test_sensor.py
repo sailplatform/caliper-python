@@ -82,7 +82,7 @@ class TestCaliperSimpleSensor(unittest.TestCase):
 
     # test transmission stats for sensor.send()
     def testEventSend(self):
-        fixture = 'caliperEventBasicCreated'
+        fixture = 'caliperEventGeneralCreated'
         for i in range(self.iterations):
             _, statistics = send(
                 self.sensor,
@@ -97,7 +97,7 @@ class TestCaliperSimpleSensor(unittest.TestCase):
             self.assertEqual(failed, 0)
 
     def testEventSendBatch(self):
-        fixture = 'caliperEventBasicCreated'
+        fixture = 'caliperEventGeneralCreated'
         batch = [
             caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
@@ -179,7 +179,7 @@ class TestCaliperSensor(unittest.TestCase):
 
     # test transmission stats for sensor.send()
     def testEventSend(self):
-        fixture = 'caliperEventBasicCreated'
+        fixture = 'caliperEventGeneralCreated'
         for i in range(self.iterations):
             _, statistics = send(
                 self.sensor,
@@ -194,7 +194,7 @@ class TestCaliperSensor(unittest.TestCase):
             self.assertEqual(failed, 0)
 
     def testEventSendBatch(self):
-        fixture = 'caliperEventBasicCreated'
+        fixture = 'caliperEventGeneralCreated'
         batch = [
             caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
@@ -247,7 +247,7 @@ class TestDebugSensor(unittest.TestCase):
         self.iterations = 4
 
     def testEventSend(self):
-        fixture = 'caliperEventBasicCreated'
+        fixture = 'caliperEventGeneralCreated'
         for i in range(self.iterations):
             send(self.sensor,
                  caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))

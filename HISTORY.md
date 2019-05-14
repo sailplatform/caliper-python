@@ -1,6 +1,12 @@
 # Change history
 
 
+## 1.2.0
+
+- Add support for user-agent type information within SoftwareApplication
+  entities, and add new optional `client` field in Session entities.
+
+
 ## 1.1.10
 
 - Add in support for the Feedback metric profile.

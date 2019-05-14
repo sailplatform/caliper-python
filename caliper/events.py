@@ -203,13 +203,18 @@ class NavigationEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_types(self.object,
-                     [ENTITY_TYPES['DIGITAL_RESOURCE'], ENTITY_TYPES['SOFTWARE_APPLICATION']],
-                     optional=True)
-        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
         ensure_types(self.referrer,
                      [ENTITY_TYPES['DIGITAL_RESOURCE'], ENTITY_TYPES['SOFTWARE_APPLICATION']],
                      optional=True)
+        if self.profile == CALIPER_PROFILES['SURVEY']:
+            ensure_types(self.object,
+                         [ENTITY_TYPES['QUESTIONNAIRE'], ENTITY_TYPES['QUESTIONNAIRE_ITEM']])
+
+        else:
+            ensure_types(self.object,
+                         [ENTITY_TYPES['DIGITAL_RESOURCE'], ENTITY_TYPES['SOFTWARE_APPLICATION']],
+                         optional=True)
+            ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
 
 class QuestionnaireEvent(Event):
@@ -309,5 +314,9 @@ class ViewEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
+        if self.profile == CALIPER_PROFILES['SURVEY']:
+            ensure_types(self.object,
+                         [ENTITY_TYPES['QUESTIONNAIRE'], ENTITY_TYPES['QUESTIONNAIRE_ITEM']])
+        else:
+            ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
+            ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)

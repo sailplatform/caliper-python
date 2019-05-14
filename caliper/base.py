@@ -62,19 +62,6 @@ def is_valid_profile(p):
     return p in CALIPER_PROFILES.values()
 
 
-def suggest_profile(prf=None, ctxt=None, typ=None):
-    _basic_profile = CALIPER_PROFILES['BASIC_PROFILE']
-    if prf and not is_valid_profile(prf):
-        raise_with_traceback(
-            ValueError('profile must be in the list of Caliper profiles: {}'.format(prf)))
-    else:
-        p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt), _basic_profile)
-        if p_from_context is not _basic_profile:
-            return p_from_context
-        else:
-            return CALIPER_PROFILES_FOR_EVENT_TYPES.get(typ, _basic_profile)
-
-
 def is_valid_context_for_base(c1, c2):
     return (c2 == c1
             or (c2 == CALIPER_CORE_CONTEXT and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
@@ -84,6 +71,23 @@ def is_valid_context(ctxt, expected_base_context):
     base_context = _get_base_context(ctxt)
     return (is_valid_URI(base_context)
             and is_valid_context_for_base(base_context, expected_base_context))
+
+
+def _suggest_profile(prf, ctxt, typ):
+    if prf:
+        if not is_valid_profile(prf):
+            raise_with_traceback(
+                ValueError('{0} not in the list of valid Caliper profiles.'.format(prf)))
+        else:
+            return prf
+    else:
+        _general_profile = CALIPER_PROFILES['GENERAL']
+        p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt),
+                                                           _general_profile)
+        if p_from_context is not _general_profile:
+            return p_from_context
+        else:
+            return CALIPER_PROFILES_FOR_EVENT_TYPES.get(typ, _general_profile)
 
 
 def _get_root_context_for_profile(p):
@@ -344,6 +348,7 @@ class HttpOptions(Options):
 class CaliperSerializable(object):
     def __init__(self):
         self._props = {}
+        self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
 
     # these methods are the only ones that directly touch the object's underlying
     # property/object cache
@@ -385,11 +390,20 @@ class CaliperSerializable(object):
         self._set_typed_prop(k, v, MutableMapping, req=req)
 
     # protected complex-type setters
-    def _set_context(self, v, expected_base_context):
+    def _set_context(self, v, profile):
+        expected_base_context = _get_root_context_for_profile(profile)
         if not v:
             self._update_props('@context', expected_base_context, req=True)
         elif is_valid_context(v, expected_base_context):
             self._update_props('@context', v, req=True)
+
+    def _set_profile(self, profile=None, context=None, typename=None):
+        self._default_profile = _suggest_profile(profile, context, typename)
+        self._set_str_prop('profile', profile)
+
+    def _set_type(self, default=None):
+        self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, default)
+        self._set_str_prop('type', self._typename)
 
     def _set_id(self, v):
         if self.type in ENTITY_TYPES.values():
@@ -560,15 +574,17 @@ class CaliperSerializable(object):
 class BaseEntity(CaliperSerializable):
     def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
-        self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
-        self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['ENTITY'])
-        self._set_str_prop('type', self._typename)
-        self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
-        self._set_context(context, _get_root_context_for_profile(self._profile))
+        self._set_type(default=CALIPER_TYPES['ENTITY'])
+        self._set_profile(profile, context, self.type)
+        self._set_context(context, self.profile)
 
     @property
     def context(self):
         return self._get_prop('@context')
+
+    @property
+    def profile(self):
+        return self._get_prop('profile') or self._default_profile
 
     @property
     def type(self):
@@ -584,18 +600,15 @@ class BaseEvent(CaliperSerializable):
                  eventTime=None,
                  object=None):
         CaliperSerializable.__init__(self)
-        self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
-        self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
-
-        self._set_str_prop('type', self._typename)
+        self._set_type(default=CALIPER_TYPES['EVENT'])
+        self._set_profile(profile, context, self.type)
+        self._set_context(context, self.profile)
         self._set_id(id)
 
-        self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
-        self._set_context(context, _get_root_context_for_profile(self._profile))
-        if action not in CALIPER_PROFILE_ACTIONS[self._profile][self._typename]:
+        if action not in CALIPER_PROFILE_ACTIONS[self.profile][self.type]:
             raise_with_traceback(
                 ValueError('invalid action for profile and event: {} for {}:{}'.format(
-                    action, self._profile, self._typename)))
+                    action, self.profile, self.type)))
         self._set_str_prop('action', action, req=True)
         self._set_datetime_prop('eventTime', eventTime, req=True)
         self._set_obj_prop('object', object, t=BaseEntity)
@@ -607,6 +620,10 @@ class BaseEvent(CaliperSerializable):
     @property
     def id(self):
         return self._get_prop('id')
+
+    @property
+    def profile(self):
+        return self._get_prop('profile') or self._default_profile
 
     @property
     def type(self):

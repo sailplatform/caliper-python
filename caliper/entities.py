@@ -30,7 +30,7 @@ except ImportError:
     from collections import MutableSequence, MutableMapping
 
 from caliper.constants import ENTITY_TYPES, MARKER_TYPES
-from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES, CALIPER_STATUS
+from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES, CALIPER_STATUS, CALIPER_SYSIDTYPES
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import ensure_type, ensure_list_type
 
@@ -50,6 +50,7 @@ class Entity(BaseEntity):
                  dateModified=None,
                  description=None,
                  name=None,
+                 otherIdentifiers=None,
                  version=None,
                  extensions=None):
         BaseEntity.__init__(self, context=context, profile=profile)
@@ -58,6 +59,9 @@ class Entity(BaseEntity):
         self._set_datetime_prop('dateModified', dateModified)
         self._set_str_prop('description', description)
         self._set_str_prop('name', name)
+        self._set_list_prop('otherIdentifiers',
+                            otherIdentifiers,
+                            t=ENTITY_TYPES['SYSTEM_IDENTIFIER'])
         self._set_dict_prop('extensions', extensions)
 
     @property
@@ -79,6 +83,45 @@ class Entity(BaseEntity):
     @property
     def name(self):
         return self._get_prop('name')
+
+    @property
+    def otherIdentifiers(self):
+        return self._get_prop('otherIdentifiers')
+
+    @property
+    def extensions(self):
+        return self._get_prop('extensions')
+
+
+class SystemIdentifier(BaseEntity):
+    def __init__(self,
+                 identifier=None,
+                 identifierType=None,
+                 source=None,
+                 extensions=None,
+                 **kwargs):
+        BaseEntity.__init__(self, **kwargs)
+        self._set_str_prop('identifier', identifier, req=True)
+        self._set_obj_prop('source', source, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
+        self._set_obj_prop('extensions', extensions)
+
+        if identifierType not in CALIPER_SYSIDTYPES.values():
+            raise_with_traceback(
+                ValueError('identifierType must be in the list of valid system identifier types'))
+        else:
+            self._set_str_prop('identifierType', identifierType, req=True)
+
+    @property
+    def identifier(self):
+        return self._get_prop('identifier')
+
+    @property
+    def identifierType(self):
+        return self._get_prop('identifierType')
+
+    @property
+    def source(self):
+        return self._get_prop('source')
 
     @property
     def extensions(self):
@@ -162,9 +205,24 @@ class Agent(Entity, Referrable):
 
 
 class SoftwareApplication(Agent):
-    def __init__(self, version=None, **kwargs):
+    def __init__(self, host=None, ipAddress=None, userAgent=None, version=None, **kwargs):
         Agent.__init__(self, **kwargs)
+        self._set_str_prop('host', host)
+        self._set_str_prop('ipAddress', ipAddress)
+        self._set_str_prop('userAgent', userAgent)
         self._set_str_prop('version', version)
+
+    @property
+    def host(self):
+        return self._get_prop('host')
+
+    @property
+    def ipAddress(self):
+        return self._get_prop('ipAddress')
+
+    @property
+    def userAgent(self):
+        return self._get_prop('userAgent')
 
     @property
     def version(self):
@@ -316,6 +374,7 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
                  isPartOf=None,
                  keywords=None,
                  mediaType=None,
+                 storageName=None,
                  version=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
@@ -327,6 +386,7 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
         self._set_obj_prop('isPartOf', isPartOf, t=ENTITY_TYPES['ENTITY'])
         self._set_list_prop('keywords', keywords, t=str)
         self._set_str_prop('mediaType', mediaType)
+        self._set_str_prop('storageName', storageName)
         self._set_str_prop('version', version)
 
     @property
@@ -356,6 +416,10 @@ class DigitalResource(Entity, Generatable, Referrable, Targetable):
     @property
     def mediaType(self):
         return self._get_prop('mediaType')
+
+    @property
+    def storageName(self):
+        return self._get_prop('storageName')
 
     @property
     def version(self):
@@ -502,10 +566,11 @@ class TagAnnotation(Annotation):
 
 
 class TextPositionSelector(BaseEntity):
-    def __init__(self, start=None, end=None, **kwargs):
+    def __init__(self, start=None, end=None, extensions=None, **kwargs):
         BaseEntity.__init__(self, **kwargs)
         self._set_int_prop('end', end, req=True)
         self._set_int_prop('start', start, req=True)
+        self._set_obj_prop('extensions', extensions)
 
     @property
     def end(self):
@@ -522,6 +587,10 @@ class TextPositionSelector(BaseEntity):
     @start.setter
     def start(self, new_start):
         self._set_int_prop('start', new_start, req=True)
+
+    @property
+    def extensions(self):
+        return self._get_prop('extensions')
 
 
 ## Assessment entities
@@ -1293,12 +1362,23 @@ class SearchResponse(Entity, Generatable):
 
 ## Session entities
 class Session(Entity, Generatable, Targetable):
-    def __init__(self, duration=None, endedAtTime=None, startedAtTime=None, user=None, **kwargs):
+    def __init__(self,
+                 client=None,
+                 duration=None,
+                 endedAtTime=None,
+                 startedAtTime=None,
+                 user=None,
+                 **kwargs):
         Entity.__init__(self, **kwargs)
+        self._set_obj_prop('client', client, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_duration_prop('duration', duration)
         self._set_datetime_prop('endedAtTime', endedAtTime)
         self._set_datetime_prop('startedAtTime', startedAtTime)
         self._set_obj_prop('user', user, t=ENTITY_TYPES['PERSON'])
+
+    @property
+    def client(self):
+        return self._get_prop('client')
 
     @property
     def duration(self):

@@ -31,9 +31,8 @@ except ImportError:
 
 import copy, importlib
 
-from caliper.base import is_valid_context, is_valid_datetime, is_valid_URI, suggest_profile
-from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_PROFILES,
-                               CALIPER_PROFILES_FOR_CONTEXTS, CALIPER_TYPES, EVENT_TYPES)
+from caliper.base import is_valid_context, is_valid_datetime, is_valid_URI
+from caliper.constants import CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_TYPES, EVENT_TYPES
 
 
 def from_caliper_envelope(d, strict=False):
@@ -62,7 +61,7 @@ def from_json_dict(d, strict=False):
         return copy.deepcopy(d)
     type_path = CALIPER_CLASSES.get(typ) or d.__class__.__name__
 
-    r = {'profile': suggest_profile(prf=None, ctxt=ctxt, typ=typ)}
+    r = {}
     for k, v in d.items():
 
         # transmogrify key or move to next item
