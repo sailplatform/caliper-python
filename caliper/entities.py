@@ -103,7 +103,7 @@ class SystemIdentifier(BaseEntity):
         BaseEntity.__init__(self, **kwargs)
         self._set_str_prop('identifier', identifier, req=True)
         self._set_obj_prop('source', source, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        self._set_obj_prop('extensions', extensions)
+        self._set_dict_prop('extensions', extensions)
 
         if identifierType not in CALIPER_SYSIDTYPES.values():
             raise_with_traceback(
@@ -570,7 +570,7 @@ class TextPositionSelector(BaseEntity):
         BaseEntity.__init__(self, **kwargs)
         self._set_int_prop('end', end, req=True)
         self._set_int_prop('start', start, req=True)
-        self._set_obj_prop('extensions', extensions)
+        self._set_dict_prop('extensions', extensions)
 
     @property
     def end(self):
