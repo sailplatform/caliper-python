@@ -37,7 +37,7 @@ from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CONTEXTS,
                                CALIPER_PROFILES, CALIPER_PROFILES_FOR_CONTEXTS,
                                CALIPER_PROFILES_FOR_EVENT_TYPES, CALIPER_PROFILE_ACTIONS,
-                               CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES)
+                               CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES, EVENT_TYPES, ENTITY_TYPES)
 
 ## Convenience functions
 
@@ -50,6 +50,8 @@ _datetime_re = re.compile(r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(Y
                                                                                mm='([0-9]{2})',
                                                                                ss='([0-9]{2})',
                                                                                SSS='([0-9]{3})'))
+
+_uuid_urn_re = re.compile(r'\Aurn:uuid:[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\Z')
 
 
 def deprecation(m):
@@ -125,6 +127,14 @@ def is_valid_URI(uri):
         _uri_validator.validate(rfc3986_api.uri_reference(uri))
         return True
     except Exception:
+        return False
+
+
+def is_valid_UUID_URN(uri):
+    try:
+        assert (_uuid_urn_re.match(uri))
+        return True
+    except:
         return False
 
 
@@ -376,23 +386,28 @@ class CaliperSerializable(object):
         elif is_valid_context(v, expected_base_context):
             self._update_props('@context', v, req=True)
 
+    def _set_id(self, v):
+        if self.type in ENTITY_TYPES.values():
+            if not is_valid_URI(v):
+                raise_with_traceback(ValueError('Entity ID must be a valid URI'))
+            self._update_props('id', v, req=True)
+        elif self.type in EVENT_TYPES.values():
+            if v and not is_valid_UUID_URN(v):
+                raise_with_traceback(ValueError('Event ID must be a valid UUID URN'))
+            self._update_props('id', v or 'urn:uuid:{}'.format(uuid.uuid4()), req=True)
+        else:
+            raise_with_traceback(
+                ValueError('Caliper Serializable of undeterminable type: {}'.format(self.type)))
+
     def _set_datetime_prop(self, k, v, req=False):
         if v and not is_valid_datetime(v):
             raise_with_traceback(ValueError('{0} must be a valid date-time'.format(str(k))))
-        self._update_props(k, v, req=req)
-
-    def _set_uri_prop(self, k, v, req=False):
-        if v and not is_valid_URI(v):
-            raise_with_traceback(ValueError('{0} must be a valid URI'.format(str(k))))
         self._update_props(k, v, req=req)
 
     def _set_duration_prop(self, k, v, req=False):
         if v and not is_valid_duration(v):
             raise_with_traceback(ValueError('{0} must be a valid duration'.format(str(k))))
         self._update_props(k, v, req=req)
-
-    def _set_id(self, v):
-        self._set_uri_prop('id', v, req=True)
 
     def _set_list_prop(self, k, v, t=None, req=False):
         if v:
@@ -405,16 +420,24 @@ class CaliperSerializable(object):
 
     def _set_obj_prop(self, k, v, t=None, req=False):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
-            raise_with_traceback(TypeError('Provided property is not of required type: {}'.format(t)))
+            raise_with_traceback(
+                TypeError('Provided property is not of required type: {}'.format(t)))
         if isinstance(v, string_types) and not is_valid_URI(v):
-            raise_with_traceback(ValueError('ID value for object property must be valid URI: {}'.format(v)))
+            raise_with_traceback(
+                ValueError('ID value for object property must be valid URI: {}'.format(v)))
         if isinstance(v, string_types) and t and not (is_subtype(t, CaliperSerializable)):
-            raise_with_traceback(ValueError('URI IDs can only be provided for objects of known Caliper types'))
+            raise_with_traceback(
+                ValueError('URI IDs can only be provided for objects of known Caliper types'))
         self._update_props(k, v, req=req)
 
     def _set_time_prop(self, k, v, req=False):
         if v and not is_valid_time(v):
             raise_with_traceback(ValueError('{0} must be a valid time'.format(str(k))))
+        self._update_props(k, v, req=req)
+
+    def _set_uri_prop(self, k, v, req=False):
+        if v and not is_valid_URI(v):
+            raise_with_traceback(ValueError('{0} must be a valid URI'.format(str(k))))
         self._update_props(k, v, req=req)
 
     # protected unpacker methods, used by dict and json-string representation
@@ -560,7 +583,7 @@ class BaseEvent(CaliperSerializable):
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, CALIPER_TYPES['EVENT'])
 
         self._set_str_prop('type', self._typename)
-        self._set_id(id or 'urn:uuid:{}'.format(uuid.uuid4()))
+        self._set_id(id)
 
         self._profile = suggest_profile(prf=profile, ctxt=context, typ=self._typename)
         self._set_context(context, _get_root_context_for_profile(self._profile))
