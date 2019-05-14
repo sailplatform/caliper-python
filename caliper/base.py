@@ -361,7 +361,12 @@ class CaliperSerializable(object):
 
     def _set_typed_prop(self, k, v, t, req=False):
         if v and not (isinstance(v, t)):
-            raise_with_traceback(ValueError('{0} must be a {1}'.format(str(k), t.__name__)))
+            if hassattr(t, '__name__'):
+                typ_name = t.__name__
+            else:
+                typ_name = str(t)
+            raise_with_traceback(
+                ValueError('{0} must be a {1}; got {2} instead'.format(str(k), typ_name, v)))
         self._update_props(k, v, req=req)
 
     def _set_bool_prop(self, k, v, req=False):
