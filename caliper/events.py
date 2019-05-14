@@ -127,7 +127,8 @@ class AnnotationEvent(Event):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'])
+        ensure_type(self.generated, ENTITY_TYPES['ANNOTATION'], optional=True)
+        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
 
 
 class AssessmentEvent(Event):
@@ -143,10 +144,9 @@ class AssessmentItemEvent(Event):
         Event.__init__(self, target=None, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSESSMENT_ITEM'])
+        ensure_type(self.referrer, ENTITY_TYPES['ASSESSMENT_ITEM'], optional=True)
         if self.action == CALIPER_ACTIONS['COMPLETED']:
             ensure_type(self.generated, ENTITY_TYPES['RESPONSE'], optional=True)
-        else:
-            ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
 
 
 class AssignableEvent(Event):
@@ -155,6 +155,7 @@ class AssignableEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ASSIGNABLE_DIGITAL_RESOURCE'])
         ensure_type(self.generated, ENTITY_TYPES['ATTEMPT'], optional=True)
+        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
 
 
 class FeedbackEvent(Event):
@@ -163,8 +164,10 @@ class FeedbackEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['ENTITY'])
         ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
-        ensure_types(self.generated, [ENTITY_TYPES['RATING'], ENTITY_TYPES['COMMENT']],
-                     optional=True)
+        if self.action == CALIPER_ACTIONS['RANKED']:
+            ensure_type(self.generated, ENTITY_TYPES['RATING'], optional=True)
+        elif self.action == CALIPER_ACTIONS['COMMENTED']:
+            ensure_type(self.generated, ENTITY_TYPES['COMMENT'], optional=True)
 
 
 class ForumEvent(Event):
@@ -178,7 +181,7 @@ class GradeEvent(Event):
     def __init__(self, target=None, **kwargs):
         Event.__init__(self, target=None, **kwargs)
         ensure_type(self.object, ENTITY_TYPES['ATTEMPT'])
-        ensure_type(self.generated, ENTITY_TYPES['SCORE'])
+        ensure_type(self.generated, ENTITY_TYPES['SCORE'], optional=True)
 
 
 class MediaEvent(Event):
@@ -200,8 +203,13 @@ class NavigationEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
-        ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
-        ensure_type(self.target, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
+        ensure_types(self.object,
+                     [ENTITY_TYPES['DIGITAL_RESOURCE'], ENTITY_TYPES['SOFTWARE_APPLICATION']],
+                     optional=True)
+        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
+        ensure_types(self.referrer,
+                     [ENTITY_TYPES['DIGITAL_RESOURCE'], ENTITY_TYPES['SOFTWARE_APPLICATION']],
+                     optional=True)
 
 
 class QuestionnaireEvent(Event):
@@ -225,9 +233,9 @@ class ResourceManagementEvent(Event):
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
         if self.action == CALIPER_ACTIONS['COPIED']:
-            ensure_type(self.generated, ENTITY_TYPES['ENTITY'])
+            ensure_type(self.generated, ENTITY_TYPES['DIGITAL_RESOURCE'])
         else:
-            ensure_type(self.generated, ENTITY_TYPES['ENTITY'], optional=True)
+            ensure_type(self.generated, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
 
 
 class SearchEvent(Event):
@@ -253,6 +261,9 @@ class SessionEvent(Event):
         elif self.action == CALIPER_ACTIONS['TIMED_OUT']:
             ensure_type(self.actor, ENTITY_TYPES['SOFTWARE_APPLICATION'])
             ensure_type(self.object, ENTITY_TYPES['SESSION'])
+        ensure_types(self.referrer,
+                     [ENTITY_TYPES['DIGITAL_RESOURCE'], ENTITY_TYPES['SOFTWARE_APPLICATION']],
+                     optional=True)
 
 
 class SurveyEvent(Event):
@@ -281,7 +292,7 @@ class ToolLaunchEvent(Event):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'], optional=True)
+        ensure_type(self.generated, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
         ensure_types(self.target, [ENTITY_TYPES['LINK'], ENTITY_TYPES['LTI_LINK']], optional=True)
 
 
@@ -299,3 +310,4 @@ class ViewEvent(Event):
         Event.__init__(self, **kwargs)
         ensure_type(self.actor, ENTITY_TYPES['PERSON'])
         ensure_type(self.object, ENTITY_TYPES['DIGITAL_RESOURCE'])
+        ensure_type(self.target, ENTITY_TYPES['FRAME'], optional=True)
