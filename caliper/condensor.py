@@ -33,7 +33,7 @@ import copy, importlib
 
 from caliper.base import is_valid_context, is_valid_datetime, is_valid_URI, suggest_profile
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_PROFILES,
-                               CALIPER_PROFILES_FOR_CONTEXTS)
+                               CALIPER_PROFILES_FOR_CONTEXTS, CALIPER_TYPES, EVENT_TYPES)
 
 
 def from_caliper_envelope(d, strict=False):
@@ -46,12 +46,18 @@ def from_caliper_envelope(d, strict=False):
 
 def from_json_dict(d, strict=False):
     ctxt = d.get('@context')
+    id = d.get('id')
+    typ = d.get('type')
+
     if strict and not is_valid_context(ctxt, CALIPER_CORE_CONTEXT):
         raise ValueError('While strictly parsing, encountered unknown context: {}'.format(ctxt))
     else:
         ctxt = ctxt or CALIPER_CORE_CONTEXT
+    if strict and typ not in CALIPER_TYPES.values():
+        raise ValueError('While strictly parsing, encountered unknown type: {}'.format(typ))
+    if strict and typ in EVENT_TYPES.values() and not id:
+        raise ValueError('While strictly parsing, encountered event with no id: {}'.format(typ))
 
-    typ = d.get('type')
     if typ and not CALIPER_CLASSES.get(typ):
         return copy.deepcopy(d)
     type_path = CALIPER_CLASSES.get(typ) or d.__class__.__name__
