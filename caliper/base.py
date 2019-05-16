@@ -366,7 +366,7 @@ class CaliperSerializable(object):
 
     def _set_typed_prop(self, k, v, t, req=False):
         if v and not (isinstance(v, t)):
-            if hassattr(t, '__name__'):
+            if hasattr(t, '__name__'):
                 typ_name = t.__name__
             else:
                 typ_name = str(t)
