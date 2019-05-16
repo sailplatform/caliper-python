@@ -94,8 +94,16 @@ def get_fixtures_of_type(name):
 class TestError(caliper.base.CaliperSerializable):
     def __init__(self, error=None, fixture=None, **kwargs):
         caliper.base.CaliperSerializable.__init__(self)
-        self._set_str_prop('error', error)
-        self._set_obj_prop('fixture', fixture)
+        self._update_props('error', str(error))
+        self._update_props('fixture', fixture)
+
+    @property
+    def error(self):
+        return self._get_prop('error')
+
+    @property
+    def fixture(self):
+        return self._get_prop('fixture')
 
 
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
@@ -105,7 +113,7 @@ def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects
                          thin_context=thin_context,
                          described_objects=described_objects)
     except Exception as e:
-        return json.dumps({'error': str(e), 'fixture': d})
+        return TestError(e, d).as_json()
 
 
 def rebuild_event(fixture, thin_props=True, thin_context=True, described_objects=None):
