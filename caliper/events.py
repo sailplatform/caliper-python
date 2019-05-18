@@ -25,7 +25,7 @@ from future.utils import raise_with_traceback
 from builtins import *
 
 from caliper.constants import CALIPER_ACTIONS, CALIPER_PROFILES
-from caliper.constants import ENTITY_TYPES, EVENT_TYPES, MARKER_TYPES
+from caliper.constants import ENTITY_TYPES, EVENT_TYPES
 from caliper.base import BaseEvent, ensure_type, ensure_types
 
 
@@ -60,12 +60,12 @@ class Event(BaseEvent):
         self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
         self._set_dict_prop('extensions', extensions)
         self._set_obj_prop('federatedSession', federatedSession, t=ENTITY_TYPES['LTI_SESSION'])
-        self._set_obj_prop('generated', generated, t=MARKER_TYPES['GENERATABLE'])
+        self._set_obj_prop('generated', generated)
         self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
         self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
-        self._set_obj_prop('referrer', referrer, t=MARKER_TYPES['REFERRABLE'])
+        self._set_obj_prop('referrer', referrer)
         self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
-        self._set_obj_prop('target', target, t=MARKER_TYPES['TARGETABLE'])
+        self._set_obj_prop('target', target)
 
     def as_minimal_event(self):
         return MinimalEvent(id=self.id,
