@@ -6,6 +6,8 @@
 - Add support for user-agent type information within SoftwareApplication
   entities, and add new optional `client` field in Session entities.
 
+- Simplify implementation by removing marker types, as not in the Caliper specification.
+
 
 ## 1.1.10
 

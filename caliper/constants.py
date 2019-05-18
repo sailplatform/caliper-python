@@ -148,29 +148,14 @@ EVENT_TYPES = {
 EVENT_CLASSES = { EVENT_TYPES[key]:'caliper.events.{}'.format(EVENT_TYPES[key])
                   for key in EVENT_TYPES.keys() }
 
-
-MARKER_TYPES = {
-    'ASSIGNABLE': 'Assignable',
-    'GENERATABLE': 'Generatable',
-    'REFERRABLE': 'Referrable',
-    'TARGETABLE': 'Targetable',
-}
-
-## map implementing Python classes onto event types
-MARKER_CLASSES = { MARKER_TYPES[key]:'caliper.entities.{}'.format(MARKER_TYPES[key])
-                   for key in MARKER_TYPES.keys() }
-
-
 CALIPER_TYPES = {}
 CALIPER_TYPES.update(ENTITY_TYPES)
 CALIPER_TYPES.update(EVENT_TYPES)
-CALIPER_TYPES.update(MARKER_TYPES)
 
 ## maps types to Python classnames
 CALIPER_CLASSES = {}
 CALIPER_CLASSES.update(ENTITY_CLASSES)
 CALIPER_CLASSES.update(EVENT_CLASSES)
-CALIPER_CLASSES.update(MARKER_CLASSES)
 
 ## maps Python classnames back to types
 CALIPER_TYPES_FOR_CLASSES = { CALIPER_CLASSES[key]:key for key in CALIPER_CLASSES.keys() }

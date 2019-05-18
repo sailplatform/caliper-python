@@ -29,7 +29,7 @@ try:
 except ImportError:
     from collections import MutableSequence, MutableMapping
 
-from caliper.constants import ENTITY_TYPES, MARKER_TYPES
+from caliper.constants import ENTITY_TYPES
 from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES, CALIPER_STATUS, CALIPER_SYSIDTYPES
 from caliper.base import CaliperSerializable, BaseEntity
 from caliper.base import ensure_type, ensure_list_type
@@ -128,23 +128,6 @@ class SystemIdentifier(BaseEntity):
         return self._get_prop('extensions')
 
 
-## Behavioural interfaces for entities ##
-class Assignable(BaseEntity):
-    pass
-
-
-class Generatable(BaseEntity):
-    pass
-
-
-class Referrable(BaseEntity):
-    pass
-
-
-class Targetable(BaseEntity):
-    pass
-
-
 ## Fundamental entities ##
 class Collection(Entity):
     def __init__(self, items=None, **kwargs):
@@ -199,7 +182,7 @@ class Membership(Entity):
 
 
 ## Agent entities
-class Agent(Entity, Referrable):
+class Agent(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
 
@@ -315,7 +298,7 @@ class LearningObjective(Entity):
 
 
 ## Aggregate measures
-class AggregateMeasure(Entity, Generatable):
+class AggregateMeasure(Entity):
     def __init__(self,
                  endedAtTime=None,
                  metric=None,
@@ -359,14 +342,14 @@ class AggregateMeasure(Entity, Generatable):
         return self._get_prop('maxMetricValue')
 
 
-class AggregateMeasureCollection(Collection, Generatable):
+class AggregateMeasureCollection(Collection):
     def __init__(self, items=None, **kwargs):
         Collection.__init__(self, **kwargs)
         self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
 
 
 ## Creative works
-class DigitalResource(Entity, Generatable, Referrable, Targetable):
+class DigitalResource(Entity):
     def __init__(self,
                  learningObjectives=None,
                  creators=None,
@@ -432,7 +415,7 @@ class DigitalResourceCollection(DigitalResource, Collection):
         self._set_list_prop('items', items, t=ENTITY_TYPES['DIGITAL_RESOURCE'])
 
 
-class Frame(DigitalResource, Targetable):
+class Frame(DigitalResource):
     def __init__(self, index=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_int_prop('index', index, req=True)
@@ -448,7 +431,7 @@ class Reading(DigitalResource):
 
 
 # not a digital resource, just a web endpoint
-class Link(Entity, Targetable):
+class Link(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
 
@@ -505,7 +488,7 @@ class EpubVolume(DigitalResource):
 
 
 ## Annotation entities
-class Annotation(Entity, Generatable):
+class Annotation(Entity):
     def __init__(self, annotated=None, annotator=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_obj_prop('annotated', annotated, t=ENTITY_TYPES['DIGITAL_RESOURCE'], req=True)
@@ -594,7 +577,7 @@ class TextPositionSelector(BaseEntity):
 
 
 ## Assessment entities
-class AssignableDigitalResource(DigitalResource, Assignable):
+class AssignableDigitalResource(DigitalResource):
     def __init__(self,
                  dateToActivate=None,
                  dateToShow=None,
@@ -659,7 +642,7 @@ class AssessmentItem(AssignableDigitalResource):
 
 
 ## Attempt and Response entities
-class Attempt(Entity, Generatable):
+class Attempt(Entity):
     def __init__(self,
                  assignable=None,
                  assignee=None,
@@ -719,7 +702,7 @@ class Attempt(Entity, Generatable):
         return self._get_prop('startedAtTime')
 
 
-class Response(Entity, Generatable):
+class Response(Entity):
     def __init__(self, attempt=None, duration=None, endedAtTime=None, startedAtTime=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
@@ -877,7 +860,7 @@ class Message(DigitalResource):
 
 
 ## Feedback entities
-class Rating(Entity, Generatable):
+class Rating(Entity):
     def __init__(self,
                  rater=None,
                  rated=None,
@@ -913,7 +896,7 @@ class Rating(Entity, Generatable):
         return self._get_prop('selections')
 
 
-class Comment(Entity, Generatable):
+class Comment(Entity):
     def __init__(self, commenter=None, commentedOn=None, value=None, **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_obj_prop('commenter', commenter, t=ENTITY_TYPES['PERSON'])
@@ -1175,7 +1158,7 @@ class MediaObject(DigitalResource):
         return self._get_prop('duration')
 
 
-class MediaLocation(DigitalResource, Targetable):
+class MediaLocation(DigitalResource):
     def __init__(self, currentTime=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_duration_prop('currentTime', currentTime)
@@ -1221,7 +1204,7 @@ class VideoObject(MediaObject):
 
 
 ## Outcome entities
-class Result(Entity, Generatable):
+class Result(Entity):
     def __init__(self,
                  attempt=None,
                  comment=None,
@@ -1257,7 +1240,7 @@ class Result(Entity, Generatable):
         return self._get_prop('scoredBy')
 
 
-class Score(Entity, Generatable):
+class Score(Entity):
     def __init__(self,
                  attempt=None,
                  comment=None,
@@ -1314,7 +1297,7 @@ class Query(Entity):
         return self._get_prop('searchTerms')
 
 
-class SearchResponse(Entity, Generatable):
+class SearchResponse(Entity):
     def __init__(self,
                  searchProvider=None,
                  searchTarget=None,
@@ -1361,7 +1344,7 @@ class SearchResponse(Entity, Generatable):
 
 
 ## Session entities
-class Session(Entity, Generatable, Targetable):
+class Session(Entity):
     def __init__(self,
                  client=None,
                  duration=None,
