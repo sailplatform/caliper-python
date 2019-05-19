@@ -264,33 +264,6 @@ class Group(Organization):
         self._set_list_prop('members', members, t=ENTITY_TYPES['PERSON'])
 
 
-## Learning Context
-# not really a Caliper Entity, but capable of serializing itself like one, for convenience
-class LearningContext(CaliperSerializable):
-    def __init__(self, edApp=None, group=None, membership=None, session=None):
-        CaliperSerializable.__init__(self)
-        self._set_obj_prop('edApp', edApp, t=ENTITY_TYPES['SOFTWARE_APPLICATION'])
-        self._set_obj_prop('group', group, t=ENTITY_TYPES['ORGANIZATION'])
-        self._set_obj_prop('membership', membership, t=ENTITY_TYPES['MEMBERSHIP'])
-        self._set_obj_prop('session', session, t=ENTITY_TYPES['SESSION'])
-
-    @property
-    def edApp(self):
-        return self._get_prop('edApp')
-
-    @property
-    def group(self):
-        return self._get_prop('group')
-
-    @property
-    def membership(self):
-        return self._get_prop('membership')
-
-    @property
-    def session(self):
-        return self._get_prop('session')
-
-
 ## Learning objective
 class LearningObjective(Entity):
     def __init__(self, **kwargs):
