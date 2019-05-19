@@ -281,11 +281,6 @@ CALIPER_PROFILES = {
     }
 
 PROFILE_CONTEXTS = { CALIPER_PROFILES[key]:[CALIPER_CORE_CONTEXT] for key in CALIPER_PROFILES.keys() }
-## profile context exceptions
-## exceptions that extend the core profile
-#
-# ## exceptions that are net-new from the core profile
-#
 
 CALIPER_CONTEXTS = {}
 CALIPER_CONTEXTS.update(PROFILE_CONTEXTS)

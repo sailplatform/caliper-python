@@ -37,8 +37,10 @@ import caliper.condensor as condensor
 # that the tests can find all the json fixture files in that sub-directory
 ###
 _FIXTURE_PREFIX = 'fixtures'
+_BROKEN_FIXTURE_SUFFIX = 'commonErrorFixtures'
 _FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
 _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
+_BROKEN_FIXTURE_DIR = os.path.join(_FIXTURE_COMMON_DIR, _BROKEN_FIXTURE_SUFFIX)
 _SENSOR_ID = 'https://example.edu/sensors/1'
 _TEST_ENDPOINT = 'https://example.edu/caliper/endpoint'
 
@@ -78,15 +80,23 @@ def _shape_fixture(s):
     return s.replace('{"', '{\n"').replace(', "', ',\n"')
 
 
-def get_fixture(name):
-    loc = os.path.join(_FIXTURE_COMMON_DIR, '{}.{}'.format(name, 'json'))
+def get_fixture(name, broken=False):
+    if not broken:
+        _path = _FIXTURE_COMMON_DIR
+    else:
+        _path = _BROKEN_FIXTURE_DIR
+    loc = os.path.join(_path, '{}.{}'.format(name, 'json'))
     with open(loc, 'r') as f:
         return json.dumps(json.load(f), sort_keys=True)
 
 
-def get_fixtures_of_type(name):
+def get_fixtures_of_type(name, broken=False):
+    if not broken:
+        _path = _FIXTURE_COMMON_DIR
+    else:
+        _path = _BROKEN_FIXTURE_DIR
     return [
-        os.path.splitext(file)[0] for file in os.listdir(_FIXTURE_COMMON_DIR)
+        os.path.splitext(file)[0] for file in os.listdir(_path)
         if file.startswith('caliper{}'.format(name.title()))
     ]
 
@@ -116,18 +126,30 @@ def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects
         return TestError(e, d).as_json()
 
 
-def rebuild_event(fixture, thin_props=True, thin_context=True, described_objects=None):
-    f_dict = json.loads(get_fixture(fixture))
+def rebuild_event(fixture,
+                  broken=False,
+                  thin_props=True,
+                  thin_context=True,
+                  described_objects=None):
+    f_dict = json.loads(get_fixture(fixture, broken))
     return _rebuild_caliper_serializable(f_dict, thin_props, thin_context, described_objects)
 
 
-def rebuild_entity(fixture, thin_props=True, thin_context=True, described_objects=None):
-    f_dict = json.loads(get_fixture(fixture))
+def rebuild_entity(fixture,
+                   broken=False,
+                   thin_props=True,
+                   thin_context=True,
+                   described_objects=None):
+    f_dict = json.loads(get_fixture(fixture, broken))
     return _rebuild_caliper_serializable(f_dict, thin_props, thin_context, described_objects)
 
 
-def rebuild_envelope(fixture, thin_props=True, thin_context=True, described_objects=None):
-    env_dict = json.loads(get_fixture(fixture))
+def rebuild_envelope(fixture,
+                     broken=False,
+                     thin_props=True,
+                     thin_context=True,
+                     described_objects=None):
+    env_dict = json.loads(get_fixture(fixture, broken))
     try:
         payload = condensor.from_json_list(env_dict.get('data'), strict=True)
         return caliper.request.Envelope(data=payload,

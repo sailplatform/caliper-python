@@ -1,6 +1,5 @@
 # Change history
 
-
 ## 1.2.0
 
 - Add support for user-agent type information within SoftwareApplication
