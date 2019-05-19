@@ -101,6 +101,9 @@ class Client(object):
             self.debug.append(debug)
         return identifiers
 
+    def get_config(self):
+        return self._requestor.get_config()
+
     def send(self, events=None, described_objects=None, sensor_id=None):
         identifiers = None
         if ensure_list_type(events, Event):
@@ -158,6 +161,9 @@ class SimpleSensor(object):
             else:
                 self._stats.update_failed(1)
             update_func(1)
+
+    def get_config(self):
+        return self._requestor.get_config()
 
     def send(self, caliper_objects, described_objects=None):
         v = caliper_objects
@@ -227,6 +233,12 @@ class Sensor(object):
         for k, client in self.client_registry.items():
             identifiers.update({k: client.describe(entities=v, sensor_id=self.id)})
         return identifiers
+
+    def get_config(self):
+        cfgs = {}
+        for k, client in self.client_registry.items():
+            cfgs.update({k: client.get_config()})
+        return cfgs
 
     def send(self, events=None, event=None, described_objects=None):
         identifiers = {}

@@ -172,3 +172,13 @@ def get_envelope(sensor, fixture):
                                         sensor_id=sensor.id)
     except Exception as e:
         return TestError(e, env_dict)
+
+
+# rebuild an endpoint config from a json dict
+def rebuild_endpoint_config(cfg_dict):
+    try:
+        cfg = caliper.request.EndpointConfig(**cfg_dict)
+        cfg.ensure_compatibility()
+        return cfg
+    except Exception as e:
+        return TestError(e, cfg_dict)
