@@ -94,10 +94,53 @@ class Envelope(CaliperSerializable):
         })
 
 
+class EndpointConfig(CaliperSerializable):
+    def __init__(self,
+                 caliper_maximum_payload_size=None,
+                 caliper_supported_extensions=None,
+                 caliper_supported_versions=None,
+                 **kwargs):
+        CaliperSerializable.__init__(self)
+        self._set_int_prop('caliper_maximum_payload_size', caliper_maximum_payload_size)
+        self._set_obj_prop('caliper_supported_extensions', caliper_supported_extensions)
+        self._set_list_prop('caliper_supported_versions', caliper_supported_versions, req=True)
+
+    def ensure_compatibility(self):
+        if CALIPER_CORE_CONTEXT not in self.caliper_supported_versions:
+            raise_with_traceback(
+                ValueError('No support for Caliper version {0} in endpoint: {1}'.format(
+                    CALIPER_CORE_CONTEXT, self.caliper_supported_versions)))
+        return True
+
+    @property
+    def caliper_maximum_payload_size(self):
+        return self._get_prop('caliper_maximum_payload_size')
+
+    @property
+    def caliper_supported_extensions(self):
+        return self._get_prop('caliper_supported_extensions')
+
+    @property
+    def caliper_supported_versions(self):
+        return self._get_prop('caliper_supported_versions')
+
+    # override because EndpointConfig should not specially serialize any of its properties
+    def as_dict(self, described_objects=None, thin_context=False, thin_props=False):
+        return copy.deepcopy({
+            'caliper_maximum_payload_size': self.caliper_maximum_payload_size,
+            'caliper_supported_extensions': self.caliper_supported_extensions,
+            'caliper_supported_versions': self.caliper_supported_versions
+        })
+
+
 class EventStoreRequestor(object):
     def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
         raise_with_traceback(
             NotImplementedError('Instance must implement EventStoreRequester.describe()'))
+
+    def get_config(self):
+        raise_with_traceback(
+            NotImplementedError('Instance must implement EventStoreRequester.get_config()'))
 
     def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):
         raise_with_traceback(
@@ -166,11 +209,25 @@ class HttpRequestor(EventStoreRequestor):
 
         return results, identifiers, response
 
+    def _get_config(self):
+        s = requests.Session()
+        hdrs = {}
+        if self._options.get_auth_header_value():
+            hdrs.update({'Authorization': self._options.get_auth_header_value()})
+        r = s.get(self._options.HOST, headers=hdrs)
+        if (r.status_code is requests.codes.ok):
+            return r.json()
+        else:
+            return None
+
     def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
         results, ids, response = self._dispatch(caliper_objects=caliper_entity_list,
                                                 sensor_id=sensor_id,
                                                 debug=debug)
         return results, ids, response
+
+    def get_config(self):
+        return self._get_config()
 
     def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):
         results, ids, response = self._dispatch(caliper_objects=caliper_event_list,

@@ -47,6 +47,13 @@ def describe(sensor, data):
     return ids, sensor.statistics
 
 
+def get_config(sensor, data):
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.GET, util._TEST_ENDPOINT, status=200, json=data)
+        cfg = sensor.get_config()
+    return cfg
+
+
 class TestCaliperSimpleSensor(unittest.TestCase):
     def setUp(self):
         self.sensor = util.build_simple_sensor()
@@ -79,6 +86,13 @@ class TestCaliperSimpleSensor(unittest.TestCase):
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
                          util.get_fixture(fixture))
+
+    # test the ability to fetch the endpoint's config
+    def testGetConfig(self):
+        fixture = 'caliperEndpointConfigPayload'
+        cfg_from_endoint = json.loads(get_config(self.sensor, util.get_fixture(fixture)))
+        endpoint_config_object = util.rebuild_endpoint_config(cfg_from_endoint)
+        self.assertEqual(endpoint_config_object.as_json(), util.get_fixture(fixture))
 
     # test transmission stats for sensor.send()
     def testEventSend(self):
