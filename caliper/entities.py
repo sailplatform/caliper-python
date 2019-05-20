@@ -1070,11 +1070,11 @@ class Survey(Collection):
 
 
 class SurveyInvitation(DigitalResource):
-    def __init__(self, rater=None, sentCount=None, sentDate=None, survey=None, **kwargs):
+    def __init__(self, rater=None, sentCount=None, dateSent=None, survey=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
         self._set_obj_prop('rater', rater, t=ENTITY_TYPES['PERSON'])
         self._set_int_prop('sentCount', sentCount)
-        self._set_datetime_prop('sentDate', sentDate)
+        self._set_datetime_prop('dateSent', dateSent)
         self._set_obj_prop('survey', survey, t=ENTITY_TYPES['SURVEY'])
 
     @property
@@ -1086,8 +1086,8 @@ class SurveyInvitation(DigitalResource):
         return self._get_prop('sentCount')
 
     @property
-    def sentDate(self):
-        return self._get_prop('sentDate')
+    def dateSent(self):
+        return self._get_prop('dateSent')
 
     @property
     def survey(self):
