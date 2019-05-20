@@ -299,6 +299,9 @@ class ToolLaunchEvent(Event):
         ensure_type(self.object, ENTITY_TYPES['SOFTWARE_APPLICATION'])
         ensure_type(self.generated, ENTITY_TYPES['DIGITAL_RESOURCE'], optional=True)
         ensure_types(self.target, [ENTITY_TYPES['LINK'], ENTITY_TYPES['LTI_LINK']], optional=True)
+        if self.action == CALIPER_ACTIONS['LAUNCHED']:
+            ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'])
+
 
 
 class ToolUseEvent(Event):
