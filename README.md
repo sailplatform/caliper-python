@@ -1,7 +1,5 @@
-| branch  | status |
-|---------|--------|
-| master  | [![Build Status](https://travis-ci.org/IMSGlobal/caliper-python.svg?branch=master)](https://travis-ci.org/IMSGlobal/caliper-python)|
-| develop | [![Build Status](https://travis-ci.org/IMSGlobal/caliper-python.svg?branch=develop)](https://travis-ci.org/IMSGlobal/caliper-python)|
+[![Master Build Status](https://img.shields.io/travis/IMSGlobal/caliper-python.svg?label=master)](https://travis-ci.org/IMSGlobal/caliper-python)
+[![Develop Build Status](https://img.shields.io/travis/IMSGlobal/caliper-python/develop.svg?label=develop)](https://travis-ci.org/IMSGlobal/caliper-python/develop)
 
 
 # IMS Global Learning Consortium, Inc.
