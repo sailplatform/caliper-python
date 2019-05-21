@@ -752,7 +752,7 @@ class MultipleResponseResponse(Response):
 class MultiselectResponse(Response):
     def __init__(self, selections=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_list_prop('selections', selections)
+        self._set_list_prop('selections', selections, t=str)
 
     @property
     def selections(self):
