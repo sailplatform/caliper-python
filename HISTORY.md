@@ -2,6 +2,8 @@
 
 ## 1.2.0
 
+- Supports IMS Caliper specification 1.2.
+
 - Add support for user-agent type information within SoftwareApplication entities, and add new
   optional `client` field in Session entities.
 
@@ -104,7 +106,7 @@
 
 ## 1.1.0
 
-- Supports IMS Caliper specification 1.1
+- Supports IMS Caliper specification 1.1.
 
   *1.1.0.1*. Bug fix for [Issue #147](https://github.com/IMSGlobal/caliper-python/issues/147>).
 
