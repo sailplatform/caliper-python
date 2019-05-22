@@ -204,6 +204,21 @@ def ensure_list_type(l, t):
         ensure_type(i, t)
     return True
 
+def ensure_list_types(l, tl):
+    # exception or True
+    messages = []
+    ret = False
+    for t in tl:
+        try:
+            ensure_list_type(l, t)
+            ret = True
+        except Exception as e:
+            messages.append(str(e))
+    if ret:
+        return ret
+    else:
+        raise_with_traceback(TypeError(' or '.join(messages)))
+
 
 ### Default configuration values ###
 class Options(object):
@@ -433,8 +448,11 @@ class CaliperSerializable(object):
             if not (isinstance(v, MutableSequence)):
                 raise_with_traceback(ValueError('{0} must be a list'.format(str(k))))
             elif t:
-                for item in v:
-                    ensure_type(item, t)
+                if isinstance(t, MutableSequence):
+                    fn = ensure_list_types
+                else:
+                    fn = ensure_list_type
+                fn(v, t)
         self._update_props(k, v, req=req)
 
     def _set_obj_prop(self, k, v, t=None, req=False):

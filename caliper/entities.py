@@ -772,7 +772,7 @@ class OpenEndedResponse(Response):
 class RatingScaleResponse(Response):
     def __init__(self, selections=None, **kwargs):
         Response.__init__(self, **kwargs)
-        self._set_list_prop('selections', selections)
+        self._set_list_prop('selections', selections, t=[str, float])
 
     @property
     def selections(self):
@@ -846,7 +846,7 @@ class Rating(Entity):
         self._set_obj_prop('rated', rated, t=ENTITY_TYPES['ENTITY'])
         self._set_obj_prop('ratingComment', ratingComment, t=ENTITY_TYPES['COMMENT'])
         self._set_obj_prop('question', question, t=ENTITY_TYPES['QUESTION'])
-        self._set_list_prop('selections', selections)
+        self._set_list_prop('selections', selections, t=[str, float])
 
     @property
     def rater(self):
@@ -927,8 +927,8 @@ class DateTimeQuestion(Question):
 class MultiselectQuestion(Question):
     def __init__(self, itemLabels=None, itemValues=None, points=None, **kwargs):
         Question.__init__(self, **kwargs)
-        self._set_list_prop('itemLabels', itemLabels)
-        self._set_list_prop('itemValues', itemValues)
+        self._set_list_prop('itemLabels', itemLabels, t=str)
+        self._set_list_prop('itemValues', itemValues, t=str)
         self._set_int_prop('points', points)
 
     @property
@@ -967,7 +967,7 @@ class Scale(Entity):
 class LikertScale(Scale):
     def __init__(self, itemLabels=None, itemValues=None, scalePoints=None, **kwargs):
         Scale.__init__(self, **kwargs)
-        self._set_list_prop('itemLabels', itemLabels)
+        self._set_list_prop('itemLabels', itemLabels, t=str)
         self._set_list_prop('itemValues', itemValues, t=str)
         self._set_int_prop('scalePoints', scalePoints)
 
@@ -994,8 +994,8 @@ class MultiselectScale(Scale):
                  scalePoints=None,
                  **kwargs):
         Scale.__init__(self, **kwargs)
-        self._set_list_prop('itemLabels', itemLabels)
-        self._set_list_prop('itemValues', itemValues)
+        self._set_list_prop('itemLabels', itemLabels, t=str)
+        self._set_list_prop('itemValues', itemValues, t=str)
         self._set_int_prop('maxSelections', maxSelections)
         self._set_int_prop('minSelections', minSelections)
         self._set_bool_prop('isOrderedSelection', isOrderedSelection)
