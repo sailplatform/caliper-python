@@ -74,33 +74,7 @@ def build_debug_sensor():
 def build_simple_sensor():
     return caliper.build_simple_sensor(config_options=get_testing_options(), sensor_id=_SENSOR_ID)
 
-
-# basic condensor functions to condense and extract json starting from fixtures
-def _shape_fixture(s):
-    return s.replace('{"', '{\n"').replace(', "', ',\n"')
-
-
-def get_fixture(name, broken=False):
-    if not broken:
-        _path = _FIXTURE_COMMON_DIR
-    else:
-        _path = _BROKEN_FIXTURE_DIR
-    loc = os.path.join(_path, '{}.{}'.format(name, 'json'))
-    with open(loc, 'r') as f:
-        return json.dumps(json.load(f), sort_keys=True)
-
-
-def get_fixtures_of_type(name, broken=False):
-    if not broken:
-        _path = _FIXTURE_COMMON_DIR
-    else:
-        _path = _BROKEN_FIXTURE_DIR
-    return [
-        os.path.splitext(file)[0] for file in os.listdir(_path)
-        if file.startswith('caliper{}'.format(name.title()))
-    ]
-
-
+# TestError caliper serializable to make error handling more uniform to ease testing
 class TestError(caliper.base.CaliperSerializable):
     def __init__(self, error=None, fixture=None, **kwargs):
         caliper.base.CaliperSerializable.__init__(self)
@@ -114,6 +88,34 @@ class TestError(caliper.base.CaliperSerializable):
     @property
     def fixture(self):
         return self._get_prop('fixture')
+
+
+# basic condensor functions to condense and extract json starting from fixtures
+def _shape_fixture(s):
+    return s.replace('{"', '{\n"').replace(', "', ',\n"')
+
+
+def get_fixture(name, broken=False):
+    if not broken:
+        _path = _FIXTURE_COMMON_DIR
+    else:
+        _path = _BROKEN_FIXTURE_DIR
+    loc = os.path.join(_path, '{}.{}'.format(name, 'json'))
+    try:
+        with open(loc, 'r') as f:
+            return json.dumps(json.load(f), sort_keys=True)
+    except Exception as e:
+        return json.dumps(TestError(e, name).as_dict(), sort_keys=True)
+
+def get_fixtures_of_type(name, broken=False):
+    if not broken:
+        _path = _FIXTURE_COMMON_DIR
+    else:
+        _path = _BROKEN_FIXTURE_DIR
+    return [
+        os.path.splitext(file)[0] for file in os.listdir(_path)
+        if file.startswith('caliper{}'.format(name.title()))
+    ]
 
 
 def _rebuild_caliper_serializable(d, thin_props, thin_context, described_objects):
