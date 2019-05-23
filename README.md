@@ -28,6 +28,17 @@ setuptools installed. This package also depends on several third-party packages:
 To work with the `imsglobal_caliper` bundle (maintain, use, run tests) you'll need to have these
 third-party packages in your local Python environment.
 
+### Testing
+
+In test, the `ims_global` package depends on these third-party packages not actually used within
+the package code itself:
+
+* pytest and pytest-cov
+
+* responses
+
+* tox
+
 
 ### Which platform
 
@@ -85,11 +96,10 @@ Global Learning Consortium (for example, for feature requests, bug reports, ques
 but we do not accept contributions in the form of pull requests from non-members. See
 `CONTRIBUTING.md` for more information.
 
-**Testing**. When you work with the source bundle, we include tests in the `tests` directory. The
-tests use the `tox` test runner, so you will need that in your environment. In general, whenever
-you might make changes to code in `caliper`, you should run the fixture tests. From the source
-repo's top-level directory, use `tox` to run all the tests on Python 2.7, Python 3.7, PyPy, and
-PyPy3.
+**Testing**. When you work with the source bundle, we include tests in the `tests` directory. In
+general, whenever you might make changes to code in `caliper`, you should run the fixture
+tests. From the source repo's top-level directory, use `tox` to run all the tests on Python 2.7,
+Python 3.7, PyPy, and PyPy3.
 
 Before you can run the tests, you will also need a copy of the Caliper fixtures (see below).
 
