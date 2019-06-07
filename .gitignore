@@ -7,7 +7,5 @@ build
 dist
 *.egg-info*
 Pipfile.lock
-tests/fixtures
-tests/fixtures_out
-tests/contexts
+tests/caliper-spec
 venv

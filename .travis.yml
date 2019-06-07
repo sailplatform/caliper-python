@@ -21,9 +21,9 @@ install:
     - pip check
 
 before_script:
-    - wget https://github.com/IMSGlobal/caliper-common-fixtures/archive/develop.zip
+    - wget https://github.com/IMSGlobal/caliper-spec/archive/develop.zip
     - unzip develop.zip -d ./tests
-    - mv ./tests/caliper-common-fixtures-develop ./tests/fixtures
+    - mv ./tests/caliper-spec-develop ./tests/caliper-spec
 
 script:
     - python3 setup.py sdist

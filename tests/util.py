@@ -25,6 +25,7 @@ from builtins import *
 
 import json
 import os
+import responses
 import sys
 
 from .context import caliper, TESTDIR
@@ -36,7 +37,7 @@ import caliper.condensor as condensor
 # in the tests module's directory in a 'fixtures_common' subdirectory so
 # that the tests can find all the json fixture files in that sub-directory
 ###
-_FIXTURE_PREFIX = 'fixtures'
+_FIXTURE_PREFIX = os.path.join('caliper-spec', 'fixtures')
 _BROKEN_FIXTURE_SUFFIX = 'commonErrorFixtures'
 _FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
 _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
@@ -184,3 +185,23 @@ def rebuild_endpoint_config(cfg_dict):
         return cfg
     except Exception as e:
         return TestError(e, cfg_dict)
+
+# sensor send functions for mocking out endopint
+
+def _send(fn, sensor, data):
+    with responses.RequestsMock() as resps:
+        resps.add(responses.POST, _TEST_ENDPOINT, status=201)
+        ids = fn(data)
+    return ids, sensor.statistics
+
+def sensor_config(sensor, data):
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.GET, _TEST_ENDPOINT, status=200, json=data)
+        cfg = sensor.get_config()
+    return cfg
+
+def sensor_describe(sensor, data):
+    return _send(sensor.describe, sensor, data)
+
+def sensor_send(sensor, data):
+    return _send(sensor.send, sensor, data)
