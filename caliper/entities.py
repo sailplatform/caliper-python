@@ -1276,7 +1276,6 @@ class SearchResponse(Entity):
                  searchTarget=None,
                  query=None,
                  searchResultsItemCount=None,
-                 searchResults=None,
                  **kwargs):
         Entity.__init__(self, **kwargs)
         self._set_obj_prop('searchProvider',
@@ -1285,7 +1284,6 @@ class SearchResponse(Entity):
         self._set_obj_prop('searchTarget', searchTarget, t=ENTITY_TYPES['ENTITY'])
         self._set_obj_prop('query', query, t=ENTITY_TYPES['QUERY'])
         self._set_int_prop('searchResultsItemCount', searchResultsItemCount)
-        self._set_list_prop('searchResults', searchResults, t=ENTITY_TYPES['ENTITY'])
 
     @property
     def searchProvider(self):
@@ -1306,14 +1304,6 @@ class SearchResponse(Entity):
     @searchResultsItemCount.setter
     def searchResultsItemCount(self, new_count):
         self._set_int_prop('searchResultsItemCount', new_count)
-
-    @property
-    def searchResults(self):
-        return self._get_prop('searchResults')
-
-    @searchResults.setter
-    def searchResults(self, new_results):
-        self._set_list_prop('searchResults', new_results, t=ENTITY_TYPES['ENTITY'])
 
 
 ## Session entities
