@@ -1,10 +1,11 @@
+dist: xenial
 language: python
 python:
   - "2.7"
   - "3.7"
-  - "pypy2.7-5.10.0"
-  - "pypy3.5"
-dist: xenial
+  - "3.8-dev"
+  - "pypy"
+  - "pypy3"
 sudo: true
 
 before_install:
