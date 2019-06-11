@@ -337,7 +337,7 @@ CALIPER_ACTIONS = {
     'DESCRIBED': 'Described',
     'DISABLED_CLOSED_CAPTIONING': 'DisabledClosedCaptioning',
     'DISLIKED': 'Disliked',
-    'DOWNLOADED': 'Downlaoded',
+    'DOWNLOADED': 'Downloaded',
     'ENABLED_CLOSED_CAPTIONING': 'EnabledClosedCaptioning',
     'ENDED': 'Ended',
     'ENTERED_FULLSCREEN': 'EnteredFullScreen',
