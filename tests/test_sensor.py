@@ -21,14 +21,10 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from builtins import *
 
 import json
-import os
-import sys
 import unittest
 
-from .context import caliper
 from . import util
 
 
@@ -59,8 +55,8 @@ class TestCaliperSimpleSensor(unittest.TestCase):
         self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
                          util.get_fixture(fixture))
 
-    def testEntityPayloadSingle(self):
-        fixture = 'caliperEnvelopeEntitySingle'
+    def testEntityPayloadBatch(self):
+        fixture = 'caliperEnvelopeEntityBatch'
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
                          util.get_fixture(fixture))
@@ -78,7 +74,7 @@ class TestCaliperSimpleSensor(unittest.TestCase):
         for i in range(self.iterations):
             _, statistics = util.sensor_send(
                 self.sensor,
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+                util.condensor_from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
@@ -91,7 +87,7 @@ class TestCaliperSimpleSensor(unittest.TestCase):
     def testEventSendBatch(self):
         fixture = 'caliperEventGeneralCreated'
         batch = [
-            caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
+            util.condensor_from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
         _, statistics = util.sensor_send(self.sensor, batch)
@@ -110,7 +106,7 @@ class TestCaliperSimpleSensor(unittest.TestCase):
         for i in range(self.iterations):
             _, statistics = util.sensor_send(
                 self.sensor,
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+                util.condensor_from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.sent.count
             succeeded = stats.successful.count
@@ -123,7 +119,7 @@ class TestCaliperSimpleSensor(unittest.TestCase):
     def testEntityDescribeBatch(self):
         fixture = 'caliperEntityPerson'
         batch = [
-            caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
+            util.condensor_from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
         _, statistics = util.sensor_send(self.sensor, batch)
@@ -164,8 +160,8 @@ class TestCaliperSensor(unittest.TestCase):
         self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
                          util.get_fixture(fixture))
 
-    def testEntityPayloadSingle(self):
-        fixture = 'caliperEnvelopeEntitySingle'
+    def testEntityPayloadBatch(self):
+        fixture = 'caliperEnvelopeEntityBatch'
         envelope = util.get_envelope(self.sensor, fixture)
         self.assertEqual(envelope.as_json(thin_props=True, thin_context=True),
                          util.get_fixture(fixture))
@@ -176,7 +172,7 @@ class TestCaliperSensor(unittest.TestCase):
         for i in range(self.iterations):
             _, statistics = util.sensor_send(
                 self.sensor,
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+                util.condensor_from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.measures.count
             succeeded = stats.successful.count
@@ -189,7 +185,7 @@ class TestCaliperSensor(unittest.TestCase):
     def testEventSendBatch(self):
         fixture = 'caliperEventGeneralCreated'
         batch = [
-            caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
+            util.condensor_from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
         _, statistics = util.sensor_send(self.sensor, batch)
@@ -207,7 +203,7 @@ class TestCaliperSensor(unittest.TestCase):
         for i in range(self.iterations):
             _, statistics = util.sensor_describe(
                 self.sensor,
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+                util.condensor_from_json_dict(json.loads(util.get_fixture(fixture))))
         for stats in statistics:
             counted = stats.describes.count
             succeeded = stats.successful.count
@@ -220,7 +216,7 @@ class TestCaliperSensor(unittest.TestCase):
     def testEntityDescribeBatch(self):
         fixture = 'caliperEntityPerson'
         batch = [
-            caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture)))
+            util.condensor_from_json_dict(json.loads(util.get_fixture(fixture)))
             for x in range(self.iterations)
         ]
         _, statistics = util.sensor_describe(self.sensor, batch)
@@ -244,6 +240,6 @@ class TestDebugSensor(unittest.TestCase):
         for i in range(self.iterations):
             util.sensor_send(
                 self.sensor,
-                caliper.condensor.from_json_dict(json.loads(util.get_fixture(fixture))))
+                util.condensor_from_json_dict(json.loads(util.get_fixture(fixture))))
         for response in self.sensor.client_registry['default'].debug:
             self.assertEqual(response.status_code, 201)

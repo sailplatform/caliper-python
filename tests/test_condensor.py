@@ -21,13 +21,9 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from builtins import *
 
-import os
-import sys
 import unittest
 
-from .context import caliper
 from . import util
 
 

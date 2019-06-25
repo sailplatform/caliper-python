@@ -22,14 +22,15 @@ from __future__ import (absolute_import, division, print_function, unicode_liter
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import raise_with_traceback
-from builtins import *
 
 try:
-    from collections.abc import MutableSequence, MutableMapping
+    from collections.abc import MutableSequence
 except ImportError:
-    from collections import MutableSequence, MutableMapping
+    from collections import MutableSequence
 
-import copy, datetime, json, requests
+import copy
+import datetime
+import requests
 
 from caliper.base import CaliperSerializable, HttpOptions
 from caliper.constants import CALIPER_CORE_CONTEXT
@@ -54,7 +55,7 @@ class Envelope(CaliperSerializable):
 
     @data.setter
     def data(self, new_data):
-        self._set_list_prop('data', data, t=CaliperSerializable)
+        self._set_list_prop('data', new_data, t=CaliperSerializable)
 
     @property
     def dataVersion(self):

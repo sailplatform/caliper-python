@@ -22,12 +22,12 @@ from __future__ import (absolute_import, division, print_function, unicode_liter
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import raise_with_traceback
-from builtins import *
+from builtins import str
 
 try:
-    from collections.abc import MutableSequence, MutableMapping
+    from collections.abc import MutableSequence
 except ImportError:
-    from collections import MutableSequence, MutableMapping
+    from collections import MutableSequence
 
 from caliper.base import CaliperSerializable, Options, HttpOptions, deprecation, ensure_list_type
 from caliper.entities import Entity
@@ -53,7 +53,7 @@ class Client(object):
         else:
             self._requestor = HttpRequestor(options=self._config)
 
-        if stats and not (isinstance(stats, Stats)):
+        if stats and not (isinstance(stats, Statistics)):
             raise_with_traceback(TypeError('stats must implement stats.Stats'))
         else:
             self._stats = Statistics()

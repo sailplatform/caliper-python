@@ -21,19 +21,21 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from builtins import *
 
 from math import sqrt
 
 
 class Statistic(object):
+    _count_string = '[Count: {0}]'
+    _stats_string = '[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]'
+
     def __init__(self):
         self._sum = 0.0
         self._count = 0
         self._last = 0.0
 
-        ## standard deviation variables based on
-        ## http://www.johndcook.com/standard_deviation.html
+        # standard deviation variables based on
+        # http://www.johndcook.com/standard_deviation.html
         self._oldM = 0.0
         self._newM = 0.0
         self._oldS = 0.0
@@ -44,10 +46,10 @@ class Statistic(object):
 
     def __str__(self):
         if self._min == 1.0 and self._max == 1.0:
-            return '[Count: {0}]'.format(self._count)
+            return self._count_string.format(self._count)
         else:
-            return '[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]'.format(
-                self._count, self._min, self._max, self.average, self.standard_deviation)
+            return self._stats_string.format(self._count, self._min, self._max, self.average,
+                                             self.standard_deviation)
 
     def clear(self):
         self._sum = 0.0

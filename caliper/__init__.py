@@ -30,19 +30,18 @@ Caliper-compliant sensor or endpoint for you learning services.
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from builtins import *
+
+import logging
+
+from caliper.base import HttpOptions
+from caliper.constants import CALIPER_VERSION
+from caliper.sensor import Sensor, SimpleSensor
 
 __title__ = 'imsglobal_caliper'
 __version__ = '1.2.0.0'
 __build__ = 0x01020000
 __author__ = 'IMS Global Learning Consortium, Inc.'
 __license__ = 'LGPLv3'
-
-import logging, os
-
-from caliper.base import HttpOptions as HttpOptions
-from caliper.constants import CALIPER_VERSION as CALIPER_VERSION
-from caliper.sensor import Sensor as Sensor, SimpleSensor as SimpleSensor
 __all__ = ['Sensor', 'SimpleSensor', 'HttpOptions', CALIPER_VERSION]
 
 
@@ -65,6 +64,6 @@ def build_simple_sensor(config_options=None, sensor_id=None):
     return SimpleSensor.fashion_simple_sensor(config_options=config_options, sensor_id=sensor_id)
 
 
-## set default logging handler to avoid "No handler found" warnings.
-## Thanks to Kenneth Reitz' requests library for this pattern
+# set default logging handler to avoid "No handler found" warnings.
+# Thanks to Kenneth Reitz' requests library for this pattern
 logger = logging.getLogger(__name__).addHandler(logging.NullHandler())

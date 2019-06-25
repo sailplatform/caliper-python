@@ -21,13 +21,9 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from builtins import *
 
-import os
-import sys
 import unittest
 
-from .context import caliper
 from . import util
 
 
@@ -44,7 +40,7 @@ class TestCaliperEntities(unittest.TestCase):
             print('Testing entity fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_entity(fixture))
-            except AssertionError as e:
+            except AssertionError:
                 passing = False
                 print('Unable to rebuild matching entity fixture: {}'.format(fixture))
         if not passing:
@@ -63,8 +59,9 @@ class TestBrokenCaliperEntities(unittest.TestCase):
         for fixture in self.fixtures:
             print('Testing broken entity fixture: {}'.format(fixture))
             try:
-                self.assertNotEqual(util.get_fixture(fixture, broken), util.rebuild_entity(fixture, broken))
-            except AssertionError as e:
+                self.assertNotEqual(util.get_fixture(fixture, broken),
+                                    util.rebuild_entity(fixture, broken))
+            except AssertionError:
                 passing = False
                 print('Broken entity fixture should not be rebuildable: {}'.format(fixture))
         if not passing:
@@ -84,7 +81,7 @@ class TestCaliperEnvelopes(unittest.TestCase):
             print('Testing envelope fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_envelope(fixture))
-            except AssertionError as e:
+            except AssertionError:
                 passing = False
                 print('Unable to rebuild matching envelope fixture: {}'.format(fixture))
         if not passing:
@@ -103,8 +100,9 @@ class TestBrokenCaliperEnvelopes(unittest.TestCase):
         for fixture in self.fixtures:
             print('Testing envelope fixture: {}'.format(fixture))
             try:
-                self.assertNotEqual(util.get_fixture(fixture, broken), util.rebuild_entity(fixture, broken))
-            except AssertionError as e:
+                self.assertNotEqual(util.get_fixture(fixture, broken),
+                                    util.rebuild_entity(fixture, broken))
+            except AssertionError:
                 passing = False
                 print('Broken envelope fixture should not be rebuildable: {}'.format(fixture))
         if not passing:
@@ -124,7 +122,7 @@ class TestCaliperEvents(unittest.TestCase):
             print('Testing event fixture: {}'.format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_event(fixture))
-            except AssertionError as e:
+            except AssertionError:
                 passing = False
                 print('Unable to rebuild matching event fixture: {}'.format(fixture))
         if not passing:
@@ -143,8 +141,9 @@ class TestBrokenCaliperEvents(unittest.TestCase):
         for fixture in self.fixtures:
             print('Testing broken event fixture: {}'.format(fixture))
             try:
-                self.assertNotEqual(util.get_fixture(fixture, broken), util.rebuild_entity(fixture, broken))
-            except AssertionError as e:
+                self.assertNotEqual(util.get_fixture(fixture, broken),
+                                    util.rebuild_entity(fixture, broken))
+            except AssertionError:
                 passing = False
                 print('Broken event fixture should not be rebuildable: {}'.format(fixture))
         if not passing:

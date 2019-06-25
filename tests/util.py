@@ -21,12 +21,10 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from builtins import *
 
 import json
 import os
 import responses
-import sys
 
 from .context import caliper, TESTDIR
 from caliper import CALIPER_VERSION
@@ -75,6 +73,7 @@ def build_debug_sensor():
 def build_simple_sensor():
     return caliper.build_simple_sensor(config_options=get_testing_options(), sensor_id=_SENSOR_ID)
 
+
 # TestError caliper serializable to make error handling more uniform to ease testing
 class TestError(caliper.base.CaliperSerializable):
     def __init__(self, error=None, fixture=None, **kwargs):
@@ -92,6 +91,11 @@ class TestError(caliper.base.CaliperSerializable):
 
 
 # basic condensor functions to condense and extract json starting from fixtures
+
+# export function so that test classes don't need to import caliper directly
+condensor_from_json_dict = caliper.condensor.from_json_dict
+
+
 def _shape_fixture(s):
     return s.replace('{"', '{\n"').replace(', "', ',\n"')
 
@@ -107,6 +111,7 @@ def get_fixture(name, broken=False):
             return json.dumps(json.load(f), sort_keys=True)
     except Exception as e:
         return json.dumps(TestError(e, name).as_dict(), sort_keys=True)
+
 
 def get_fixtures_of_type(name, broken=False):
     if not broken:
@@ -186,13 +191,14 @@ def rebuild_endpoint_config(cfg_dict):
     except Exception as e:
         return TestError(e, cfg_dict)
 
-# sensor send functions for mocking out endopint
 
+# sensor send functions for mocking out endopint
 def _send(fn, sensor, data):
     with responses.RequestsMock() as resps:
         resps.add(responses.POST, _TEST_ENDPOINT, status=201)
         ids = fn(data)
     return ids, sensor.statistics
+
 
 def sensor_config(sensor, data):
     with responses.RequestsMock() as rsps:
@@ -200,8 +206,10 @@ def sensor_config(sensor, data):
         cfg = sensor.get_config()
     return cfg
 
+
 def sensor_describe(sensor, data):
     return _send(sensor.describe, sensor, data)
+
 
 def sensor_send(sensor, data):
     return _send(sensor.send, sensor, data)

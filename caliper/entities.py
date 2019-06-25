@@ -22,25 +22,25 @@ from __future__ import (absolute_import, division, print_function, unicode_liter
 from future.standard_library import install_aliases
 install_aliases()
 from future.utils import raise_with_traceback
-from builtins import *
+from builtins import str
 
 try:
-    from collections.abc import MutableSequence, MutableMapping
+    from collections.abc import MutableSequence
 except ImportError:
-    from collections import MutableSequence, MutableMapping
+    from collections import MutableSequence
 
 from caliper.constants import ENTITY_TYPES
-from caliper.constants import CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES, CALIPER_STATUS, CALIPER_SYSIDTYPES
-from caliper.base import CaliperSerializable, BaseEntity
-from caliper.base import ensure_type, ensure_list_type
+from caliper.constants import (CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES,
+                               CALIPER_STATUS, CALIPER_SYSIDTYPES)
+from caliper.base import BaseEntity
 
 
-### Fundamental entities ###
-## Base entity class
+# Fundamental entities
+# Base entity class
 class Entity(BaseEntity):
 
-    ## Use the base context value here, but preserve the context labels
-    ## in case, in the future, indivdual contexts start getting split out
+    # Use the base context value here, but preserve the context labels
+    # in case, in the future, indivdual contexts start getting split out
 
     def __init__(self,
                  id=None,
@@ -128,7 +128,7 @@ class SystemIdentifier(BaseEntity):
         return self._get_prop('extensions')
 
 
-## Fundamental entities ##
+# Fundamental entities
 class Collection(Entity):
     def __init__(self, items=None, **kwargs):
         Entity.__init__(self, **kwargs)
@@ -139,10 +139,8 @@ class Collection(Entity):
         return self._get_prop('items')
 
 
-### Derived entities ###
-
-
-## Membership entities
+# Derived entities
+# Membership entities
 class Membership(Entity):
     def __init__(self, member=None, organization=None, roles=None, status=None, **kwargs):
         Entity.__init__(self, **kwargs)
@@ -181,7 +179,7 @@ class Membership(Entity):
         return self._get_prop('status')
 
 
-## Agent entities
+# Agent entities
 class Agent(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
@@ -217,7 +215,7 @@ class Person(Agent):
         Agent.__init__(self, **kwargs)
 
 
-## Organization entities
+# Organization entities
 class Organization(Agent):
     def __init__(self, members=None, subOrganizationOf=None, **kwargs):
         Entity.__init__(self, **kwargs)
@@ -264,13 +262,13 @@ class Group(Organization):
         self._set_list_prop('members', members, t=ENTITY_TYPES['PERSON'])
 
 
-## Learning objective
+# Learning objective
 class LearningObjective(Entity):
     def __init__(self, **kwargs):
         Entity.__init__(self, **kwargs)
 
 
-## Aggregate measures
+# Aggregate measures
 class AggregateMeasure(Entity):
     def __init__(self,
                  endedAtTime=None,
@@ -321,7 +319,7 @@ class AggregateMeasureCollection(Collection):
         self._set_list_prop('items', items, t=ENTITY_TYPES['AGGREGATE_MEASURE'])
 
 
-## Creative works
+# Creative works
 class DigitalResource(Entity):
     def __init__(self,
                  learningObjectives=None,
@@ -460,7 +458,7 @@ class EpubVolume(DigitalResource):
         DigitalResource.__init__(self, **kwargs)
 
 
-## Annotation entities
+# Annotation entities
 class Annotation(Entity):
     def __init__(self, annotated=None, annotator=None, **kwargs):
         Entity.__init__(self, **kwargs)
@@ -549,7 +547,7 @@ class TextPositionSelector(BaseEntity):
         return self._get_prop('extensions')
 
 
-## Assessment entities
+# Assessment entities
 class AssignableDigitalResource(DigitalResource):
     def __init__(self,
                  dateToActivate=None,
@@ -614,7 +612,7 @@ class AssessmentItem(AssignableDigitalResource):
         return self._get_prop('isTimeDependent')
 
 
-## Attempt and Response entities
+# Attempt and Response entities
 class Attempt(Entity):
     def __init__(self,
                  assignable=None,
@@ -799,7 +797,7 @@ class TrueFalseResponse(Response):
         return self._get_prop('value')
 
 
-## Discussion forum entities
+# Discussion forum entities
 class Forum(DigitalResourceCollection):
     def __init__(self, items=None, **kwargs):
         DigitalResourceCollection.__init__(self, **kwargs)
@@ -832,7 +830,7 @@ class Message(DigitalResource):
         return self._get_prop('attachments')
 
 
-## Feedback entities
+# Feedback entities
 class Rating(Entity):
     def __init__(self,
                  rater=None,
@@ -1062,7 +1060,7 @@ class NumericScale(Scale):
         return self._get_prop('step')
 
 
-## Survey entities
+# Survey entities
 class Survey(Collection):
     def __init__(self, items=None, **kwargs):
         Collection.__init__(self, **kwargs)
@@ -1120,7 +1118,7 @@ class QuestionnaireItem(DigitalResource):
         return self._get_prop('weight')
 
 
-## Media entities
+# Media entities
 class MediaObject(DigitalResource):
     def __init__(self, duration=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
@@ -1176,7 +1174,7 @@ class VideoObject(MediaObject):
         MediaObject.__init__(self, **kwargs)
 
 
-## Outcome entities
+# Outcome entities
 class Result(Entity):
     def __init__(self,
                  attempt=None,
@@ -1249,7 +1247,7 @@ class Score(Entity):
         return self._get_prop('scoredBy')
 
 
-## Search entities
+# Search entities
 class Query(Entity):
     def __init__(self, creator=None, searchTarget=None, searchTerms=None, **kwargs):
         Entity.__init__(self, **kwargs)
@@ -1306,7 +1304,7 @@ class SearchResponse(Entity):
         self._set_int_prop('searchResultsItemCount', new_count)
 
 
-## Session entities
+# Session entities
 class Session(Entity):
     def __init__(self,
                  client=None,

@@ -21,15 +21,13 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from future.utils import raise_with_traceback
-from builtins import *
 
 from caliper.constants import CALIPER_ACTIONS, CALIPER_PROFILES
-from caliper.constants import ENTITY_TYPES, EVENT_TYPES
+from caliper.constants import ENTITY_TYPES
 from caliper.base import BaseEvent, ensure_type, ensure_types
 
 
-## Base event class
+# Base event class
 class Event(BaseEvent):
     def __init__(self,
                  id=None,
@@ -121,7 +119,7 @@ class MinimalEvent(BaseEvent):
         return self._get_prop('actor')
 
 
-## Derived Events
+# Derived Eventsa
 class AnnotationEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)
@@ -301,7 +299,6 @@ class ToolLaunchEvent(Event):
         ensure_types(self.target, [ENTITY_TYPES['LINK'], ENTITY_TYPES['LTI_LINK']], optional=True)
         if self.action == CALIPER_ACTIONS['LAUNCHED']:
             ensure_type(self.federatedSession, ENTITY_TYPES['LTI_SESSION'])
-
 
 
 class ToolUseEvent(Event):

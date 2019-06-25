@@ -17,21 +17,26 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
+
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 from future.standard_library import install_aliases
 install_aliases()
-from future.utils import raise_with_traceback, string_types
-from builtins import *
+from future.utils import raise_with_traceback
+from builtins import str
 
 try:
     from collections.abc import MutableSequence, MutableMapping
 except ImportError:
     from collections import MutableSequence, MutableMapping
 
-import copy, importlib, json, re, warnings, uuid
-from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_date as aniso_parse_date,
-                       parse_time as aniso_parse_time, parse_duration as aniso_parse_duration)
+import copy
+import importlib
+import json
+import re
+import warnings
+import uuid
+from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_time as aniso_parse_time,
+                       parse_duration as aniso_parse_duration)
 from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CONTEXTS,
@@ -39,7 +44,7 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CO
                                CALIPER_PROFILES_FOR_EVENT_TYPES, CALIPER_PROFILE_ACTIONS,
                                CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES, EVENT_TYPES, ENTITY_TYPES)
 
-## Convenience functions
+# Convenience functions
 
 _uri_validator = rfc3986_validators.Validator().require_presence_of('scheme', )
 
@@ -138,7 +143,7 @@ def is_valid_UUID_URN(uri):
     try:
         assert (_uuid_urn_re.match(uri))
         return True
-    except:
+    except Exception:
         return False
 
 
@@ -150,7 +155,7 @@ def _get_type(t):
         m, c = CALIPER_CLASSES.get(t, '.').rsplit('.', 1)
     try:
         return getattr(importlib.import_module(m), c)
-    except (ImportError, ValueError) as e:
+    except (ImportError, ValueError):
         raise_with_traceback(ValueError('Unknown type: {0}'.format(str(t))))
 
 
@@ -160,24 +165,23 @@ def is_subtype(t1, t2):
 
 def ensure_type(p, t, optional=False):
     # exception or True
-    if p == None:
+    if p is None:
         if optional:
             return True
         else:
             raise_with_traceback(TypeError('non-optional properties cannot be None'))
-    if t == None:
+    if t is None:
         raise_with_traceback(TypeError('for present properties, type cannot be None type'))
-    elif t == MutableMapping:
+    elif t is MutableMapping:
         if not isinstance(p, t):
             raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
         else:
             return True
-    elif t and not (
-        (isinstance(p, string_types) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
-        (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-        (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
-        (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
-        (isinstance(p, _get_type(t)))):
+    elif t and not ((isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
+                    (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
+                    (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
+                    (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
+                    (isinstance(p, _get_type(t)))):
         raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
     return True
 
@@ -204,6 +208,7 @@ def ensure_list_type(l, t):
         ensure_type(i, t)
     return True
 
+
 def ensure_list_types(l, tl):
     # exception or True
     messages = []
@@ -220,7 +225,7 @@ def ensure_list_types(l, tl):
         raise_with_traceback(TypeError(' or '.join(messages)))
 
 
-### Default configuration values ###
+# Default configuration values
 class Options(object):
 
     default_options = {
@@ -246,7 +251,7 @@ class Options(object):
 
     @API_KEY.setter
     def API_KEY(self, new_key):
-        if isinstance(new_key, string_types):
+        if isinstance(new_key, str):
             self._config['API_KEY'] = new_key
         else:
             raise_with_traceback(ValueError('new key value must be a string'))
@@ -257,7 +262,7 @@ class Options(object):
 
     @AUTH_SCHEME.setter
     def AUTH_SCHEME(self, new_scheme):
-        if isinstance(new_scheme, string_types):
+        if isinstance(new_scheme, str):
             self._config['AUTH_SCHEME'] = new_scheme
         else:
             raise_with_traceback(ValueError('new key value must be a string'))
@@ -359,7 +364,7 @@ class HttpOptions(Options):
             return None
 
 
-### Caliper serializable base class for all caliper objects that need serialization ###
+# Caliper serializable base class for all caliper objects that need serialization
 class CaliperSerializable(object):
     def __init__(self):
         self._props = {}
@@ -371,7 +376,7 @@ class CaliperSerializable(object):
         return self._props.get(k)
 
     def _update_props(self, k, v, req=False):
-        if req and (v == None):
+        if req and (v is None):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if k:
             self._props.update({k: v})
@@ -380,7 +385,7 @@ class CaliperSerializable(object):
     # underlying state
 
     def _set_typed_prop(self, k, v, t, req=False):
-        if not (v == None or isinstance(v, t)):
+        if not (v is None or isinstance(v, t)):
             if hasattr(t, '__name__'):
                 typ_name = t.__name__
             else:
@@ -399,7 +404,7 @@ class CaliperSerializable(object):
         self._set_typed_prop(k, v, float, req=req)
 
     def _set_str_prop(self, k, v, req=False):
-        self._set_typed_prop(k, v, string_types, req=req)
+        self._set_typed_prop(k, v, str, req=req)
 
     def _set_dict_prop(self, k, v, req=False):
         self._set_typed_prop(k, v, MutableMapping, req=req)
@@ -459,10 +464,10 @@ class CaliperSerializable(object):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
             raise_with_traceback(
                 TypeError('Provided property is not of required type: {}'.format(t)))
-        if isinstance(v, string_types) and not is_valid_URI(v):
+        if isinstance(v, str) and not is_valid_URI(v):
             raise_with_traceback(
                 ValueError('ID value for object property must be valid URI: {}'.format(v)))
-        if isinstance(v, string_types) and t and not (is_subtype(t, CaliperSerializable)):
+        if isinstance(v, str) and t and not (is_subtype(t, CaliperSerializable)):
             raise_with_traceback(
                 ValueError('URI IDs can only be provided for objects of known Caliper types'))
         self._update_props(k, v, req=req)
@@ -486,7 +491,8 @@ class CaliperSerializable(object):
                 # this Caliper object's context already exists in list of context bases
                 return None
             if is_valid_context_for_base(_get_base_context(ctxt), _get_base_context(r)):
-                # the base of this Cailper object's context is valid for an entry in the lists of context bases
+                # the base of this Cailper object's context is valid for an
+                # entry in the lists of context bases
                 return None
         else:
             # this Caliper object's context is new, so return as value to unpack
@@ -588,7 +594,7 @@ class CaliperSerializable(object):
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 
-### Entities and Events ###
+# Entities and Events
 class BaseEntity(CaliperSerializable):
     def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
