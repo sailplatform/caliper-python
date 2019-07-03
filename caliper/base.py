@@ -29,7 +29,10 @@ try:
 except ImportError:
     from collections import MutableSequence, MutableMapping
 
+from collections import namedtuple
+
 import copy
+import hashlib
 import importlib
 import json
 import re
@@ -44,8 +47,7 @@ from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CO
                                CALIPER_PROFILES_FOR_EVENT_TYPES, CALIPER_PROFILE_ACTIONS,
                                CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES, EVENT_TYPES, ENTITY_TYPES)
 
-# Convenience functions
-
+# validation regexes
 _uri_validator = rfc3986_validators.Validator().require_presence_of('scheme', )
 
 _datetime_re = re.compile(r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(YYYY='([0-9]{4})',
@@ -59,23 +61,14 @@ _datetime_re = re.compile(r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(Y
 _uuid_urn_re = re.compile(r'\Aurn:uuid:[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\Z')
 
 
+# deprecation convenience function
 def deprecation(m):
     warnings.warn(m, DeprecationWarning, stacklevel=2)
 
 
+# profile handling functions
 def is_valid_profile(p):
     return p in CALIPER_PROFILES.values()
-
-
-def is_valid_context_for_base(c1, c2):
-    return (c2 == c1
-            or (c2 == CALIPER_CORE_CONTEXT and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
-
-
-def is_valid_context(ctxt, expected_base_context):
-    base_context = _get_base_context(ctxt)
-    return (is_valid_URI(base_context)
-            and is_valid_context_for_base(base_context, expected_base_context))
 
 
 def _suggest_profile(prf, ctxt, typ):
@@ -95,17 +88,42 @@ def _suggest_profile(prf, ctxt, typ):
             return CALIPER_PROFILES_FOR_EVENT_TYPES.get(typ, _general_profile)
 
 
-def _get_root_context_for_profile(p):
-    return CALIPER_CONTEXTS.get(p, [CALIPER_CORE_CONTEXT])[0]
+# named tuple to make it easier to handle the context hashes for a Caliper object
+ContextHash = namedtuple('ContextHash', ['context', 'context_base'])
+
+
+# context handling functions
+def is_valid_context(ctxt, expected_base_context):
+    base_context = _get_base_context(ctxt)
+    return (is_valid_URI(base_context)
+            and _is_valid_context_for_base(base_context, expected_base_context))
 
 
 def _get_base_context(ctxt):
-    if isinstance(ctxt, MutableSequence):
+    # contexts that are maps are opaque; we assume that its base will be
+    # the caliper core context
+    if isinstance(ctxt, MutableMapping):
+        return CALIPER_CORE_CONTEXT
+    elif isinstance(ctxt, MutableSequence):
         return ctxt[-1]
     else:
         return ctxt
 
 
+def _get_context_hash(ctxt):
+    return hashlib.md5(json.dumps(ctxt, sort_keys=True).encode('utf-8')).hexdigest()
+
+
+def _get_root_context_for_profile(p):
+    return CALIPER_CONTEXTS.get(p, [CALIPER_CORE_CONTEXT])[0]
+
+
+def _is_valid_context_for_base(c1, c2):
+    return (c2 == c1
+            or (c2 == CALIPER_CORE_CONTEXT and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
+
+
+# date and time validation
 def is_valid_datetime(dt):
     try:
         assert (_datetime_re.match(dt))
@@ -131,6 +149,7 @@ def is_valid_time(time):
         return False
 
 
+# URI/URN/UUID validation
 def is_valid_URI(uri):
     try:
         _uri_validator.validate(rfc3986_api.uri_reference(uri))
@@ -147,20 +166,28 @@ def is_valid_UUID_URN(uri):
         return False
 
 
-def _get_type(t):
-    m = c = ''
-    if t and isinstance(t, type):
-        m, c = t.__module__, t.__name__
-    elif t:
-        m, c = CALIPER_CLASSES.get(t, '.').rsplit('.', 1)
-    try:
-        return getattr(importlib.import_module(m), c)
-    except (ImportError, ValueError):
-        raise_with_traceback(ValueError('Unknown type: {0}'.format(str(t))))
+# type validation functions
+def ensure_list_type(l, t):
+    # exception or True
+    for i in l:
+        ensure_type(i, t)
+    return True
 
 
-def is_subtype(t1, t2):
-    return issubclass(_get_type(t1), _get_type(t2))
+def ensure_list_types(l, tl):
+    # exception or True
+    messages = []
+    ret = False
+    for t in tl:
+        try:
+            ensure_list_type(l, t)
+            ret = True
+        except Exception as e:
+            messages.append(str(e))
+    if ret:
+        return ret
+    else:
+        raise_with_traceback(TypeError(' or '.join(messages)))
 
 
 def ensure_type(p, t, optional=False):
@@ -202,30 +229,23 @@ def ensure_types(p, tl, optional=False):
         raise_with_traceback(TypeError(' or '.join(messages)))
 
 
-def ensure_list_type(l, t):
-    # exception or True
-    for i in l:
-        ensure_type(i, t)
-    return True
+def is_subtype(t1, t2):
+    return issubclass(_get_type(t1), _get_type(t2))
 
 
-def ensure_list_types(l, tl):
-    # exception or True
-    messages = []
-    ret = False
-    for t in tl:
-        try:
-            ensure_list_type(l, t)
-            ret = True
-        except Exception as e:
-            messages.append(str(e))
-    if ret:
-        return ret
-    else:
-        raise_with_traceback(TypeError(' or '.join(messages)))
+def _get_type(t):
+    m = c = ''
+    if t and isinstance(t, type):
+        m, c = t.__module__, t.__name__
+    elif t:
+        m, c = CALIPER_CLASSES.get(t, '.').rsplit('.', 1)
+    try:
+        return getattr(importlib.import_module(m), c)
+    except (ImportError, ValueError):
+        raise_with_traceback(ValueError('Unknown type: {0}'.format(str(t))))
 
 
-# Default configuration values
+# Basic Caliper configuration object
 class Options(object):
 
     default_options = {
@@ -335,6 +355,7 @@ class Options(object):
                 ValueError('new timeout value must be at least 1000 milliseconds'))
 
 
+# Cailper configuration for HTTP transport
 class HttpOptions(Options):
     def __init__(
             self,
@@ -369,6 +390,20 @@ class CaliperSerializable(object):
     def __init__(self):
         self._props = {}
         self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
+        self._context_hashes = ContextHash(None, None)
+        self._default_profile = None
+
+    @property
+    def context(self):
+        return self._get_prop('@context')
+
+    @property
+    def profile(self):
+        return self._get_prop('profile') or self._default_profile
+
+    @property
+    def type(self):
+        return self._get_prop('type')
 
     # these methods are the only ones that directly touch the object's underlying
     # property/object cache
@@ -380,6 +415,9 @@ class CaliperSerializable(object):
             raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
         if k:
             self._props.update({k: v})
+
+    def _update_context_hashes(self, ctxt, ctxt_base):
+        self._context_hashes = ContextHash(_get_context_hash(ctxt), _get_context_hash(ctxt_base))
 
     # protected base-type setters that inheriting classes use internally to set
     # underlying state
@@ -416,6 +454,9 @@ class CaliperSerializable(object):
             self._update_props('@context', expected_base_context, req=True)
         elif is_valid_context(v, expected_base_context):
             self._update_props('@context', v, req=True)
+        else:
+            raise_with_traceback(ValueError('Invalid context value: {}'.format(str(v))))
+        self._update_context_hashes(self.context, _get_base_context(self.context))
 
     def _set_profile(self, profile=None, context=None, typename=None):
         self._default_profile = _suggest_profile(profile, context, typename)
@@ -484,23 +525,9 @@ class CaliperSerializable(object):
 
     # protected unpacker methods, used by dict and json-string representation
     # public functions
-    def _unpack_context(self, ctxt_bases=[]):
-        r = self._get_prop('@context')
-        for ctxt in ctxt_bases:
-            if r == ctxt:
-                # this Caliper object's context already exists in list of context bases
-                return None
-            if is_valid_context_for_base(_get_base_context(ctxt), _get_base_context(r)):
-                # the base of this Cailper object's context is valid for an
-                # entry in the lists of context bases
-                return None
-        else:
-            # this Caliper object's context is new, so return as value to unpack
-            return r
-
     def _unpack_list(self,
                      l,
-                     ctxt_bases=[],
+                     known_contexts=set(),
                      described_objects=[],
                      thin_context=False,
                      thin_props=False):
@@ -509,13 +536,13 @@ class CaliperSerializable(object):
             if isinstance(item, MutableSequence):
                 r.append(
                     self._unpack_list(item,
-                                      ctxt_bases=ctxt_bases,
+                                      known_contexts=known_contexts,
                                       described_objects=described_objects,
                                       thin_context=thin_context,
                                       thin_props=thin_props))
             elif isinstance(item, CaliperSerializable):
                 r.append(
-                    item._unpack_object(ctxt_bases=ctxt_bases,
+                    item._unpack_object(known_contexts=known_contexts,
                                         described_objects=described_objects,
                                         thin_context=thin_context,
                                         thin_props=thin_props))
@@ -524,19 +551,18 @@ class CaliperSerializable(object):
         return r
 
     def _unpack_object(self,
-                       ctxt_bases=[],
+                       known_contexts=set(),
                        described_objects=[],
                        thin_context=False,
                        thin_props=False):
         r = {}
-        cb = copy.deepcopy(ctxt_bases)
-        ctxt_prop = self._unpack_context(ctxt_bases=cb)
-        if ctxt_prop:
-            r.update({'@context': ctxt_prop})
+        kc = copy.deepcopy(known_contexts)
+        # if this object's context is not already known, then we retain
+        # the context, and we add its context hashes to the list of known contexts
+        if self._context_hashes.context not in known_contexts:
+            r.update({'@context': self.context})
             if thin_context:
-                if not cb:
-                    cb.append(_get_base_context(ctxt_prop))
-                cb.append(ctxt_prop)
+                kc.update(set(self._context_hashes))
 
         for k, v in sorted(self._props.items()):
             if k == '@context':
@@ -547,7 +573,7 @@ class CaliperSerializable(object):
                 continue
             elif isinstance(v, MutableSequence):
                 value = self._unpack_list(v,
-                                          ctxt_bases=cb,
+                                          known_contexts=kc,
                                           described_objects=described_objects,
                                           thin_context=thin_context,
                                           thin_props=thin_props)
@@ -558,7 +584,7 @@ class CaliperSerializable(object):
                         and the_id in described_objects):
                     value = the_id
                 else:
-                    value = v._unpack_object(ctxt_bases=cb,
+                    value = v._unpack_object(known_contexts=kc,
                                              described_objects=described_objects,
                                              thin_context=thin_context,
                                              thin_props=thin_props)
@@ -594,25 +620,13 @@ class CaliperSerializable(object):
         return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
 
 
-# Entities and Events
+# Base classes for Caliper Entity and Event
 class BaseEntity(CaliperSerializable):
     def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
         self._set_type(default=CALIPER_TYPES['ENTITY'])
         self._set_profile(profile, context, self.type)
         self._set_context(context, self.profile)
-
-    @property
-    def context(self):
-        return self._get_prop('@context')
-
-    @property
-    def profile(self):
-        return self._get_prop('profile') or self._default_profile
-
-    @property
-    def type(self):
-        return self._get_prop('type')
 
 
 class BaseEvent(CaliperSerializable):
@@ -638,20 +652,8 @@ class BaseEvent(CaliperSerializable):
         self._set_obj_prop('object', object, t=BaseEntity)
 
     @property
-    def context(self):
-        return self._get_prop('@context')
-
-    @property
     def id(self):
         return self._get_prop('id')
-
-    @property
-    def profile(self):
-        return self._get_prop('profile') or self._default_profile
-
-    @property
-    def type(self):
-        return self._get_prop('type')
 
     @property
     def action(self):

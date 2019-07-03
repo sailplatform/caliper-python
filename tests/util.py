@@ -159,7 +159,7 @@ def rebuild_envelope(fixture,
                      described_objects=None):
     env_dict = json.loads(get_fixture(fixture, broken))
     try:
-        payload = condensor.from_json_list(env_dict.get('data'), strict=True)
+        payload = condensor.from_caliper_envelope(env_dict, strict=True)
         return caliper.request.Envelope(data=payload,
                                         send_time=env_dict.get('sendTime'),
                                         sensor_id=env_dict.get('sensor')).as_json(
