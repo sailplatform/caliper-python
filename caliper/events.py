@@ -127,6 +127,10 @@ class Event(BaseEvent):
         return self._get_prop('referrer')
 
     @property
+    def membership(self):
+        return self._get_prop('membership')
+
+    @property
     def session(self):
         return self._get_prop('session')
 
